@@ -20,6 +20,9 @@ class Meanbee_Shippingrules_IndexController extends Mage_Adminhtml_Controller_Ac
                 if ($data) {
                     $model->setData($data)->setId($id);
                 }
+
+                $model->getConditions()->setJsFormObject('conditions_fieldset');
+
             } else {
                 Mage::getSingleton('adminhtml/session')->addError(Mage::helper('meanship')->__('Shipping rule does not exist'));
                 $this->_redirect('*/*/');
@@ -40,7 +43,11 @@ class Meanbee_Shippingrules_IndexController extends Mage_Adminhtml_Controller_Ac
             if ($id) {
                 $model->load($id);
             }
-            $model->setData($data);
+
+            $data['conditions'] = $data['rule']['conditions'];
+            unset($data['rule']);
+
+            $model->loadPost($data);
 
             Mage::getSingleton('adminhtml/session')->setFormData($data);
             try {

@@ -6,6 +6,8 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Edit_Form extends Mage_Adminht
     }
 
     protected function _prepareForm() {
+        $data = Mage::registry('meanship_data');
+
         $form = new Varien_Data_Form(array(
             'id' => 'edit_form',
             'action' => $this->getUrl('*/*/save', array('id' => $this->getRequest()->getParam('id'))),
@@ -17,7 +19,7 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Edit_Form extends Mage_Adminht
 
         $this->setForm($form);
 
-        $fieldset = $form->addFieldset('example_form', array(
+        $fieldset = $form->addFieldset('meanbee_shippingrules_form', array(
             'legend' =>Mage::helper('meanship')->__('Shipping Rule Information')
         ));
 
@@ -52,9 +54,9 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Edit_Form extends Mage_Adminht
             'label' => Mage::helper('meanship')->__('Conditions'),
             'title' => Mage::helper('meanship')->__('Conditions'),
             'required' => true,
-        ))->setRule($model)->setRenderer(Mage::getBlockSingleton('rule/conditions'));
+        ))->setRule($data)->setRenderer(Mage::getBlockSingleton('rule/conditions'));
 
-        if ($data = Mage::registry('meanship_data')) {
+        if ($data) {
             $form->setValues($data);
         }
 

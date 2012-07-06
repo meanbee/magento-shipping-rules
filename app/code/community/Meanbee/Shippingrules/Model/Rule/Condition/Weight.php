@@ -30,7 +30,7 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Weight extends Mage_Rule_Model_
         return $return;
     }
 
-    public function validate($obj) {
-
+    public function validate(Varien_Object $object) {
+        return true;
     }
 }
