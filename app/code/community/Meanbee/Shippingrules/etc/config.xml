@@ -34,12 +34,21 @@
         </routers>
     </admin>
     <adminhtml>
+        <layout>
+            <updates>
+                <meanbee_shippingrules>
+                    <file>meanbee/shippingrules.xml</file>
+                </meanbee_shippingrules>
+            </updates>s
+        </layout>
         <menu>
             <catalog>
                 <children>
                     <meanbee_shippingrules translate="title">
                         <title>Manage Shipping Rules</title>
                         <action>shippingrules/index/index</action>
+                        <!-- Just beneath Manage Categories -->
+                        <sort_order>11</sort_order>
                     </meanbee_shippingrules>
                 </children>
             </catalog>

@@ -1,2 +1,3 @@
 app/code/community/Meanbee/Shippingrules/ app/code/community/Meanbee/Shippingrules/
 app/etc/modules/* app/etc/modules/
+app/design/adminhtml/default/default/layout/meanbee/* app/design/adminhtml/default/default/layout/meanbee/

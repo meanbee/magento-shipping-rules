@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<layout>
+    <meanbee_shippingrules_admin_index_index>
+        <reference name="content">
+            <block type="meanship/adminhtml_rules" name="example" />
+        </reference>
+    </meanbee_shippingrules_admin_index_index>
+</layout>
