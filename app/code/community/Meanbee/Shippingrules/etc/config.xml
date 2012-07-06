@@ -22,4 +22,27 @@
             </meanship>
         </blocks>
     </global>
+    <admin>
+        <routers>
+            <meanbee_shippingrules_admin>
+                <use>admin</use>
+                <args>
+                    <module>Meanbee_Shippingrules</module>
+                    <frontName>shippingrules</frontName>
+                </args>
+            </meanbee_shippingrules_admin>
+        </routers>
+    </admin>
+    <adminhtml>
+        <menu>
+            <catalog>
+                <children>
+                    <meanbee_shippingrules translate="title">
+                        <title>Manage Shipping Rules</title>
+                        <action>shippingrules/index/index</action>
+                    </meanbee_shippingrules>
+                </children>
+            </catalog>
+        </menu>
+    </adminhtml>
 </config>
