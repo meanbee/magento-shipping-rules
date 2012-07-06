@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Meanbee_Shippingrules>
+            <version>1.0.0</version>
+        </Meanbee_Shippingrules>
+    </modules>
+    <global>
+        <models>
+            <meanship>
+                <class>Meanbee_Shippingrules_Model</class>
+            </meanship>
+        </models>
+        <helpers>
+            <meanship>
+                <class>Meanbee_Shippingrules_Helper</class>
+            </meanship>
+        </helpers>
+        <blocks>
+            <meanship>
+                <class>Meanbee_Shippingrules_Block</class>
+            </meanship>
+        </blocks>
+    </global>
+</config>
