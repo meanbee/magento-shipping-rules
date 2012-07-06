@@ -1,7 +1,5 @@
 <?php
-class Meanbee_Shippingrules_Model_Rule_Condition_Cart_Count extends Mage_Rule_Model_Condition_Abstract {
-
-    protected $_inputType = 'numeric';
+class Meanbee_Shippingrules_Model_Rule_Condition_Cart_Count extends Meanbee_Shippingrules_Model_Rule_Condition_Numeric {
 
     public function getAttributeName() {
         return 'Cart Item Count';
@@ -13,7 +11,7 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Cart_Count extends Mage_Rule_Mo
         return $element;
     }
 
-    public function validate(Varien_Object $object) {
-        return true;
+    public function getValidateObjectKey() {
+        return 'package_qty';
     }
 }

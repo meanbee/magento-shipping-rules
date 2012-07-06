@@ -70,4 +70,13 @@
             </catalog>
         </menu>
     </adminhtml>
+    <default>
+        <carriers>
+            <meanship>
+                <active>0</active>
+                <model>meanship/carrier</model>
+                <title>Shipping Method</title>
+            </meanship>
+        </carriers>
+    </default>
 </config>
