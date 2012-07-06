@@ -31,6 +31,26 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Combine extends Mage_Rule_Model
             )
         );
 
+        $conditions[] = array(
+            'label' => Mage::helper('meanship')->__('Destination Conditions'),
+            'value' => array(
+                array(
+                    'label' => Mage::helper('meanship')->__('Shipping Country'),
+                    'value' => 'meanship/rule_condition_destination_country'
+                ),
+                array(
+                    'label' => Mage::helper('meanship')->__('Shipping State'),
+                    'value' => 'meanship/rule_condition_destination_state'
+                ),
+                array(
+                    'label' => Mage::helper('meanship')->__('Shipping Zip Code'),
+                    'value' => 'meanship/rule_condition_destination_zipcode'
+                )
+            )
+        );
+
+
+
         return $conditions;
     }
 
