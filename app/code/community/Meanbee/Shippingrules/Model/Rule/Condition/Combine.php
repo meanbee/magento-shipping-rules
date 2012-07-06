@@ -23,6 +23,10 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Combine extends Mage_Rule_Model
                 array(
                     'label' => Mage::helper('meanship')->__('Cart Item Count'),
                     'value' => 'meanship/rule_condition_cart_count'
+                ),
+                array(
+                    'label' => Mage::helper('meanship')->__('Cart Total'),
+                    'value' => 'meanship/rule_condition_cart_total'
                 )
             )
         );
