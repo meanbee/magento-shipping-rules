@@ -10,7 +10,7 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Edit extends Mage_Adminhtml_Bl
 
         $this->_addButton('save_and_continue', array(
             'label' => Mage::helper('adminhtml')->__('Save And Continue Edit'),
-            'onclick' => 'saveAndContinueEdit()',
+            'onclick' => 'editForm.submit($(\'edit_form\').action + \'back/edit/\')',
             'class' => 'save',
         ), -100);
         $this->_updateButton('save', 'label', Mage::helper('meanship')->__('Save Shipping Rule'));
@@ -18,7 +18,7 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Edit extends Mage_Adminhtml_Bl
 
     public function getHeaderText() {
         if (Mage::registry('meanship_data') && Mage::registry('meanship_data')->getId()) {
-            return Mage::helper('meanship')->__('Edit Shipping Rule "%s"', $this->escapeHtml(Mage::registry('meanship')->getName()));
+            return Mage::helper('meanship')->__('Edit Shipping Rule "%s"', $this->escapeHtml(Mage::registry('meanship_data')->getName()));
         } else {
             return Mage::helper('meanship')->__('New Shipping Rule');
         }

@@ -9,8 +9,24 @@
         <models>
             <meanship>
                 <class>Meanbee_Shippingrules_Model</class>
+                <resourceModel>meanship_resource</resourceModel>
             </meanship>
+            <meanship_resource>
+                <class>Meanbee_Shippingrules_Model_Resource</class>
+                <entities>
+                    <rule>
+                        <table>meanship_rule</table>
+                    </rule>
+                </entities>
+            </meanship_resource>
         </models>
+        <resources>
+            <meanship_setup>
+                <setup>
+                    <module>Meanbee_Shippingrules</module>
+                </setup>
+            </meanship_setup>
+        </resources>
         <helpers>
             <meanship>
                 <class>Meanbee_Shippingrules_Helper</class>
