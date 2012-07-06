@@ -23,6 +23,14 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Edit_Form extends Mage_Adminht
             'legend' =>Mage::helper('meanship')->__('Shipping Rule Information')
         ));
 
+        $fieldset->addField('is_active', 'select', array(
+            'label'     => Mage::helper('meanship')->__('Rule Enabled?'),
+            'class'     => 'required-entry',
+            'required'  => true,
+            'name'      => 'is_active',
+            'values'    => Mage::getSingleton('adminhtml/system_config_source_yesno')->toOptionArray()
+        ));
+
         $fieldset->addField('name', 'text', array(
             'label'     => Mage::helper('meanship')->__('Shipping Method Name'),
             'class'     => 'required-entry',
@@ -37,6 +45,17 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Edit_Form extends Mage_Adminht
             'required'  => true,
             'name'      => 'price',
             'note'     => Mage::helper('meanship')->__('This is the price that the customer will be charged.'),
+        ));
+
+        $fieldset->addField('sort_order', 'text', array(
+            'label'     => Mage::helper('meanship')->__('Sort Order'),
+            'name'      => 'sort_order'
+        ));
+
+        $fieldset->addField('cost', 'text', array(
+            'label'     => Mage::helper('meanship')->__('Shipping Method Cost'),
+            'name'      => 'cost',
+            'note'     => Mage::helper('meanship')->__('<em>Optional</em>. The actual cost incurred by the store owner when the customer uses this method.'),
         ));
 
         $model = Mage::getModel('meanship/rule');

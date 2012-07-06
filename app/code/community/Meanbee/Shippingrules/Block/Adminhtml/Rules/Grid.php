@@ -15,15 +15,29 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Grid extends Mage_Adminhtml_Bl
     protected function _prepareColumns() {
         $this->addColumn('rule_id', array(
             'header'    => Mage::helper('meanship')->__('ID'),
-            'align'     =>'right',
+            'align'     => 'center',
             'index'     => 'rule_id',
             'width'     => '50px'
+        ));
+
+        $this->addColumn('is_active', array(
+            'header'    => Mage::helper('meanship')->__('Enabled'),
+            'align'     => 'center',
+            'index'     => 'is_active',
+            'type'      => 'checkbox'
         ));
 
         $this->addColumn('name', array(
             'header'    => Mage::helper('meanship')->__('Name'),
             'align'     =>'left',
             'index'     => 'name',
+            'width'     => '250px'
+        ));
+
+        $this->addColumn('conditions', array(
+            'header'    => Mage::helper('meanship')->__('Rule Condition Summary'),
+            'align'     =>'left',
+            'getter'    => 'getConditionsHtml'
         ));
 
         $this->addColumn('price', array(
@@ -35,17 +49,10 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Grid extends Mage_Adminhtml_Bl
 
         $this->addColumn('sort_order', array(
             'header'    => Mage::helper('meanship')->__('Sort Order'),
-            'align'     =>'left',
+            'align'     => 'center',
             'index'     => 'sort_order',
             'width'     => '50px',
             'type'      => 'range'
-        ));
-
-        $this->addColumn('is_active', array(
-            'header'    => Mage::helper('meanship')->__('Enabled'),
-            'align'     =>'left',
-            'index'     => 'is_active',
-            'type'      => 'checkbox'
         ));
 
         return parent::_prepareColumns();

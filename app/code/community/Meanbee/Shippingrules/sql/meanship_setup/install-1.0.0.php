@@ -17,7 +17,11 @@ $table = $installer->getConnection()
     ->addColumn('price', Varien_Db_Ddl_Table::TYPE_DECIMAL, array(12,2), array(
         'nullable'  => false,
         'default'   => 0.00,
-    ), 'Shipping Methond Price')
+    ), 'Shipping Method Price')
+        ->addColumn('cost', Varien_Db_Ddl_Table::TYPE_DECIMAL, array(12,2), array(
+        'nullable'  => false,
+        'default'   => 0.00,
+    ), 'Shipping Method Cost')
     ->addColumn('conditions_serialized', Varien_Db_Ddl_Table::TYPE_TEXT, '2M', array(), 'Conditions Serialized')
     ->addColumn('stop_rules_processing', Varien_Db_Ddl_Table::TYPE_SMALLINT, null, array(
         'nullable'  => false,

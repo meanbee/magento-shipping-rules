@@ -22,4 +22,8 @@ class Meanbee_Shippingrules_Model_Rule extends Mage_Rule_Model_Abstract {
     public function getActionsInstance() {
         return Mage::getModel('catalogrule/rule_action_collection');
     }
+
+    public function getConditionsHtml() {
+        return $this->getConditions()->asStringRecursive();
+    }
 }
