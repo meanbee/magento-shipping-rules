@@ -1,5 +1,5 @@
 <?php
-abstract class Meanbee_Shippingrules_Model_Rule_Condition_Numeric extends Mage_Rule_Model_Condition_Abstract {
+abstract class Meanbee_Shippingrules_Model_Rule_Condition_Numeric extends Meanbee_Shippingrules_Model_Rule_Condition_Abstract {
 
     protected $_inputType = 'numeric';
 
@@ -8,7 +8,7 @@ abstract class Meanbee_Shippingrules_Model_Rule_Condition_Numeric extends Mage_R
     public function validate(Varien_Object $object) {
         $obj_value = $object->getData($this->getValidateObjectKey());
 
-        if ($obj_value) {
+        if ($obj_value && is_numeric($obj_value)) {
             $operation = $this->getOperatorForValidate();
             $value = $this->getValue();
 

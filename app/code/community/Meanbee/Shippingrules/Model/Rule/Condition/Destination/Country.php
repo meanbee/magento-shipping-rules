@@ -1,5 +1,5 @@
 <?php
-class Meanbee_Shippingrules_Model_Rule_Condition_Destination_Country extends Mage_Rule_Model_Condition_Abstract {
+class Meanbee_Shippingrules_Model_Rule_Condition_Destination_Country extends Meanbee_Shippingrules_Model_Rule_Condition_Abstract {
 
     protected $_inputType = 'multiselect';
 
