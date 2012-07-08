@@ -5,13 +5,13 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Destination_Zipcode extends Mea
         return 'Shipping Zipcode';
     }
 
+    public function getAttribute() {
+        return 'dest_postcode';
+    }
+
     public function getAttributeElement() {
         $element = parent::getAttributeElement();
         $element->setShowAsText(true);
         return $element;
-    }
-
-    public function validate(Varien_Object $object) {
-        return true;
     }
 }

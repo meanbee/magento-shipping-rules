@@ -1,7 +1,7 @@
 <?php
 class Meanbee_Shippingrules_Model_Rule_Condition_Destination_Country extends Meanbee_Shippingrules_Model_Rule_Condition_Abstract {
 
-    protected $_inputType = 'multiselect';
+    protected $_inputType = 'grid';
 
     public function getValueElementType() {
         return 'multiselect';
@@ -9,6 +9,10 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Destination_Country extends Mea
 
     public function getAttributeName() {
         return 'Shipping Country';
+    }
+
+    public function getAttribute() {
+        return 'dest_country_id';
     }
 
     public function getAttributeElement() {
@@ -21,9 +25,5 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Destination_Country extends Mea
         return Mage::getResourceModel('directory/country_collection')
             ->loadData()
             ->toOptionArray(false);
-    }
-
-    public function validate(Varien_Object $object) {
-        return true;
     }
 }

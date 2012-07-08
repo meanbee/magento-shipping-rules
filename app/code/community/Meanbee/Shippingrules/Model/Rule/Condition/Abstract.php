@@ -35,8 +35,8 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Abstract extends Mage_Rule_Mode
             $this->_defaultOperatorOptions = array(
                 '=='  => Mage::helper('rule')->__('is'),
                 '!='  => Mage::helper('rule')->__('is not'),
-                '>='  => Mage::helper('rule')->__('equals or greater than'),
-                '<='  => Mage::helper('rule')->__('equals or less than'),
+                '>='  => Mage::helper('meanship')->__('greater than or equal to'),
+                '<='  => Mage::helper('meanship')->__('less than or equal to'),
                 '>'   => Mage::helper('rule')->__('greater than'),
                 '<'   => Mage::helper('rule')->__('less than'),
                 '{}'  => Mage::helper('rule')->__('contains'),
@@ -156,8 +156,8 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Abstract extends Mage_Rule_Mode
             if (!is_scalar($validatedValue) || !is_string($validatedValue)) {
                 return false;
             } else {
-                $length = strlen($validatedValue);
-                return (substr($value, 0, $length) === $validatedValue);
+                $length = strlen($value);
+                return (substr($validatedValue, 0, $length) === $value);
             }
             break;
 
@@ -165,12 +165,13 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Abstract extends Mage_Rule_Mode
             if (!is_scalar($validatedValue) || !is_string($validatedValue)) {
                 return false;
             } else {
-                $length = strlen($validatedValue);
+                $length = strlen($value);
+
                 if ($length == 0) {
                     return true;
                 }
 
-                return (substr($value, -$length) === $validatedValue);
+                return (substr($validatedValue, -$length) === $value);
             }
             break;
         }
