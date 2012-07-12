@@ -25,7 +25,7 @@ $table = $installer->getConnection()
     ->addColumn('conditions_serialized', Varien_Db_Ddl_Table::TYPE_TEXT, '2M', array(), 'Conditions Serialized')
     ->addColumn('stop_rules_processing', Varien_Db_Ddl_Table::TYPE_SMALLINT, null, array(
         'nullable'  => false,
-        'default'   => '1',
+        'default'   => '0',
     ), 'Stop Rules Processing')
     ->addColumn('sort_order', Varien_Db_Ddl_Table::TYPE_INTEGER, null, array(
         'unsigned'  => true,

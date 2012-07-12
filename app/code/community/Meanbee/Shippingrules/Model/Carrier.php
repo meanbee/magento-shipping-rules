@@ -39,9 +39,10 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
     protected function _getApplicableRules(Mage_Shipping_Model_Rate_Request $request) {
         $methods = array();
 
+        /** @var $rule_collection Meanbee_Shippingrules_Model_Resource_Rule_Collection */
         $rule_collection = Mage::getModel('meanship/rule')->getCollection()
             ->addFieldToFilter('is_active', 1)
-            ->setOrder('sort_order');
+            ->setOrder('sort_order', Varien_Data_Collection::SORT_ORDER_ASC);
 
         /**
          * The customer doesn't come to us through $request, so we need to check for it manually.  This following will
@@ -57,22 +58,37 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
             $request->setCustomerGroupId(Mage_Customer_Model_Group::NOT_LOGGED_IN_ID);
         }
 
+        $stop_flag = array();
+
         foreach ($rule_collection as $rule) {
             if (!$rule->validate($request)) {
                 continue;
             }
 
-            if (array_key_exists($rule->getName(), $methods)) {
-                if ($methods[$rule->getName()]->getPrice() < $rule->getPrice()) {
+            $rule_name = $rule->getName();
+
+            if (array_key_exists($rule_name, $methods)) {
+                if (!isset($stop_flag[$rule_name])) {
+                    $stop_flag[$rule_name] = false;
+                }
+
+                /**
+                 * We'll skip this rule if we've already matched at a cheaper price, or we've hit a stop flag.
+                 */
+                if ($methods[$rule_name]->getPrice() < $rule->getPrice() || $stop_flag[$rule_name]) {
                     continue;
                 }
             }
 
-            $methods[$rule->getName()] = new Varien_Object(array(
+            $methods[$rule_name] = new Varien_Object(array(
                 'price' => $rule->getPrice(),
                 'cost'  => $rule->getCost(),
                 'id'    => $rule->getId()
             ));
+
+            if ($rule->getStopRulesProcessing()) {
+                $stop_flag[$rule_name] = true;
+            }
         }
 
         return $methods;

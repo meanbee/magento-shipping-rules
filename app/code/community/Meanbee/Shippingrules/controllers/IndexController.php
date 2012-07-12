@@ -47,6 +47,8 @@ class Meanbee_Shippingrules_IndexController extends Mage_Adminhtml_Controller_Ac
             $data['conditions'] = $data['rule']['conditions'];
             unset($data['rule']);
 
+            $data['stop_rules_processing'] = (int) isset($data['stop_rules_processing']);
+
             $model->loadPost($data);
 
             Mage::getSingleton('adminhtml/session')->setFormData($data);

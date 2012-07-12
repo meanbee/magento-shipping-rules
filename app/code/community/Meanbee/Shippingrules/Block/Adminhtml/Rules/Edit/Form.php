@@ -49,7 +49,16 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Edit_Form extends Mage_Adminht
 
         $fieldset->addField('sort_order', 'text', array(
             'label'     => Mage::helper('meanship')->__('Sort Order'),
-            'name'      => 'sort_order'
+            'name'      => 'sort_order',
+            'note'     => Mage::helper('meanship')->__('<em>Optional</em>. Rules are sorted ascending, so lower values will be checked first.'),
+        ));
+
+        $fieldset->addField('stop_rules_processing', 'checkbox', array(
+            'label'     => Mage::helper('meanship')->__('Stop rule processing if matched'),
+            'name'      => 'stop_rules_processing',
+            'value'     => 1,
+            'checked'   => $data->getStopRulesProcessing() == '1',
+            'note'     => Mage::helper('meanship')->__("<em>Optional</em>. Stop processing rules sharing this rule's shipping method name if it matches."),
         ));
 
         $fieldset->addField('cost', 'text', array(
@@ -57,8 +66,6 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Edit_Form extends Mage_Adminht
             'name'      => 'cost',
             'note'     => Mage::helper('meanship')->__('<em>Optional</em>. The actual cost incurred by the store owner when the customer uses this method.'),
         ));
-
-        $model = Mage::getModel('meanship/rule');
 
         $renderer = Mage::getBlockSingleton('adminhtml/widget_form_renderer_fieldset')
             ->setTemplate('promo/fieldset.phtml')
@@ -76,6 +83,11 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Edit_Form extends Mage_Adminht
         ))->setRule($data)->setRenderer(Mage::getBlockSingleton('rule/conditions'));
 
         if ($data) {
+            /**
+             * The value of the checkbox represents it's value *if it's checked*, therefore should always be one.  We
+             * use the 'checked' array option when we create the field to do the 'checking'.
+             */
+            $data['stop_rules_processing'] = 1;
             $form->setValues($data);
         }
 
