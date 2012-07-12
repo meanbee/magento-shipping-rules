@@ -52,6 +52,9 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
         if ($customer = Mage::helper('customer')->getCustomer()) {
             $request->setCustomer($customer);
             $request->setCustomerGroupId($customer->getGroupId());
+        } else {
+            $request->setCustomer(null);
+            $request->setCustomerGroupId(Mage_Customer_Model_Group::NOT_LOGGED_IN_ID);
         }
 
         foreach ($rule_collection as $rule) {
