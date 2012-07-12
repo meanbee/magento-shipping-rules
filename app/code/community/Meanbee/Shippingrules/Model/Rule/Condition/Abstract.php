@@ -9,7 +9,7 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Abstract extends Mage_Rule_Mode
     {
         if (null === $this->_defaultOperatorInputByType) {
             $this->_defaultOperatorInputByType = array(
-                'string'      => array('==', '!=', '>=', '>', '<=', '<', '{}', '!{}', '()', '!()', '^', '$'),
+                'string'      => array('==', '!=', '>=', '>', '<=', '<', '{}', '!{}', '()', '!()', '^', '$', '!^', '!$'),
                 'numeric'     => array('==', '!=', '>=', '>', '<=', '<', '()', '!()'),
                 'date'        => array('==', '>=', '<='),
                 'select'      => array('==', '!='),
@@ -45,6 +45,8 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Abstract extends Mage_Rule_Mode
                 '!()' => Mage::helper('rule')->__('is not one of'),
                 '^'   => Mage::helper('meanship')->__('begins with'),
                 '$'   => Mage::helper('meanship')->__('ends with'),
+                '!^'   => Mage::helper('meanship')->__('does not begin with'),
+                '!$'   => Mage::helper('meanship')->__('does not end with'),
             );
         }
 
@@ -152,7 +154,7 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Abstract extends Mage_Rule_Mode
             }
             break;
 
-            case '^':;
+            case '^': case '!^':
             if (!is_scalar($validatedValue) || !is_string($validatedValue)) {
                 return false;
             } else {
@@ -161,7 +163,7 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Abstract extends Mage_Rule_Mode
             }
             break;
 
-            case '$':
+            case '$': case '!$':
             if (!is_scalar($validatedValue) || !is_string($validatedValue)) {
                 return false;
             } else {
@@ -176,7 +178,7 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Abstract extends Mage_Rule_Mode
             break;
         }
 
-        if ('!=' == $op || '>' == $op || '<' == $op || '!{}' == $op || '!()' == $op) {
+        if ('!=' == $op || '>' == $op || '<' == $op || '!{}' == $op || '!()' == $op || '!^' == $op || '!$' == $op) {
             $result = !$result;
         }
 
