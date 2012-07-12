@@ -14,6 +14,16 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Combine extends Mage_Rule_Model
         );
 
         $conditions[] = array(
+            'label' => Mage::helper('meanship')->__('Customer Information'),
+            'value' => array(
+                array(
+                    'label' => Mage::helper('meanship')->__('Customer Group'),
+                    'value' => 'meanship/rule_condition_customer_group'
+                )
+            )
+        );
+
+        $conditions[] = array(
             'label' => Mage::helper('meanship')->__('Cart Conditions'),
             'value' => array(
                 array(

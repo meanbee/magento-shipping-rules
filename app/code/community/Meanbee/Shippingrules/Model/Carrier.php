@@ -43,6 +43,17 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
             ->addFieldToFilter('is_active', 1)
             ->setOrder('sort_order');
 
+        /**
+         * The customer doesn't come to us through $request, so we need to check for it manually.  This following will
+         * work on the frontend checkout.
+         *
+         * @TODO Check how this performs when creating an order from the admin area.
+         */
+        if ($customer = Mage::helper('customer')->getCustomer()) {
+            $request->setCustomer($customer);
+            $request->setCustomerGroupId($customer->getGroupId());
+        }
+
         foreach ($rule_collection as $rule) {
             if (!$rule->validate($request)) {
                 continue;

@@ -32,8 +32,6 @@ $table = $installer->getConnection()
         'nullable'  => false,
         'default'   => '0',
     ), 'Sort Order')
-    ->addColumn('customer_group_ids', Varien_Db_Ddl_Table::TYPE_TEXT, '64k', array(), 'Customer Group Ids')
-    ->addColumn('website_ids', Varien_Db_Ddl_Table::TYPE_TEXT, 4000, array(), 'Website Ids')
     ->addColumn('is_active', Varien_Db_Ddl_Table::TYPE_SMALLINT, null, array(
         'nullable'  => false,
         'default'   => '0',
