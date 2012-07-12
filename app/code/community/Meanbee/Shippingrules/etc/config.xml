@@ -73,7 +73,7 @@
     <default>
         <carriers>
             <meanship>
-                <active>0</active>
+                <active>1</active>
                 <model>meanship/carrier</model>
                 <title>Shipping Method</title>
             </meanship>
