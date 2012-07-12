@@ -7,6 +7,10 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules extends Mage_Adminhtml_Block_W
 
         $this->_controller = 'adminhtml_rules';
         $this->_blockGroup = 'meanship';
-        $this->_headerText = Mage::helper('meanship')->__('Shipping Rules');
+        $this->_headerText = Mage::helper('meanship')->__('Manage Shipping Rules');
+    }
+
+    public function getHeaderCssClass() {
+        return 'head-shipping-method ' . parent::getHeaderCssClass();
     }
 }
