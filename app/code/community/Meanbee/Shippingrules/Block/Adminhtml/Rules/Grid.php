@@ -45,14 +45,20 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Grid extends Mage_Adminhtml_Bl
         $this->addColumn('conditions', array(
             'header'    => Mage::helper('meanship')->__('Rule Condition Summary'),
             'align'     =>'left',
-            'getter'    => 'getConditionsHtml'
+            'getter'    => 'getConditionsHtml',
+            'filter'    => false
         ));
 
         $this->addColumn('price', array(
             'header'    => Mage::helper('meanship')->__('Price'),
             'align'     =>'left',
             'index'     => 'price',
-            'type'      => 'price'
+            'type'      => 'price',
+            /**
+             * There's always an error generated when you attempt to search with price as an active or even inactive
+             * filter.
+             */
+            'filter'    => false
         ));
 
         $this->addColumn('sort_order', array(
