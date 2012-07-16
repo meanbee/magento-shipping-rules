@@ -23,4 +23,8 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Edit extends Mage_Adminhtml_Bl
             return Mage::helper('meanship')->__('New Shipping Rule');
         }
     }
+
+    public function getHeaderCssClass() {
+        return 'head-shipping-method ' . parent::getHeaderCssClass();
+    }
 }

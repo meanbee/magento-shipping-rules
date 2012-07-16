@@ -3,6 +3,7 @@ class Meanbee_Shippingrules_IndexController extends Mage_Adminhtml_Controller_Ac
     public function indexAction() {
         $this->loadLayout();
         $this->_setActiveMenu('catalog/meanbee_shippingrules');
+        $this->_setTitle('Manage Shipping Rules');
         $this->renderLayout();
     }
 
@@ -13,6 +14,7 @@ class Meanbee_Shippingrules_IndexController extends Mage_Adminhtml_Controller_Ac
     public function editAction() {
         $id = $this->getRequest()->getParam('id', null);
         $model = Mage::getModel('meanship/rule');
+
         if ($id) {
             $model->load((int) $id);
             if ($model->getId()) {
@@ -33,6 +35,14 @@ class Meanbee_Shippingrules_IndexController extends Mage_Adminhtml_Controller_Ac
         $this->loadLayout();
         $this->_setActiveMenu('catalog/meanbee_shippingrules');
         $this->getLayout()->getBlock('head')->setCanLoadExtJs(true);
+
+
+        if ($id) {
+            $this->_setTitle('Edit Shipping Rule');
+        } else {
+            $this->_setTitle('New Shipping Rule');
+        }
+
         $this->renderLayout();
     }
 
@@ -207,5 +217,9 @@ class Meanbee_Shippingrules_IndexController extends Mage_Adminhtml_Controller_Ac
 
     protected function _addNotice($message) {
         Mage::getSingleton('adminhtml/session')->addNotice(Mage::helper('meanship')->__($message));
+    }
+
+    protected function _setTitle($title) {
+        $this->getLayout()->getBlock('head')->setTitle(Mage::helper('meanship')->__($title));
     }
 }
