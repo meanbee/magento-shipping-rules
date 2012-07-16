@@ -9,7 +9,7 @@ abstract class Meanbee_Shippingrules_Model_Rule_Condition_Numeric extends Meanbe
         $obj_value = $object->getData($this->getValidateObjectKey());
 
         if ($obj_value && is_numeric($obj_value)) {
-            $operation = $this->getOperatorForValidate();
+            $operation = $this->getOperator();
             $value = $this->getValue();
 
             switch ($operation) {

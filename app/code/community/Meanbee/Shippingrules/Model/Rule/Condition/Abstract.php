@@ -54,6 +54,21 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Abstract extends Mage_Rule_Mode
     }
 
     /**
+     * Magento 1.6+ uses getOperatorForValidate(), but previous versions just use getOperator().
+     *
+     * @return string
+     */
+    public function getOperator() {
+        $operator = $this->getOperatorForValidate();
+
+        if ($operator !== null) {
+            return $operator;
+        }
+
+        return parent::getOperator();
+    }
+
+    /**
      * Validate product attrbute value for condition
      *
      * @param   mixed $validatedValue product attribute value
@@ -73,7 +88,7 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Abstract extends Mage_Rule_Mode
         /**
          * Comparison operator
          */
-        $op = $this->getOperatorForValidate();
+        $op = $this->getOperator();
 
         // if operator requires array and it is not, or on opposite, return false
         if ($this->isArrayOperatorType() xor is_array($value)) {
