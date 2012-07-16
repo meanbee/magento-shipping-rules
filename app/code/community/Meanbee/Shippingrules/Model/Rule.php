@@ -1,5 +1,5 @@
 <?php
-class Meanbee_Shippingrules_Model_Rule extends Mage_Rule_Model_Abstract {
+class Meanbee_Shippingrules_Model_Rule extends Meanbee_Shippingrules_Model_Rule_Abstract {
 
     protected function _construct() {
         $this->_init('meanship/rule');

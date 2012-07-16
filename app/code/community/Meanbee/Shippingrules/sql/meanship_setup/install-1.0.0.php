@@ -3,7 +3,7 @@ $installer = $this;
 $installer->startSetup();
 
 /**
- * Create table 'catalogrule/rule'
+ * Create table 'meanship/rule'
  */
 $table = $installer->getConnection()
     ->newTable($installer->getTable('meanship/rule'))
