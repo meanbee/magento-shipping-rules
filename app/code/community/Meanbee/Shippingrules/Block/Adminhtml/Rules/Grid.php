@@ -21,19 +21,12 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Grid extends Mage_Adminhtml_Bl
     }
 
     protected function _prepareColumns() {
-        $this->addColumn('rule_id', array(
-            'header'    => Mage::helper('meanship')->__('ID'),
-            'align'     => 'center',
-            'type'      => 'number',
-            'index'     => 'rule_id',
-            'width'     => '50px'
-        ));
-
         $this->addColumn('is_active', array(
             'header'    => Mage::helper('meanship')->__('Enabled'),
             'align'     => 'center',
             'index'     => 'is_active',
             'type'      => 'options',
+            'width'     => '50px',
             'options'   => array(
                 0 => $this->__('No'),
                 1 => $this->__('Yes')
@@ -75,6 +68,31 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Grid extends Mage_Adminhtml_Bl
         ));
 
         return parent::_prepareColumns();
+    }
+
+    protected function _prepareMassaction() {
+        $this->setMassactionIdField('rule_id');
+        $this->getMassactionBlock()->setFormFieldName('rule_id');
+
+        $this->getMassactionBlock()->addItem('delete', array(
+            'label'=> Mage::helper('meanship')->__('Delete Shipping Rules'),
+            'url'  => $this->getUrl('*/*/massDelete', array('' => '')),
+            'confirm' => Mage::helper('meanship')->__('Are you sure?')
+        ));
+
+        $this->getMassactionBlock()->addItem('disable', array(
+            'label'=> Mage::helper('meanship')->__('Disable Shipping Rules'),
+            'url'  => $this->getUrl('*/*/massDisable', array('' => '')),
+            'confirm' => Mage::helper('meanship')->__('Are you sure?')
+        ));
+
+        $this->getMassactionBlock()->addItem('enabled', array(
+            'label'=> Mage::helper('meanship')->__('Enable Shipping Rules'),
+            'url'  => $this->getUrl('*/*/massEnable', array('' => '')),
+            'confirm' => Mage::helper('meanship')->__('Are you sure?')
+        ));
+
+        return $this;
     }
 
     public function getRowUrl($row) {

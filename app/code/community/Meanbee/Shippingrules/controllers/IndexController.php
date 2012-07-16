@@ -126,4 +126,86 @@ class Meanbee_Shippingrules_IndexController extends Mage_Adminhtml_Controller_Ac
         }
         $this->getResponse()->setBody($html);
     }
+
+    public function exportAction() {
+        print_r($_POST);
+    }
+
+    public function massDeleteAction() {
+        if ($this->getRequest()->isPost()) {
+            $rule_ids = $this->getRequest()->getParam('rule_id');
+
+            if (count($rule_ids) > 0) {
+                foreach ($rule_ids as $rule_id) {
+                    try {
+                        Mage::getModel('meanship/rule')->load($rule_id)->delete();
+                    } catch (Exception $e) {
+                        $this->_addError("Unable to delete rule");
+                    }
+                }
+
+                $this->_addSuccess('Successfully deleted shipping rules');
+            } else {
+                $this->_addNotice('No rules were selected for deletion');
+            }
+        }
+
+        $this->_redirect('*/*');
+    }
+
+    public function massEnableAction() {
+        if ($this->getRequest()->isPost()) {
+            $rule_ids = $this->getRequest()->getParam('rule_id');
+
+            if (count($rule_ids) > 0) {
+                foreach ($rule_ids as $rule_id) {
+                    try {
+                        Mage::getModel('meanship/rule')->load($rule_id)->setIsActive(true)->save();
+                    } catch (Exception $e) {
+                        $this->_addError("Unable to enable rule");
+                    }
+                }
+
+                $this->_addSuccess('Successfully enabled shipping rules');
+            } else {
+                $this->_addNotice('No rules were selected for enabling');
+            }
+        }
+
+        $this->_redirect('*/*');
+    }
+
+    public function massDisableAction() {
+        if ($this->getRequest()->isPost()) {
+            $rule_ids = $this->getRequest()->getParam('rule_id');
+
+            if (count($rule_ids) > 0) {
+                foreach ($rule_ids as $rule_id) {
+                    try {
+                        Mage::getModel('meanship/rule')->load($rule_id)->setIsActive(false)->save();
+                    } catch (Exception $e) {
+                        $this->_addError("Unable to disable rule");
+                    }
+                }
+
+                $this->_addSuccess('Successfully disabled shipping rules');
+            } else {
+                $this->_addNotice('No rules were selected for disabling');
+            }
+        }
+
+        $this->_redirect('*/*');
+    }
+
+    protected function _addSuccess($message) {
+        Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('meanship')->__($message));
+    }
+
+    protected function _addError($message) {
+        Mage::getSingleton('adminhtml/session')->addError(Mage::helper('meanship')->__($message));
+    }
+
+    protected function _addNotice($message) {
+        Mage::getSingleton('adminhtml/session')->addNotice(Mage::helper('meanship')->__($message));
+    }
 }
