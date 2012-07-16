@@ -24,6 +24,7 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Grid extends Mage_Adminhtml_Bl
         $this->addColumn('rule_id', array(
             'header'    => Mage::helper('meanship')->__('ID'),
             'align'     => 'center',
+            'type'      => 'number',
             'index'     => 'rule_id',
             'width'     => '50px'
         ));
@@ -32,7 +33,11 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Grid extends Mage_Adminhtml_Bl
             'header'    => Mage::helper('meanship')->__('Enabled'),
             'align'     => 'center',
             'index'     => 'is_active',
-            'type'      => 'checkbox'
+            'type'      => 'options',
+            'options'   => array(
+                0 => $this->__('No'),
+                1 => $this->__('Yes')
+            )
         ));
 
         $this->addColumn('name', array(
