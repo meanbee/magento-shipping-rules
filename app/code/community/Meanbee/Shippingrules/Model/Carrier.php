@@ -1,6 +1,5 @@
 <?php
-class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Abstract {
-
+class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Abstract implements Mage_Shipping_Model_Carrier_Interface {
     protected $_code = 'meanship';
 
     /**
@@ -10,8 +9,8 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
      * @return Mage_Shipping_Model_Rate_Result|bool|null
      */
     public function collectRates(Mage_Shipping_Model_Rate_Request $request) {
-        if (!$this->getConfigFlag('active')) {
-            return;
+        if (!$this->isActive()) {
+            return false;
         }
 
         $result = Mage::getModel('shipping/rate_result');
@@ -34,6 +33,21 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
         }
 
         return $result;
+    }
+
+    public function getAllowedMethods() {
+        $methods = array();
+
+        /** @var $rule_collection Meanbee_Shippingrules_Model_Resource_Rule_Collection */
+        $rule_collection = Mage::getModel('meanship/rule')->getCollection()
+            ->addFieldToFilter('is_active', 1)
+            ->setOrder('sort_order', Varien_Data_Collection::SORT_ORDER_ASC);
+
+        foreach ($rule_collection as $rule) {
+            $methods[$rule->getId()] = $rule->getName();
+        }
+
+        return $methods;
     }
 
     protected function _getApplicableRules(Mage_Shipping_Model_Rate_Request $request) {

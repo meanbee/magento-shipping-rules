@@ -69,6 +69,37 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Abstract extends Mage_Rule_Mode
     }
 
     /**
+     * Magento < 1.6 does not have this method.
+     *
+     * @return bool
+     */
+    public function isArrayOperatorType() {
+        $op = $this->getOperator();
+        return $op === '()' || $op === '!()' || in_array($this->getInputType(), $this->_arrayInputTypes);
+    }
+
+    /**
+     *
+     * Magento < 1.6 does not have this method.
+     *
+     * @param $validatedValue
+     * @param $value
+     * @param bool $strict
+     * @return bool
+     */
+    protected function _compareValues($validatedValue, $value, $strict = true) {
+        if ($strict && is_numeric($validatedValue) && is_numeric($value)) {
+            return $validatedValue == $value;
+        } else {
+            $validatePattern = preg_quote($validatedValue, '~');
+            if ($strict) {
+                $validatePattern = '^' . $validatePattern . '$';
+            }
+            return (bool)preg_match('~' . $validatePattern . '~iu', $value);
+        }
+    }
+
+    /**
      * Validate product attrbute value for condition
      *
      * @param   mixed $validatedValue product attribute value
