@@ -54,21 +54,6 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Abstract extends Mage_Rule_Mode
     }
 
     /**
-     * Magento 1.6+ uses getOperatorForValidate(), but previous versions just use getOperator().
-     *
-     * @return string
-     */
-    public function getOperator() {
-        $operator = $this->getOperatorForValidate();
-
-        if ($operator !== null) {
-            return $operator;
-        }
-
-        return parent::getOperator();
-    }
-
-    /**
      * Magento < 1.6 does not have this method.
      *
      * @return bool
