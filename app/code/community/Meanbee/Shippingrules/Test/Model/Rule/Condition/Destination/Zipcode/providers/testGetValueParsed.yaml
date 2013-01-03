@@ -1,0 +1,12 @@
+-
+  raw: test
+  sanitised: test
+-
+  raw: TEST
+  sanitised: test
+-
+  raw: T E S T
+  sanitised: test
+-
+  raw: T e S     T
+  sanitised: test

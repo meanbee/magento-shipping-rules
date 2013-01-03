@@ -79,4 +79,11 @@
             </meanship>
         </carriers>
     </default>
+    <phpunit>
+        <suite>
+            <modules>
+                <Meanbee_Shippingrules />
+            </modules>
+        </suite>
+    </phpunit>
 </config>

@@ -1,0 +1,12 @@
+# Test: ()
+-
+  -
+    dest_region_id: CA
+  operator: '()'
+  value:
+    - CA
+  pass: true
+
+# Test: !()
+# Test: {}
+# Test: !{}

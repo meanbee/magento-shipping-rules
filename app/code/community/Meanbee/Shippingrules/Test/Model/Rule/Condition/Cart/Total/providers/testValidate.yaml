@@ -1,0 +1,117 @@
+# Test: ==
+-
+  -
+    package_value: 5
+  operator: ==
+  value: 5
+  pass: true
+
+-
+  -
+    package_value: 5
+  operator: ==
+  value: 6
+  pass: false
+
+# Test: !=
+-
+  -
+    package_value: 5
+  operator: !=
+  value: 4
+  pass: true
+
+-
+  -
+    package_value: 5
+  operator: !=
+  value: 5
+  pass: false
+
+# Test: <
+-
+  -
+    package_value: 5
+  operator: <
+  value: 6
+  pass: true
+
+-
+  -
+    package_value: 5
+  operator: <
+  value: 2
+  pass: false
+
+-
+  -
+    package_value: 5
+  operator: <
+  value: 5
+  pass: false
+
+# Test: >
+-
+  -
+    package_value: 5
+  operator: '>'
+  value: 3
+  pass: true
+
+-
+  -
+    package_value: 5
+  operator: '>'
+  value: 6
+  pass: false
+
+-
+  -
+    package_value: 5
+  operator: '>'
+  value: 5
+  pass: false
+
+# Test: <=
+-
+  -
+    package_value: 5
+  operator: <=
+  value: 6
+  pass: true
+
+-
+  -
+    package_value: 5
+  operator: <=
+  value: 2
+  pass: false
+
+-
+  -
+    package_value: 5
+  operator: <=
+  value: 5
+  pass: true
+
+# Test: >=
+-
+  -
+    package_value: 5
+  operator: '>='
+  value: 3
+  pass: true
+
+-
+  -
+    package_value: 5
+  operator: '>='
+  value: 6
+  pass: false
+
+-
+  -
+    package_value: 5
+  operator: '>='
+  value: 5
+  pass: true
