@@ -117,6 +117,23 @@ class Meanbee_Shippingrules_IndexController extends Mage_Adminhtml_Controller_Ac
         $this->_redirect('*/*/');
     }
 
+    public function duplicateAction() {
+        if ($id = $this->getRequest()->getParam('id')) {
+            $model = Mage::getModel('meanship/rule')->load($id);
+
+            if ($model->getId()) {
+                $new_rule = $model->duplicate();
+                $this->_addSuccess("Your rule has been successfully duplicated.  You can edit your newly created rule below.");
+                $this->_redirect('*/*/edit', array('id' => $new_rule->getId()));
+                return;
+            } else {
+                $this->_addError("Couldn't load the rule to be duplicated");
+            }
+        }
+
+        $this->_redirect('*/*');
+    }
+
     public function newConditionHtmlAction() {
         $id = $this->getRequest()->getParam('id');
         $typeArr = explode('|', str_replace('-', '/', $this->getRequest()->getParam('type')));
