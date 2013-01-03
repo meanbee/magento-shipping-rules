@@ -59,7 +59,23 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Combine extends Mage_Rule_Model
             )
         );
 
-
+        $conditions[] = array(
+            'label' => Mage::helper('meanship')->__('Product Conditions'),
+            'value' => array(
+                array(
+                    'label' => Mage::helper('meanship')->__('Product SKU'),
+                    'value' => 'meanship/rule_condition_product_sku'
+                ),
+                array(
+                    'label' => Mage::helper('meanship')->__('Product Attribute Set'),
+                    'value' => 'meanship/rule_condition_product_attributeset'
+                ),
+                array(
+                    'label' => Mage::helper('meanship')->__('Product Category'),
+                    'value' => 'meanship/rule_condition_product_category'
+                )
+            )
+        );
 
         return $conditions;
     }
