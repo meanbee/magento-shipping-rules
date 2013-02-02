@@ -1,0 +1,81 @@
+##########################################
+# Single product in cart
+-
+  result:
+    product_data:
+      attribute_set:
+        - 1
+  operator: "()"
+  value: 1
+  pass: true
+-
+  result:
+    product_data:
+      attribute_set:
+        - 1
+  operator: "!()"
+  value: 2
+  pass: true
+-
+  result:
+    product_data:
+      attribute_set:
+        - 1
+  operator: "()"
+  value:
+    - 1
+    - 2
+  pass: true
+-
+  result:
+    product_data:
+      attribute_set:
+        - 1
+  operator: "!()"
+  value:
+    - 2
+    - 3
+  pass: true
+
+##########################################
+# Multiple products in cart
+-
+  result:
+    product_data:
+      attribute_set:
+        - 1
+        - 2
+  operator: "()"
+  value: 1
+  pass: true
+-
+  result:
+    product_data:
+      attribute_set:
+        - 1
+        - 3
+  operator: "!()"
+  value: 2
+  pass: true
+-
+  result:
+    product_data:
+      attribute_set:
+        - 1
+        - 2
+  operator: "()"
+  value:
+    - 1
+    - 3
+  pass: true
+-
+  result:
+    product_data:
+      attribute_set:
+        - 1
+        - 3
+  operator: "!()"
+  value:
+    - 2
+    - 4
+  pass: true

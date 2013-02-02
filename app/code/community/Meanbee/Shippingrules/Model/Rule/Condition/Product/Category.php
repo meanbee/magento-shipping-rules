@@ -7,7 +7,7 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Product_Category extends Meanbe
     }
 
     public function getAttributeName() {
-        return 'Product Category';
+        return 'Cart contains product in at least one of the Categories';
     }
 
     public function getAttribute() {

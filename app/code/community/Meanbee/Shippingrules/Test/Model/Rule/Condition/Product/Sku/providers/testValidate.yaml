@@ -1,0 +1,17 @@
+# Test: ==
+-
+  result:
+    product_data:
+      sku:
+        - "BA1 2BN"
+  operator: ==
+  value: "BA1 2BN"
+  pass: true
+
+# Test: !=
+# Test: ^
+# Test: !^
+# Test: $
+# Test: !$
+# Test: {}
+# Test: !{}

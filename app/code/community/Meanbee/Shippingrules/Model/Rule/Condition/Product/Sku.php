@@ -2,7 +2,7 @@
 class Meanbee_Shippingrules_Model_Rule_Condition_Product_Sku extends Meanbee_Shippingrules_Model_Rule_Condition_Product_Abstract {
 
     public function getAttributeName() {
-        return 'Product SKU';
+        return 'Cart contains product with SKU';
     }
 
     public function getAttributeElement() {
@@ -12,7 +12,7 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Product_Sku extends Meanbee_Shi
     }
 
     public function getValidateObjectKey() {
-        return 'package_qty';
+        return 'sku';
     }
 
     public function validate(Varien_Object $object) {

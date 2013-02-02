@@ -1,0 +1,142 @@
+##########################################
+# Single product in cart
+-
+  result:
+    product_data:
+      category:
+        - 1
+  operator: "()"
+  value: 1
+  pass: true
+-
+  result:
+    product_data:
+      category:
+        - 1
+  operator: "!()"
+  value: 2
+  pass: true
+-
+  result:
+    product_data:
+      category:
+        - 1
+  operator: "()"
+  value: 2
+  pass: false
+-
+  result:
+    product_data:
+      category:
+        - 1
+  operator: "!()"
+  value: 1
+  pass: false
+
+##########################################
+# Multiple products in cart
+-
+  result:
+    product_data:
+      category:
+        - 1
+        - 2
+  operator: "()"
+  value: 1
+  pass: true
+-
+  result:
+    product_data:
+      category:
+        - 1
+        - 3
+  operator: "!()"
+  value: 2
+  pass: true
+-
+  result:
+    product_data:
+      category:
+        - 1
+        - 2
+  operator: "()"
+  value: 3
+  pass: false
+-
+  result:
+    product_data:
+      category:
+        - 1
+        - 3
+  operator: "!()"
+  value: 1
+  pass: true
+
+##########################################
+# Multiple categories selected
+-
+  result:
+    product_data:
+      category:
+        - 1
+        - 2
+  operator: "()"
+  value:
+    - 1
+    - 4
+  pass: true
+-
+  result:
+    product_data:
+      category:
+        - 1
+        - 2
+  operator: "()"
+  value:
+    - 1
+    - 2
+  pass: true
+-
+  result:
+    product_data:
+      category:
+        - 1
+        - 2
+  operator: "()"
+  value:
+    - 4
+    - 5
+  pass: false
+-
+  result:
+    product_data:
+      category:
+        - 1
+        - 2
+  operator: "!()"
+  value:
+    - 4
+    - 5
+  pass: true
+-
+  result:
+    product_data:
+      category:
+        - 1
+        - 2
+  operator: "!()"
+  value:
+    - 1
+    - 5
+  pass: true
+-
+  result:
+    product_data:
+      category:
+        - 1
+        - 2
+  operator: "!()"
+  value:
+    - 1
+    - 2
+  pass: false

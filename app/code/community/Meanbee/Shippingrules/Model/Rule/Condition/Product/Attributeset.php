@@ -7,7 +7,7 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Product_Attributeset extends Me
     }
 
     public function getAttributeName() {
-        return 'Product Attribute Set';
+        return 'Cart contains product with at least one of the Attribute Sets';
     }
 
     public function getAttribute() {
