@@ -145,6 +145,10 @@ class Meanbee_Shippingrules_IndexController extends Mage_Adminhtml_Controller_Ac
             ->setRule(Mage::getModel('meanship/rule'))
             ->setPrefix('conditions');
 
+        if (!empty($typeArr[1])) {
+            $model->setAttribute($typeArr[1]);
+        }
+
         if ($model instanceof Mage_Rule_Model_Condition_Abstract) {
             $model->setJsFormObject($this->getRequest()->getParam('form'));
             $html = $model->asHtmlRecursive();

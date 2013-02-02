@@ -75,28 +75,7 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
         /**
          * Add the product data to the request
          */
-        $product_ids = array();
-        foreach ($request->getAllItems() as $item) {
-            /** @var $item Mage_Sales_Model_Quote_Item */
-            $product_ids[] = $item->getProductId();
-        }
-
-        $product_data = array(
-            'sku' => array(),
-            'category' => array(),
-            'attribute_set' => array()
-        );
-        $order_product_collection = Mage::getModel('catalog/product')->getCollection()
-            ->addAttributeToFilter('entity_id', array($product_ids));
-        foreach ($order_product_collection as $product) {
-            /** @var $product Mage_Catalog_Model_Product */
-            $product_data['sku'][] = $product->getData('sku');
-            $product_data['attribute_set'][] = $product->getData('attribute_set_id');
-
-            $product_data['category'] = array_merge($product_data['category'], $product->getCategoryIds());
-        }
-
-        $request->setData('product_data', $product_data);
+        $request->setData('all_items', $request->getAllItems());
 
         $stop_flag = array();
 

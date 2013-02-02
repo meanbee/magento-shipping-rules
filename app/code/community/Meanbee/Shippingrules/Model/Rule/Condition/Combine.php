@@ -60,20 +60,12 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Combine extends Mage_Rule_Model
         );
 
         $conditions[] = array(
-            'label' => Mage::helper('meanship')->__('Product Cart Conditions'),
+            'label' => Mage::helper('meanship')->__('Cart Item Conditions'),
             'value' => array(
                 array(
-                    'label' => Mage::helper('meanship')->__('Cart contains product with SKU'),
-                    'value' => 'meanship/rule_condition_product_sku'
+                    'label' => Mage::helper('meanship')->__('Cart items subselection'),
+                    'value' => 'meanship/rule_condition_product_subselect'
                 ),
-                array(
-                    'label' => Mage::helper('meanship')->__('Cart contains product with Attribute Set'),
-                    'value' => 'meanship/rule_condition_product_attributeset'
-                ),
-                array(
-                    'label' => Mage::helper('meanship')->__('Cart contains product in the Category'),
-                    'value' => 'meanship/rule_condition_product_category'
-                )
             )
         );
 
