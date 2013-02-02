@@ -46,6 +46,10 @@ class Meanbee_Shippingrules_Test_Model_Rule_Condition_Destination_Country extend
             'rule'               => Mage::getModel('meanship/rule')
         ));
 
-        $this->assertEquals($result == 'true', $this->_obj->validate(new Varien_Object($rate_request)), "Operator: $operator, Value: $value, Request: " . json_encode($rate_request));
+        $this->assertEquals(
+            $result == 'true',
+            $this->_obj->validate(new Varien_Object($rate_request)),
+            "Operator: " . $this->_obj->getOperator() . ", Value: " . json_encode($this->_obj->getValueParsed()) . ", Request: " . json_encode($rate_request) . ", " . (($result == 'true') ? 'Should pass' : 'Should fail')
+        );
     }
 }
