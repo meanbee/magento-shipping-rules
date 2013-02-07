@@ -72,11 +72,6 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
             $request->setCustomerGroupId(Mage_Customer_Model_Group::NOT_LOGGED_IN_ID);
         }
 
-        /**
-         * Add the product data to the request
-         */
-        $request->setData('all_items', $request->getAllItems());
-
         $stop_flag = array();
 
         foreach ($rule_collection as $rule) {
