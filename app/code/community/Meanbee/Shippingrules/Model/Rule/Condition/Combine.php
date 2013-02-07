@@ -64,7 +64,7 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Combine extends Mage_Rule_Model
             'value' => array(
                 array(
                     'label' => Mage::helper('meanship')->__('Cart items subselection'),
-                    'value' => 'salesrule/rule_condition_product_subselect'
+                    'value' => 'meanship/rule_condition_product_subselect'
                 ),
             )
         );
