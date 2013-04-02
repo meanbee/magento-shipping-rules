@@ -1,5 +1,5 @@
 <_>
-   <form_key>YWogQGJzDWRJf4i3</form_key>
+   <form_key>5gdYfJI3NB8FqWZ4</form_key>
    <name>Meanbee_Shippingrules</name>
    <channel>community</channel>
    <version_ids>
@@ -9,9 +9,11 @@
    <description>Provides a GUI, similar to the one for shopping and catalog promotion rules, to specifying shipping rates for your customers.</description>
    <license>Commercial License</license>
    <license_uri/>
-   <version>1.0.0</version>
+   <version>1.0.4</version>
    <stability>stable</stability>
-   <notes>Initial release.</notes>
+   <notes>* Fix 1.6 compatability issues.
+* Add rule duplication.
+</notes>
    <authors>
       <name>
          <name>Meanbee</name>
@@ -40,7 +42,7 @@
             <max/>
          </max>
          <files>
-            <files> </files>
+            <files>  </files>
          </files>
       </package>
       <extension>
@@ -92,8 +94,4 @@
          <ignore/>
       </ignore>
    </contents>
-   <page>1</page>
-   <limit>200</limit>
-   <folder/>
-   <package/>
 </_>
