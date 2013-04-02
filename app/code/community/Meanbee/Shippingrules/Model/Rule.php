@@ -26,4 +26,23 @@ class Meanbee_Shippingrules_Model_Rule extends Meanbee_Shippingrules_Model_Rule_
     public function getConditionsHtml() {
         return $this->getConditions()->asStringRecursive();
     }
+
+    /**
+     * Make a copy of the current rule object, save it and return.
+     *
+     * @return Meanbee_Shippingrules_Model_Rule
+     */
+    public function duplicate() {
+        if (!$this->getId()) {
+            Mage::throwException("Can't duplicate a rule that hasn't been saved");
+        }
+
+        $new_rule = Mage::getModel('meanship/rule')
+            ->setData($this->getData())
+            ->setId(null);
+
+        $new_rule->save();
+
+        return $new_rule;
+    }
 }
