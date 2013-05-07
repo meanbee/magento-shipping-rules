@@ -1,5 +1,5 @@
 <_>
-   <form_key>5gdYfJI3NB8FqWZ4</form_key>
+   <form_key>X9YvxfqU76zsbprL</form_key>
    <name>Meanbee_Shippingrules</name>
    <channel>community</channel>
    <version_ids>
@@ -42,7 +42,7 @@
             <max/>
          </max>
          <files>
-            <files>  </files>
+            <files>   </files>
          </files>
       </package>
       <extension>
@@ -70,7 +70,7 @@
          <path>Meanbee/Shippingrules/</path>
          <path>modules/Meanbee_Shippingrules.xml</path>
          <path>adminhtml/default/default/layout/meanbee/shippingrules.xml</path>
-         <path>adminhtml/default/default/layout/meanbee/shippingrules/</path>
+         <path>adminhtml/default/default/template/meanbee/shippingrules/</path>
       </path>
       <type>
          <type>file</type>
