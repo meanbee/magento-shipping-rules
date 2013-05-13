@@ -42,7 +42,7 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Abstract extends Mage_Rule_Mode
                 '{}'  => Mage::helper('rule')->__('contains'),
                 '!{}' => Mage::helper('rule')->__('does not contain'),
                 '()'  => Mage::helper('rule')->__('is one of'),
-                '!()' => Mage::helper('rule')->__('is not one o f'),
+                '!()' => Mage::helper('rule')->__('is not one of'),
                 '^'   => Mage::helper('meanship')->__('begins with'),
                 '$'   => Mage::helper('meanship')->__('ends with'),
                 '!^'   => Mage::helper('meanship')->__('does not begin with'),

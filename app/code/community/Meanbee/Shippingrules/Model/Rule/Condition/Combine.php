@@ -35,7 +35,7 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Combine extends Mage_Rule_Model
                     'value' => 'meanship/rule_condition|package_qty'
                 ),
                 array(
-                    'label' => Mage::helper('meanship')->__('Cart Total'),
+                    'label' => Mage::helper('meanship')->__('Cart Subtotal'),
                     'value' => 'meanship/rule_condition|package_value'
                 )
             )

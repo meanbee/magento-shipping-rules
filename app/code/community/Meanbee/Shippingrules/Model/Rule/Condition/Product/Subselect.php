@@ -40,15 +40,14 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Product_Subselect extends Mage_
             return true;
         }
 
-        $all    = $this->getAggregator() === 'all';
-        $true   = (bool)$this->getValue();
+        $all = $this->getAggregator() === 'all';
 
         foreach ($this->getConditions() as $cond) {
             $validated = $cond->validate($object);
 
-            if ($all && $validated !== $true) {
+            if ($all && $validated !== true) {
                 return false;
-            } elseif (!$all && $validated === $true) {
+            } elseif (!$all && $validated === true) {
                 return true;
             }
         }

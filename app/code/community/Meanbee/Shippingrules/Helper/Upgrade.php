@@ -10,8 +10,6 @@ class Meanbee_Shippingrules_Helper_Upgrade extends Mage_Core_Helper_Abstract {
         $write_connection = $resource->getConnection('core_write');
 
         foreach ($rules as $rule) {
-            $migrated_conditions = array();
-
             /** @var $rule Meanbee_Shippingrules_Model_Rule */
             $conditions_serialized = $rule->getConditionsSerialized();
             $migrated_conditions = $this->_processRule(unserialize($conditions_serialized));
