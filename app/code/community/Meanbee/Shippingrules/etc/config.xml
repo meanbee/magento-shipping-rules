@@ -37,6 +37,17 @@
                 <class>Meanbee_Shippingrules_Block</class>
             </meanship>
         </blocks>
+        <events>
+            <sales_quote_config_get_product_attributes>
+                <observers>
+                    <meanship>
+                        <type>singleton</type>
+                        <class>Meanbee_ShippingRules_Model_Observer</class>
+                        <method>salesQuoteConfigGetProductAttributes</method>
+                    </meanship>
+                </observers>
+            </sales_quote_config_get_product_attributes>
+        </events>
     </global>
     <admin>
         <routers>
