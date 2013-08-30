@@ -190,7 +190,7 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Abstract extends Mage_Rule_Mode
                 return false;
             } else {
                 $length = strlen($value);
-                return (substr($validatedValue, 0, $length) === $value);
+                $result = (substr($validatedValue, 0, $length) === $value);
             }
             break;
 
@@ -204,7 +204,7 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Abstract extends Mage_Rule_Mode
                     return true;
                 }
 
-                return (substr($validatedValue, -$length) === $value);
+                $result = (substr($validatedValue, -$length) === $value);
             }
             break;
         }
