@@ -61,10 +61,13 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
         /**
          * The customer doesn't come to us through $request, so we need to check for it manually.  This following will
          * work on the frontend checkout.
-         *
-         * @TODO Check how this performs when creating an order from the admin area.
          */
-        if ($customer = Mage::helper('customer')->getCustomer()) {
+        if(Mage::getSingleton('adminhtml/session_quote')->getCustomer()->hasData()) {
+            $customer = Mage::getSingleton('adminhtml/session_quote')->getCustomer();
+            $request->setCustomer($customer);
+            $request->setCustomerGroupId($customer->getGroupId());
+        } elseif (Mage::helper('customer')->getCustomer()->hasData()) {
+            $customer = Mage::helper('customer')->getCustomer();
             $request->setCustomer($customer);
             $request->setCustomerGroupId($customer->getGroupId());
         } else {
