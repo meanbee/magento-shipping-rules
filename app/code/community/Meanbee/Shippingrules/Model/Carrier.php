@@ -24,10 +24,15 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
             // record method information
             $method->setMethod($rule_data->getId());
             $method->setMethodTitle($method_name);
-
-            // rate cost is optional property to record how much it costs to vendor to ship
-            $method->setCost($rule_data->getCost());
-            $method->setPrice($rule_data->getPrice());
+            
+            if ($request->getFreeShipping()) {
+                $method->setCost(0);
+                $method->setPrice(0);
+            } else { 
+                // rate cost is optional property to record how much it costs to vendor to ship
+                $method->setCost($rule_data->getCost());
+                $method->setPrice($rule_data->getPrice());
+            }
 
             $result->append($method);
         }
