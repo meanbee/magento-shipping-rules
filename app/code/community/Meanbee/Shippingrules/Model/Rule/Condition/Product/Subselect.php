@@ -18,7 +18,7 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Product_Subselect extends Mage_
         $productAttributes = Mage::getResourceSingleton('catalog/product')
            ->loadAllAttributes()
            ->getAttributesByCode();
-        $allowedInputTypes = array('text', 'boolean', 'price');
+        $allowedInputTypes = array('text', 'boolean', 'price', 'weight');
         $allowedTextValidations = array('validate-number', 'validate-digits');
 
         foreach ($productAttributes as $attribute) {
