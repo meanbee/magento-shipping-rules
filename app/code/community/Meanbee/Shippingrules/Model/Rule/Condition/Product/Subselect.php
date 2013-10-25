@@ -12,7 +12,7 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Product_Subselect extends Mage_
         $hlp = Mage::helper('salesrule');
         $attributes = array(
             'qty'  => $hlp->__('total quantity'),
-            'base_row_total'  => $hlp->__('total amount'),
+            'price'  => $hlp->__('total amount'),
         );
 
         $productAttributes = Mage::getResourceSingleton('catalog/product')
@@ -65,8 +65,10 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Product_Subselect extends Mage_
                     $total += (float) $item->getData($attr);
                 } elseif ($item->getProduct() instanceof Mage_Catalog_Model_Product) {
                     $product = Mage::getModel('catalog/product')->load($item->getProduct()->getId());
-                    $total += (float) $product->getData($attr) * $item->getQty();
+                    $total += (float) $product->getData($attr);
                 }
+
+                $total *= $item->getQty();
             }
         }
 
