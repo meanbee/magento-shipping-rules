@@ -396,4 +396,48 @@ class Meanbee_Shippingrules_Test_Model_Rule_Condition_Product_Subselect extends 
 
         $this->assertTrue($this->_obj->validate(new Varien_Object($rate_request)));
     }
+
+    /**
+     * @test
+     */
+    public function testValidateSummingOfAttributes_2() {
+        $rate_request = array(
+            'all_items' => array(
+                Mage::getModel('sales/quote_item')->setData(array(
+                    'qty' => 1,
+                    'weight' => 2,
+                    'product' => Mage::getModel('catalog/product')->setData(array(
+                        'attribute_set_id' => 2,
+                    ))
+                )),
+
+                Mage::getModel('sales/quote_item')->setData(array(
+                    'qty' => 1,
+                    'weight' => 2,
+                    'product' => Mage::getModel('catalog/product')->setData(array(
+                        'attribute_set_id' => 2,
+                    ))
+                ))
+            )
+        );
+
+        /** @var $rule Meanbee_Shippingrules_Model_Rule */
+        $rule = Mage::getModel('meanship/rule');
+
+        $this->_obj->setData(array(
+            'attribute'          => 'weight',
+            'operator'           => '>',
+            'value'              => 5,
+            'aggregator'         => 'any',
+            'is_value_processed' => 0,
+            'prefix'             => '123123',
+            'rule'               => $rule
+        ));
+
+        $condition = $this->_getProductCondition('attribute_set_id', '==', 2);
+
+        $this->_obj->setConditions(array($condition));
+
+        $this->assertFalse($this->_obj->validate(new Varien_Object($rate_request)));
+    }
 }
