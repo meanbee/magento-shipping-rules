@@ -21,7 +21,7 @@
  * 
  */
  
-class Meanbee_ShippingRules_Model_Observer
+class Meanbee_Shippingrules_Model_Observer
 {
     public function salesQuoteConfigGetProductAttributes(Varien_Event_Observer $event) {
         /** @var Varien_Object $attributes */

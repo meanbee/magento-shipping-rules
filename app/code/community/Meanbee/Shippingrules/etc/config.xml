@@ -42,7 +42,7 @@
                 <observers>
                     <meanship>
                         <type>singleton</type>
-                        <class>Meanbee_ShippingRules_Model_Observer</class>
+                        <class>Meanbee_Shippingrules_Model_Observer</class>
                         <method>salesQuoteConfigGetProductAttributes</method>
                     </meanship>
                 </observers>
