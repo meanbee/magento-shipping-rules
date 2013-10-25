@@ -54,9 +54,13 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Product_Subselect extends Mage_
 
         $attr = $this->getAttribute();
         $total = 0;
+        
         foreach ($object->getData('all_items') as $item) {
             /** @var $item Mage_Sales_Model_Quote_Item */
             if ($this->_validateItem($item)) {
+                // Handle configurable products
+                $item = $this->_getParentItemIfExists($item);
+
                 if ($item->getData($attr)) {
                     $total += (float) $item->getData($attr);
                 } elseif ($item->getProduct() instanceof Mage_Catalog_Model_Product) {
@@ -94,5 +98,21 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Product_Subselect extends Mage_
             }
         }
         return $all ? true : false;
+    }
+
+    /**
+     * Helper method to grab the parent item of an item.
+     *
+     * This is needed when we have a configurable product in our basket. Attributes are stored on the parent configurable
+     * product rather than the simple product which we are working with ($item).
+     *
+     * @param Mage_Sales_Model_Quote_Item $item
+     * @return Mage_Sales_Model_Quote_Item
+     */
+    protected function _getParentItemIfExists(Mage_Sales_Model_Quote_Item $item) {
+        if ($item->hasParentItemId()) {
+            return $item->getParentItem();
+        }
+        return $item;
     }
 }
