@@ -68,7 +68,9 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Product_Subselect extends Mage_
                     $total += (float) $product->getData($attr);
                 }
 
-                $total *= $item->getQty();
+                if ($attr != 'qty') {
+                    $total *= $item->getQty();
+                }
             }
         }
 
