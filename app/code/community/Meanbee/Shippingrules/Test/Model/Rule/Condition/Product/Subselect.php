@@ -368,7 +368,7 @@ class Meanbee_Shippingrules_Test_Model_Rule_Condition_Product_Subselect extends 
                 )),
 
                 Mage::getModel('sales/quote_item')->setData(array(
-                    'qty' => 1,
+                    'qty' => 2,
                     'weight' => 2,
                     'product' => Mage::getModel('catalog/product')->setData(array(
                         'attribute_set_id' => 2,
@@ -383,7 +383,7 @@ class Meanbee_Shippingrules_Test_Model_Rule_Condition_Product_Subselect extends 
         $this->_obj->setData(array(
             'attribute'          => 'weight',
             'operator'           => '>',
-            'value'              => 3,
+            'value'              => 5,
             'aggregator'         => 'any',
             'is_value_processed' => 0,
             'prefix'             => '123123',

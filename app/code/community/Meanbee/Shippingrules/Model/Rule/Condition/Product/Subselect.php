@@ -56,22 +56,26 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Product_Subselect extends Mage_
         $total = 0;
         
         foreach ($object->getData('all_items') as $item) {
+            $value = 0;
+
             /** @var $item Mage_Sales_Model_Quote_Item */
             if ($this->_validateItem($item)) {
                 // Handle configurable products
                 $item = $this->_getParentItemIfExists($item);
 
                 if ($item->getData($attr)) {
-                    $total += (float) $item->getData($attr);
+                    $value += (float) $item->getData($attr);
                 } elseif ($item->getProduct() instanceof Mage_Catalog_Model_Product) {
                     $product = Mage::getModel('catalog/product')->load($item->getProduct()->getId());
-                    $total += (float) $product->getData($attr);
+                    $value += (float) $product->getData($attr);
                 }
 
                 if ($attr != 'qty') {
-                    $total *= $item->getQty();
+                    $value *= $item->getQty();
                 }
             }
+
+            $total += $value;
         }
 
         return $this->validateAttribute($total);
