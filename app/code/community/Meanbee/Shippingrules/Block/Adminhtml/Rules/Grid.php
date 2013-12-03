@@ -4,18 +4,13 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Grid extends Mage_Adminhtml_Bl
         parent::__construct();
 
         $this->setId('meanbee_shippingrules_grid');
+        $this->setDefaultSort('name');
+        $this->setDefaultDir(Varien_Data_Collection::SORT_ORDER_ASC);
+        $this->setSaveParametersInSession(true);
     }
 
     protected function _prepareCollection() {
-        $collection = Mage::getModel('meanship/rule')->getCollection()
-            // Alphabetical
-            ->setOrder('name', Varien_Data_Collection::SORT_ORDER_ASC)
-            // Active rules first
-            ->setOrder('is_active', Varien_Data_Collection::SORT_ORDER_DESC)
-            // Respect sort order
-            ->setOrder('sort_order', Varien_Data_Collection::SORT_ORDER_ASC)
-        ;
-
+        $collection = Mage::getModel('meanship/rule')->getCollection();
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }

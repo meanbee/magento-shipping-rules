@@ -1,0 +1,97 @@
+############################################################
+# These tests read:
+#
+#     "Is $a $operator $b?"
+#     Example: Is 1 on of [1,2,3]?
+############################################################-
+-
+  a:
+    - 1
+    - 2
+    - 3
+  operator: "()"
+  b:
+    - 1
+    - 4
+  pass: true
+
+-
+  a:
+    - 1
+    - 2
+    - 3
+  operator: "()"
+  b:
+    - 4
+    - 5
+  pass: false
+
+-
+  a: 1
+  operator: "()"
+  b:
+    - 1
+    - 2
+    - 3
+  pass: true
+
+-
+  a: 4
+  operator: "()"
+  b:
+    - 1
+    - 2
+    - 3
+  pass: false
+
+############################################################
+-
+  a:
+    - 1
+    - 2
+    - 3
+  operator: "!()"
+  b:
+    - 4
+    - 5
+  pass: true
+
+-
+  a:
+    - 1
+    - 2
+    - 3
+  operator: "!()"
+  b:
+    - 1
+    - 2
+  pass: false
+
+-
+  a:
+    - 1
+    - 2
+    - 3
+  operator: "!()"
+  b:
+    - 1
+    - 4
+  pass: false
+
+-
+  a: 4
+  operator: "!()"
+  b:
+    - 1
+    - 2
+    - 3
+  pass: true
+
+-
+  a: 1
+  operator: "!()"
+  b:
+    - 1
+    - 2
+    - 3
+  pass: false

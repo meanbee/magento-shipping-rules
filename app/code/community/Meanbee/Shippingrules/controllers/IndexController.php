@@ -56,6 +56,8 @@ class Meanbee_Shippingrules_IndexController extends Mage_Adminhtml_Controller_Ac
 
             $data['conditions'] = $data['rule']['conditions'];
             unset($data['rule']);
+            
+            $forceRedirect = $this->_validateRegexConditions($data['conditions']);
 
             $data['stop_rules_processing'] = (int) isset($data['stop_rules_processing']);
 
@@ -76,7 +78,8 @@ class Meanbee_Shippingrules_IndexController extends Mage_Adminhtml_Controller_Ac
                 Mage::getSingleton('adminhtml/session')->setFormData(false);
 
                 // The following line decides if it is a "save" or "save and continue"
-                if ($this->getRequest()->getParam('back')) {
+                // forceRedirect is a boolean we set if the conditions contain an invalid regex.
+                if ($forceRedirect || $this->getRequest()->getParam('back')) {
                     $this->_redirect('*/*/edit', array('id' => $model->getId()));
                 } else {
                     $this->_redirect('*/*/');
@@ -95,6 +98,27 @@ class Meanbee_Shippingrules_IndexController extends Mage_Adminhtml_Controller_Ac
         }
         Mage::getSingleton('adminhtml/session')->addError(Mage::helper('meanship')->__('No data found to save'));
         $this->_redirect('*/*/');
+    }
+
+    /**
+     * Validates any regex conditions have valid regex values. We want to return back to the edit rule page if there
+     * are any failures so return a boolean to indicate this.
+     *
+     * @param $conditions
+     * @return bool
+     */
+    protected function _validateRegexConditions($conditions) {
+        $redirectBackToEditPage = false;
+        foreach ($conditions as $condition) {
+            if ($condition['operator'] == '//') {
+                if(!Mage::helper('meanship')->isValidRegex($condition['value'])) {
+                    Mage::getSingleton('adminhtml/session')->addError(sprintf("'%s' is not a valid regular expression. Your shipping rule may not behave as expected.", $condition['value']));
+                    $redirectBackToEditPage = true;
+                }
+            }
+        }
+
+        return $redirectBackToEditPage;
     }
 
     public function deleteAction() {
@@ -144,6 +168,10 @@ class Meanbee_Shippingrules_IndexController extends Mage_Adminhtml_Controller_Ac
             ->setType($type)
             ->setRule(Mage::getModel('meanship/rule'))
             ->setPrefix('conditions');
+
+        if (!empty($typeArr[1])) {
+            $model->setAttribute($typeArr[1]);
+        }
 
         if ($model instanceof Mage_Rule_Model_Condition_Abstract) {
             $model->setJsFormObject($this->getRequest()->getParam('form'));

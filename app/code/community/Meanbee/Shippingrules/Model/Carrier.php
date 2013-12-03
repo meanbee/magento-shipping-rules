@@ -24,10 +24,15 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
             // record method information
             $method->setMethod($rule_data->getId());
             $method->setMethodTitle($method_name);
-
-            // rate cost is optional property to record how much it costs to vendor to ship
-            $method->setCost($rule_data->getCost());
-            $method->setPrice($rule_data->getPrice());
+            
+            if ($request->getFreeShipping()) {
+                $method->setCost(0);
+                $method->setPrice(0);
+            } else { 
+                // rate cost is optional property to record how much it costs to vendor to ship
+                $method->setCost($rule_data->getCost());
+                $method->setPrice($rule_data->getPrice());
+            }
 
             $result->append($method);
         }
@@ -61,10 +66,13 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
         /**
          * The customer doesn't come to us through $request, so we need to check for it manually.  This following will
          * work on the frontend checkout.
-         *
-         * @TODO Check how this performs when creating an order from the admin area.
          */
-        if ($customer = Mage::helper('customer')->getCustomer()) {
+        if(Mage::getSingleton('adminhtml/session_quote')->getCustomer()->hasData()) {
+            $customer = Mage::getSingleton('adminhtml/session_quote')->getCustomer();
+            $request->setCustomer($customer);
+            $request->setCustomerGroupId($customer->getGroupId());
+        } elseif (Mage::helper('customer')->getCustomer()->hasData()) {
+            $customer = Mage::helper('customer')->getCustomer();
             $request->setCustomer($customer);
             $request->setCustomerGroupId($customer->getGroupId());
         } else {
@@ -75,6 +83,7 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
         $stop_flag = array();
 
         foreach ($rule_collection as $rule) {
+            /** @var $rule Meanbee_Shippingrules_Model_Rule */
             if (!$rule->validate($request)) {
                 continue;
             }

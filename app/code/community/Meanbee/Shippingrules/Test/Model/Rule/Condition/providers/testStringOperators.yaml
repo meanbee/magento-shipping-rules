@@ -1,0 +1,162 @@
+############################################################
+# These tests read:
+#
+#     "Is $a $operator $b?"
+#     Example: Is 1 on of [1,2,3]?
+############################################################
+-
+  a: test
+  operator: "=="
+  b: test
+  pass: true
+
+-
+  a: test
+  operator: "=="
+  b: tes
+  pass: false
+
+############################################################
+-
+  a: test
+  operator: "!="
+  b: test
+  pass: false
+
+-
+  a: test
+  operator: "!="
+  b: tes
+  pass: true
+
+############################################################
+-
+  a: test
+  operator: "{}"
+  b: tes
+  pass: true
+
+-
+  a: test
+  operator: "{}"
+  b: st
+  pass: true
+
+-
+  a: test
+  operator: "{}"
+  b: es
+  pass: true
+
+-
+  a: test
+  operator: "{}"
+  b: test
+  pass: true
+
+-
+  a: test
+  operator: "{}"
+  b: a
+  pass: false
+
+############################################################
+-
+  a: test
+  operator: "!{}"
+  b: a
+  pass: true
+
+-
+  a: test
+  operator: "!{}"
+  b: test
+  pass: false
+
+############################################################
+-
+  a: test
+  operator: "^"
+  b: t
+  pass: true
+
+-
+  a: test
+  operator: "^"
+  b: te
+  pass: true
+
+-
+  a: test
+  operator: "^"
+  b: tes
+  pass: true
+
+-
+  a: test
+  operator: "^"
+  b: test
+  pass: true
+
+-
+  a: test
+  operator: "^"
+  b: e
+  pass: false
+
+############################################################
+-
+  a: test
+  operator: "$"
+  b: t
+  pass: true
+
+-
+  a: test
+  operator: "$"
+  b: st
+  pass: true
+
+-
+  a: test
+  operator: "$"
+  b: est
+  pass: true
+
+-
+  a: test
+  operator: "$"
+  b: test
+  pass: true
+
+-
+  a: test
+  operator: "$"
+  b: a
+  pass: false
+
+############################################################
+-
+  a: test
+  operator: "!^"
+  b: e
+  pass: true
+
+-
+  a: test
+  operator: "!^"
+  b: t
+  pass: false
+
+############################################################
+-
+  a: test
+  operator: "!$"
+  b: e
+  pass: true
+
+-
+  a: test
+  operator: "!$"
+  b: t
+  pass: false
