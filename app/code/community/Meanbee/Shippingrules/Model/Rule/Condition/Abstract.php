@@ -1,5 +1,6 @@
 <?php
 class Meanbee_Shippingrules_Model_Rule_Condition_Abstract extends Mage_Rule_Model_Condition_Abstract {
+
     /**
      * Default operator input by type map getter
      *
@@ -9,7 +10,7 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Abstract extends Mage_Rule_Mode
     {
         if (null === $this->_defaultOperatorInputByType) {
             $this->_defaultOperatorInputByType = array(
-                'string'      => array('==', '!=', '{}', '!{}', '^', '$', '!^', '!$'),
+                'string'      => array('==', '!=', '{}', '!{}', '^', '$', '!^', '!$', '//'),
                 'numeric'     => array('==', '!=', '>=', '>', '<=', '<', '()', '!()'),
                 'date'        => array('==', '>=', '<='),
                 'select'      => array('==', '!='),
@@ -47,6 +48,7 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Abstract extends Mage_Rule_Mode
                 '$'   => Mage::helper('meanship')->__('ends with'),
                 '!^'   => Mage::helper('meanship')->__('does not begin with'),
                 '!$'   => Mage::helper('meanship')->__('does not end with'),
+                '//'   => Mage::helper('meanship')->__('matches regex'),
             );
         }
 
@@ -207,6 +209,11 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Abstract extends Mage_Rule_Mode
                 $result = (substr($validatedValue, -$length) === $value);
             }
             break;
+            case '//':
+                if (Mage::helper('meanship')->isValidRegex($value)) {
+                    $result = (bool)preg_match($value, $validatedValue);
+                }
+                break;
         }
 
         if ('!=' == $op || '>' == $op || '<' == $op || '!{}' == $op || '!()' == $op || '!^' == $op || '!$' == $op) {
