@@ -78,6 +78,7 @@ class Meanbee_Shippingrules_IndexController extends Mage_Adminhtml_Controller_Ac
                 Mage::getSingleton('adminhtml/session')->setFormData(false);
 
                 // The following line decides if it is a "save" or "save and continue"
+                // forceRedirect is a boolean we set if the conditions contain an invalid regex.
                 if ($forceRedirect || $this->getRequest()->getParam('back')) {
                     $this->_redirect('*/*/edit', array('id' => $model->getId()));
                 } else {
