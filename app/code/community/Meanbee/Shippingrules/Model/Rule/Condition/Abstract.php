@@ -9,12 +9,12 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Abstract extends Mage_Rule_Mode
     {
         if (null === $this->_defaultOperatorInputByType) {
             $this->_defaultOperatorInputByType = array(
-                'string'      => array('==', '!=', '>=', '>', '<=', '<', '{}', '!{}', '()', '!()', '^', '$', '!^', '!$'),
+                'string'      => array('==', '!=', '{}', '!{}', '^', '$', '!^', '!$'),
                 'numeric'     => array('==', '!=', '>=', '>', '<=', '<', '()', '!()'),
                 'date'        => array('==', '>=', '<='),
                 'select'      => array('==', '!='),
                 'boolean'     => array('==', '!='),
-                'multiselect' => array('{}', '!{}', '()', '!()'),
+                'multiselect' => array('()', '!()'),
                 'grid'        => array('()', '!()'),
             );
             $this->_arrayInputTypes = array('multiselect', 'grid');

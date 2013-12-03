@@ -1,0 +1,13 @@
+-
+  attribute: dest_postcode
+  input: ba1 2bn
+  output: ba12bn
+-
+  attribute: dest_postcode
+  input: BA1 2BN
+  output: ba12bn
+
+-
+  attribute: dest_postcode
+  input: BA1 2 b n
+  output: ba12bn

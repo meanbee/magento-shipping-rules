@@ -83,6 +83,7 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
         $stop_flag = array();
 
         foreach ($rule_collection as $rule) {
+            /** @var $rule Meanbee_Shippingrules_Model_Rule */
             if (!$rule->validate($request)) {
                 continue;
             }
