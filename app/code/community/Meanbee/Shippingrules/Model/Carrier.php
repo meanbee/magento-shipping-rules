@@ -67,7 +67,7 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
          * The customer doesn't come to us through $request, so we need to check for it manually.  This following will
          * work on the frontend checkout.
          */
-        if(Mage::getSingleton('adminhtml/session_quote')->getCustomer()->hasData()) {
+        if (Mage::getSingleton('adminhtml/session_quote')->getCustomer()->hasData()) {
             $customer = Mage::getSingleton('adminhtml/session_quote')->getCustomer();
             $request->setCustomer($customer);
             $request->setCustomerGroupId($customer->getGroupId());
@@ -80,6 +80,15 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
             $request->setCustomerGroupId(Mage_Customer_Model_Group::NOT_LOGGED_IN_ID);
         }
 
+        /**
+         * Determine whether or not this is an order placed in the admin area.
+         */
+        if (Mage::getSingleton('adminhtml/session_quote')->hasData('quote_id')) {
+            $request->setIsAdminOrder(true);
+        } else {
+            $request->setIsAdminOrder(false);
+        }
+        
         $stop_flag = array();
 
         foreach ($rule_collection as $rule) {
