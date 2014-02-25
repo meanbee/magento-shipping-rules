@@ -13,6 +13,7 @@ class Meanbee_Shippingrules_Model_Rule_Condition extends Meanbee_Shippingrules_M
             'customer_group_id' => Mage::helper('meanship')->__('Customer Group'),
 
             'dest_country_id' => Mage::helper('meanship')->__('Shipping Country'),
+            'dest_country_group' => Mage::helper('meanship')->__('Shipping Country Group'),
             'dest_region_id'  => Mage::helper('meanship')->__('Shipping State'),
             'dest_postcode'   => Mage::helper('meanship')->__('Shipping Zipcode')
         );
@@ -26,6 +27,7 @@ class Meanbee_Shippingrules_Model_Rule_Condition extends Meanbee_Shippingrules_M
         switch ($this->getAttribute()) {
             case 'customer_group_id':
             case 'dest_country_id':
+            case 'dest_country_group':
             case 'dest_region_id':
             case 'store_id':
             case 'website_id':
@@ -43,6 +45,7 @@ class Meanbee_Shippingrules_Model_Rule_Condition extends Meanbee_Shippingrules_M
         switch ($this->getAttribute()) {
             case 'customer_group_id':
             case 'dest_country_id':
+            case 'dest_country_group':
             case 'dest_region_id':
             case 'store_id':
             case 'website_id':
@@ -71,6 +74,10 @@ class Meanbee_Shippingrules_Model_Rule_Condition extends Meanbee_Shippingrules_M
                     $options = Mage::getResourceModel('directory/region_collection')
                         ->loadData()
                         ->toOptionArray(false);
+                    break;
+                case 'dest_country_group':
+                    $options = Mage::getModel('meanship/rule_condition_source_countryGroup')
+                        ->toOptionArray();
                     break;
                 case 'store_id':
                     $options = Mage::getResourceModel('core/store_collection')
