@@ -80,6 +80,8 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
             $request->setCustomerGroupId(Mage_Customer_Model_Group::NOT_LOGGED_IN_ID);
         }
 
+        $request = $this->_addPostcodePrefixToRequest($request);
+
         $stop_flag = array();
 
         foreach ($rule_collection as $rule) {
@@ -115,5 +117,20 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
         }
 
         return $methods;
+    }
+
+    protected function _addPostcodePrefixToRequest(Mage_Shipping_Model_Rate_Request $request) {
+        $postcode = $request->getDestPostcode();
+        $postcode_prefix = null;
+
+        if ($postcode) {
+            $postcode_prefix = Mage::helper('meanship/postcode')->extractUKPostcodePrefix($postcode);
+        }
+
+        if ($postcode_prefix) {
+            $request->setData('dest_postcode_prefix', $postcode_prefix);
+        }
+
+        return $request;
     }
 }
