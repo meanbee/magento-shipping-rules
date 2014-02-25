@@ -8,9 +8,17 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules extends Mage_Adminhtml_Block_W
         $this->_controller = 'adminhtml_rules';
         $this->_blockGroup = 'meanship';
         $this->_headerText = Mage::helper('meanship')->__('Manage Shipping Rules');
+
+        if (!$this->isAllowedToWrite()) {
+            $this->_removeButton('add');
+        }
     }
 
     public function getHeaderCssClass() {
         return 'head-shipping-method ' . parent::getHeaderCssClass();
+    }
+
+    public function isAllowedToWrite() {
+        return Mage::helper('meanship/acl')->isAllowedToWrite();
     }
 }

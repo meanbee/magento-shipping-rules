@@ -67,6 +67,10 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Combine extends Mage_Rule_Model
                     'value' => 'meanship/rule_condition|dest_country_id'
                 ),
                 array(
+                    'label' => Mage::helper('meanship')->__('Shipping Country Group'),
+                    'value' => 'meanship/rule_condition|dest_country_group'
+                ),
+                array(
                     'label' => Mage::helper('meanship')->__('Shipping State'),
                     'value' => 'meanship/rule_condition|dest_region_id'
                 ),
