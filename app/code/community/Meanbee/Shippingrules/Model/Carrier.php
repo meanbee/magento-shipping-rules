@@ -80,6 +80,8 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
             $request->setCustomerGroupId(Mage_Customer_Model_Group::NOT_LOGGED_IN_ID);
         }
 
+        $request = $this->_addCountryGroupToRequest($request);
+
         $stop_flag = array();
 
         foreach ($rule_collection as $rule) {
@@ -115,5 +117,22 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
         }
 
         return $methods;
+    }
+
+    protected function _addCountryGroupToRequest(Mage_Shipping_Model_Rate_Request $request) {
+
+        $destination_country = $request->getDestCountryId();
+        $destination_country_group = null;
+
+        if (Mage::helper('core')->isCountryInEU($destination_country)) {
+            $destination_country_group = 'eu';
+        }
+
+        if ($destination_country_group) {
+            $request->setData('dest_country_group', $destination_country_group);
+        }
+
+        return $request;
+
     }
 }
