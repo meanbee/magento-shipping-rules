@@ -1,6 +1,6 @@
 <?php
 class Meanbee_Shippingrules_Helper_Postcode extends Mage_Core_Helper_Abstract {
-    static protected $_VALID_POSTCODE_REGEX = '/^([a-z]{2}\d[a-z]|[a-z]\d[a-z]|[a-z]\d|[a-z]\d{2}|[a-z]{2}\d|[a-z]{2}\d{2})|\d[a-z]{2}$/i';
+    static protected $_VALID_POSTCODE_REGEX = '/^([a-z]{2}\d[a-z]|[a-z]\d[a-z]|[a-z]\d|[a-z]\d{2}|[a-z]{2}\d|[a-z]{2}\d{2})\d[a-z]{2}$/i';
 
     /**
      * @param $postcode
@@ -23,6 +23,13 @@ class Meanbee_Shippingrules_Helper_Postcode extends Mage_Core_Helper_Abstract {
      * @return bool
      */
     public function isValidPostcode($postcode) {
+        $postcode = $this->sanitisePostcode($postcode);
+        $postcode_length = strlen($postcode);
+
+        if ($postcode_length > 8 || $postcode_length < 5) {
+            return false;
+        }
+
         return preg_match(self::$_VALID_POSTCODE_REGEX, $postcode) === 1;
     }
 
