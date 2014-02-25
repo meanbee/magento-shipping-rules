@@ -9,7 +9,7 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Edit extends Mage_Adminhtml_Bl
         $this->_mode = 'edit';
 
         if ($rule_id = Mage::registry('meanship_data')->getId()) {
-            $duplicate_url = $this->getUrl('shippingrules/index/duplicate', array(
+            $duplicate_url = $this->getUrl('*/*/duplicate', array(
                 'id' => $rule_id
             ));
 

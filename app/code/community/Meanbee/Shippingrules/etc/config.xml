@@ -51,13 +51,13 @@
     </global>
     <admin>
         <routers>
-            <meanbee_shippingrules_admin>
-                <use>admin</use>
+            <adminhtml>
                 <args>
-                    <module>Meanbee_Shippingrules</module>
-                    <frontName>shippingrules</frontName>
+                    <modules>
+                        <meanbee_shippingrules before="Mage_Adminhtml">Meanbee_Shippingrules</meanbee_shippingrules>
+                    </modules>
                 </args>
-            </meanbee_shippingrules_admin>
+            </adminhtml>
         </routers>
     </admin>
     <adminhtml>
@@ -73,7 +73,7 @@
                 <children>
                     <meanbee_shippingrules translate="title">
                         <title>Manage Shipping Rules</title>
-                        <action>shippingrules/index/index</action>
+                        <action>adminhtml/shippingrules/index</action>
                         <!-- Just beneath Manage Categories -->
                         <sort_order>100</sort_order>
                     </meanbee_shippingrules>
