@@ -69,12 +69,6 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Grid extends Mage_Adminhtml_Bl
             'filter'    => false
         ));
 
-        $this->addColumn('cost', array(
-            'header'  => Mage::helper('meanship')->__('Cost'),
-            'type'    => 'price',
-            'visible' => false
-        ));
-
         $this->addColumn('sort_order', array(
             'header'    => Mage::helper('meanship')->__('Sort Order'),
             'align'     => 'center',
