@@ -2,6 +2,10 @@
 class Meanbee_Shippingrules_Model_Rule_Condition extends Meanbee_Shippingrules_Model_Rule_Condition_Abstract {
     public function loadAttributeOptions() {
         $attributes = array(
+            'store_id'       => Mage::helper('meanship')->__('Magento Store'),
+            'website_id'     => Mage::helper('meanship')->__('Magento Website'),
+            'is_admin_order' => Mage::helper('meanship')->__('Is an admin order'),
+
             'package_qty'    => Mage::helper('meanship')->__('Total Items Quantity'),
             'package_value'  => Mage::helper('meanship')->__('Subtotal'),
             'package_weight' => Mage::helper('meanship')->__('Total Weight'),
@@ -25,7 +29,11 @@ class Meanbee_Shippingrules_Model_Rule_Condition extends Meanbee_Shippingrules_M
             case 'dest_country_id':
             case 'dest_country_group':
             case 'dest_region_id':
+            case 'store_id':
+            case 'website_id':
                 return 'multiselect';
+            case 'is_admin_order':
+                return 'select';
             case 'dest_postcode':
                 return 'string';
             default:
@@ -39,7 +47,11 @@ class Meanbee_Shippingrules_Model_Rule_Condition extends Meanbee_Shippingrules_M
             case 'dest_country_id':
             case 'dest_country_group':
             case 'dest_region_id':
+            case 'store_id':
+            case 'website_id':
                 return 'multiselect';
+            case 'is_admin_order':
+                return 'select';
             default:
                 return 'text';
         }
@@ -65,6 +77,18 @@ class Meanbee_Shippingrules_Model_Rule_Condition extends Meanbee_Shippingrules_M
                     break;
                 case 'dest_country_group':
                     $options = Mage::getModel('meanship/rule_condition_source_countryGroup')
+                        ->toOptionArray();
+                    break;
+                case 'store_id':
+                    $options = Mage::getResourceModel('core/store_collection')
+                        ->toOptionArray();
+                    break;
+                case 'website_id':
+                    $options = Mage::getResourceModel('core/website_collection')
+                        ->toOptionArray();
+                    break;
+                case 'is_admin_order':
+                    $options = Mage::getModel('adminhtml/system_config_source_yesno')
                         ->toOptionArray();
                     break;
                 default:
@@ -95,6 +119,9 @@ class Meanbee_Shippingrules_Model_Rule_Condition extends Meanbee_Shippingrules_M
         switch ($this->getAttribute()) {
             case 'dest_postcode':
                 $value = str_replace(' ', '', strtolower($value));
+                break;
+            case 'is_admin_order':
+                $value = ($value == '1');
                 break;
         }
 
