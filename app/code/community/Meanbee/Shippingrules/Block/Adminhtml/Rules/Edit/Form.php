@@ -28,7 +28,8 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Edit_Form extends Mage_Adminht
             'class'     => 'required-entry',
             'required'  => true,
             'name'      => 'is_active',
-            'values'    => Mage::getSingleton('adminhtml/system_config_source_yesno')->toOptionArray()
+            'values'    => Mage::getSingleton('adminhtml/system_config_source_yesno')->toOptionArray(),
+            'disabled'  => !$this->isAllowedToWrite()
         ));
 
         $fieldset->addField('name', 'text', array(
@@ -37,6 +38,7 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Edit_Form extends Mage_Adminht
             'required'  => true,
             'name'      => 'name',
             'note'     => Mage::helper('meanship')->__('This is the name of the shipping method that will be displayed to the customer.'),
+            'disabled'  => !$this->isAllowedToWrite()
         ));
 
         $fieldset->addField('price', 'text', array(
@@ -45,12 +47,14 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Edit_Form extends Mage_Adminht
             'required'  => true,
             'name'      => 'price',
             'note'     => Mage::helper('meanship')->__('This is the price that the customer will be charged.'),
+            'disabled'  => !$this->isAllowedToWrite()
         ));
 
         $fieldset->addField('sort_order', 'text', array(
             'label'     => Mage::helper('meanship')->__('Sort Order'),
             'name'      => 'sort_order',
             'note'     => Mage::helper('meanship')->__('<em>Optional</em>. Rules are sorted ascending, so lower values will be checked first.'),
+            'disabled'  => !$this->isAllowedToWrite()
         ));
 
         $fieldset->addField('stop_rules_processing', 'checkbox', array(
@@ -59,12 +63,14 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Edit_Form extends Mage_Adminht
             'value'     => 1,
             'checked'   => $data->getStopRulesProcessing() == '1',
             'note'     => Mage::helper('meanship')->__("<em>Optional</em>. Stop processing rules sharing this rule's shipping method name if it matches."),
+            'disabled'  => !$this->isAllowedToWrite()
         ));
 
         $fieldset->addField('cost', 'text', array(
             'label'     => Mage::helper('meanship')->__('Shipping Method Cost'),
             'name'      => 'cost',
             'note'     => Mage::helper('meanship')->__('<em>Optional</em>. The actual cost incurred by the store owner when the customer uses this method.'),
+            'disabled'  => !$this->isAllowedToWrite()
         ));
 
         $renderer = Mage::getBlockSingleton('adminhtml/widget_form_renderer_fieldset')
@@ -72,14 +78,14 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Edit_Form extends Mage_Adminht
             ->setNewChildUrl($this->getUrl('*/*/newConditionHtml/form/rule_conditions_fieldset'));
 
         $conditions_fieldset = $form->addFieldset('conditions_fieldset', array(
-            'legend' => Mage::helper('meanship')->__('Cart Conditions'))
-        )->setRenderer($renderer);
+            'legend' => Mage::helper('meanship')->__('Cart Conditions')
+        ))->setRenderer($renderer);
 
         $conditions_fieldset->addField('conditions', 'text', array(
             'name'  => 'conditions',
             'label' => Mage::helper('meanship')->__('Conditions'),
             'title' => Mage::helper('meanship')->__('Conditions'),
-            'required' => true,
+            'required' => true
         ))->setRule($data)->setRenderer(Mage::getBlockSingleton('rule/conditions'));
 
         if ($data) {
@@ -92,5 +98,9 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Edit_Form extends Mage_Adminht
         }
 
         return parent::_prepareForm();
+    }
+
+    public function isAllowedToWrite() {
+        return Mage::helper('meanship/acl')->isAllowedToWrite();
     }
 }
