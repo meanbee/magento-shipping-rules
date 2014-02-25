@@ -116,7 +116,7 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Grid extends Mage_Adminhtml_Bl
     public function decorateExportValue($value, $row, $column, $isExport) {
         if ($isExport) {
             if ($column->getIndex() == 'conditions_serialized') {
-                return base64_encode($value);
+                return base64_encode(html_entity_decode($value));
             }
         }
 
