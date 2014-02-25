@@ -65,7 +65,7 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
 
         $request = $this->addCustomerDataToRequest($request);
         $request = $this->addAdminOrderDataToRequest($request);
-        $request = $this->_addCountryGroupToRequest($request);
+        $request = $this->addCountryGroupToRequest($request);
 
         $stop_flag = array();
 
@@ -104,7 +104,15 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
         return $methods;
     }
 
-    protected function _addCountryGroupToRequest(Mage_Shipping_Model_Rate_Request $request) {
+    /**
+     * Establish whether or not the destination country is in a country group and add the country group
+     * to the request if so.
+     *
+     * @param Mage_Shipping_Model_Rate_Request $request
+     *
+     * @return Mage_Shipping_Model_Rate_Request
+     */
+    public function addCountryGroupToRequest(Mage_Shipping_Model_Rate_Request $request) {
 
         $destination_country = $request->getDestCountryId();
         $destination_country_group = null;
