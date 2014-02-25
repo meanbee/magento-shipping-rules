@@ -182,8 +182,46 @@ class Meanbee_Shippingrules_IndexController extends Mage_Adminhtml_Controller_Ac
         $this->getResponse()->setBody($html);
     }
 
-    public function exportAction() {
-        print_r($_POST);
+    public function exportCsvAction() {
+        $filename = sprintf('%s.csv', $this->_getDownloadFileName());
+        $data = $this->getLayout()->createBlock('meanship/adminhtml_rules_grid')->getCsv();
+
+        return $this->_setDownloadHeaders($filename, $data);
+    }
+
+    /**
+     * Return a host-name-time-specific download filename without the file
+     * extension.
+     *
+     * @return string
+     */
+    protected function _getDownloadFileName() {
+        $base_url_parts = parse_url(Mage::getBaseUrl());
+        return sprintf(
+            'meanbee_shippingrules_%s_%s',
+            str_replace('.', '_', $base_url_parts['host']),
+            date('Ymd\THis')
+        );
+    }
+
+    /**
+     * Set headers that force a download in browsers.
+     *
+     * @param $filename
+     * @param $data
+     *
+     * @return Mage_Core_Controller_Response_Http
+     */
+    protected function _setDownloadHeaders($filename, $data) {
+        $response = $this->getResponse();
+
+        $response->setHeader('Content-Type', 'application/octet-stream');
+        $response->setHeader('Content-Transfer-Encoding', 'binary');
+        $response->setHeader('Content-Disposition', 'attachment; filename="' . $filename . '"');
+
+        $response->setBody($data);
+
+        return $response;
     }
 
     public function massDeleteAction() {
