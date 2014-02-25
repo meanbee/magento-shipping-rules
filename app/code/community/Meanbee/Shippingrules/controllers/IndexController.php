@@ -290,6 +290,41 @@ class Meanbee_Shippingrules_IndexController extends Mage_Adminhtml_Controller_Ac
         $this->_redirect('*/*');
     }
 
+    public function importAction() {
+        $this->loadLayout();
+        $this->renderLayout();
+    }
+
+    public function importPostAction() {
+        try {
+            $temp_file_name = sprintf('meanbee_shippingrules_import_%s_%s.csv', date('su'), md5(time()));
+
+            $uploader = new Varien_File_Uploader('csv_import');
+
+            $uploader->setAllowedExtensions(array('csv'));
+            $uploader->setAllowCreateFolders(false);
+            $uploader->setFilesDispersion(false);
+            $uploader->setAllowRenameFiles(false);
+
+            $uploader->save(Mage::getBaseDir('tmp'), $temp_file_name);
+
+            $temp_file_name_with_path = Mage::getBaseDir('tmp') . DS . $temp_file_name;
+
+            $import_result = Mage::helper('meanship/import')->importRulesFromFile($temp_file_name_with_path);
+
+            if ($import_result) {
+                $this->_addSuccess("Your rules have been successfully imported");
+                $this->_redirect('*/*/');
+            } else {
+                $this->_addError("An unknown error occurred during the import process");
+                $this->_redirectReferer();
+            }
+        } catch (Exception $e) {
+            $this->_addError(sprintf("Error attempting to import CSV: %s", $e->getMessage()));
+            $this->_redirectReferer();
+        }
+    }
+
     protected function _addSuccess($message) {
         Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('meanship')->__($message));
     }

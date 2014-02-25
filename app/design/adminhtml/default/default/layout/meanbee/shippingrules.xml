@@ -14,4 +14,9 @@
             <block type="meanship/adminhtml_rules_edit" name="rules_edit" />
         </reference>
     </meanbee_shippingrules_admin_index_edit>
+    <meanbee_shippingrules_admin_index_import>
+        <reference name="content">
+            <block type="meanship/adminhtml_rules_import" name="import" template="meanbee/shippingrules/rules/import.phtml" />
+        </reference>
+    </meanbee_shippingrules_admin_index_import>
 </layout>

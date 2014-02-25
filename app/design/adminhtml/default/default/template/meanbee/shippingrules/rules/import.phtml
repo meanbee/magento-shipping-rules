@@ -1,0 +1,6 @@
+<?php /** @var Meanbee_Shippingrules_Block_Adminhtml_Rules_Import */ ?>
+<form action="<?php echo $this->getPostUrl() ?>" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="form_key" value="<?php echo $this->getFormKey() ?>" />
+    <input type="file" name="csv_import" />
+    <input type="submit" value="Import Rules" />
+</form>
