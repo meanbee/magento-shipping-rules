@@ -63,22 +63,9 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
             ->addFieldToFilter('is_active', 1)
             ->setOrder('sort_order', Varien_Data_Collection::SORT_ORDER_ASC);
 
-        /**
-         * The customer doesn't come to us through $request, so we need to check for it manually.  This following will
-         * work on the frontend checkout.
-         */
-        if(Mage::getSingleton('adminhtml/session_quote')->getCustomer()->hasData()) {
-            $customer = Mage::getSingleton('adminhtml/session_quote')->getCustomer();
-            $request->setCustomer($customer);
-            $request->setCustomerGroupId($customer->getGroupId());
-        } elseif (Mage::helper('customer')->getCustomer()->hasData()) {
-            $customer = Mage::helper('customer')->getCustomer();
-            $request->setCustomer($customer);
-            $request->setCustomerGroupId($customer->getGroupId());
-        } else {
-            $request->setCustomer(null);
-            $request->setCustomerGroupId(Mage_Customer_Model_Group::NOT_LOGGED_IN_ID);
-        }
+        $request = $this->addCustomerDataToRequest($request);
+        $request = $this->addAdminOrderDataToRequest($request);
+        $request = $this->addCountryGroupToRequest($request);
 
         $stop_flag = array();
 
@@ -115,5 +102,70 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
         }
 
         return $methods;
+    }
+
+    /**
+     * Establish whether or not the destination country is in a country group and add the country group
+     * to the request if so.
+     *
+     * @param Mage_Shipping_Model_Rate_Request $request
+     *
+     * @return Mage_Shipping_Model_Rate_Request
+     */
+    public function addCountryGroupToRequest(Mage_Shipping_Model_Rate_Request $request) {
+
+        $destination_country = $request->getDestCountryId();
+        $destination_country_group = null;
+
+        if (Mage::helper('core')->isCountryInEU($destination_country)) {
+            $destination_country_group = 'eu';
+        }
+
+        if ($destination_country_group) {
+            $request->setData('dest_country_group', $destination_country_group);
+        }
+
+        return $request;
+    }
+
+    /**
+     * The customer doesn't come to us through $request, so we need to check for it manually.  This following will
+     * work on the frontend checkout.
+     *
+     * @param $request Mage_Shipping_Model_Rate_Request
+     * @return Mage_Shipping_Model_Rate_Request
+     */
+    public function addCustomerDataToRequest(Mage_Shipping_Model_Rate_Request $request) {
+        if (Mage::getSingleton('adminhtml/session_quote')->getCustomer()->hasData()) {
+            $customer = Mage::getSingleton('adminhtml/session_quote')->getCustomer();
+            $request->setCustomer($customer);
+            $request->setCustomerGroupId($customer->getGroupId());
+        } elseif (Mage::helper('customer')->getCustomer()->hasData()) {
+            $customer = Mage::helper('customer')->getCustomer();
+            $request->setCustomer($customer);
+            $request->setCustomerGroupId($customer->getGroupId());
+        } else {
+            $request->setCustomer(null);
+            $request->setCustomerGroupId(Mage_Customer_Model_Group::NOT_LOGGED_IN_ID);
+        }
+
+        return $request;
+    }
+
+    /**
+     * Determine whether or not this is an order placed in the admin area.
+     *
+     * @param Mage_Shipping_Model_Rate_Request $request
+     *
+     * @return Mage_Shipping_Model_Rate_Request
+     */
+    public function addAdminOrderDataToRequest(Mage_Shipping_Model_Rate_Request $request) {
+        if (Mage::getSingleton('adminhtml/session_quote')->hasData('quote_id')) {
+            $request->setIsAdminOrder(true);
+        } else {
+            $request->setIsAdminOrder(false);
+        }
+
+        return $request;
     }
 }

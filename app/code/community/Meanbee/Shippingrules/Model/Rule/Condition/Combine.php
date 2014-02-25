@@ -14,6 +14,24 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Combine extends Mage_Rule_Model
         );
 
         $conditions[] = array(
+            'label' => Mage::helper('meanship')->__('Magento Environment'),
+            'value' => array(
+                array(
+                    'label' => Mage::helper('meanship')->__('Magento Store'),
+                    'value' => 'meanship/rule_condition|store_id'
+                ),
+                array(
+                    'label' => Mage::helper('meanship')->__('Magento Website'),
+                    'value' => 'meanship/rule_condition|website_id'
+                ),
+                array(
+                    'label' => Mage::helper('meanship')->__('Is an admin order?'),
+                    'value' => 'meanship/rule_condition|is_admin_order'
+                )
+            )
+        );
+
+        $conditions[] = array(
             'label' => Mage::helper('meanship')->__('Customer Information'),
             'value' => array(
                 array(
@@ -47,6 +65,10 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Combine extends Mage_Rule_Model
                 array(
                     'label' => Mage::helper('meanship')->__('Shipping Country'),
                     'value' => 'meanship/rule_condition|dest_country_id'
+                ),
+                array(
+                    'label' => Mage::helper('meanship')->__('Shipping Country Group'),
+                    'value' => 'meanship/rule_condition|dest_country_group'
                 ),
                 array(
                     'label' => Mage::helper('meanship')->__('Shipping State'),
