@@ -17,4 +17,42 @@ class Meanbee_Shippingrules_Test_Model_Carrier extends EcomDev_PHPUnit_Test_Case
     public function testModelConstructed() {
         $this->assertInstanceOf('Meanbee_Shippingrules_Model_Carrier', $this->_obj);
     }
+
+    /**
+     * @test
+     * @loadFixture
+     * @dataProvider dataProvider
+     */
+    public function testCollectRates($id, $request_data) {
+        $adminhtml_session_quote = $this->mockSession('adminhtml/session_quote', array('hasData'));
+        $this->replaceByMock('singleton', 'adminhtml/session_quote', $adminhtml_session_quote);
+
+        $customer_session = $this->mockSession('customer/session', array('hasData'));
+        $this->replaceByMock('singleton', 'customer/session', $customer_session);
+
+        $expected_methods = $this->expected($id);
+
+        $request_obj = $this->_buildRequestObj($request_data);
+        $result_obj = $this->_obj->collectRates($request_obj);
+
+        $rates = $result_obj->getAllRates();
+
+        $this->assertEquals(count($expected_methods), count($rates), "The number of rates returned did not match the number of expected rates");
+
+        foreach ($rates as $method) {
+            /** @var Mage_Shipping_Model_Rate_Result_Method $method */
+            $method_code = sprintf("%s_%s", $method->getCarrier(), $method->getMethod());
+            $this->assertContains($method_code, $expected_methods, sprintf("Could not find %s in expected methods", $method_code), true, false);
+        }
+    }
+
+    /**
+     * @param $request_data
+     *
+     * @return Mage_Shipping_Model_Rate_Request
+     */
+    protected function _buildRequestObj($request_data) {
+        $result = Mage::getModel('shipping/rate_request')->addData($request_data);
+        return $result;
+    }
 }
