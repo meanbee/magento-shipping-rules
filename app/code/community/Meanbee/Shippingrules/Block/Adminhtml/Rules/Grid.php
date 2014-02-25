@@ -69,28 +69,34 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Grid extends Mage_Adminhtml_Bl
         $this->setMassactionIdField('rule_id');
         $this->getMassactionBlock()->setFormFieldName('rule_id');
 
-        $this->getMassactionBlock()->addItem('delete', array(
-            'label'=> Mage::helper('meanship')->__('Delete Shipping Rules'),
-            'url'  => $this->getUrl('*/*/massDelete', array('' => '')),
-            'confirm' => Mage::helper('meanship')->__('Are you sure?')
-        ));
+        if ($this->isAllowedToWrite()) {
+            $this->getMassactionBlock()->addItem('delete', array(
+                'label'=> Mage::helper('meanship')->__('Delete Shipping Rules'),
+                'url'  => $this->getUrl('*/*/massDelete', array('' => '')),
+                'confirm' => Mage::helper('meanship')->__('Are you sure?')
+            ));
 
-        $this->getMassactionBlock()->addItem('disable', array(
-            'label'=> Mage::helper('meanship')->__('Disable Shipping Rules'),
-            'url'  => $this->getUrl('*/*/massDisable', array('' => '')),
-            'confirm' => Mage::helper('meanship')->__('Are you sure?')
-        ));
+            $this->getMassactionBlock()->addItem('disable', array(
+                'label'=> Mage::helper('meanship')->__('Disable Shipping Rules'),
+                'url'  => $this->getUrl('*/*/massDisable', array('' => '')),
+                'confirm' => Mage::helper('meanship')->__('Are you sure?')
+            ));
 
-        $this->getMassactionBlock()->addItem('enabled', array(
-            'label'=> Mage::helper('meanship')->__('Enable Shipping Rules'),
-            'url'  => $this->getUrl('*/*/massEnable', array('' => '')),
-            'confirm' => Mage::helper('meanship')->__('Are you sure?')
-        ));
+            $this->getMassactionBlock()->addItem('enabled', array(
+                'label'=> Mage::helper('meanship')->__('Enable Shipping Rules'),
+                'url'  => $this->getUrl('*/*/massEnable', array('' => '')),
+                'confirm' => Mage::helper('meanship')->__('Are you sure?')
+            ));
+        }
 
         return $this;
     }
 
     public function getRowUrl($row) {
         return $this->getUrl('*/*/edit', array('id' => $row->getId()));
+    }
+
+    public function isAllowedToWrite() {
+        return Mage::helper('meanship/acl')->isAllowedToWrite();
     }
 }

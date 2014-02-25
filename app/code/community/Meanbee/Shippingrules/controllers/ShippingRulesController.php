@@ -1,5 +1,22 @@
 <?php
 class Meanbee_Shippingrules_ShippingRulesController extends Mage_Adminhtml_Controller_Action {
+
+    protected static $_READ_ACTIONS = array(
+        'index',
+        'edit',
+        'export'
+    );
+
+    protected function _isAllowed() {
+        $requires_write_permission = !in_array($this->getRequest()->getActionName(), self::$_READ_ACTIONS);
+
+        if ($requires_write_permission) {
+            return Mage::helper('meanship/acl')->isAllowedToWrite();
+        } else {
+            return Mage::helper('meanship/acl')->isAllowedToRead();
+        }
+    }
+
     public function indexAction() {
         $this->loadLayout();
         $this->_setActiveMenu('catalog/meanbee_shippingrules');

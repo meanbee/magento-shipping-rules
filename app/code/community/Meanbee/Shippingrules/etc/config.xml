@@ -69,16 +69,17 @@
             </updates>
         </layout>
         <menu>
-            <sales>
+            <catalog>
                 <children>
                     <meanbee_shippingrules translate="title">
                         <title>Manage Shipping Rules</title>
                         <action>adminhtml/shippingrules/index</action>
                         <!-- Just beneath Manage Categories -->
                         <sort_order>100</sort_order>
+                        <resource>meanbee_shippingrules</resource>
                     </meanbee_shippingrules>
                 </children>
-            </sales>
+            </catalog>
         </menu>
     </adminhtml>
     <default>
