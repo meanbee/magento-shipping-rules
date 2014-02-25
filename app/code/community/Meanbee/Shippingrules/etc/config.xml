@@ -87,6 +87,7 @@
                 <active>1</active>
                 <model>meanship/carrier</model>
                 <title>Shipping Method</title>
+                <show_method_code_on_grid>0</show_method_code_on_grid>
             </meanship>
         </carriers>
     </default>

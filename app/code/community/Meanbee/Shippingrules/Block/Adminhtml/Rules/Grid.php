@@ -28,6 +28,18 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Grid extends Mage_Adminhtml_Bl
             )
         ));
 
+        if (Mage::helper('meanship/config')->getShouldShowMethodCodeOnGrid()) {
+            $this->addColumn('rule_id', array(
+                'header'    => Mage::helper('meanship')->__('Method Code'),
+                'align'     =>'left',
+                'index'     => 'rule_id',
+                'width'     => '50px',
+                'filter'    => false,
+                'sortable'  => false,
+                'frame_callback' => array($this, 'decorateUserValue')
+            ));
+        }
+
         $this->addColumn('name', array(
             'header'    => Mage::helper('meanship')->__('Name'),
             'align'     =>'left',
@@ -39,7 +51,8 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Grid extends Mage_Adminhtml_Bl
             'header'    => Mage::helper('meanship')->__('Rule Condition Summary'),
             'align'     =>'left',
             'getter'    => 'getConditionsHtml',
-            'filter'    => false
+            'filter'    => false,
+            'sortable'  => false
         ));
 
         $this->addColumn('price', array(
@@ -63,6 +76,22 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Grid extends Mage_Adminhtml_Bl
         ));
 
         return parent::_prepareColumns();
+    }
+
+    /**
+     * @param $value
+     * @param $row
+     * @param $column
+     * @param $isExport
+     *
+     * @return string
+     */
+    public function decorateUserValue($value, $row, $column, $isExport) {
+        if ($column->getIndex() == 'rule_id') {
+            return sprintf("%s_%s", Mage::getModel('meanship/carrier')->getCarrierCode(), $value);
+        }
+
+        return $value;
     }
 
     protected function _prepareMassaction() {
