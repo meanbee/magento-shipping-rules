@@ -19,6 +19,12 @@
 -
     postcode: DN55 1PT
     expected: dn55
+-
+    postcode: ba103bn
+    expected: ba10
+-
+    postcode: ba13bn
+    expected: ba1
 
 #########################################################
 # Sanity checks on input
