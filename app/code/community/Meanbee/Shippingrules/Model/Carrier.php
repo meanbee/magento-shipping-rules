@@ -65,7 +65,7 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
 
         $request = $this->addCustomerDataToRequest($request);
         $request = $this->addAdminOrderDataToRequest($request);
-        $request = $this->_addPostcodePrefixToRequest($request);
+        $request = $this->addPostcodePrefixToRequest($request);
 
         $stop_flag = array();
 
@@ -145,7 +145,14 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
         return $request;
     }
 
-    protected function _addPostcodePrefixToRequest(Mage_Shipping_Model_Rate_Request $request) {
+    /**
+     * Extract the postcode prefix from the destination postcode if available.
+     *
+     * @param Mage_Shipping_Model_Rate_Request $request
+     *
+     * @return Mage_Shipping_Model_Rate_Request
+     */
+    public function addPostcodePrefixToRequest(Mage_Shipping_Model_Rate_Request $request) {
         $postcode = $request->getDestPostcode();
         $postcode_prefix = null;
 
