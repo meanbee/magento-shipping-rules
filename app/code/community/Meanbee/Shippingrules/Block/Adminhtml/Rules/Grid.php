@@ -18,10 +18,10 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Grid extends Mage_Adminhtml_Bl
     }
 
     protected function _prepareColumns() {
-        if (!$this->_isExport) {
-            $this->_prepareUserColumns();
-        } else {
+        if ($this->_isExport) {
             $this->_prepareExportColumns();
+        } else {
+            $this->_prepareUserColumns();
         }
 
         return parent::_prepareColumns();
