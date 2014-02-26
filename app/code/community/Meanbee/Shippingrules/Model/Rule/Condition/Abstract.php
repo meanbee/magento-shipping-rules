@@ -1,6 +1,8 @@
 <?php
 class Meanbee_Shippingrules_Model_Rule_Condition_Abstract extends Mage_Rule_Model_Condition_Abstract {
 
+    protected $_arrayInputTypes = array();
+
     /**
      * Default operator input by type map getter
      *
