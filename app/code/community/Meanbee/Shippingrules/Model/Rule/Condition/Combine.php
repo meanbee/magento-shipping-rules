@@ -59,30 +59,11 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Combine extends Mage_Rule_Model
             )
         );
 
+
+
         $conditions[] = array(
             'label' => Mage::helper('meanship')->__('Destination Conditions'),
-            'value' => array(
-                array(
-                    'label' => Mage::helper('meanship')->__('Shipping Country'),
-                    'value' => 'meanship/rule_condition|dest_country_id'
-                ),
-                array(
-                    'label' => Mage::helper('meanship')->__('Shipping Country Group'),
-                    'value' => 'meanship/rule_condition|dest_country_group'
-                ),
-                array(
-                    'label' => Mage::helper('meanship')->__('Shipping State'),
-                    'value' => 'meanship/rule_condition|dest_region_id'
-                ),
-                array(
-                    'label' => Mage::helper('meanship')->__('Shipping Zip Code'),
-                    'value' => 'meanship/rule_condition|dest_postcode'
-                ),
-                array(
-                    'label' => Mage::helper('meanship')->__('Shipping Postcode (UK only) Prefix'),
-                    'value' => 'meanship/rule_condition|dest_postcode_prefix'
-                )
-            )
+            'value' => $this->getDestinationConditions()
         );
 
         $conditions[] = array(
@@ -96,6 +77,31 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Combine extends Mage_Rule_Model
         );
 
         return $conditions;
+    }
+
+    public function getDestinationConditions() {
+        return array(
+            array(
+                'label' => Mage::helper('meanship')->__('Shipping Country'),
+                'value' => 'meanship/rule_condition|dest_country_id'
+            ),
+            array(
+                'label' => Mage::helper('meanship')->__('Shipping Country Group'),
+                'value' => 'meanship/rule_condition|dest_country_group'
+            ),
+            array(
+                'label' => Mage::helper('meanship')->__('Shipping State'),
+                'value' => 'meanship/rule_condition|dest_region_id'
+            ),
+            array(
+                'label' => Mage::helper('meanship')->__('Shipping Zip Code'),
+                'value' => 'meanship/rule_condition|dest_postcode'
+            ),
+            array(
+                'label' => Mage::helper('meanship')->__('Shipping Postcode (UK only) Prefix'),
+                'value' => 'meanship/rule_condition|dest_postcode_prefix'
+            )
+        );
     }
 
     public function collectValidatedAttributes($productCollection) {
