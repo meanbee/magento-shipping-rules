@@ -11,6 +11,12 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules extends Mage_Adminhtml_Block_W
 
         if (!$this->isAllowedToWrite()) {
             $this->_removeButton('add');
+        } else {
+            $this->_addButton('import', array(
+                'label'   => 'Import Shipping Rules',
+                'class'   => 'add',
+                'onclick' => sprintf("setLocation('%s')", $this->getUrl('*/*/import'))
+            ));
         }
     }
 

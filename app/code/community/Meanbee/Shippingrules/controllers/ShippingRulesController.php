@@ -4,7 +4,7 @@ class Meanbee_Shippingrules_ShippingRulesController extends Mage_Adminhtml_Contr
     protected static $_READ_ACTIONS = array(
         'index',
         'edit',
-        'export'
+        'exportCsv'
     );
 
     protected function _isAllowed() {
@@ -199,8 +199,46 @@ class Meanbee_Shippingrules_ShippingRulesController extends Mage_Adminhtml_Contr
         $this->getResponse()->setBody($html);
     }
 
-    public function exportAction() {
-        print_r($_POST);
+    public function exportCsvAction() {
+        $filename = sprintf('%s.csv', $this->_getDownloadFileName());
+        $data = $this->getLayout()->createBlock('meanship/adminhtml_rules_grid')->getCsv();
+
+        return $this->_setDownloadHeaders($filename, $data);
+    }
+
+    /**
+     * Return a host-name-time-specific download filename without the file
+     * extension.
+     *
+     * @return string
+     */
+    protected function _getDownloadFileName() {
+        $base_url_parts = parse_url(Mage::getBaseUrl());
+        return sprintf(
+            'meanbee_shippingrules_%s_%s',
+            str_replace('.', '_', $base_url_parts['host']),
+            date('Ymd\THis')
+        );
+    }
+
+    /**
+     * Set headers that force a download in browsers.
+     *
+     * @param $filename
+     * @param $data
+     *
+     * @return Mage_Core_Controller_Response_Http
+     */
+    protected function _setDownloadHeaders($filename, $data) {
+        $response = $this->getResponse();
+
+        $response->setHeader('Content-Type', 'application/octet-stream');
+        $response->setHeader('Content-Transfer-Encoding', 'binary');
+        $response->setHeader('Content-Disposition', 'attachment; filename="' . $filename . '"');
+
+        $response->setBody($data);
+
+        return $response;
     }
 
     public function massDeleteAction() {
@@ -267,6 +305,41 @@ class Meanbee_Shippingrules_ShippingRulesController extends Mage_Adminhtml_Contr
         }
 
         $this->_redirect('*/*');
+    }
+
+    public function importAction() {
+        $this->loadLayout();
+        $this->renderLayout();
+    }
+
+    public function importPostAction() {
+        try {
+            $temp_file_name = sprintf('meanbee_shippingrules_import_%s_%s.csv', date('su'), md5(time()));
+
+            $uploader = new Varien_File_Uploader('csv_import');
+
+            $uploader->setAllowedExtensions(array('csv'));
+            $uploader->setAllowCreateFolders(false);
+            $uploader->setFilesDispersion(false);
+            $uploader->setAllowRenameFiles(false);
+
+            $uploader->save(Mage::getBaseDir('tmp'), $temp_file_name);
+
+            $temp_file_name_with_path = Mage::getBaseDir('tmp') . DS . $temp_file_name;
+
+            $import_result = Mage::helper('meanship/import')->importRulesFromFile($temp_file_name_with_path);
+
+            if ($import_result) {
+                $this->_addSuccess("Your rules have been successfully imported");
+                $this->_redirect('*/*/');
+            } else {
+                $this->_addError("An unknown error occurred during the import process");
+                $this->_redirectReferer();
+            }
+        } catch (Exception $e) {
+            $this->_addError(sprintf("Error attempting to import CSV: %s", $e->getMessage()));
+            $this->_redirectReferer();
+        }
     }
 
     protected function _addSuccess($message) {
