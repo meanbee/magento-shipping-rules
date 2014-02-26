@@ -79,6 +79,10 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Combine extends Mage_Rule_Model
                     'value' => 'meanship/rule_condition|dest_postcode'
                 ),
                 array(
+                    'label' => Mage::helper('meanship')->__('Shipping Zip Code (if numeric value)'),
+                    'value' => 'meanship/rule_condition|dest_postcode_numeric'
+                ),
+                array(
                     'label' => Mage::helper('meanship')->__('Shipping Postcode (UK only) Prefix'),
                     'value' => 'meanship/rule_condition|dest_postcode_prefix'
                 )

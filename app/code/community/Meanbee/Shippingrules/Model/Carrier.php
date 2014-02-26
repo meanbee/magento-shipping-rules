@@ -67,6 +67,7 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
         $request = $this->addAdminOrderDataToRequest($request);
         $request = $this->addPostcodePrefixToRequest($request);
         $request = $this->addCountryGroupToRequest($request);
+        $request = $this->addNumericPostcodesToRequest($request);
 
         $stop_flag = array();
 
@@ -187,6 +188,27 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
 
         if ($postcode_prefix) {
             $request->setData('dest_postcode_prefix', $postcode_prefix);
+        }
+
+        return $request;
+    }
+
+    /**
+     * If the postcode is numeric then cast to a number and store it on the request so we can perform
+     * numerical operations on it in the rule conditions.
+     *
+     * @param Mage_Shipping_Model_Rate_Request $request
+     *
+     * @return Mage_Shipping_Model_Rate_Request
+     */
+    public function addNumericPostcodesToRequest(Mage_Shipping_Model_Rate_Request $request) {
+
+        if ($request->hasData('dest_postcode')) {
+            $postcode = preg_replace('/\s*/', '', $request->getData('dest_postcode'));
+
+            if (is_numeric($postcode)) {
+                $request->setData('dest_postcode_numeric', (int) $postcode);
+            }
         }
 
         return $request;
