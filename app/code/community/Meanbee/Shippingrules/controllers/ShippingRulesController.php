@@ -127,7 +127,7 @@ class Meanbee_Shippingrules_ShippingRulesController extends Mage_Adminhtml_Contr
     protected function _validateRegexConditions($conditions) {
         $redirectBackToEditPage = false;
         foreach ($conditions as $condition) {
-            if ($condition['operator'] == '//') {
+            if (isset($condition['operator']) && $condition['operator'] == '//') {
                 if(!Mage::helper('meanship')->isValidRegex($condition['value'])) {
                     Mage::getSingleton('adminhtml/session')->addError(sprintf("'%s' is not a valid regular expression. Your shipping rule may not behave as expected.", $condition['value']));
                     $redirectBackToEditPage = true;
