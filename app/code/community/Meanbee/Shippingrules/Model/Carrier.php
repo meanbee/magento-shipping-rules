@@ -118,7 +118,7 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
         $destination_country = $request->getDestCountryId();
         $destination_country_group = null;
 
-        if (Mage::helper('core')->isCountryInEU($destination_country)) {
+        if (Mage::helper('meanship/compat')->isEuCountrySupported() && Mage::helper('core')->isCountryInEU($destination_country)) {
             $destination_country_group = 'eu';
         }
 
