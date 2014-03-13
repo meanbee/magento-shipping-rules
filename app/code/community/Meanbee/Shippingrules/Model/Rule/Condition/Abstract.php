@@ -1,6 +1,8 @@
 <?php
 class Meanbee_Shippingrules_Model_Rule_Condition_Abstract extends Mage_Rule_Model_Condition_Abstract {
 
+    protected $_arrayInputTypes = array();
+
     /**
      * Default operator input by type map getter
      *
@@ -84,6 +86,23 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Abstract extends Mage_Rule_Mode
             }
             return (bool)preg_match('~' . $validatePattern . '~iu', $value);
         }
+    }
+
+    /**
+     * Magento 1.5 has an incompatible implementation of this method.
+     *
+     * @return array|string|int|float
+     */
+    public function getValueParsed()
+    {
+        if (!$this->hasValueParsed()) {
+            $value = $this->getData('value');
+            if ($this->isArrayOperatorType() && is_string($value)) {
+                $value = preg_split('#\s*[,;]\s*#', $value, null, PREG_SPLIT_NO_EMPTY);
+            }
+            $this->setValueParsed($value);
+        }
+        return $this->getData('value_parsed');
     }
 
     /**
