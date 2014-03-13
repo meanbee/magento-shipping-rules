@@ -1,5 +1,5 @@
 <?php
-class Meanbee_Shippingrules_ShippingRulesController extends Mage_Adminhtml_Controller_Action {
+class Meanbee_Shippingrules_ShippingrulesController extends Mage_Adminhtml_Controller_Action {
 
     protected static $_READ_ACTIONS = array(
         'index',
