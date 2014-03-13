@@ -47,6 +47,20 @@ class Meanbee_Shippingrules_Test_Model_Carrier extends EcomDev_PHPUnit_Test_Case
     }
 
     /**
+     * @test
+     * @dataProvider dataProvider
+     */
+    public function testAddNumericPostcodesToRequest($input_request, $output_request) {
+        $request_obj = $this->_buildRequestObj($input_request);
+        $request_obj = $this->_obj->addNumericPostcodesToRequest($request_obj);
+
+        foreach ($output_request as $key => $value) {
+            $this->assertTrue($request_obj->hasData($key), sprintf("Response did not contain %s", $key));
+            $this->assertEquals($request_obj->getData($key), $value, sprintf("Response %s value was %s, expected %s", $key, $request_obj->getData($key), $value));
+        }
+    }
+
+    /**
      * @param $request_data
      *
      * @return Mage_Shipping_Model_Rate_Request

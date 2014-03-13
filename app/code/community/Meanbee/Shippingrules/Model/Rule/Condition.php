@@ -16,6 +16,7 @@ class Meanbee_Shippingrules_Model_Rule_Condition extends Meanbee_Shippingrules_M
             'dest_country_group' => Mage::helper('meanship')->__('Shipping Country Group'),
             'dest_region_id'  => Mage::helper('meanship')->__('Shipping State'),
             'dest_postcode'   => Mage::helper('meanship')->__('Shipping Zipcode'),
+            'dest_postcode_numeric' => Mage::helper('meanship')->__('Shipping Zip Code (if numeric value)'),
             'dest_postcode_prefix' => Mage::helper('meanship')->__('Shipping Postcode (UK only) Prefix')
         );
 
@@ -110,7 +111,7 @@ class Meanbee_Shippingrules_Model_Rule_Condition extends Meanbee_Shippingrules_M
             case 'dest_postcode':
             case 'dest_postcode_prefix':
                 $value = Mage::helper('meanship/postcode')->sanitisePostcode($value);
-            break;
+                break;
         }
 
         return $value;
@@ -126,6 +127,9 @@ class Meanbee_Shippingrules_Model_Rule_Condition extends Meanbee_Shippingrules_M
                 break;
             case 'is_admin_order':
                 $value = ($value == '1');
+                break;
+            case 'dest_postcode_numeric':
+                $value = (int) $value;
                 break;
         }
 
