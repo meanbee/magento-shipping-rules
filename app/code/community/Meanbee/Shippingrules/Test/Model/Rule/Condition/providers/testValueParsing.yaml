@@ -1,0 +1,36 @@
+-
+  attribute: dest_postcode
+  input: ba1 2bn
+  operator: ""
+  output: ba12bn
+-
+  attribute: dest_postcode
+  input: BA1 2BN
+  operator: ""
+  output: ba12bn
+
+-
+  attribute: dest_postcode
+  input: BA1 2 b n
+  operator: ""
+  output: ba12bn
+-
+  attribute: dest_postcode_numeric
+  input: "12345"
+  operator: ""
+  output: 12345
+-
+  attribute: dest_postcode_numeric
+  input: "123a"
+  operator: ""
+  output: 123
+-
+  attribute: dest_postcode_numeric
+  input: "1,2,3,4,5"
+  operator: "()"
+  output: [1, 2, 3, 4, 5]
+-
+  attribute: dest_postcode_numeric
+  input: "1,2,3,4,5"
+  operator: "!()"
+  output: [1, 2, 3, 4, 5]

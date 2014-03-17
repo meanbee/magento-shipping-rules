@@ -129,7 +129,7 @@ class Meanbee_Shippingrules_Model_Rule_Condition extends Meanbee_Shippingrules_M
                 $value = ($value == '1');
                 break;
             case 'dest_postcode_numeric':
-                $value = (int) $value;
+                $value = (is_array($value)) ? array_map("intval", $value) : intval($value);
                 break;
         }
 
