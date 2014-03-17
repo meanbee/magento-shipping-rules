@@ -17,6 +17,39 @@
 ############################################################
 -
   rate_request:
+    dest_postcode_numeric: 12345
+  attr: dest_postcode_numeric
+  operator: "()"
+  test: "12345,67890"
+  pass: true
+
+-
+  rate_request:
+    dest_postcode_numeric: 12345
+  attr: dest_postcode_numeric
+  operator: "!()"
+  test: "12345,67890"
+  pass: false
+
+-
+  rate_request:
+    dest_postcode_numeric: 12345
+  attr: dest_postcode_numeric
+  operator: "()"
+  test: "98765,43210"
+  pass: false
+
+-
+  rate_request:
+    dest_postcode_numeric: 12345
+  attr: dest_postcode_numeric
+  operator: "!()"
+  test: "98765,43210"
+  pass: true
+
+############################################################
+-
+  rate_request:
     dest_country_id: 1
   attr: dest_country_id
   operator: ()
