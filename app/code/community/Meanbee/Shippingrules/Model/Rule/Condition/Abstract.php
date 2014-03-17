@@ -108,7 +108,7 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Abstract extends Mage_Rule_Mode
     /**
      * Validate product attrbute value for condition
      *
-     * @param   mixed $validatedValue product attribute value
+     * @param   mixed $validatedValue Value to validate against
      * @return  bool
      */
     public function validateAttribute($validatedValue)
@@ -118,7 +118,7 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Abstract extends Mage_Rule_Mode
         }
 
         /**
-         * Condition attribute value
+         * Value defined in the rule condition
          */
         $value = $this->getValueParsed();
 

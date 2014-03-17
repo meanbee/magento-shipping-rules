@@ -91,6 +91,20 @@ class Meanbee_Shippingrules_Test_Model_Rule_Condition extends EcomDev_PHPUnit_Te
         $this->assertEquals($output, $this->_obj->getSanitisedValue(new Varien_Object(array(
             $attribute_name => $input
         ))));
+    }
+
+    /**
+     * @test
+     * @dataProvider dataProvider
+     */
+    public function testValueParsing($attribute_name, $input, $operator, $output) {
+        $this->_obj->setData(array(
+            'attribute'          => $attribute_name,
+            'operator'           => $operator,
+            'value'              => $input,
+            'is_value_processed' => 0,
+            'rule'               => Mage::getModel('meanship/rule')
+        ));
 
         $this->assertEquals($output, $this->_obj->getValueParsed());
     }
@@ -101,6 +115,7 @@ class Meanbee_Shippingrules_Test_Model_Rule_Condition extends EcomDev_PHPUnit_Te
      */
     public function testValidate($rate_request, $attribute_name, $operator, $test, $pass_str) {
         $pass = ($pass_str == 'true');
+
 
         $this->_obj->setData(array(
             'attribute'          => $attribute_name,
