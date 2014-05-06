@@ -19,7 +19,7 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
             $method = Mage::getModel('shipping/rate_result_method');
 
             $method->setCarrier($this->_code);
-            $method->setCarrierTitle('Shipping');
+            $method->setCarrierTitle($this->getConfigData('title'));
 
             // record method information
             $method->setMethod($rule_data->getId());
