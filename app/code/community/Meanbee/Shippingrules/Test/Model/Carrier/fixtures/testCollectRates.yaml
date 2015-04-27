@@ -1,0 +1,48 @@
+tables:
+    meanship_rule:
+        - rule_id: 1
+          name: Match Every Time
+          price: 5.95
+          cost: 0.0
+          conditions_serialized: 'a:6:{s:4:"type";s:31:"meanship/rule_condition_combine";s:9:"attribute";N;s:8:"operator";N;s:5:"value";s:1:"1";s:18:"is_value_processed";N;s:10:"aggregator";s:3:"all";}'
+          stop_rule_processing: 0
+          sort_order: 0
+          is_active: 1
+          version: 1.0.0
+eav:
+    catalog_product:
+        -
+            entity_id: 51
+            attribute_set_id: 1
+            type_id: "simple"
+            color: 26
+            color_value: "Red"
+            cost: 50.0000
+            country_orgin: "Italy"
+            created_at: "2007-08-28 16:25:46"
+            custom_layout_update: ""
+            description: "The Magento ottoman will impress with its style while it delivers on quality. This piece of living room furniture is built to last with durable solid wood framing, generous padding and plush stain-resistant microfiber upholstery."
+            dimension: ""
+            finish: "Microfiber"
+            gift_message_available: 0
+            has_options: 0
+            image: "/o/t/ottoman.jpg"
+            meta_description: "Ottoman"
+            meta_keyword: "Ottoman"
+            meta_title: "Ottoman"
+            minimal_price: 299.9900
+            model: "magotto"
+            name: "Ottoman"
+            price: 299.9900
+            required_options: 0
+            room: 72
+            room_value: "Living Room"
+            short_description: "With durable solid wood framing, generous padding and plush stain-resistant microfiber upholstery."
+            sku: 1111
+            small_image: "/o/t/ottoman.jpg"
+            tax_class_id: 2
+            thumbnail: "/o/t/ottoman.jpg"
+            updated_at: "2008-08-08 14:59:04"
+            url_key: "ottoman"
+            visibility: 4
+            weight: 20.0000

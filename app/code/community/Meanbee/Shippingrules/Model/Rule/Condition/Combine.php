@@ -14,6 +14,24 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Combine extends Mage_Rule_Model
         );
 
         $conditions[] = array(
+            'label' => Mage::helper('meanship')->__('Magento Environment'),
+            'value' => array(
+                array(
+                    'label' => Mage::helper('meanship')->__('Magento Store'),
+                    'value' => 'meanship/rule_condition|store_id'
+                ),
+                array(
+                    'label' => Mage::helper('meanship')->__('Magento Website'),
+                    'value' => 'meanship/rule_condition|website_id'
+                ),
+                array(
+                    'label' => Mage::helper('meanship')->__('Is an admin order?'),
+                    'value' => 'meanship/rule_condition|is_admin_order'
+                )
+            )
+        );
+
+        $conditions[] = array(
             'label' => Mage::helper('meanship')->__('Customer Information'),
             'value' => array(
                 array(
@@ -41,20 +59,23 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Combine extends Mage_Rule_Model
             )
         );
 
+
+
         $conditions[] = array(
             'label' => Mage::helper('meanship')->__('Destination Conditions'),
+            'value' => $this->getDestinationConditions()
+        );
+
+        $conditions[] = array(
+            'label' => Mage::helper('meanship')->__('Specalist Destnation Conditions'),
             'value' => array(
                 array(
-                    'label' => Mage::helper('meanship')->__('Shipping Country'),
-                    'value' => 'meanship/rule_condition|dest_country_id'
+                    'label' => Mage::helper('meanship')->__('Shipping Zip Code (if numeric value)'),
+                    'value' => 'meanship/rule_condition|dest_postcode_numeric'
                 ),
                 array(
-                    'label' => Mage::helper('meanship')->__('Shipping State'),
-                    'value' => 'meanship/rule_condition|dest_region_id'
-                ),
-                array(
-                    'label' => Mage::helper('meanship')->__('Shipping Zip Code'),
-                    'value' => 'meanship/rule_condition|dest_postcode'
+                    'label' => Mage::helper('meanship')->__('Shipping Postcode Prefix (UK only)'),
+                    'value' => 'meanship/rule_condition|dest_postcode_prefix'
                 )
             )
         );
@@ -67,6 +88,39 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Combine extends Mage_Rule_Model
                     'value' => 'meanship/rule_condition_product_subselect'
                 ),
             )
+        );
+
+        return $conditions;
+    }
+
+    public function getDestinationConditions() {
+        $conditions = array();
+
+        $conditions[] =  array(
+            'label' => Mage::helper('meanship')->__('Shipping Country'),
+            'value' => 'meanship/rule_condition|dest_country_id'
+        );
+
+        if (Mage::helper('meanship/compat')->isEuCountrySupported()) {
+            $conditions[] = array(
+                'label' => Mage::helper('meanship')->__('Shipping Country Group'),
+                'value' => 'meanship/rule_condition|dest_country_group'
+            );
+        }
+
+        $conditions[] = array(
+            'label' => Mage::helper('meanship')->__('Shipping State'),
+            'value' => 'meanship/rule_condition|dest_region_id'
+        );
+
+        $conditions[] = array(
+            'label' => Mage::helper('meanship')->__('Shipping Zip Code'),
+            'value' => 'meanship/rule_condition|dest_postcode'
+        );
+
+        $conditions[] = array(
+            'label' => Mage::helper('meanship')->__('Shipping Postcode (UK only) Prefix'),
+            'value' => 'meanship/rule_condition|dest_postcode_prefix'
         );
 
         return $conditions;

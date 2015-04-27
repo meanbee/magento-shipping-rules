@@ -1,0 +1,24 @@
+-
+    version: 1.8
+    supported: true
+-
+    version: 1.7
+    supported: true
+-
+    version: 1.6
+    supported: false
+-
+    version: 1.5
+    supported: false
+-
+    version: 1.8.1.0
+    supported: true
+-
+    version: 1.7.0.2
+    supported: true
+-
+    version: 1.6.2.0
+    supported: false
+-
+    version: 1.5.1.0
+    supported: false

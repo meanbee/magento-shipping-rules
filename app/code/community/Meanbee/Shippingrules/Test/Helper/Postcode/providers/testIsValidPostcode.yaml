@@ -1,0 +1,39 @@
+-
+    postcode: AA9A 9AA
+    is_valid: true
+-
+    postcode: A9A 9AA
+    is_valid: true
+-
+    postcode: A9 9AA
+    is_valid: true
+-
+    postcode: A99 9AA
+    is_valid: true
+-
+    postcode: AA9 9AA
+    is_valid: true
+-
+    postcode: AA99 9AA
+    is_valid: true
+-
+    postcode: aa99 9aa
+    is_valid: true
+-
+    postcode: aa99 9Aa
+    is_valid: true
+-
+    postcode: 123
+    is_valid: false
+-
+    postcode: ''
+    is_valid: false
+-
+    postcode: 9AA AAA
+    is_valid: false
+-
+    postcode: sa18 3qt1
+    is_valid: false
+-
+    postcode: sa1 3q
+    is_valid: false

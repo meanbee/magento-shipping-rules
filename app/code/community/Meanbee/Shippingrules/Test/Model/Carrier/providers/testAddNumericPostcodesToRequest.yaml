@@ -1,0 +1,64 @@
+-
+    input_request:
+        dest_postcode: '123456'
+    output_request:
+        dest_postcode: '123456'
+        dest_postcode_numeric: 123456
+-
+    input_request:
+        dest_postcode: '1'
+    output_request:
+        dest_postcode: '1'
+        dest_postcode_numeric: 1
+-
+    input_request:
+        dest_postcode: '001'
+    output_request:
+        dest_postcode: '001'
+        dest_postcode_numeric: 1
+-
+    input_request:
+        dest_postcode: '00101'
+    output_request:
+        dest_postcode: '00101'
+        dest_postcode_numeric: 101
+-
+    input_request:
+        dest_postcode: '123 456'
+    output_request:
+        dest_postcode: '123 456'
+        dest_postcode_numeric: 123456
+-
+    input_request:
+        dest_postcode: '123 456 '
+    output_request:
+        dest_postcode: '123 456 '
+        dest_postcode_numeric: 123456
+-
+    input_request:
+        dest_postcode: ' 123 456'
+    output_request:
+        dest_postcode: ' 123 456'
+        dest_postcode_numeric: 123456
+-
+    input_request:
+        dest_postcode: ' 123 456 '
+    output_request:
+        dest_postcode: ' 123 456 '
+        dest_postcode_numeric: 123456
+-
+    input_request:
+        dest_postcode: '123456a'
+    output_request:
+        dest_postcode: '123456a'
+-
+    input_request:
+        dest_postcode: 'ba12bn'
+    output_request:
+        dest_postcode: 'ba12bn'
+-
+    input_request:
+        dest_postcode: ''
+    output_request:
+        dest_postcode: ''
+

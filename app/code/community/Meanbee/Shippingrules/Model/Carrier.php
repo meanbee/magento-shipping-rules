@@ -19,7 +19,7 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
             $method = Mage::getModel('shipping/rate_result_method');
 
             $method->setCarrier($this->_code);
-            $method->setCarrierTitle('Shipping');
+            $method->setCarrierTitle($this->getConfigData('title'));
 
             // record method information
             $method->setMethod($rule_data->getId());
@@ -63,22 +63,11 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
             ->addFieldToFilter('is_active', 1)
             ->setOrder('sort_order', Varien_Data_Collection::SORT_ORDER_ASC);
 
-        /**
-         * The customer doesn't come to us through $request, so we need to check for it manually.  This following will
-         * work on the frontend checkout.
-         */
-        if(Mage::getSingleton('adminhtml/session_quote')->getCustomer()->hasData()) {
-            $customer = Mage::getSingleton('adminhtml/session_quote')->getCustomer();
-            $request->setCustomer($customer);
-            $request->setCustomerGroupId($customer->getGroupId());
-        } elseif (Mage::helper('customer')->getCustomer()->hasData()) {
-            $customer = Mage::helper('customer')->getCustomer();
-            $request->setCustomer($customer);
-            $request->setCustomerGroupId($customer->getGroupId());
-        } else {
-            $request->setCustomer(null);
-            $request->setCustomerGroupId(Mage_Customer_Model_Group::NOT_LOGGED_IN_ID);
-        }
+        $request = $this->addCustomerDataToRequest($request);
+        $request = $this->addAdminOrderDataToRequest($request);
+        $request = $this->addPostcodePrefixToRequest($request);
+        $request = $this->addCountryGroupToRequest($request);
+        $request = $this->addNumericPostcodesToRequest($request);
 
         $stop_flag = array();
 
@@ -115,5 +104,113 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
         }
 
         return $methods;
+    }
+
+    /**
+     * Establish whether or not the destination country is in a country group and add the country group
+     * to the request if so.
+     *
+     * @param Mage_Shipping_Model_Rate_Request $request
+     *
+     * @return Mage_Shipping_Model_Rate_Request
+     */
+    public function addCountryGroupToRequest(Mage_Shipping_Model_Rate_Request $request) {
+
+        $destination_country = $request->getDestCountryId();
+        $destination_country_group = null;
+
+        if (Mage::helper('meanship/compat')->isEuCountrySupported() && Mage::helper('core')->isCountryInEU($destination_country)) {
+            $destination_country_group = 'eu';
+        }
+
+        if ($destination_country_group) {
+            $request->setData('dest_country_group', $destination_country_group);
+        }
+
+        return $request;
+    }
+
+    /**
+     * The customer doesn't come to us through $request, so we need to check for it manually.  This following will
+     * work on the frontend checkout.
+     *
+     * @param $request Mage_Shipping_Model_Rate_Request
+     * @return Mage_Shipping_Model_Rate_Request
+     */
+    public function addCustomerDataToRequest(Mage_Shipping_Model_Rate_Request $request) {
+        if (Mage::getSingleton('adminhtml/session_quote')->getCustomer()->hasData()) {
+            $customer = Mage::getSingleton('adminhtml/session_quote')->getCustomer();
+            $request->setCustomer($customer);
+            $request->setCustomerGroupId($customer->getGroupId());
+        } elseif (Mage::helper('customer')->getCustomer()->hasData()) {
+            $customer = Mage::helper('customer')->getCustomer();
+            $request->setCustomer($customer);
+            $request->setCustomerGroupId($customer->getGroupId());
+        } else {
+            $request->setCustomer(null);
+            $request->setCustomerGroupId(Mage_Customer_Model_Group::NOT_LOGGED_IN_ID);
+        }
+
+        return $request;
+    }
+
+    /**
+     * Determine whether or not this is an order placed in the admin area.
+     *
+     * @param Mage_Shipping_Model_Rate_Request $request
+     *
+     * @return Mage_Shipping_Model_Rate_Request
+     */
+    public function addAdminOrderDataToRequest(Mage_Shipping_Model_Rate_Request $request) {
+        if (Mage::getSingleton('adminhtml/session_quote')->hasData('quote_id')) {
+            $request->setIsAdminOrder(true);
+        } else {
+            $request->setIsAdminOrder(false);
+        }
+
+        return $request;
+    }
+
+    /**
+     * Extract the postcode prefix from the destination postcode if available.
+     *
+     * @param Mage_Shipping_Model_Rate_Request $request
+     *
+     * @return Mage_Shipping_Model_Rate_Request
+     */
+    public function addPostcodePrefixToRequest(Mage_Shipping_Model_Rate_Request $request) {
+        $postcode = $request->getDestPostcode();
+        $postcode_prefix = null;
+
+        if ($postcode) {
+            $postcode_prefix = Mage::helper('meanship/postcode')->extractUKPostcodePrefix($postcode);
+        }
+
+        if ($postcode_prefix) {
+            $request->setData('dest_postcode_prefix', $postcode_prefix);
+        }
+
+        return $request;
+    }
+
+    /**
+     * If the postcode is numeric then cast to a number and store it on the request so we can perform
+     * numerical operations on it in the rule conditions.
+     *
+     * @param Mage_Shipping_Model_Rate_Request $request
+     *
+     * @return Mage_Shipping_Model_Rate_Request
+     */
+    public function addNumericPostcodesToRequest(Mage_Shipping_Model_Rate_Request $request) {
+
+        if ($request->hasData('dest_postcode')) {
+            $postcode = preg_replace('/\s*/', '', $request->getData('dest_postcode'));
+
+            if (is_numeric($postcode)) {
+                $request->setData('dest_postcode_numeric', (int) $postcode);
+            }
+        }
+
+        return $request;
     }
 }
