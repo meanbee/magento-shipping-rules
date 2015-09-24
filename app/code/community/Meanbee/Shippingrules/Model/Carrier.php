@@ -24,7 +24,7 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
             // record method information
             $method->setMethod($rule_data->getId());
             $method->setMethodTitle($method_name);
-            
+
             if ($request->getFreeShipping()) {
                 $method->setCost(0);
                 $method->setPrice(0);
@@ -69,7 +69,9 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
         $request = $this->addCountryGroupToRequest($request);
         $request = $this->addNumericPostcodesToRequest($request);
 
-        $stop_flag = array();
+        $stop_flag = array(
+            '_all' => false
+        );
 
         foreach ($rule_collection as $rule) {
             /** @var $rule Meanbee_Shippingrules_Model_Rule */
@@ -87,7 +89,7 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
                 /**
                  * We'll skip this rule if we've already matched at a cheaper price, or we've hit a stop flag.
                  */
-                if ($methods[$rule_name]->getPrice() < $rule->getPrice() || $stop_flag[$rule_name]) {
+                if ($methods[$rule_name]->getPrice() < $rule->getPrice() || $stop_flag[$rule_name] || $stop_flag['_all']) {
                     continue;
                 }
             }
@@ -100,6 +102,10 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
 
             if ($rule->getStopRulesProcessing()) {
                 $stop_flag[$rule_name] = true;
+            }
+
+            if ($rule->getStopAllRulesProcessing()) {
+                $stop_flag['_all'] = true;
             }
         }
 
