@@ -24,11 +24,11 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
             // record method information
             $method->setMethod($rule_data->getId());
             $method->setMethodTitle($method_name);
-            
+
             if ($request->getFreeShipping()) {
                 $method->setCost(0);
                 $method->setPrice(0);
-            } else { 
+            } else {
                 // rate cost is optional property to record how much it costs to vendor to ship
                 $method->setCost($rule_data->getCost());
                 $method->setPrice($rule_data->getPrice());
@@ -36,7 +36,7 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
 
             $result->append($method);
         }
-
+        usort($result, 'self::sortRates');
         return $result;
     }
 
@@ -213,4 +213,14 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
 
         return $request;
     }
+
+    /**
+     * Sorts rates by Display Sort Order
+     */
+     protected static function sortRates($a, $b) {
+         if ($a->getDisplaySortOrder()==$b->getDisplaySortOrder()) {
+             return 0;
+         }
+         return ($a->getDisplaySortOrder() < $b->getDisplaySortOrder()) ? -1 : 1;
+     }
 }

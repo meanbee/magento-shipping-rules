@@ -89,6 +89,14 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Grid extends Mage_Adminhtml_Bl
             'width'     => '50px',
             'type'      => 'range'
         ));
+
+        $this->addColumn('display_sort_order', array(
+            'header'    => Mage::helper('meanship')->__('Display Sort Order'),
+            'align'     => 'center',
+            'index'     => 'display_sort_order',
+            'width'     => '50px',
+            'type'      => 'range'
+        ));
     }
 
     /**

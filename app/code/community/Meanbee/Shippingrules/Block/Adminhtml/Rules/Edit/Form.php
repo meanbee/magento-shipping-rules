@@ -57,6 +57,13 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Edit_Form extends Mage_Adminht
             'disabled'  => !$this->isAllowedToWrite()
         ));
 
+        $fieldset->addField('display_sort_order', 'text', array(
+            'label'     => Mage::helper('meanship')->__('Display Sort Order'),
+            'name'      => 'display_sort_order',
+            'note'     => Mage::helper('meanship')->__('<em>Optional</em>. Specifies the order in which the rules are displayed to the customer.'),
+            'disabled'  => !$this->isAllowedToWrite()
+        ));
+
         $fieldset->addField('stop_rules_processing', 'checkbox', array(
             'label'     => Mage::helper('meanship')->__('Stop rule processing if matched'),
             'name'      => 'stop_rules_processing',
