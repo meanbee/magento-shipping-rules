@@ -50,6 +50,13 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Edit_Form extends Mage_Adminht
             'disabled'  => !$this->isAllowedToWrite()
         ));
 
+        $fieldset->addField('notes', 'textarea', array(
+            'label'     => Mage::helper('meanship')->__('Notes'),
+            'name'      => 'notes',
+            'note'     => Mage::helper('meanship')->__('For internal use.'),
+            'disabled'  => !$this->isAllowedToWrite()
+        ));
+
         $fieldset->addField('sort_order', 'text', array(
             'label'     => Mage::helper('meanship')->__('Sort Order'),
             'name'      => 'sort_order',

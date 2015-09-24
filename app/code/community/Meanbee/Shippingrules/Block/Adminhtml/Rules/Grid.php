@@ -82,6 +82,14 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Grid extends Mage_Adminhtml_Bl
             'filter'    => false
         ));
 
+        $this->addColumn('notes', array(
+            'header'    => Mage::helper('meanship')->__('Notes'),
+            'align'     =>'left',
+            'index'     => 'notes',
+            'type'      => 'text',
+            'filter'    => false
+        ));
+
         $this->addColumn('sort_order', array(
             'header'    => Mage::helper('meanship')->__('Sort Order'),
             'align'     => 'center',
