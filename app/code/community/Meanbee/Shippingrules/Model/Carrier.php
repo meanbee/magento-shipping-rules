@@ -28,7 +28,7 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
             if ($request->getFreeShipping()) {
                 $method->setCost(0);
                 $method->setPrice(0);
-            } else { 
+            } else {
                 // rate cost is optional property to record how much it costs to vendor to ship
                 $method->setCost($rule_data->getCost());
                 $method->setPrice($rule_data->getPrice());
@@ -89,8 +89,10 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
                 /**
                  * We'll skip this rule if we've already matched at a cheaper price, or we've hit a stop flag.
                  */
-                if ($methods[$rule_name]->getPrice() < $rule->getPrice() || $stop_flag[$rule_name] || $stop_flag['_all']) {
+                if ($methods[$rule_name]->getPrice() < $rule->getPrice() || $stop_flag[$rule_name]) {
                     continue;
+                } else if ($stop_flag['_all']) {
+                    break;
                 }
             }
 
