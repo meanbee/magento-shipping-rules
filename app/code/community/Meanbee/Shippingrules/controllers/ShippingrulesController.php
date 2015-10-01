@@ -73,10 +73,11 @@ class Meanbee_Shippingrules_ShippingrulesController extends Mage_Adminhtml_Contr
 
             $data['conditions'] = $data['rule']['conditions'];
             unset($data['rule']);
-            
+
             $forceRedirect = $this->_validateRegexConditions($data['conditions']);
 
             $data['stop_rules_processing'] = (int) isset($data['stop_rules_processing']);
+            $data['stop_all_rules_processing'] = (int) isset($data['stop_all_rules_processing']);
 
             $model->loadPost($data);
 

@@ -66,6 +66,15 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Edit_Form extends Mage_Adminht
             'disabled'  => !$this->isAllowedToWrite()
         ));
 
+        $fieldset->addField('stop_all_rules_processing', 'checkbox', array(
+            'label'     => Mage::helper('meanship')->__('Stop all rule processing if matched'),
+            'name'      => 'stop_all_rules_processing',
+            'value'     => 1,
+            'checked'   => $data->getStopAllRulesProcessing() == '1',
+            'note'     => Mage::helper('meanship')->__("<em>Optional</em>. Stop processing rules regardless of method name if it matches."),
+            'disabled'  => !$this->isAllowedToWrite()
+        ));
+
         $fieldset->addField('cost', 'text', array(
             'label'     => Mage::helper('meanship')->__('Shipping Method Cost'),
             'name'      => 'cost',
@@ -94,6 +103,7 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Edit_Form extends Mage_Adminht
              * use the 'checked' array option when we create the field to do the 'checking'.
              */
             $data['stop_rules_processing'] = 1;
+            $data['stop_all_rules_processing'] = 1;
             $form->setValues($data);
         }
 
