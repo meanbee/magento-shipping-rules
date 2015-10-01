@@ -9,6 +9,7 @@ class Meanbee_Shippingrules_Model_Rule_Condition extends Meanbee_Shippingrules_M
             'package_qty'    => Mage::helper('meanship')->__('Total Items Quantity'),
             'package_value'  => Mage::helper('meanship')->__('Subtotal excl. Tax'),
             'base_subtotal_incl_tax' => Mage::helper('meanship')->__('Subtotal incl. Tax'),
+            'package_value_with_discount' => Mage::helper('meanship')->__('Subtotal after Discounts'),
             'package_weight' => Mage::helper('meanship')->__('Total Weight'),
 
             'customer_group_id' => Mage::helper('meanship')->__('Customer Group'),
