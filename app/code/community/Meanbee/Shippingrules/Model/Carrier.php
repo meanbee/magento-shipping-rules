@@ -36,7 +36,7 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
 
             $result->append($method);
         }
-
+        usort($result, 'self::sortRates');
         return $result;
     }
 
@@ -221,4 +221,14 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
 
         return $request;
     }
+
+    /**
+     * Sorts rates by Display Sort Order
+     */
+     protected static function sortRates($a, $b) {
+         if ($a->getDisplaySortOrder()==$b->getDisplaySortOrder()) {
+             return 0;
+         }
+         return ($a->getDisplaySortOrder() < $b->getDisplaySortOrder()) ? -1 : 1;
+     }
 }
