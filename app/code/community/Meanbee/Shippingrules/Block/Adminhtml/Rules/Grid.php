@@ -65,7 +65,7 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Grid extends Mage_Adminhtml_Bl
         $this->addColumn('conditions', array(
             'header'    => Mage::helper('meanship')->__('Rule Condition Summary'),
             'align'     =>'left',
-            'getter'    => 'getConditionsHtml',
+            'renderer'  => 'Meanbee_Shippingrules_Block_Adminhtml_Rules_Renderer',
             'filter'    => false,
             'sortable'  => false
         ));
