@@ -7,7 +7,8 @@ class Meanbee_Shippingrules_Model_Rule_Condition extends Meanbee_Shippingrules_M
             'is_admin_order' => Mage::helper('meanship')->__('Is an admin order'),
 
             'package_qty'    => Mage::helper('meanship')->__('Total Items Quantity'),
-            'package_value'  => Mage::helper('meanship')->__('Subtotal'),
+            'package_value'  => Mage::helper('meanship')->__('Subtotal excl. Tax'),
+            'base_subtotal_incl_tax' => Mage::helper('meanship')->__('Subtotal incl. Tax'),
             'package_weight' => Mage::helper('meanship')->__('Total Weight'),
 
             'customer_group_id' => Mage::helper('meanship')->__('Customer Group'),
