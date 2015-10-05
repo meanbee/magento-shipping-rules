@@ -10,7 +10,7 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Renderer
     }
     protected function asHtmlRecursive($condition)
     {
-        $html = $condition->asString().'<ul id="'.$condition->getPrefix().'__'.$condition->getId().'__children" class="rule-param-children" style="padding-left: 1em">';
+        $html = $this->renderCondition($condition).'<ul id="'.$condition->getPrefix().'__'.$condition->getId().'__children" class="rule-param-children" style="padding-left: 1em">';
         foreach ($condition->getConditions() as $i => $child) {
             if ($i >= 5) {
                 $html .='<li>⋮</li>';
@@ -20,5 +20,38 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Renderer
         }
         $html .= '</ul>';
         return $html;
+    }
+    protected function renderCondition($condition)
+    {
+        switch ($condition->getAttribute()) {
+            case 'dest_country_id':
+                $countryHelper = Mage::helper('meanship/country');
+                $countryCodes = $condition->getValue();
+                $countryNames = explode(', ', $condition->getValueName());
+                $listlen = count($countryCodes);
+                $countries = '';
+                for ($i = 0; $i < $listlen; $i++) {
+                    switch (Mage::helper('meanship/config')->getCondenseCountriesOnGrid()) {
+                        case 'code':
+                            $countries .= ", <abbr title='{$countryNames[$i]}'>";
+                            $countries .= $countryCodes[$i];
+                            $countries .= "</abbr>";
+                            break;
+                        case 'flag':
+                            $countries .= " <abbr title='{$countryNames[$i]} ({$countryCodes[$i]})'>";
+                            $countries .= $countryHelper->toRegionalIndicatorSymbols($countryCodes[$i]);
+                            $countries .= "</abbr> ";
+                            break;
+                        case 'full':
+                        default:
+                            $countries .= ', ' . $countryNames[$i];
+                            break;
+                    }
+                }
+                return $condition->getAttributeName() . ' ' . $condition->getOperatorName() . ' ' . substr($countries, 1);
+                break;
+            default:
+                return $condition->asString();
+        }
     }
 }
