@@ -13,7 +13,7 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
             return false;
         }
 
-        $result = Mage::getModel('shipping/rate_result');
+        $resultArray = array();
 
         foreach ($this->_getApplicableRules($request) as $method_name =>  $rule_data) {
             $method = Mage::getModel('shipping/rate_result_method');
@@ -34,9 +34,14 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
                 $method->setPrice($rule_data->getPrice());
             }
 
+            $resultArray[] = $method;
+        }
+
+        usort($resultArray, 'self::sortRates');
+        $result = Mage::getModel('shipping/rate_result');
+        foreach ($resultArray as $method) {
             $result->append($method);
         }
-        usort($result, 'self::sortRates');
         return $result;
     }
 
