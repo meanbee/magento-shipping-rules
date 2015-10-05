@@ -13,7 +13,7 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
             return false;
         }
 
-        $result = Mage::getModel('shipping/rate_result');
+        $resultArray = array();
 
         foreach ($this->_getApplicableRules($request) as $method_name =>  $rule_data) {
             $method = Mage::getModel('shipping/rate_result_method');
@@ -24,19 +24,24 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
             // record method information
             $method->setMethod($rule_data->getId());
             $method->setMethodTitle($method_name);
-            
+
             if ($request->getFreeShipping()) {
                 $method->setCost(0);
                 $method->setPrice(0);
-            } else { 
+            } else {
                 // rate cost is optional property to record how much it costs to vendor to ship
                 $method->setCost($rule_data->getCost());
                 $method->setPrice($rule_data->getPrice());
             }
 
-            $result->append($method);
+            $resultArray[] = $method;
         }
 
+        usort($resultArray, 'self::sortRates');
+        $result = Mage::getModel('shipping/rate_result');
+        foreach ($resultArray as $method) {
+            $result->append($method);
+        }
         return $result;
     }
 
@@ -69,7 +74,9 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
         $request = $this->addCountryGroupToRequest($request);
         $request = $this->addNumericPostcodesToRequest($request);
 
-        $stop_flag = array();
+        $stop_flag = array(
+            '_all' => false
+        );
 
         foreach ($rule_collection as $rule) {
             /** @var $rule Meanbee_Shippingrules_Model_Rule */
@@ -89,6 +96,8 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
                  */
                 if ($methods[$rule_name]->getPrice() < $rule->getPrice() || $stop_flag[$rule_name]) {
                     continue;
+                } else if ($stop_flag['_all']) {
+                    break;
                 }
             }
 
@@ -100,6 +109,10 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
 
             if ($rule->getStopRulesProcessing()) {
                 $stop_flag[$rule_name] = true;
+            }
+
+            if ($rule->getStopAllRulesProcessing()) {
+                $stop_flag['_all'] = true;
             }
         }
 
@@ -213,4 +226,14 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
 
         return $request;
     }
+
+    /**
+     * Sorts rates by Display Sort Order
+     */
+     protected static function sortRates($a, $b) {
+         if ($a->getDisplaySortOrder()==$b->getDisplaySortOrder()) {
+             return 0;
+         }
+         return ($a->getDisplaySortOrder() < $b->getDisplaySortOrder()) ? -1 : 1;
+     }
 }

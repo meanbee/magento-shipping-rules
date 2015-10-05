@@ -65,7 +65,7 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Grid extends Mage_Adminhtml_Bl
         $this->addColumn('conditions', array(
             'header'    => Mage::helper('meanship')->__('Rule Condition Summary'),
             'align'     =>'left',
-            'getter'    => 'getConditionsHtml',
+            'renderer'  => 'Meanbee_Shippingrules_Block_Adminhtml_Rules_Renderer',
             'filter'    => false,
             'sortable'  => false
         ));
@@ -82,10 +82,26 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Grid extends Mage_Adminhtml_Bl
             'filter'    => false
         ));
 
+        $this->addColumn('notes', array(
+            'header'    => Mage::helper('meanship')->__('Notes'),
+            'align'     =>'left',
+            'index'     => 'notes',
+            'type'      => 'text',
+            'filter'    => false
+        ));
+
         $this->addColumn('sort_order', array(
             'header'    => Mage::helper('meanship')->__('Sort Order'),
             'align'     => 'center',
             'index'     => 'sort_order',
+            'width'     => '50px',
+            'type'      => 'range'
+        ));
+
+        $this->addColumn('display_sort_order', array(
+            'header'    => Mage::helper('meanship')->__('Display Sort Order'),
+            'align'     => 'center',
+            'index'     => 'display_sort_order',
             'width'     => '50px',
             'type'      => 'range'
         ));
@@ -97,7 +113,7 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Grid extends Mage_Adminhtml_Bl
     protected function _prepareExportColumns() {
         $columns = array(
             'rule_id', 'name', 'price', 'cost', 'conditions_serialized', 'stop_rules_processing',
-            'sort_order', 'is_active', 'version'
+            'stop_all_rules_processing', 'sort_order', 'is_active', 'version'
         );
 
         foreach ($columns as $column) {
