@@ -8,17 +8,21 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Renderer
         $conditions = $row->getConditions();
         return $this->asHtmlRecursive($conditions);
     }
-    protected function asHtmlRecursive($condition)
+    protected function asHtmlRecursive($condition, $level = 0)
     {
-        $html = $this->renderCondition($condition).'<ul id="'.$condition->getPrefix().'__'.$condition->getId().'__children" class="rule-param-children" style="padding-left: 1em">';
-        foreach ($condition->getConditions() as $i => $child) {
-            if ($i >= 5) {
-                $html .='<li>⋮</li>';
-                break;
+        if ($condition->getConditions()) {
+            $html = '<details'.($level < 1 ? ' open' : '').'><summary>'.$this->renderCondition($condition).'</summary><ul id="'.$condition->getPrefix().'__'.$condition->getId().'__children" class="rule-param-children" style="padding-left: 1em">';
+            foreach ($condition->getConditions() as $i => $child) {
+                if ($i >= 5) {
+                    $html .='<li>⋮</li>';
+                    break;
+                }
+                $html .= '<li>'.$this->asHtmlRecursive($child, $level + 1).'</li>';
             }
-            $html .= '<li>'.$this->asHtmlRecursive($child).'</li>';
+            $html .= '</ul></details>';
+        } else {
+            $html = $this->renderCondition($condition);
         }
-        $html .= '</ul>';
         return $html;
     }
     protected function renderCondition($condition)
