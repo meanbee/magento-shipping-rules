@@ -55,6 +55,15 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </condense_countries_on_grid>
+                        <clip_conditions_on_grid translate="label">
+                            <label>Clip conditions on grid after</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>60</sort_order>
+                            <comment>After this many conditions in a rule, no more conditions will be shown on the grid. Enter 0 to never clip rules.</comment>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </clip_conditions_on_grid>
                     </fields>
                 </meanship>
             </groups>

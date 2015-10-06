@@ -10,10 +10,11 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Renderer
     }
     protected function asHtmlRecursive($condition, $level = 0)
     {
+        $clipPoint = Mage::helper('meanship/config')->getClipPointOnGrid();
         if ($condition->getConditions()) {
             $html = '<details'.($level < 1 ? ' open' : '').'><summary>'.$this->renderCondition($condition).'</summary><ul id="'.$condition->getPrefix().'__'.$condition->getId().'__children" class="rule-param-children" style="padding-left: 1em">';
             foreach ($condition->getConditions() as $i => $child) {
-                if ($i >= 5) {
+                if ($clipPoint > 0 && $i >= $clipPoint) {
                     $html .='<li>⋮</li>';
                     break;
                 }
