@@ -64,6 +64,15 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </clip_conditions_on_grid>
+                        <colapse_conditions_on_subcondition_on_grid translate="label">
+                            <label><![CDATA[Colapse conditions on grid after n<sup>th</sup> degree sub-condition.]]></label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>70</sort_order>
+                            <comment>After this level of sub-condition the condition tree will be default colapsed on the grid.</comment>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </colapse_conditions_on_subcondition_on_grid>
                     </fields>
                 </meanship>
             </groups>
