@@ -5,6 +5,9 @@
             <action method="addJs">
                 <script>Meanbee/shippingrules/grid.js</script>
             </action>
+            <action method="addCss">
+                <stylesheet>Meanbee/shippingrules/grid.css</stylesheet>
+            </action>
         </reference>
         <reference name="content">
             <block type="meanship/adminhtml_rules" name="rules" />

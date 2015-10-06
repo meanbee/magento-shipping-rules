@@ -1,6 +1,6 @@
 <?php
 class Meanbee_Shippingrules_Helper_Country extends Mage_Core_Helper_Data {
-	
+
 	/**
 	 * Converts all letters in range A-Z in passed string to their respective
 	 * Regional Indicator symbol. Intended for the purpose of converting country
@@ -19,7 +19,7 @@ class Meanbee_Shippingrules_Helper_Country extends Mage_Core_Helper_Data {
 			$char = substr($plaintext, $i, 1);
 			$codepoint = ord($char);
 			if ($codepoint >= ord('A') && $codepoint <= ord('Z')) { // If character in range A-Z
-				$regionalIndicatorSymbols .= '&#' . (127462 + $codepoint - ord('A')) . ';'; // Create HTML Entity for respective Regional Indicator Symbol
+				$regionalIndicatorSymbols .= html_entity_decode('&#' . (127462 + $codepoint - ord('A')) . ';'); // Create character for respective Regional Indicator Symbol
 			} else { // Else
 				$regionalIndicatorSymbols .= $char; // Use original character
 			}
