@@ -21,7 +21,7 @@ class Meanbee_Shippingrules_Helper_Upgrade extends Mage_Core_Helper_Abstract {
                 'conditions_serialized' => serialize($migrated_conditions),
                 'version' => '1.1.0'
             ), array(
-                'rule_id' => $rule->getId()
+                'rule_id = ?' => $rule->getId()
             ));
         }
     }
