@@ -73,6 +73,7 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
         $request = $this->addPostcodePrefixToRequest($request);
         $request = $this->addCountryGroupToRequest($request);
         $request = $this->addNumericPostcodesToRequest($request);
+        $request = $this->addPromoDataToRequest($request);
 
         $stop_flag = array(
             '_all' => false
@@ -224,6 +225,20 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
             }
         }
 
+        return $request;
+    }
+
+    /**
+     * Add promotion data to the request, so conditions can be
+     * dependant on promotions.
+     *
+     * @param Mage_Shipping_Model_Rate_Request $request
+     *
+     * @return Mage_Shipping_Model_Rate_Request
+     */
+    public function addPromoDataToRequest(Mage_Shipping_Model_Rate_Request $request) {
+        $quote = $request->getAllItems()[0]->getQuote();
+        $request->setData('promo_free_shipping', $quote->getShippingAddress()->getFreeShipping());
         return $request;
     }
 
