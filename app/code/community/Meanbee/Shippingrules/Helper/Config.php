@@ -6,6 +6,7 @@ class Meanbee_Shippingrules_Helper_Config extends Mage_Core_Helper_Abstract {
     const XML_CLIP_POINT_ON_GRID = 'carriers/meanship/clip_conditions_on_grid';
     const XML_COLAPSE_SUBCONDITION_ON_GRID = 'carriers/meanship/colapse_conditions_on_subcondition_on_grid';
     const XML_USE_EMOJI_ONE = 'carriers/meanship/use_emoji_one';
+    const XML_OPERATOR_RENDER_TYPE_ON_GRID = 'carriers/meanship/operator_render_type_on_grid';
 
     /**
      * @param null $store
@@ -59,5 +60,14 @@ class Meanbee_Shippingrules_Helper_Config extends Mage_Core_Helper_Abstract {
      */
     public function getUseEmojiOne($store = null) {
         return Mage::getStoreConfigFlag(self::XML_USE_EMOJI_ONE, $store);
+    }
+
+    /**
+     *
+     * @param  null $store
+     * @return string
+     */
+    public function getOperatorRenderTypeOnGrid($store = null) {
+        return Mage::getStoreConfig(self::XML_OPERATOR_RENDER_TYPE_ON_GRID, $store);
     }
 }

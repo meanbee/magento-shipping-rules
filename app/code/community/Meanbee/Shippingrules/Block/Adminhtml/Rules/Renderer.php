@@ -65,10 +65,39 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Renderer
                             break;
                     }
                 }
-                return $condition->getAttributeName() . ' ' . $condition->getOperatorName() . ' ' . substr($countries, 1);
+                return $condition->getAttributeName() . ' ' . $this->renderOperator($condition) . ' ' . substr($countries, 1);
                 break;
             default:
-                return $condition->asString();
+                return $condition->getAttributeName() . ' ' . $this->renderOperator($condition) . ' ' . $condition->getValueName();
         }
+    }
+    protected function renderOperator ($condition) {
+        if (Mage::helper('meanship/config')->getOperatorRenderTypeOnGrid() === 'mathematical') {
+            switch ($condition->getOperator()) {
+                case '<':
+                    return '<';
+                case '>':
+                    return '>';
+                case '<=':
+                    return '≤';
+                case '>=':
+                    return '≥';
+                case '==':
+                    return '=';
+                case '!=':
+                    return '≠';
+                case '//':
+                    return '∾';
+                case '()':
+                case '{}':
+                    return '∈';
+                case '!()':
+                case '!{}':
+                    return '∉';
+                default:
+                    return $condition->getOperatorName();
+            }
+        } // else textual
+        return $condition->getOperatorName();
     }
 }
