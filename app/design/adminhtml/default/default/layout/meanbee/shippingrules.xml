@@ -9,6 +9,7 @@
         <reference name="head">
             <action method="setCanLoadExtJs"><flag>1</flag></action>
             <action method="setCanLoadRulesJs"><flag>1</flag></action>
+            <action method="addJs"><script>meanbee/shippingrules/form.js</script></action>
         </reference>
         <reference name="content">
             <block type="meanship/adminhtml_rules_edit" name="rules_edit" />
