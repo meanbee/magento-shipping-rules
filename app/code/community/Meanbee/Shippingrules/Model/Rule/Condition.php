@@ -20,9 +20,9 @@ class Meanbee_Shippingrules_Model_Rule_Condition extends Meanbee_Shippingrules_M
             'dest_region_id'  => Mage::helper('meanship')->__('Shipping State'),
 
             /** @deprecated Remove next major version. { */
-                'dest_postcode'   => Mage::helper('meanship')->__('Shipping Zipcode'),
-                'dest_postcode_numeric' => Mage::helper('meanship')->__('Shipping Zip Code (if numeric value)'),
-                'dest_postcode_prefix' => Mage::helper('meanship')->__('Shipping Postcode (UK only) Prefix'),
+                'dest_postcode'   => Mage::helper('meanship')->__('Shipping Zipcode [Deprecated]'),
+                'dest_postcode_numeric' => Mage::helper('meanship')->__('Shipping Zip Code (if numeric value) [Deprecated]'),
+                'dest_postcode_prefix' => Mage::helper('meanship')->__('Shipping Postcode (UK only) Prefix [Deprecated]'),
             /** } */
 
             'dest_postal_code_p0_str' => Mage::helper('meanship')->__('Entire Postal Code'),
