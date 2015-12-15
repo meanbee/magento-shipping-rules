@@ -70,9 +70,10 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
 
         $request = $this->addCustomerDataToRequest($request);
         $request = $this->addAdminOrderDataToRequest($request);
-        $request = $this->addPostcodePrefixToRequest($request);
+        $request = $this->addPostcodePrefixToRequest($request); /** @deprecated Remove next major version. */
+        $request = $this->addPostalCodePartsToRequest($request);
         $request = $this->addCountryGroupToRequest($request);
-        $request = $this->addNumericPostcodesToRequest($request);
+        $request = $this->addNumericPostcodesToRequest($request); /** @deprecated Remove next major version. */
 
         $stop_flag = array(
             '_all' => false
@@ -186,6 +187,7 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
 
     /**
      * Extract the postcode prefix from the destination postcode if available.
+     * @deprecated Remove next major version.
      *
      * @param Mage_Shipping_Model_Rate_Request $request
      *
@@ -207,8 +209,37 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
     }
 
     /**
+     * Extract the postcode parts from the destination postal code if available.
+     *
+     * @param Mage_Shipping_Model_Rate_Request $request
+     *
+     * @return Mage_Shipping_Model_Rate_Request
+     */
+    public function addPostalCodePartsToRequest(Mage_Shipping_Model_Rate_Request $request) {
+        $postalCodeHelper = Mage::helper('meanship/postcode');
+        $postalCode = $request->getDestPostcode();
+        $countryCode = $request->getDestCountryId();
+
+        $matches = array();
+        $valid = $postalCodeHelper->isValidPostalCode($postalCode, $countryCode, $matches);
+        if ($valid) {
+            $postalCodeData = $postalCodeHelper->getPostalCodeDataByCountryCode($countryCode);
+            foreach ($postalCodeData['parts'] as $part => $type) {
+                if ($type !== Meanbee_Shippingrules_Helper_Postcode::CONSTANT) {
+                    $request->setData("dest_postal_code_p{$part}_{$type}", $matches[$part]);
+                }
+            }
+        } else if ($valid === null) {
+            $request->setData('dest_postal_code_p0_str', $postalCodeHelper->sanitisePostcode($postalCode));
+            $request->setData('dest_postal_code_p0_b36', $postalCodeHelper->sanitisePostcode($postalCode));
+        }
+        return $request;
+    }
+
+    /**
      * If the postcode is numeric then cast to a number and store it on the request so we can perform
      * numerical operations on it in the rule conditions.
+     * @deprecated Remove next major version.
      *
      * @param Mage_Shipping_Model_Rate_Request $request
      *

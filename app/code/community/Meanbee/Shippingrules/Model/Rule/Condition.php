@@ -1,4 +1,5 @@
 <?php
+use Meanbee_Shippingrules_Helper_Postcode;
 class Meanbee_Shippingrules_Model_Rule_Condition extends Meanbee_Shippingrules_Model_Rule_Condition_Abstract {
     public function loadAttributeOptions() {
         $attributes = array(
@@ -17,9 +18,12 @@ class Meanbee_Shippingrules_Model_Rule_Condition extends Meanbee_Shippingrules_M
             'dest_country_id' => Mage::helper('meanship')->__('Shipping Country'),
             'dest_country_group' => Mage::helper('meanship')->__('Shipping Country Group'),
             'dest_region_id'  => Mage::helper('meanship')->__('Shipping State'),
-            // 'dest_postcode'   => Mage::helper('meanship')->__('Shipping Zipcode'),
-            // 'dest_postcode_numeric' => Mage::helper('meanship')->__('Shipping Zip Code (if numeric value)'),
-            // 'dest_postcode_prefix' => Mage::helper('meanship')->__('Shipping Postcode (UK only) Prefix'),
+
+            /** @deprecated Remove next major version. { */
+                'dest_postcode'   => Mage::helper('meanship')->__('Shipping Zipcode'),
+                'dest_postcode_numeric' => Mage::helper('meanship')->__('Shipping Zip Code (if numeric value)'),
+                'dest_postcode_prefix' => Mage::helper('meanship')->__('Shipping Postcode (UK only) Prefix'),
+            /** } */
 
             'dest_postal_code_p0_str' => Mage::helper('meanship')->__('Entire Postal Code'),
             'dest_postal_code_p0_b26' => Mage::helper('meanship')->__('Entire Postal Code [A-Z]'),
@@ -49,6 +53,15 @@ class Meanbee_Shippingrules_Model_Rule_Condition extends Meanbee_Shippingrules_M
     }
 
     public function getInputType() {
+        $matches = array();
+        if (preg_match('/^dest_postal_code_p[0-4]_([str|b10|b26|b36])$/', $this->getAttribute(), $matches)) {
+            switch ($matches[1]) {
+                case Meanbee_Shippingrules_Helper_Postcode::ALPHABETIC:
+                    return 'string';
+                default:
+                    return "numeric_{$matches[1]}";
+            }
+        }
         switch ($this->getAttribute()) {
             case 'customer_group_id':
             case 'dest_country_id':
@@ -59,11 +72,6 @@ class Meanbee_Shippingrules_Model_Rule_Condition extends Meanbee_Shippingrules_M
                 return 'multiselect';
             case 'is_admin_order':
                 return 'select';
-            case 'dest_postal_code_p0_str':
-            case 'dest_postal_code_p1_str':
-            case 'dest_postal_code_p2_str':
-            case 'dest_postal_code_p3_str':
-            case 'dest_postal_code_p4_str':
             case 'dest_postcode':
             case 'dest_postcode_prefix':
                 return 'string';
@@ -136,8 +144,8 @@ class Meanbee_Shippingrules_Model_Rule_Condition extends Meanbee_Shippingrules_M
         $value = $object->getData($this->getAttribute());
 
         switch ($this->getAttribute()) {
-            case 'dest_postcode':
-            case 'dest_postcode_prefix':
+            case 'dest_postcode': /** @deprecated Remove next major version. */
+            case 'dest_postcode_prefix': /** @deprecated Remove next major version. */
                 $value = Mage::helper('meanship/postcode')->sanitisePostcode($value);
                 break;
         }
@@ -149,8 +157,8 @@ class Meanbee_Shippingrules_Model_Rule_Condition extends Meanbee_Shippingrules_M
         $value = parent::getValueParsed();
 
         switch ($this->getAttribute()) {
-            case 'dest_postcode':
-            case 'dest_postcode_prefix':
+            case 'dest_postcode': /** @deprecated Remove next major version. */
+            case 'dest_postcode_prefix': /** @deprecated Remove next major version. */
                 $value = Mage::helper('meanship/postcode')->sanitisePostcode($value);
                 break;
             case 'is_admin_order':

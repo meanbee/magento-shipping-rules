@@ -74,19 +74,20 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Combine extends Mage_Rule_Model
             'value' => $this->getDestinationConditions()
         );
 
-        // $conditions[] = array(
-        //     'label' => Mage::helper('meanship')->__('Specalist Destnation Conditions'),
-        //     'value' => array(
-        //         array(
-        //             'label' => Mage::helper('meanship')->__('Shipping Zip Code (if numeric value)'),
-        //             'value' => 'meanship/rule_condition|dest_postcode_numeric'
-        //         ),
-        //         array(
-        //             'label' => Mage::helper('meanship')->__('Shipping Postcode Prefix (UK only)'),
-        //             'value' => 'meanship/rule_condition|dest_postcode_prefix'
-        //         )
-        //     )
-        // );
+        /** @deprecated Remove next major version. */
+        $conditions[] = array(
+            'label' => Mage::helper('meanship')->__('Specalist Destnation Conditions'),
+            'value' => array(
+                array(
+                    'label' => Mage::helper('meanship')->__('Shipping Zip Code (if numeric value)'),
+                    'value' => 'meanship/rule_condition|dest_postcode_numeric'
+                ),
+                array(
+                    'label' => Mage::helper('meanship')->__('Shipping Postcode Prefix (UK only)'),
+                    'value' => 'meanship/rule_condition|dest_postcode_prefix'
+                )
+            )
+        );
 
         $conditions[] = array(
             'label' => Mage::helper('meanship')->__('Cart Item Conditions'),
@@ -121,15 +122,17 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Combine extends Mage_Rule_Model
             'value' => 'meanship/rule_condition|dest_region_id'
         );
 
-        // $conditions[] = array(
-        //     'label' => Mage::helper('meanship')->__('Shipping Zip Code'),
-        //     'value' => 'meanship/rule_condition|dest_postcode'
-        // );
-        //
-        // $conditions[] = array(
-        //     'label' => Mage::helper('meanship')->__('Shipping Postcode (UK only) Prefix'),
-        //     'value' => 'meanship/rule_condition|dest_postcode_prefix'
-        // );
+        /** @deprecated Remove next major version. */
+        $conditions[] = array(
+            'label' => Mage::helper('meanship')->__('Shipping Zip Code'),
+            'value' => 'meanship/rule_condition|dest_postcode'
+        );
+
+        /** @deprecated Remove next major version. */
+        $conditions[] = array(
+            'label' => Mage::helper('meanship')->__('Shipping Postcode (UK only) Prefix'),
+            'value' => 'meanship/rule_condition|dest_postcode_prefix'
+        );
 
         $conditions[] = array(
             'label' => Mage::helper('meanship')->__('Shipping Postal Code'),
