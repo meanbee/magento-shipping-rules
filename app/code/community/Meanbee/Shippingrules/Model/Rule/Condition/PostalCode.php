@@ -85,6 +85,25 @@ class Meanbee_Shippingrules_Model_Rule_Condition_PostalCode extends Mage_Rule_Mo
         ))->setRenderer(Mage::getBlockSingleton('rule/editable'));
     }
 
+    public function validate(Varien_Object $object)
+    {
+        if (strpos($this->getValue(), $object->getDestCountryId()) !== 0) return false;
+
+        if (!$this->getConditions()) {
+            return true;
+        }
+        $all    = $this->getAggregator() === 'all';
+        foreach ($this->getConditions() as $cond) {
+            $validated = $cond->validate($object);
+            if ($all && !$validated) {
+                return false;
+            } elseif (!$all && $validated) {
+                return true;
+            }
+        }
+        return $all ? true : false;
+    }
+
     public function asHtml()
     {
         return $this->getTypeElement()->getHtml().Mage::helper('meanship')->__('Postal Code of %s matches %s of these conditions:', $this->getValueElement()->getHtml(), $this->getAggregatorElement()->getHtml()).$this->getRemoveLinkHtml();
