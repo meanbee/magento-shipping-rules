@@ -45,6 +45,13 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
         return $result;
     }
 
+    /**
+     * Gets allowed shiping methods
+     *
+     * @implements Mage_Shipping_Model_Carrier_Interface
+     *
+     * @return array Allowed shipping methods.
+     */
     public function getAllowedMethods() {
         $methods = array();
 
@@ -60,6 +67,12 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
         return $methods;
     }
 
+    /**
+     * Gets shipping methods whose rules validate when evalutaed against the shipping rate request.
+     *
+     * @param  Mage_Shipping_Model_Rate_Request $request
+     * @return array                                     Array of rules that validated.
+     */
     protected function _getApplicableRules(Mage_Shipping_Model_Rate_Request $request) {
         $methods = array();
 
@@ -125,7 +138,6 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
      * to the request if so.
      *
      * @param Mage_Shipping_Model_Rate_Request $request
-     *
      * @return Mage_Shipping_Model_Rate_Request
      */
     public function addCountryGroupToRequest(Mage_Shipping_Model_Rate_Request $request) {
@@ -172,7 +184,6 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
      * Determine whether or not this is an order placed in the admin area.
      *
      * @param Mage_Shipping_Model_Rate_Request $request
-     *
      * @return Mage_Shipping_Model_Rate_Request
      */
     public function addAdminOrderDataToRequest(Mage_Shipping_Model_Rate_Request $request) {
@@ -187,10 +198,10 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
 
     /**
      * Extract the postcode prefix from the destination postcode if available.
+     *
      * @deprecated Remove next major version.
      *
      * @param Mage_Shipping_Model_Rate_Request $request
-     *
      * @return Mage_Shipping_Model_Rate_Request
      */
     public function addPostcodePrefixToRequest(Mage_Shipping_Model_Rate_Request $request) {
@@ -212,7 +223,6 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
      * Extract the postcode parts from the destination postal code if available.
      *
      * @param Mage_Shipping_Model_Rate_Request $request
-     *
      * @return Mage_Shipping_Model_Rate_Request
      */
     public function addPostalCodePartsToRequest(Mage_Shipping_Model_Rate_Request $request) {
@@ -239,10 +249,10 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
     /**
      * If the postcode is numeric then cast to a number and store it on the request so we can perform
      * numerical operations on it in the rule conditions.
+     *
      * @deprecated Remove next major version.
      *
      * @param Mage_Shipping_Model_Rate_Request $request
-     *
      * @return Mage_Shipping_Model_Rate_Request
      */
     public function addNumericPostcodesToRequest(Mage_Shipping_Model_Rate_Request $request) {

@@ -154,7 +154,13 @@ class Meanbee_Shippingrules_Helper_Postcode extends Mage_Core_Helper_Abstract {
         )
     );
 
-    public function getPostalCodeDataByCountryCode($countryCode) {
+    /**
+     * Searches array of postal code format descriptors by country code.
+     *
+     * @param  string     $countryCode 2 letter country code (e.g. "GB"; United Kingdom).
+     * @return array|null              Postal code format descriptor, null if no match found.
+     */
+    public function getPostalCodeDataByCountryCode(string $countryCode) {
         foreach (self::$POSTAL_CODES as $postalCode) {
             if ($postalCode['code'] === $countryCode) {
                 return $postalCode;
@@ -165,6 +171,7 @@ class Meanbee_Shippingrules_Helper_Postcode extends Mage_Core_Helper_Abstract {
 
     /**
      * @deprecated Remove next major version.
+     *
      * @param $postcode
      * @return string
      */
@@ -179,13 +186,16 @@ class Meanbee_Shippingrules_Helper_Postcode extends Mage_Core_Helper_Abstract {
     }
 
     /**
-     * @param string $postalCode
-     * @param string $countryCode=null
-     * @param array  &$matches
+     * Checks validity of postal code.
      *
-     * @return boolean|null
+     * @param string $postalCode       Postal code to be validated.
+     * @param string $countryCode=null Country code indicating format to match against.
+     * @param array  &$matches         Array to fill with result of regex execution.
+     * @return boolean|array|null      Returns validity of postal code if format is known.
+     *                                 Returns array of valid formats if no country code is provided.
+     *                                 Else returns null.
      */
-    public function isValidPostalCode($postalCode, $countryCode = null, &$matches) {
+    public function isValidPostalCode(string $postalCode, string $countryCode = null, array &$matches) {
         $postalCode = $this->sanitisePostcode($postalCode);
         if ($countryCode !== null) {
             $postalCodeData = $this->getPostalCodeDataByCountryCode($countryCode);
@@ -202,11 +212,12 @@ class Meanbee_Shippingrules_Helper_Postcode extends Mage_Core_Helper_Abstract {
     }
 
     /**
-     * @param $postalCode
+     * Removes space and dash characters from postal code.
      *
-     * @return mixed
+     * @param string $postalCode
+     * @return string
      */
-    public function sanitisePostcode($postalCode) {
+    public function sanitisePostcode(string $postalCode) {
         return preg_replace('/\s+/', '', str_replace(array('-', '-', '‒', '–', '—', '―'), '', strtoupper($postalCode)));
     }
 
@@ -215,7 +226,6 @@ class Meanbee_Shippingrules_Helper_Postcode extends Mage_Core_Helper_Abstract {
      *
      * @param string $subject
      * @param int    $fromBase
-     *
      * @return int
      */
     public function toBase10(string $subject, int $fromBase) {

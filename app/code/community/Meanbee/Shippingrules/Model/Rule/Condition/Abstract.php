@@ -1,10 +1,12 @@
 <?php
 class Meanbee_Shippingrules_Model_Rule_Condition_Abstract extends Mage_Rule_Model_Condition_Abstract {
-
+    /** @override */
     protected $_arrayInputTypes = array();
 
     /**
      * Default operator input by type map getter
+     *
+     * @override
      *
      * @return array
      */
@@ -31,6 +33,8 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Abstract extends Mage_Rule_Mode
     /**
      * Default operator options getter
      * Provides all possible operator options
+     *
+     * @override
      *
      * @return array
      */
@@ -70,6 +74,8 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Abstract extends Mage_Rule_Mode
     /**
      * Magento < 1.6 does not have this method.
      *
+     * @override
+     *
      * @return bool
      */
     public function isArrayOperatorType() {
@@ -78,8 +84,9 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Abstract extends Mage_Rule_Mode
     }
 
     /**
-     *
      * Magento < 1.6 does not have this method.
+     *
+     * @override
      *
      * @param $validatedValue
      * @param $value
@@ -100,6 +107,8 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Abstract extends Mage_Rule_Mode
 
     /**
      * Magento 1.5 has an incompatible implementation of this method.
+     *
+     * @override
      *
      * @return array|string|int|float
      */
@@ -122,6 +131,8 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Abstract extends Mage_Rule_Mode
      * and validates it against the rule condition defined for that attribute using the
      * defined operator ($op) and rule value ($value). It returns true if the provided
      * value passes the condition, otherwise it returns false.
+     *
+     * @override
      *
      * @param   mixed $validatedValue Value to validate against
      * @return  bool
