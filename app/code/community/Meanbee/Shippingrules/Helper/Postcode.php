@@ -21,9 +21,8 @@ class Meanbee_Shippingrules_Helper_Postcode extends Mage_Core_Helper_Abstract {
             'parts' => array(self::NUMERIC_BASE10)
         ), array(
             'code'  => 'AQ', 'name'  => 'British Antarctic Territory',
-            'regex' => '/^BIQQ(\d)([ABD-HJLNP-UW-Z]{2})$/',
-            'parts' => array(self::NUMERIC_BASE36, self::CONSTANT, self::NUMERIC_BASE10, self::NUMERIC_BASE26),
-            'prefix' => 'BIQQ'
+            'regex' => '/^(BIQQ)(\d)([ABD-HJLNP-UW-Z]{2})$/',
+            'parts' => array(self::NUMERIC_BASE36, self::CONSTANT, self::NUMERIC_BASE10, self::NUMERIC_BASE26)
         ), array(
             'code'  => 'BE', 'name'  => 'Belgium',
             'regex' => '/^(\d{4})$/',
@@ -50,9 +49,8 @@ class Meanbee_Shippingrules_Helper_Postcode extends Mage_Core_Helper_Abstract {
             'parts' => array(self::NUMERIC_BASE10)
         ), array(
             'code'  => 'FK', 'name'  => 'Falkland Islands',
-            'regex' => '/^FIQQ(\d)([ABD-HJLNP-UW-Z]{2})$/',
-            'parts' => array(self::NUMERIC_BASE36, self::CONSTANT, self::NUMERIC_BASE10, self::NUMERIC_BASE26),
-            'prefix' => 'FIQQ'
+            'regex' => '/^(FIQQ)(\d)([ABD-HJLNP-UW-Z]{2})$/',
+            'parts' => array(self::NUMERIC_BASE36, self::CONSTANT, self::NUMERIC_BASE10, self::NUMERIC_BASE26)
         ), array(
             'code'  => 'FR', 'name'  => 'France',
             'regex' => '/^(\d{1,5})$/',
@@ -67,56 +65,48 @@ class Meanbee_Shippingrules_Helper_Postcode extends Mage_Core_Helper_Abstract {
             'parts' => array(self::ALPHABETIC, self::ALPHABETIC, self::NUMERIC_BASE36, self::NUMERIC_BASE10, self::NUMERIC_BASE26)
         ), array(
             'code'  => 'GB+', 'name' => 'British Forces Post Office',
-            'regex' => '/^BFPO(\d{1,4})$/',
-            'parts' => array(self::NUMERIC_BASE36, self::CONSTANT, self::NUMERIC_BASE10),
-            'prefix' => 'BFPO'
+            'regex' => '/^(BFPO)(\d{1,4})$/',
+            'parts' => array(self::NUMERIC_BASE36, self::CONSTANT, self::NUMERIC_BASE10)
         ), array(
             'code'  => 'GG', 'name'  => 'Guernsey',
-            'regex' => '/^GY(\d{2}|\d[A-Z]?)(\d)([ABD-HJLNP-UW-Z]{2})$/',
-            'parts' => array(self::NUMERIC_BASE36, self::CONSTANT, self::NUMERIC_BASE36, self::NUMERIC_BASE10, self::NUMERIC_BASE26),
-            'prefix' => 'GY'
+            'regex' => '/^(GY)(\d{2}|\d[A-Z]?)(\d)([ABD-HJLNP-UW-Z]{2})$/',
+            'parts' => array(self::NUMERIC_BASE36, self::CONSTANT, self::NUMERIC_BASE36, self::NUMERIC_BASE10, self::NUMERIC_BASE26)
         ), array(
             'code'  => 'GI', 'name'  => 'Gibraltar',
-            'regex' => '/^GX(\d{1,2})(\d)([ABD-HJLNP-UW-Z]{2})$/',
-            'parts' => array(self::NUMERIC_BASE36, self::CONSTANT, self::NUMERIC_BASE10, self::NUMERIC_BASE10, self::NUMERIC_BASE26),
-            'prefix' => 'GX'
+            'regex' => '/^(GX)(\d{1,2})(\d)([ABD-HJLNP-UW-Z]{2})$/',
+            'parts' => array(self::NUMERIC_BASE36, self::CONSTANT, self::NUMERIC_BASE10, self::NUMERIC_BASE10, self::NUMERIC_BASE26)
         ), array(
             'code'  => 'GS', 'name'  => 'South Georgia and the South Sandwich Islands',
-            'regex' => '/^SIQQ(\d)([ABD-HJLNP-UW-Z]{2})$/',
-            'parts' => array(self::NUMERIC_BASE36, self::CONSTANT, self::NUMERIC_BASE10, self::NUMERIC_BASE26),
-            'prefix' => 'SIQQ'
+            'regex' => '/^(SIQQ)(\d)([ABD-HJLNP-UW-Z]{2})$/',
+            'parts' => array(self::NUMERIC_BASE36, self::CONSTANT, self::NUMERIC_BASE10, self::NUMERIC_BASE26)
         ), array(
             'code'  => 'IM', 'name'  => 'Isle of Man',
-            'regex' => '/^IM(\d{2}|\d[A-Z]?)(\d)([ABD-HJLNP-UW-Z]{2})$/',
-            'parts' => array(self::NUMERIC_BASE36, self::CONSTANT, self::NUMERIC_BASE36, self::NUMERIC_BASE10, self::NUMERIC_BASE26),
-            'prefix' => 'IM'
+            'regex' => '/^(IM)(\d{2}|\d[A-Z]?)(\d)([ABD-HJLNP-UW-Z]{2})$/',
+            'parts' => array(self::NUMERIC_BASE36, self::CONSTANT, self::NUMERIC_BASE36, self::NUMERIC_BASE10, self::NUMERIC_BASE26)
         ), array(
             'code'  => 'HU', 'name'  => 'Hungary',
             'regex' => '/^(\d{4})$/',
             'parts' => array(self::NUMERIC_BASE10)
         ), array(
             'code'  => 'IO', 'name'  => 'British Indian Ocean Territory',
-            'regex' => '/^BBND(\d)([ABD-HJLNP-UW-Z]{2})$/',
-            'parts' => array(self::NUMERIC_BASE36, self::CONSTANT, self::NUMERIC_BASE10, self::NUMERIC_BASE26),
-            'prefix' => 'BBND'
+            'regex' => '/^(BBND)(\d)([ABD-HJLNP-UW-Z]{2})$/',
+            'parts' => array(self::NUMERIC_BASE36, self::CONSTANT, self::NUMERIC_BASE10, self::NUMERIC_BASE26)
         ), array(
             'code'  => 'IT', 'name'  => 'Italy',
             'regex' => '/^(\d{5})$/',
             'parts' => array(self::NUMERIC_BASE10)
         ), array(
             'code'  => 'JE', 'name'  => 'Jersey',
-            'regex' => '/^JE(\d{2}|\d[A-Z]?)(\d)([ABD-HJLNP-UW-Z]{2})$/',
-            'parts' => array(self::NUMERIC_BASE36, self::CONSTANT, self::NUMERIC_BASE36, self::NUMERIC_BASE10, self::NUMERIC_BASE26),
-            'prefix' => 'JE'
+            'regex' => '/^(JE)(\d{2}|\d[A-Z]?)(\d)([ABD-HJLNP-UW-Z]{2})$/',
+            'parts' => array(self::NUMERIC_BASE36, self::CONSTANT, self::NUMERIC_BASE36, self::NUMERIC_BASE10, self::NUMERIC_BASE26)
         ), array(
             'code'  => 'JP', 'name'  => 'Japan',
             'regex' => '/^(\d{3})(\d{4})$/',
             'parts' => array(self::NUMERIC_BASE10, self::NUMERIC_BASE10, self::NUMERIC_BASE10)
         ), array(
             'code'  => 'LU', 'name'  => 'Luxembourg',
-            'regex' => '/^L(\d{4})$/',
-            'parts' => array(self::NUMERIC_BASE10),
-            'prefix' => 'L'
+            'regex' => '/^(L)(\d{4})$/',
+            'parts' => array(self::NUMERIC_BASE10)
         ), array(
             'code'  => 'NL', 'name'  => 'Netherlands',
             'regex' => '/^([1-9]\d{3})([A-Z]{2})$/',
@@ -131,18 +121,16 @@ class Meanbee_Shippingrules_Helper_Postcode extends Mage_Core_Helper_Abstract {
             'parts' => array(self::NUMERIC_BASE36, self::ALPHABETIC, self::NUMERIC_BASE10, self::NUMERIC_BASE26)
         ), array(
             'code'  => 'PN', 'name'  => 'Pitcairn Islands',
-            'regex' => '/^PCRN(\d)([ABD-HJLNP-UW-Z]{2})$/',
-            'parts' => array(self::NUMERIC_BASE36, self::CONSTANT, self::NUMERIC_BASE10, self::NUMERIC_BASE26),
-            'prefix' => 'PCRN'
+            'regex' => '/^(PCRN)(\d)([ABD-HJLNP-UW-Z]{2})$/',
+            'parts' => array(self::NUMERIC_BASE36, self::CONSTANT, self::NUMERIC_BASE10, self::NUMERIC_BASE26)
         ), array(
             'code'  => 'RU', 'name'  => 'Russia',
             'regex' => '/^\d{6}$/',
             'parts' => array(self::NUMERIC_BASE10)
         ), array(
             'code'  => 'TC', 'name'  => 'Turks and Caicos Islands',
-            'regex' => '/^TKCA(\d)([ABD-HJLNP-UW-Z]{2})$/',
-            'parts' => array(self::NUMERIC_BASE36, self::CONSTANT, self::NUMERIC_BASE10, self::NUMERIC_BASE26),
-            'prefix' => 'TKCA'
+            'regex' => '/^(TKCA)(\d)([ABD-HJLNP-UW-Z]{2})$/',
+            'parts' => array(self::NUMERIC_BASE36, self::CONSTANT, self::NUMERIC_BASE10, self::NUMERIC_BASE26)
         ), array(
             'code'  => 'PL', 'name'  => 'Poland',
             'regex' => '/^(\d{2})(\d{3})$/',
