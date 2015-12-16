@@ -1,68 +1,65 @@
 (function() {
-  if (!Array.prototype.forEach) {
-    Array.prototype.forEach = function(callback, thisArg) {
-      var T, k, O, len;
-      if (this == null) throw new TypeError(' this is null or not defined'); // jshint ignore:line
-      O = Object(this);
-      len = O.length >>> 0;
-      if (typeof callback !== 'function') throw new TypeError(callback + ' is not a function');
-      if (arguments.length > 1) T = thisArg;
-      for (k = 0; k < len; k++) {
-        var kValue;
-        if (k in O) {
-          kValue = O[k];
-          callback.call(T, kValue, k, O);
-        }
+  /**
+   * Non-conflicting forEach polyfil.
+   */
+  function forEach(array, cb, cxt) {
+    var T, k, O, len;
+    if (array == null) throw new TypeError(' array is null or not defined'); // jshint ignore:line
+    O = Object(array);
+    len = O.length >>> 0;
+    if (typeof cb !== 'function') throw new TypeError(cb + ' is not a function');
+    if (arguments.length > 1) T = cxt;
+    for (k = 0; k < len; k++) {
+      var kValue;
+      if (k in O) {
+        kValue = O[k];
+        cb.call(T, kValue, k, O);
       }
-    };
+    }
   }
 
-  var ALPHABETIC = 'str';
-  var NUMERIC_BASE10 = 'b10';
-  var NUMERIC_BASE26 = 'b26';
-  var NUMERIC_BASE36 = 'b36';
-  var CONSTANT = '';
-  var postalCodeData = {
-    AU: [NUMERIC_BASE10],
-    AI: [NUMERIC_BASE10],
-    AT: [NUMERIC_BASE10],
-    AQ: [NUMERIC_BASE36, CONSTANT,       NUMERIC_BASE10, NUMERIC_BASE26],
-    BE: [NUMERIC_BASE10],
-    BR: [NUMERIC_BASE10, NUMERIC_BASE10, NUMERIC_BASE10],
-    CA: [NUMERIC_BASE36, NUMERIC_BASE36, NUMERIC_BASE36],
-    DE: [NUMERIC_BASE10],
-    DK: [NUMERIC_BASE10],
-    ES: [NUMERIC_BASE10],
-    FK: [NUMERIC_BASE36, CONSTANT,       NUMERIC_BASE10, NUMERIC_BASE26],
-    FR: [NUMERIC_BASE10],
-    FO: [NUMERIC_BASE10],
-    GB: [ALPHABETIC,     ALPHABETIC,     NUMERIC_BASE36, NUMERIC_BASE10, NUMERIC_BASE26],
-    'GB+': [NUMERIC_BASE36,    CONSTANT,       NUMERIC_BASE10],
-    GG: [NUMERIC_BASE36, CONSTANT,       NUMERIC_BASE36, NUMERIC_BASE10, NUMERIC_BASE26],
-    GI: [NUMERIC_BASE36, CONSTANT,       NUMERIC_BASE10, NUMERIC_BASE10, NUMERIC_BASE26],
-    GS: [NUMERIC_BASE36, CONSTANT,       NUMERIC_BASE10, NUMERIC_BASE26],
-    IM: [NUMERIC_BASE36, CONSTANT,       NUMERIC_BASE36, NUMERIC_BASE10, NUMERIC_BASE26],
-    HU: [NUMERIC_BASE10],
-    IO: [NUMERIC_BASE36, CONSTANT,       NUMERIC_BASE10, NUMERIC_BASE26],
-    IT: [NUMERIC_BASE10],
-    JE: [NUMERIC_BASE36, CONSTANT,       NUMERIC_BASE36, NUMERIC_BASE10, NUMERIC_BASE26],
-    JP: [NUMERIC_BASE10, NUMERIC_BASE10, NUMERIC_BASE10],
-    LU: [NUMERIC_BASE10],
-    NL: [NUMERIC_BASE36, NUMERIC_BASE10, NUMERIC_BASE26],
-    SE: [NUMERIC_BASE10, NUMERIC_BASE10, NUMERIC_BASE10],
-    SH: [NUMERIC_BASE36,     ALPHABETIC,     NUMERIC_BASE10, NUMERIC_BASE26],
-    PN: [NUMERIC_BASE36, CONSTANT,       NUMERIC_BASE10, NUMERIC_BASE26],
-    RU: [NUMERIC_BASE10],
-    TC: [NUMERIC_BASE36, CONSTANT,       NUMERIC_BASE10, NUMERIC_BASE26],
-    PL: [NUMERIC_BASE36, NUMERIC_BASE10, NUMERIC_BASE26],
-    US: [NUMERIC_BASE10, NUMERIC_BASE10, NUMERIC_BASE10],
-  };
+  var postalCodeData,
+      scripts = document.getElementsByTagName('script'),
+      url = scripts[scripts.length - 1].src.replace(/\/[^\/]*\.js/, '/postalcode_formats.json');
 
+  /**
+   * Get postal code format descriptors from JSON file.
+   */
+  function loadPostalCodeData() {
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        postalCodeData = JSON.parse(xhr.responseText);
+        forEach(document.querySelectorAll('input[value="meanship/rule_condition_postalCode"]'), function(hiddenField) {
+          postalCodeFormatChangeHandler({target: hiddenField.nextElementSibling.lastElementChild.firstElementChild});
+        });
+      }
+    };
+
+    xhr.open('GET', url);
+    xhr.send();
+  }
+
+  function getPostalCodePartsByCountryCode(countryCode) {
+    for (var i = 0; i < postalCodeData.length; i++) {
+      var postalCode = postalCodeData[i];
+      if (postalCode.code === countryCode) {
+        return postalCode.parts;
+      }
+    }
+
+    return null;
+  }
+
+  /**
+   * Show only the attributes that can be applied to the selected postal code format.
+   */
   function postalCodeFormatChangeHandler(event) {
-    var parts = postalCodeData[event.target.value];
-    var container = event.target.parentElement.parentElement.parentElement;
+    var parts = getPostalCodePartsByCountryCode(event.target.value),
+        container = event.target.parentElement.parentElement.parentElement;
+    if (parts === null || parts === undefined) { return; }
 
-    [].forEach.call(container.querySelectorAll('option[value^="meanship/rule_condition|dest_postal_code"]'), function(option) {
+    forEach(container.querySelectorAll('option[value^="meanship/rule_condition|dest_postal_code"]'), function(option) {
       option.style.display = 'none';
     });
 
@@ -74,11 +71,14 @@
     }
   }
 
+  // Attach event listeners.
   document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('conditions_fieldset').addEventListener('change', function(event) {
       if (event.target.parentElement.parentElement.previousElementSibling.value === 'meanship/rule_condition_postalCode') {
         postalCodeFormatChangeHandler(event);
       }
     });
+
+    loadPostalCodeData();
   }, false);
 }());

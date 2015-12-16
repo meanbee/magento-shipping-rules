@@ -63,7 +63,7 @@ class Meanbee_Shippingrules_Model_Rule_Condition_PostalCode extends Mage_Rule_Mo
     public function loadValueOptions()
     {
         $valueOptions = array();
-        foreach (Meanbee_Shippingrules_Helper_Postcode::$POSTAL_CODES as $postalCodeData) {
+        foreach (Mage::helper('meanship/postcode')->getPostalCodeData() as $postalCodeData) {
             $valueOptions[$postalCodeData['code']] = Mage::helper('meanship/country')->toRegionalIndicatorSymbols($postalCodeData['code']) . ' '
                                                     . $postalCodeData['name']
                                                     . (isset($postalCodeData['prefix']) ? '  ['.$postalCodeData['prefix'].']' : '');

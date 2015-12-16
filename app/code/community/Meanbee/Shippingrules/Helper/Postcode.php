@@ -6,141 +6,19 @@ class Meanbee_Shippingrules_Helper_Postcode extends Mage_Core_Helper_Abstract {
     const NUMERIC_BASE36 = 'b36';
     const CONSTANT = '';
 
-    static public $POSTAL_CODES = array(
-        array(
-            'code'  => 'AU', 'name'  => 'Australia',
-            'regex' => '/^(\d{4})$/',
-            'parts' => array(self::NUMERIC_BASE10)
-        ), array(
-            'code'  => 'AI', 'name'  => 'Anguilla',
-            'regex' => '/^AI(\d{4})$/',
-            'parts' => array(self::NUMERIC_BASE10)
-        ), array(
-            'code'  => 'AT', 'name'  => 'Austria',
-            'regex' => '/^(\d{4})$/',
-            'parts' => array(self::NUMERIC_BASE10)
-        ), array(
-            'code'  => 'AQ', 'name'  => 'British Antarctic Territory',
-            'regex' => '/^(BIQQ)(\d)([ABD-HJLNP-UW-Z]{2})$/',
-            'parts' => array(self::NUMERIC_BASE36, self::CONSTANT, self::NUMERIC_BASE10, self::NUMERIC_BASE26)
-        ), array(
-            'code'  => 'BE', 'name'  => 'Belgium',
-            'regex' => '/^(\d{4})$/',
-            'parts' => array(self::NUMERIC_BASE10)
-        ), array(
-            'code'  => 'BR', 'name'  => 'Brazil',
-            'regex' => '/^(\d{5})(\d{3})$/',
-            'parts' => array(self::NUMERIC_BASE10, self::NUMERIC_BASE10, self::NUMERIC_BASE10)
-        ), array(
-            'code'  => 'CA', 'name'  => 'Canada',
-            'regex' => '/^([A-Z]\d[A-Z])(\d[A-Z]\d)$/',
-            'parts' => array(self::NUMERIC_BASE36, self::NUMERIC_BASE36, self::NUMERIC_BASE36)
-        ), array(
-            'code'  => 'DE', 'name'  => 'Germany',
-            'regex' => '/^(\d{5})$/',
-            'parts' => array(self::NUMERIC_BASE10)
-        ), array(
-            'code'  => 'DK', 'name'  => 'Denmark',
-            'regex' => '/^(\d{3,4})$/',
-            'parts' => array(self::NUMERIC_BASE10)
-        ), array(
-            'code'  => 'ES', 'name'  => 'Spain',
-            'regex' => '/^(0[1-9]\d{3}|[1-4]\d{4}|5[0-2]\d{3})$/',
-            'parts' => array(self::NUMERIC_BASE10)
-        ), array(
-            'code'  => 'FK', 'name'  => 'Falkland Islands',
-            'regex' => '/^(FIQQ)(\d)([ABD-HJLNP-UW-Z]{2})$/',
-            'parts' => array(self::NUMERIC_BASE36, self::CONSTANT, self::NUMERIC_BASE10, self::NUMERIC_BASE26)
-        ), array(
-            'code'  => 'FR', 'name'  => 'France',
-            'regex' => '/^(\d{1,5})$/',
-            'parts' => array(self::NUMERIC_BASE10)
-        ), array(
-            'code'  => 'FO', 'name'  => 'Faroe Islands',
-            'regex' => '/^(\d{3,4})$/',
-            'parts' => array(self::NUMERIC_BASE10)
-        ), array(
-            'code'  => 'GB', 'name'  => 'United Kingdom',
-            'regex' => '/^([A-Z]{1,2})(\d{2}|\d[A-Z]?)(\d)([ABD-HJLNP-UW-Z]{2})$/',
-            'parts' => array(self::ALPHABETIC, self::ALPHABETIC, self::NUMERIC_BASE36, self::NUMERIC_BASE10, self::NUMERIC_BASE26)
-        ), array(
-            'code'  => 'GB+', 'name' => 'British Forces Post Office',
-            'regex' => '/^(BFPO)(\d{1,4})$/',
-            'parts' => array(self::NUMERIC_BASE36, self::CONSTANT, self::NUMERIC_BASE10)
-        ), array(
-            'code'  => 'GG', 'name'  => 'Guernsey',
-            'regex' => '/^(GY)(\d{2}|\d[A-Z]?)(\d)([ABD-HJLNP-UW-Z]{2})$/',
-            'parts' => array(self::NUMERIC_BASE36, self::CONSTANT, self::NUMERIC_BASE36, self::NUMERIC_BASE10, self::NUMERIC_BASE26)
-        ), array(
-            'code'  => 'GI', 'name'  => 'Gibraltar',
-            'regex' => '/^(GX)(\d{1,2})(\d)([ABD-HJLNP-UW-Z]{2})$/',
-            'parts' => array(self::NUMERIC_BASE36, self::CONSTANT, self::NUMERIC_BASE10, self::NUMERIC_BASE10, self::NUMERIC_BASE26)
-        ), array(
-            'code'  => 'GS', 'name'  => 'South Georgia and the South Sandwich Islands',
-            'regex' => '/^(SIQQ)(\d)([ABD-HJLNP-UW-Z]{2})$/',
-            'parts' => array(self::NUMERIC_BASE36, self::CONSTANT, self::NUMERIC_BASE10, self::NUMERIC_BASE26)
-        ), array(
-            'code'  => 'IM', 'name'  => 'Isle of Man',
-            'regex' => '/^(IM)(\d{2}|\d[A-Z]?)(\d)([ABD-HJLNP-UW-Z]{2})$/',
-            'parts' => array(self::NUMERIC_BASE36, self::CONSTANT, self::NUMERIC_BASE36, self::NUMERIC_BASE10, self::NUMERIC_BASE26)
-        ), array(
-            'code'  => 'HU', 'name'  => 'Hungary',
-            'regex' => '/^(\d{4})$/',
-            'parts' => array(self::NUMERIC_BASE10)
-        ), array(
-            'code'  => 'IO', 'name'  => 'British Indian Ocean Territory',
-            'regex' => '/^(BBND)(\d)([ABD-HJLNP-UW-Z]{2})$/',
-            'parts' => array(self::NUMERIC_BASE36, self::CONSTANT, self::NUMERIC_BASE10, self::NUMERIC_BASE26)
-        ), array(
-            'code'  => 'IT', 'name'  => 'Italy',
-            'regex' => '/^(\d{5})$/',
-            'parts' => array(self::NUMERIC_BASE10)
-        ), array(
-            'code'  => 'JE', 'name'  => 'Jersey',
-            'regex' => '/^(JE)(\d{2}|\d[A-Z]?)(\d)([ABD-HJLNP-UW-Z]{2})$/',
-            'parts' => array(self::NUMERIC_BASE36, self::CONSTANT, self::NUMERIC_BASE36, self::NUMERIC_BASE10, self::NUMERIC_BASE26)
-        ), array(
-            'code'  => 'JP', 'name'  => 'Japan',
-            'regex' => '/^(\d{3})(\d{4})$/',
-            'parts' => array(self::NUMERIC_BASE10, self::NUMERIC_BASE10, self::NUMERIC_BASE10)
-        ), array(
-            'code'  => 'LU', 'name'  => 'Luxembourg',
-            'regex' => '/^(L)(\d{4})$/',
-            'parts' => array(self::NUMERIC_BASE10)
-        ), array(
-            'code'  => 'NL', 'name'  => 'Netherlands',
-            'regex' => '/^([1-9]\d{3})([A-Z]{2})$/',
-            'parts' => array(self::NUMERIC_BASE36, self::NUMERIC_BASE10, self::NUMERIC_BASE26)
-        ), array(
-            'code'  => 'SE', 'name'  => 'Sweden',
-            'regex' => '/^(\d{3})(\d{2})$/',
-            'parts' => array(self::NUMERIC_BASE10, self::NUMERIC_BASE10, self::NUMERIC_BASE10)
-        ), array(
-            'code'  => 'SH', 'name'  => 'Saint Helena, Ascension and Tristan da Cunha',
-            'regex' => '/^(ASCN|STHL|TDCU)(\d)([ABD-HJLNP-UW-Z]{2})$/',
-            'parts' => array(self::NUMERIC_BASE36, self::ALPHABETIC, self::NUMERIC_BASE10, self::NUMERIC_BASE26)
-        ), array(
-            'code'  => 'PN', 'name'  => 'Pitcairn Islands',
-            'regex' => '/^(PCRN)(\d)([ABD-HJLNP-UW-Z]{2})$/',
-            'parts' => array(self::NUMERIC_BASE36, self::CONSTANT, self::NUMERIC_BASE10, self::NUMERIC_BASE26)
-        ), array(
-            'code'  => 'RU', 'name'  => 'Russia',
-            'regex' => '/^\d{6}$/',
-            'parts' => array(self::NUMERIC_BASE10)
-        ), array(
-            'code'  => 'TC', 'name'  => 'Turks and Caicos Islands',
-            'regex' => '/^(TKCA)(\d)([ABD-HJLNP-UW-Z]{2})$/',
-            'parts' => array(self::NUMERIC_BASE36, self::CONSTANT, self::NUMERIC_BASE10, self::NUMERIC_BASE26)
-        ), array(
-            'code'  => 'PL', 'name'  => 'Poland',
-            'regex' => '/^(\d{2})(\d{3})$/',
-            'parts' => array(self::NUMERIC_BASE36, self::NUMERIC_BASE10, self::NUMERIC_BASE26)
-        ), array(
-            'code'  => 'US', 'name'  => 'United States of America',
-            'regex' => '/^(\d{5})(\d{4}|)$/',
-            'parts' => array(self::NUMERIC_BASE10, self::NUMERIC_BASE10, self::NUMERIC_BASE10)
-        )
-    );
+    /**
+     * Loads postal code format descriptors from JSON file.
+     *
+     * @return array Postal code format descriptor array.
+     */
+    public function getPostalCodeData() {
+        if (isset($this->_postalCodeData)) {
+            return $this->_postalCodeData;
+        }
+        $json = file_get_contents(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_JS).'meanbee/shippingrules/postalcode_formats.json');
+        $this->_postalCodeData = json_decode($json, true);
+        return $this->_postalCodeData;
+    }
 
     /**
      * Searches array of postal code format descriptors by country code.
@@ -149,7 +27,7 @@ class Meanbee_Shippingrules_Helper_Postcode extends Mage_Core_Helper_Abstract {
      * @return array|null              Postal code format descriptor, null if no match found.
      */
     public function getPostalCodeDataByCountryCode(string $countryCode) {
-        foreach (self::$POSTAL_CODES as $postalCode) {
+        foreach ($this->getPostalCodeData() as $postalCode) {
             if ($postalCode['code'] === $countryCode) {
                 return $postalCode;
             }
@@ -191,7 +69,7 @@ class Meanbee_Shippingrules_Helper_Postcode extends Mage_Core_Helper_Abstract {
             return (bool) preg_match($postalCodeData['regex'], $postalCode, $matches);
         }
         $countryCodes = array();
-        foreach (self::$POSTAL_CODES as $postalCodeData) {
+        foreach ($this->getPostalCodeData() as $postalCodeData) {
             if ((bool) preg_match($postalCodeData['regex'], $postalCode, $matches)) {
                 array_push($countryCodes, $postalCodeData['code']);
             }
