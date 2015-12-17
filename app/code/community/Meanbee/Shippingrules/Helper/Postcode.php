@@ -129,6 +129,6 @@ class Meanbee_Shippingrules_Helper_Postcode extends Mage_Core_Helper_Abstract {
                 $subject .= $map[$char];
             }
         }
-        return (int) base_convert($subject, $frombase, 10);
+        return (int) base_convert($subject, $fromBase, 10);
     }
 }
