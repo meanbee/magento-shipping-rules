@@ -33,7 +33,7 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Renderer
             case 'dest_country_id':
                 $countryHelper = Mage::helper('meanship/country');
                 $useEmojiOne = Mage::helper('meanship/config')->getUseEmojiOne();
-                $emojiOne = new Emojione_Client();
+                $emojiHelper = Mage::helper('meanship/emoji');
                 $countryCodes = $condition->getValue();
                 $countryNames = explode(', ', $condition->getValueName());
                 $listlen = count($countryCodes);
@@ -49,8 +49,9 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Renderer
                         case 'flag':
                             $country .= "<abbr title='{$countryNames[$i]} ({$countryCodes[$i]})'>";
                             if ($useEmojiOne) {
-                                $imageCode = $emojiOne->unicodeToImage($countryHelper->toRegionalIndicatorSymbols($countryCodes[$i]));
-                                if (preg_match("/<img/", $imageCode)) {
+                                $match = false;
+                                $imageCode = $emojiHelper->unicodeToImage($countryHelper->toRegionalIndicatorSymbols($countryCodes[$i]), $match);
+                                if ($match) {
                                     $country .= $imageCode;
                                 } else {
                                     $country .= $countryCodes[$i];
