@@ -70,10 +70,12 @@ class Meanbee_Shippingrules_Model_Rule_Condition extends Meanbee_Shippingrules_M
      */
     public function getInputType() {
         $matches = array();
-        if (preg_match('/^dest_postal_code_p[0-4]_([str|b10|b26|b36])$/', $this->getAttribute(), $matches)) {
+        if (preg_match('/^dest_postal_code_p[0-4]_(str|b10|b26|b36)$/', $this->getAttribute(), $matches)) {
             switch ($matches[1]) {
                 case Meanbee_Shippingrules_Helper_Postcode::ALPHABETIC:
                     return 'string';
+                case Meanbee_Shippingrules_Helper_Postcode::NUMERIC_BASE10:
+                    return 'numeric';
                 default:
                     return "numeric_{$matches[1]}";
             }
