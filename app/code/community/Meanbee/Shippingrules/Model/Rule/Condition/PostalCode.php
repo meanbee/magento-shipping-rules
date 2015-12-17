@@ -27,29 +27,14 @@ class Meanbee_Shippingrules_Model_Rule_Condition_PostalCode extends Mage_Rule_Mo
                 'value' => "meanship/rule_condition|dest_postal_code_p0_{$type}"
             );
         }
-        foreach ($types as $type) {
-            $conditions[] = array(
-                'label' => '1st Part',
-                'value' => "meanship/rule_condition|dest_postal_code_p1_{$type}"
-            );
-        }
-        foreach ($types as $type) {
-            $conditions[] = array(
-                'label' => '2nd Part',
-                'value' => "meanship/rule_condition|dest_postal_code_p2_{$type}"
-            );
-        }
-        foreach ($types as $type) {
-            $conditions[] = array(
-                'label' => '3rd Part',
-                'value' => "meanship/rule_condition|dest_postal_code_p3_{$type}"
-            );
-        }
-        foreach ($types as $type) {
-            $conditions[] = array(
-                'label' => '4th Part',
-                'value' => "meanship/rule_condition|dest_postal_code_p4_{$type}"
-            );
+        foreach (array('', 'st', 'nd', 'rd', 'th') as $index => $ordinal) {
+            foreach ($types as $type) {
+                if (! $index) continue;
+                $conditions[] = array(
+                    'label' => "{$index}{$ordinal} Part",
+                    'value' => "meanship/rule_condition|dest_postal_code_p{$index}_{$type}"
+                );
+            }
         }
         return $conditions;
     }
@@ -128,7 +113,7 @@ class Meanbee_Shippingrules_Model_Rule_Condition_PostalCode extends Mage_Rule_Mo
         if (!$this->getConditions()) {
             return true;
         }
-        $all    = $this->getAggregator() === 'all';
+        $all = $this->getAggregator() === 'all';
         foreach ($this->getConditions() as $cond) {
             $validated = $cond->validate($request);
             if ($all && !$validated) {
@@ -149,7 +134,13 @@ class Meanbee_Shippingrules_Model_Rule_Condition_PostalCode extends Mage_Rule_Mo
      */
     public function asHtml()
     {
-        return $this->getTypeElement()->getHtml().Mage::helper('meanship')->__('Postal Code of %s matches %s of these conditions:', $this->getValueElement()->getHtml(), $this->getAggregatorElement()->getHtml()).$this->getRemoveLinkHtml();
+        return $this->getTypeElement()->getHtml()
+             . Mage::helper('meanship')->__(
+                     'Postal Code of %s matches %s of these conditions:',
+                     $this->getValueElement()->getHtml(),
+                     $this->getAggregatorElement()->getHtml()
+               )
+             . $this->getRemoveLinkHtml();
     }
 
     /**
@@ -161,6 +152,10 @@ class Meanbee_Shippingrules_Model_Rule_Condition_PostalCode extends Mage_Rule_Mo
      */
     public function asString()
     {
-        return Mage::helper('meanship')->__('Postal Code of %s matches %s of these conditions:', $this->getValueName(), strtoupper($this->getAggregator()));
+        return Mage::helper('meanship')->__(
+                    'Postal Code of %s matches %s of these conditions:',
+                    $this->getValueName(),
+                    strtoupper($this->getAggregator())
+               );
     }
 }
