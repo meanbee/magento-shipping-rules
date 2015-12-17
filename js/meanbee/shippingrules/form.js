@@ -1,6 +1,7 @@
 (function() {
   /**
-   * Non-conflicting forEach polyfil.
+   * Non-conflicting forEach polyfill.
+   * @see {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach#Polyfill}
    */
   function forEach(array, cb, cxt) {
     var T, k, O, len;

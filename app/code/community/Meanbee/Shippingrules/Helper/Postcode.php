@@ -1,10 +1,10 @@
 <?php
 class Meanbee_Shippingrules_Helper_Postcode extends Mage_Core_Helper_Abstract {
-    const ALPHABETIC = 'str';
-    const NUMERIC_BASE10 = 'b10';
-    const NUMERIC_BASE26 = 'b26';
-    const NUMERIC_BASE36 = 'b36';
-    const CONSTANT = '';
+    const ALPHABETIC = 'str';     // Postcode part should be considered as a string.
+    const NUMERIC_BASE10 = 'b10'; // Postcode part should be considered as a decimal integer.
+    const NUMERIC_BASE26 = 'b26'; // Postcode part should be considered as a hexavigesimal integer.
+    const NUMERIC_BASE36 = 'b36'; // Postcode part should be considered as a hexatrigesimal integer.
+    const CONSTANT = '';          // Postcode part should not be cosidered for solitary comparison since it is constant for the format.
 
     /**
      * Loads postal code format descriptors from JSON file.

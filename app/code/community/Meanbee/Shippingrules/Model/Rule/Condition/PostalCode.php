@@ -114,7 +114,7 @@ class Meanbee_Shippingrules_Model_Rule_Condition_PostalCode extends Mage_Rule_Mo
     }
 
     /**
-     * Validates conatained conditions against shipping rate request, guarded by check on country code.
+     * Validates contained conditions against shipping rate request, guarded by check on country code.
      *
      * @override
      *
