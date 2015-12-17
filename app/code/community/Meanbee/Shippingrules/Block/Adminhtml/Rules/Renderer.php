@@ -37,35 +37,37 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Renderer
                 $countryCodes = $condition->getValue();
                 $countryNames = explode(', ', $condition->getValueName());
                 $listlen = count($countryCodes);
-                $countries = '';
+                $countries = array();
                 for ($i = 0; $i < $listlen; $i++) {
+                    $country = "";
                     switch (Mage::helper('meanship/config')->getCondenseCountriesOnGrid()) {
                         case 'code':
-                            $countries .= ", <abbr title='{$countryNames[$i]}'>";
-                            $countries .= $countryCodes[$i];
-                            $countries .= "</abbr>";
+                            $country .= "<abbr title='{$countryNames[$i]}'>";
+                            $country .= $countryCodes[$i];
+                            $country .= "</abbr>";
                             break;
                         case 'flag':
-                            $countries .= ", <abbr title='{$countryNames[$i]} ({$countryCodes[$i]})'>";
+                            $country .= "<abbr title='{$countryNames[$i]} ({$countryCodes[$i]})'>";
                             if ($useEmojiOne) {
                                 $imageCode = $emojiOne->unicodeToImage($countryHelper->toRegionalIndicatorSymbols($countryCodes[$i]));
                                 if (preg_match("/<img/", $imageCode)) {
-                                    $countries .= $imageCode;
+                                    $country .= $imageCode;
                                 } else {
-                                    $countries .= $countryCodes[$i];
+                                    $country .= $countryCodes[$i];
                                 }
                             } else {
-                                $countries .= $countryHelper->toRegionalIndicatorSymbols($countryCodes[$i]);
+                                $country .= $countryHelper->toRegionalIndicatorSymbols($countryCodes[$i]);
                             }
-                            $countries .= "</abbr>";
+                            $country .= "</abbr>";
                             break;
                         case 'full':
                         default:
-                            $countries .= ', ' . $countryNames[$i];
+                            $country .= $countryNames[$i];
                             break;
                     }
+                    array_push($countries, $country);
                 }
-                return $condition->getAttributeName() . ' ' . $this->renderOperator($condition) . ' ' . substr($countries, 1);
+                return $condition->getAttributeName() . ' ' . $this->renderOperator($condition) . ' ' . join(', ', $countries);
                 break;
             default:
                 return $condition->getAttributeName() . ' ' . $this->renderOperator($condition) . ' ' . $condition->getValueName();
