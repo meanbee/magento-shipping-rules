@@ -86,14 +86,6 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Renderer
                     return '=';
                 case '!=':
                     return '≠';
-                case '//':
-                    return '∾';
-                case '()':
-                case '{}':
-                    return '∈';
-                case '!()':
-                case '!{}':
-                    return '∉';
                 default:
                     return $condition->getOperatorName();
             }
