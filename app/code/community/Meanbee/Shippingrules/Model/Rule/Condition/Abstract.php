@@ -15,10 +15,10 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Abstract extends Mage_Rule_Mode
         if (null === $this->_defaultOperatorInputByType) {
             $this->_defaultOperatorInputByType = array(
                 'string'      => array('==', '!=', '{}', '!{}', '^', '$', '!^', '!$', '//'),
-                'numeric'     => array('==', '!=', '>=', '>', '<=', '<', '()', '!()'),
-                'numeric_b26' => array('==', '!=', '>=:b26', '>:b26', '<=:b26', '<:b26', '()', '!()'),
-                'numeric_b36' => array('==', '!=', '>=:b36', '>:b36', '<=:b36', '<:b36', '()', '!()'),
-                'date'        => array('==', '>=', '<='),
+                'numeric'     => array('==', '!=', '>=', '>', '<=', '<', '..', '!..', '()', '!()'),
+                'numeric_b26' => array('==', '!=', '>=:b26', '>:b26', '<=:b26', '<:b26', '..:b26', '!..:b26', '()', '!()'),
+                'numeric_b36' => array('==', '!=', '>=:b36', '>:b36', '<=:b36', '<:b36', '..:b36', '!..:b36', '()', '!()'),
+                'date'        => array('==', '>=', '<=', '..'),
                 'select'      => array('==', '!='),
                 'boolean'     => array('==', '!='),
                 'multiselect' => array('()', '!()'),
@@ -42,29 +42,35 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Abstract extends Mage_Rule_Mode
     {
         if (null === $this->_defaultOperatorOptions) {
             $this->_defaultOperatorOptions = array(
-                '=='     => Mage::helper('rule')->__('is'),
-                '!='     => Mage::helper('rule')->__('is not'),
-                '>='     => Mage::helper('meanship')->__('greater than or equal to'),
-                '<='     => Mage::helper('meanship')->__('less than or equal to'),
-                '>'      => Mage::helper('rule')->__('greater than'),
-                '<'      => Mage::helper('rule')->__('less than'),
-                '>=:b26' => Mage::helper('meanship')->__('greater than or equal to'),
-                '<=:b26' => Mage::helper('meanship')->__('less than or equal to'),
-                '>:b26'  => Mage::helper('rule')->__('greater than'),
-                '<:b26'  => Mage::helper('rule')->__('less than'),
-                '>=:b36' => Mage::helper('meanship')->__('greater than or equal to'),
-                '<=:b36' => Mage::helper('meanship')->__('less than or equal to'),
-                '>:b36'  => Mage::helper('rule')->__('greater than'),
-                '<:b36'  => Mage::helper('rule')->__('less than'),
-                '{}'     => Mage::helper('rule')->__('contains'),
-                '!{}'    => Mage::helper('rule')->__('does not contain'),
-                '()'     => Mage::helper('rule')->__('is one of'),
-                '!()'    => Mage::helper('rule')->__('is not one of'),
-                '^'      => Mage::helper('meanship')->__('begins with'),
-                '$'      => Mage::helper('meanship')->__('ends with'),
-                '!^'     => Mage::helper('meanship')->__('does not begin with'),
-                '!$'     => Mage::helper('meanship')->__('does not end with'),
-                '//'     => Mage::helper('meanship')->__('matches regex'),
+                '=='      => Mage::helper('rule')->__('is'),
+                '!='      => Mage::helper('rule')->__('is not'),
+                '>='      => Mage::helper('meanship')->__('greater than or equal to'),
+                '<='      => Mage::helper('meanship')->__('less than or equal to'),
+                '>'       => Mage::helper('rule')->__('greater than'),
+                '<'       => Mage::helper('rule')->__('less than'),
+                '..'      => Mage::helper('meanship')->__('is in range'),
+                '!..'     => Mage::helper('meanship')->__('is not in range'),
+                '>=:b26'  => Mage::helper('meanship')->__('greater than or equal to'),
+                '<=:b26'  => Mage::helper('meanship')->__('less than or equal to'),
+                '>:b26'   => Mage::helper('rule')->__('greater than'),
+                '<:b26'   => Mage::helper('rule')->__('less than'),
+                '..:b26'  => Mage::helper('meanship')->__('is in range'),
+                '!..:b26' => Mage::helper('meanship')->__('is not in range'),
+                '>=:b36'  => Mage::helper('meanship')->__('greater than or equal to'),
+                '<=:b36'  => Mage::helper('meanship')->__('less than or equal to'),
+                '>:b36'   => Mage::helper('rule')->__('greater than'),
+                '<:b36'   => Mage::helper('rule')->__('less than'),
+                '..:b36'  => Mage::helper('meanship')->__('is in range'),
+                '!..:b36' => Mage::helper('meanship')->__('is not in range'),
+                '{}'      => Mage::helper('rule')->__('contains'),
+                '!{}'     => Mage::helper('rule')->__('does not contain'),
+                '()'      => Mage::helper('rule')->__('is one of'),
+                '!()'     => Mage::helper('rule')->__('is not one of'),
+                '^'       => Mage::helper('meanship')->__('begins with'),
+                '$'       => Mage::helper('meanship')->__('ends with'),
+                '!^'      => Mage::helper('meanship')->__('does not begin with'),
+                '!$'      => Mage::helper('meanship')->__('does not end with'),
+                '//'      => Mage::helper('meanship')->__('matches regex'),
             );
         }
 
@@ -194,6 +200,22 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Abstract extends Mage_Rule_Mode
             }
             break;
 
+            case '..': case '!..':
+            if (!is_scalar($validatedValue)) {
+                return false;
+            } else {
+                $range = preg_split('/([|\-]|\.\.)/', preg_replace('/\s*/', '', $value), 2);
+                if ($range[0] <= $range[1]) {
+                    $min = $range[0];
+                    $max = $range[1];
+                } else {
+                    $min = $range[1];
+                    $max = $range[0];
+                }
+                $result = $min <= $validatedValue && $validatedValue <= $max;
+            }
+            break;
+
             case '<=:b26': case '>:b26':
             if (!is_scalar($validatedValue)) {
                 return false;
@@ -212,6 +234,25 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Abstract extends Mage_Rule_Mode
             }
             break;
 
+            case '..:b26': case '!..:b26':
+            if (!is_scalar($validatedValue)) {
+                return false;
+            } else {
+                $range = preg_split('/([|\-]|\.\.)/', preg_replace('/\s*/', '', $value), 2);
+                $validatedValue = Mage::helper('meanship/postcode')->toBase10($validatedValue, 26);
+                $range[0] = Mage::helper('meanship/postcode')->toBase10($range[0], 26);
+                $range[1] = Mage::helper('meanship/postcode')->toBase10($range[1], 26);
+                if ($range[0] <= $range[1]) {
+                    $min = $range[0];
+                    $max = $range[1];
+                } else {
+                    $min = $range[1];
+                    $max = $range[0];
+                }
+                $result = $min <= $validatedValue && $validatedValue <= $max;
+            }
+            break;
+
             case '<=:b36': case '>:b36':
             if (!is_scalar($validatedValue)) {
                 return false;
@@ -227,6 +268,25 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Abstract extends Mage_Rule_Mode
             } else {
                 $validatedValue = Mage::helper('meanship/postcode')->toBase10($validatedValue, 36);
                 $result = $validatedValue >= Mage::helper('meanship/postcode')->toBase10($value, 36);
+            }
+            break;
+
+            case '..:b36': case '!..:b36':
+            if (!is_scalar($validatedValue)) {
+                return false;
+            } else {
+                $range = preg_split('/([|\-]|\.\.)/', preg_replace('/\s*/', '', $value), 2);
+                $validatedValue = Mage::helper('meanship/postcode')->toBase10($validatedValue, 36);
+                $range[0] = Mage::helper('meanship/postcode')->toBase10($range[0], 36);
+                $range[1] = Mage::helper('meanship/postcode')->toBase10($range[1], 36);
+                if ($range[0] <= $range[1]) {
+                    $min = $range[0];
+                    $max = $range[1];
+                } else {
+                    $min = $range[1];
+                    $max = $range[0];
+                }
+                $result = $min <= $validatedValue && $validatedValue <= $max;
             }
             break;
 
@@ -297,7 +357,7 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Abstract extends Mage_Rule_Mode
                 break;
         }
 
-        if (in_array($op, array('!=', '>', '<', '>:b26', '<:b26', '>:b36', '<:b36', '!{}', '!()', '!^', '!$'))) {
+        if (in_array($op, array('!=', '>', '<', '>:b26', '<:b26', '>:b36', '<:b36', '!..', '!..:b26', '!..:b36', '!{}', '!()', '!^', '!$'))) {
             $result = !$result;
         }
 
