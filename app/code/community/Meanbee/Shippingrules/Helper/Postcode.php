@@ -16,7 +16,7 @@ class Meanbee_Shippingrules_Helper_Postcode extends Mage_Core_Helper_Abstract {
             return $this->_postalCodeData;
         }
         $json = file_get_contents(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_JS).'meanbee/shippingrules/postalcode_formats.json');
-        $this->_postalCodeData = json_decode($json, true);
+        $this->_postalCodeData = Zend_Json::decode($json, true);
         return $this->_postalCodeData;
     }
 
@@ -28,7 +28,7 @@ class Meanbee_Shippingrules_Helper_Postcode extends Mage_Core_Helper_Abstract {
      */
     public function getPostalCodeDataByCountryCode(string $countryCode) {
         foreach ($this->getPostalCodeData() as $postalCode) {
-            if ($postalCode['code'] === $countryCode) {
+            if (strtoupper($postalCode['code']) === strtoupper($countryCode)) {
                 return $postalCode;
             }
         }
@@ -61,7 +61,7 @@ class Meanbee_Shippingrules_Helper_Postcode extends Mage_Core_Helper_Abstract {
      *                                 Returns array of valid formats if no country code is provided.
      *                                 Else returns null.
      */
-    public function isValidPostalCode(string $postalCode, string $countryCode = null, array &$matches) {
+    public function isValidPostalCode(string $postalCode, string $countryCode = null, array &$matches = array()) {
         $postalCode = $this->sanitisePostcode($postalCode);
         if ($countryCode !== null) {
             $postalCodeData = $this->getPostalCodeDataByCountryCode($countryCode);
@@ -75,6 +75,24 @@ class Meanbee_Shippingrules_Helper_Postcode extends Mage_Core_Helper_Abstract {
             }
         }
         return $countryCodes;
+    }
+
+    /**
+     * @deprecated Remove next major version.
+     * @see $this->isValidPostalCode
+     *
+     * @param  string  $postcode
+     * @return boolean
+     */
+    public function isValidPostcode(string $postcode) {
+        $postcode = $this->sanitisePostcode($postcode);
+        $postcode_length = strlen($postcode);
+
+        if ($postcode_length > 8 || $postcode_length < 5) {
+            return false;
+        }
+
+        return (boolean) preg_match('/^([a-z]{2}\d[a-z]|[a-z]\d[a-z]|[a-z]\d|[a-z]\d{2}|[a-z]{2}\d|[a-z]{2}\d{2})\d[a-z]{2}$/i', $postcode) === 1;
     }
 
     /**
