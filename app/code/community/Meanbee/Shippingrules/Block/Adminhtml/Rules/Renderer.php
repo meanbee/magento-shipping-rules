@@ -1,4 +1,6 @@
 <?php
+use Meanbee_Shippingrules_Model_Config_Source_OperatorRenderType;
+use Meanbee_Shippingrules_Model_Config_Source_CountryCondensation;
 
 class Meanbee_Shippingrules_Block_Adminhtml_Rules_Renderer
     extends Mage_Adminhtml_Block_Widget_Grid_Column_Renderer_Abstract
@@ -41,12 +43,12 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Renderer
                 for ($i = 0; $i < $listlen; $i++) {
                     $country = "";
                     switch (Mage::helper('meanship/config')->getCondenseCountriesOnGrid()) {
-                        case 'code':
+                        case Meanbee_Shippingrules_Model_Config_Source_CountryCondensation::COUNTRY_CODE:
                             $country .= "<abbr title='{$countryNames[$i]}'>";
                             $country .= $countryCodes[$i];
                             $country .= "</abbr>";
                             break;
-                        case 'flag':
+                        case Meanbee_Shippingrules_Model_Config_Source_CountryCondensation::REGIONAL_IDENTIFIERS:
                             $country .= "<abbr title='{$countryNames[$i]} ({$countryCodes[$i]})'>";
                             if ($useEmojiOne) {
                                 $match = false;
@@ -61,7 +63,7 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Renderer
                             }
                             $country .= "</abbr>";
                             break;
-                        case 'full':
+                        case Meanbee_Shippingrules_Model_Config_Source_CountryCondensation::VERBOSE:
                         default:
                             $country .= $countryNames[$i];
                             break;
@@ -75,7 +77,7 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Renderer
         }
     }
     protected function renderOperator ($condition) {
-        if (Mage::helper('meanship/config')->getOperatorRenderTypeOnGrid() === 'mathematical') {
+        if (Mage::helper('meanship/config')->getOperatorRenderTypeOnGrid() === Meanbee_Shippingrules_Model_Config_Source_OperatorRenderType::MATHEMATICAL) {
             switch ($condition->getOperator()) {
                 case '<':
                     return '<';
