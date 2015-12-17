@@ -21,7 +21,7 @@
 
   var postalCodeData,
       scripts = document.getElementsByTagName('script'),
-      url = scripts[scripts.length - 1].src.replace(/\/[^\/]*\.js/, '/postalcode_formats.json');
+      jsDirectory = scripts[scripts.length - 1].src.replace(/\/[^\/]*\.js/, '/');
 
   /**
    * Get postal code format descriptors from JSON file.
@@ -31,13 +31,16 @@
     xhr.onreadystatechange = function() {
       if (xhr.readyState === 4 && xhr.status === 200) {
         postalCodeData = JSON.parse(xhr.responseText);
-        forEach(document.querySelectorAll('input[value="meanship/rule_condition_postalCode"]'), function(hiddenField) {
-          postalCodeFormatChangeHandler({target: hiddenField.nextElementSibling.lastElementChild.firstElementChild});
-        });
+        forEach(
+          document.querySelectorAll('input[value="meanship/rule_condition_postalCode"] + .rule-param select'),
+          function(postalCodeFormatSelect) {
+            postalCodeFormatChangeHandler({target: postalCodeFormatSelect});
+          }
+        );
       }
     };
 
-    xhr.open('GET', url);
+    xhr.open('GET', jsDirectory + 'postalcode_formats.json');
     xhr.send();
   }
 
@@ -65,8 +68,8 @@
     });
 
     for (var i = 0; i < parts.length; i++) {
-      var option;
-      if (option = container.querySelector('option[value="meanship/rule_condition|dest_postal_code_p' + i + '_' + parts[i] + '"]')) { // jshint ignore:line
+      var option = container.querySelector('option[value="meanship/rule_condition|dest_postal_code_p' + i + '_' + parts[i] + '"]');
+      if (option) {
         option.style.display = 'initial';
       }
     }
