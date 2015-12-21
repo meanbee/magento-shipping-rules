@@ -89,6 +89,10 @@
                 <model>meanship/carrier</model>
                 <title>Shipping Method</title>
                 <show_method_code_on_grid>0</show_method_code_on_grid>
+                <clip_conditions_on_grid>5</clip_conditions_on_grid>
+                <condense_countries_on_grid>flag</condense_countries_on_grid>
+                <colapse_conditions_on_subcondition_on_grid>1</colapse_conditions_on_subcondition_on_grid>
+                <use_emoji_one>1</use_emoji_one>
             </meanship>
         </carriers>
     </default>
