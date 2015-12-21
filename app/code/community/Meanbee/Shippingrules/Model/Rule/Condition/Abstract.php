@@ -1,10 +1,12 @@
 <?php
 class Meanbee_Shippingrules_Model_Rule_Condition_Abstract extends Mage_Rule_Model_Condition_Abstract {
-
+    /** @override */
     protected $_arrayInputTypes = array();
 
     /**
      * Default operator input by type map getter
+     *
+     * @override
      *
      * @return array
      */
@@ -14,6 +16,8 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Abstract extends Mage_Rule_Mode
             $this->_defaultOperatorInputByType = array(
                 'string'      => array('==', '!=', '{}', '!{}', '^', '$', '!^', '!$', '//'),
                 'numeric'     => array('==', '!=', '>=', '>', '<=', '<', '()', '!()'),
+                'numeric_b26' => array('==', '!=', '>=:b26', '>:b26', '<=:b26', '<:b26', '()', '!()'),
+                'numeric_b36' => array('==', '!=', '>=:b36', '>:b36', '<=:b36', '<:b36', '()', '!()'),
                 'date'        => array('==', '>=', '<='),
                 'select'      => array('==', '!='),
                 'boolean'     => array('==', '!='),
@@ -30,27 +34,37 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Abstract extends Mage_Rule_Mode
      * Default operator options getter
      * Provides all possible operator options
      *
+     * @override
+     *
      * @return array
      */
     public function getDefaultOperatorOptions()
     {
         if (null === $this->_defaultOperatorOptions) {
             $this->_defaultOperatorOptions = array(
-                '=='  => Mage::helper('rule')->__('is'),
-                '!='  => Mage::helper('rule')->__('is not'),
-                '>='  => Mage::helper('meanship')->__('greater than or equal to'),
-                '<='  => Mage::helper('meanship')->__('less than or equal to'),
-                '>'   => Mage::helper('rule')->__('greater than'),
-                '<'   => Mage::helper('rule')->__('less than'),
-                '{}'  => Mage::helper('rule')->__('contains'),
-                '!{}' => Mage::helper('rule')->__('does not contain'),
-                '()'  => Mage::helper('rule')->__('is one of'),
-                '!()' => Mage::helper('rule')->__('is not one of'),
-                '^'   => Mage::helper('meanship')->__('begins with'),
-                '$'   => Mage::helper('meanship')->__('ends with'),
-                '!^'   => Mage::helper('meanship')->__('does not begin with'),
-                '!$'   => Mage::helper('meanship')->__('does not end with'),
-                '//'   => Mage::helper('meanship')->__('matches regex'),
+                '=='     => Mage::helper('rule')->__('is'),
+                '!='     => Mage::helper('rule')->__('is not'),
+                '>='     => Mage::helper('meanship')->__('greater than or equal to'),
+                '<='     => Mage::helper('meanship')->__('less than or equal to'),
+                '>'      => Mage::helper('rule')->__('greater than'),
+                '<'      => Mage::helper('rule')->__('less than'),
+                '>=:b26' => Mage::helper('meanship')->__('greater than or equal to'),
+                '<=:b26' => Mage::helper('meanship')->__('less than or equal to'),
+                '>:b26'  => Mage::helper('rule')->__('greater than'),
+                '<:b26'  => Mage::helper('rule')->__('less than'),
+                '>=:b36' => Mage::helper('meanship')->__('greater than or equal to'),
+                '<=:b36' => Mage::helper('meanship')->__('less than or equal to'),
+                '>:b36'  => Mage::helper('rule')->__('greater than'),
+                '<:b36'  => Mage::helper('rule')->__('less than'),
+                '{}'     => Mage::helper('rule')->__('contains'),
+                '!{}'    => Mage::helper('rule')->__('does not contain'),
+                '()'     => Mage::helper('rule')->__('is one of'),
+                '!()'    => Mage::helper('rule')->__('is not one of'),
+                '^'      => Mage::helper('meanship')->__('begins with'),
+                '$'      => Mage::helper('meanship')->__('ends with'),
+                '!^'     => Mage::helper('meanship')->__('does not begin with'),
+                '!$'     => Mage::helper('meanship')->__('does not end with'),
+                '//'     => Mage::helper('meanship')->__('matches regex'),
             );
         }
 
@@ -60,6 +74,8 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Abstract extends Mage_Rule_Mode
     /**
      * Magento < 1.6 does not have this method.
      *
+     * @override
+     *
      * @return bool
      */
     public function isArrayOperatorType() {
@@ -68,8 +84,9 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Abstract extends Mage_Rule_Mode
     }
 
     /**
-     *
      * Magento < 1.6 does not have this method.
+     *
+     * @override
      *
      * @param $validatedValue
      * @param $value
@@ -90,6 +107,8 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Abstract extends Mage_Rule_Mode
 
     /**
      * Magento 1.5 has an incompatible implementation of this method.
+     *
+     * @override
      *
      * @return array|string|int|float
      */
@@ -112,6 +131,8 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Abstract extends Mage_Rule_Mode
      * and validates it against the rule condition defined for that attribute using the
      * defined operator ($op) and rule value ($value). It returns true if the provided
      * value passes the condition, otherwise it returns false.
+     *
+     * @override
      *
      * @param   mixed $validatedValue Value to validate against
      * @return  bool
@@ -170,6 +191,42 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Abstract extends Mage_Rule_Mode
                 return false;
             } else {
                 $result = $validatedValue >= $value;
+            }
+            break;
+
+            case '<=:b26': case '>:b26':
+            if (!is_scalar($validatedValue)) {
+                return false;
+            } else {
+                $validatedValue = Mage::helper('meanship/postcode')->toBase10($validatedValue, 26);
+                $result = $validatedValue <= Mage::helper('meanship/postcode')->toBase10($value, 26);
+            }
+            break;
+
+            case '>=:b26': case '<:b26':
+            if (!is_scalar($validatedValue)) {
+                return false;
+            } else {
+                $validatedValue = Mage::helper('meanship/postcode')->toBase10($validatedValue, 26);
+                $result = $validatedValue >= Mage::helper('meanship/postcode')->toBase10($value, 26);
+            }
+            break;
+
+            case '<=:b36': case '>:b36':
+            if (!is_scalar($validatedValue)) {
+                return false;
+            } else {
+                $validatedValue = Mage::helper('meanship/postcode')->toBase10($validatedValue, 36);
+                $result = $validatedValue <= Mage::helper('meanship/postcode')->toBase10($value, 36);
+            }
+            break;
+
+            case '>=:b36': case '<:b36':
+            if (!is_scalar($validatedValue)) {
+                return false;
+            } else {
+                $validatedValue = Mage::helper('meanship/postcode')->toBase10($validatedValue, 36);
+                $result = $validatedValue >= Mage::helper('meanship/postcode')->toBase10($value, 36);
             }
             break;
 
@@ -240,7 +297,7 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Abstract extends Mage_Rule_Mode
                 break;
         }
 
-        if ('!=' == $op || '>' == $op || '<' == $op || '!{}' == $op || '!()' == $op || '!^' == $op || '!$' == $op) {
+        if (in_array($op, array('!=', '>', '<', '>:b26', '<:b26', '>:b36', '<:b36', '!{}', '!()', '!^', '!$'))) {
             $result = !$result;
         }
 

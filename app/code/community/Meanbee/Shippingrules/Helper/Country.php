@@ -5,7 +5,7 @@ class Meanbee_Shippingrules_Helper_Country extends Mage_Core_Helper_Data {
      * Converts all letters in range A-Z in passed string to their respective
      * Regional Indicator symbol. Intended for the purpose of converting country
      * codes into flags.
-     * wki.pe/Regional_Indicator_Symbol
+     * @link wki.pe/Regional_Indicator_Symbol
      *
      * @param  String $plaintext County Code(s)
      * @return String            Regional Indicator Symbols

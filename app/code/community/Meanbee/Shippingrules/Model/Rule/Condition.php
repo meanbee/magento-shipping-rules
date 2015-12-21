@@ -1,5 +1,14 @@
 <?php
+use Meanbee_Shippingrules_Helper_Postcode;
 class Meanbee_Shippingrules_Model_Rule_Condition extends Meanbee_Shippingrules_Model_Rule_Condition_Abstract {
+
+    /**
+     * Full list of attributes that may be compared in a shipping rule condition
+     *
+     * @override
+     *
+     * @return array Associates attribute code with hypertext label.
+     */
     public function loadAttributeOptions() {
         $attributes = array(
             'store_id'       => Mage::helper('meanship')->__('Magento Store'),
@@ -17,9 +26,33 @@ class Meanbee_Shippingrules_Model_Rule_Condition extends Meanbee_Shippingrules_M
             'dest_country_id' => Mage::helper('meanship')->__('Shipping Country'),
             'dest_country_group' => Mage::helper('meanship')->__('Shipping Country Group'),
             'dest_region_id'  => Mage::helper('meanship')->__('Shipping State'),
-            'dest_postcode'   => Mage::helper('meanship')->__('Shipping Zipcode'),
-            'dest_postcode_numeric' => Mage::helper('meanship')->__('Shipping Zip Code (if numeric value)'),
-            'dest_postcode_prefix' => Mage::helper('meanship')->__('Shipping Postcode (UK only) Prefix')
+
+            /** @deprecated Remove next major version. { */
+                'dest_postcode'   => Mage::helper('meanship')->__('Shipping Zipcode [Deprecated]'),
+                'dest_postcode_numeric' => Mage::helper('meanship')->__('Shipping Zip Code (if numeric value) [Deprecated]'),
+                'dest_postcode_prefix' => Mage::helper('meanship')->__('Shipping Postcode (UK only) Prefix [Deprecated]'),
+            /** } */
+
+            'dest_postal_code_p0_str' => Mage::helper('meanship')->__('Entire Postal Code'),
+            'dest_postal_code_p0_b26' => Mage::helper('meanship')->__('Entire Postal Code [A-Z]'),
+            'dest_postal_code_p0_b10' => Mage::helper('meanship')->__('Entire Postal Code [0-9]'),
+            'dest_postal_code_p0_b36' => Mage::helper('meanship')->__('Entire Postal Code [0-9, A-Z]'),
+            'dest_postal_code_p1_str' => Mage::helper('meanship')->__('1st Part [A-Z]'),
+            'dest_postal_code_p1_b26' => Mage::helper('meanship')->__('1st Part [A-Z]'),
+            'dest_postal_code_p1_b10' => Mage::helper('meanship')->__('1st Part [0-9]'),
+            'dest_postal_code_p1_b36' => Mage::helper('meanship')->__('1st Part [0-9, A-Z]'),
+            'dest_postal_code_p2_str' => Mage::helper('meanship')->__('2nd Part [A-Z]'),
+            'dest_postal_code_p2_b26' => Mage::helper('meanship')->__('2nd Part [A-Z]'),
+            'dest_postal_code_p2_b10' => Mage::helper('meanship')->__('2nd Part [0-9]'),
+            'dest_postal_code_p2_b36' => Mage::helper('meanship')->__('2nd Part [0-9, A-Z]'),
+            'dest_postal_code_p3_str' => Mage::helper('meanship')->__('3rd Part [A-Z]'),
+            'dest_postal_code_p3_b26' => Mage::helper('meanship')->__('3rd Part [A-Z]'),
+            'dest_postal_code_p3_b10' => Mage::helper('meanship')->__('3rd Part [0-9]'),
+            'dest_postal_code_p3_b36' => Mage::helper('meanship')->__('3rd Part [0-9, A-Z]'),
+            'dest_postal_code_p4_str' => Mage::helper('meanship')->__('4th Part [A-Z]'),
+            'dest_postal_code_p4_b26' => Mage::helper('meanship')->__('4th Part [A-Z]'),
+            'dest_postal_code_p4_b10' => Mage::helper('meanship')->__('4th Part [0-9]'),
+            'dest_postal_code_p4_b36' => Mage::helper('meanship')->__('4th Part [0-9, A-Z]')
         );
 
         $this->setAttributeOption($attributes);
@@ -27,7 +60,26 @@ class Meanbee_Shippingrules_Model_Rule_Condition extends Meanbee_Shippingrules_M
         return $this;
     }
 
+    /**
+     * Maps attribute code to types which describe compatible operators.
+     *
+     * @see Meanbee_Shippingrules_Model_Rule_Condition_Abstract->getDefaultOperatorInputByType
+     * @override
+     *
+     * @return string Operator list key.
+     */
     public function getInputType() {
+        $matches = array();
+        if (preg_match('/^dest_postal_code_p[0-4]_(str|b10|b26|b36)$/', $this->getAttribute(), $matches)) {
+            switch ($matches[1]) {
+                case Meanbee_Shippingrules_Helper_Postcode::ALPHABETIC:
+                    return 'string';
+                case Meanbee_Shippingrules_Helper_Postcode::NUMERIC_BASE10:
+                    return 'numeric';
+                default:
+                    return "numeric_{$matches[1]}";
+            }
+        }
         switch ($this->getAttribute()) {
             case 'customer_group_id':
             case 'dest_country_id':
@@ -46,6 +98,13 @@ class Meanbee_Shippingrules_Model_Rule_Condition extends Meanbee_Shippingrules_M
         }
     }
 
+    /**
+     * Maps attribute code to input field type when editing condition.
+     *
+     * @override
+     *
+     * @return string Input field type.
+     */
     public function getValueElementType() {
         switch ($this->getAttribute()) {
             case 'customer_group_id':
@@ -62,6 +121,13 @@ class Meanbee_Shippingrules_Model_Rule_Condition extends Meanbee_Shippingrules_M
         }
     }
 
+    /**
+     * Maps attribute code to array of oftions for select and multiselect input field types.
+     *
+     * @override
+     *
+     * @return array Select options.
+     */
     public function getValueSelectOptions() {
         if (!$this->hasData('value_select_options')) {
             switch ($this->getAttribute()) {
@@ -106,12 +172,18 @@ class Meanbee_Shippingrules_Model_Rule_Condition extends Meanbee_Shippingrules_M
         return $this->getData('value_select_options');
     }
 
-    public function getSanitisedValue($object) {
-        $value = $object->getData($this->getAttribute());
+    /**
+     * Normalises attribute values in a shipping rate request.
+     *
+     * @param  Mage_Shipping_Model_Rate_Request $request
+     * @return mixed                                     Sanitised value.
+     */
+    public function getSanitisedValue(Mage_Shipping_Model_Rate_Request $request) {
+        $value = $request->getData($this->getAttribute());
 
         switch ($this->getAttribute()) {
-            case 'dest_postcode':
-            case 'dest_postcode_prefix':
+            case 'dest_postcode': /** @deprecated Remove next major version. */
+            case 'dest_postcode_prefix': /** @deprecated Remove next major version. */
                 $value = Mage::helper('meanship/postcode')->sanitisePostcode($value);
                 break;
         }
@@ -119,12 +191,19 @@ class Meanbee_Shippingrules_Model_Rule_Condition extends Meanbee_Shippingrules_M
         return $value;
     }
 
+    /**
+     * Parses the condition input for the rule, ready for comparison with shipping rate request.
+     *
+     * @override
+     *
+     * @return mixed Parsed value.
+     */
     public function getValueParsed() {
         $value = parent::getValueParsed();
 
         switch ($this->getAttribute()) {
-            case 'dest_postcode':
-            case 'dest_postcode_prefix':
+            case 'dest_postcode': /** @deprecated Remove next major version. */
+            case 'dest_postcode_prefix': /** @deprecated Remove next major version. */
                 $value = Mage::helper('meanship/postcode')->sanitisePostcode($value);
                 break;
             case 'is_admin_order':
@@ -138,10 +217,21 @@ class Meanbee_Shippingrules_Model_Rule_Condition extends Meanbee_Shippingrules_M
         return $value;
     }
 
-    public function validate(Varien_Object $object) {
-        return $this->validateAttribute($this->getSanitisedValue($object));
+    /**
+     * Checks results of condition(s).
+     *
+     * @override
+     *
+     * @param  Mage_Shipping_Model_Rate_Request $request
+     * @return boolean                          True if condition(s) passed, False otherwise.
+     */
+    public function validate(Mage_Shipping_Model_Rate_Request $request) {
+        return $this->validateAttribute($this->getSanitisedValue($request));
     }
 
+    /**
+     * @override
+     */
     public function getAttributeElement() {
         $element = parent::getAttributeElement();
         $element->setShowAsText(true);

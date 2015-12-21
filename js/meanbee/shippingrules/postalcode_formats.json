@@ -1,0 +1,186 @@
+[
+    {
+        "code": "AU", "name": "Australia",
+        "regex": "/^(\\d{4})$/",
+        "parts": ["b10"],
+        "sources": ["html5pattern.com/Postal_Codes"]
+    }, {
+        "code": "AI", "name": "Anguilla",
+        "regex": "/^AI(\\d{4})$/",
+        "parts": ["b10"],
+        "sources": ["wki.pe/Postcodes_in_the_United_Kingdom"]
+    }, {
+        "code": "AT", "name": "Austria",
+        "regex": "/^(\\d{4})$/",
+        "parts": ["b10"],
+        "sources": ["html5pattern.com/Postal_Codes"]
+    }, {
+        "code": "AQ", "name": "British Antarctic Territory",
+        "regex": "/^(BIQQ)(\\d)([A-Z]{2})$/",
+        "parts": ["b36", "", "b10", "b26"],
+        "sources": ["wki.pe/Postcodes_in_the_United_Kingdom"]
+    }, {
+        "code": "BE", "name": "Belgium",
+        "regex": "/^(\\d{4})$/",
+        "parts": ["b10"],
+        "sources": ["html5pattern.com/Postal_Codes"]
+    }, {
+        "code": "BR", "name": "Brazil",
+        "regex": "/^(\\d{2})(\\d{3})(\\d{3}|)$/",
+        "parts": ["b10", "b10", "b10", "b10"],
+        "sources": ["html5pattern.com/Postal_Codes", "regexlib.com/REDetails.aspx?regexp_id=136"]
+    }, {
+        "code": "CA", "name": "Canada",
+        "regex": "/^([A-CEGHJ-NPR-TVXY]\\d[A-CEGHJ-NPR-TV-Z])(\\d[A-CEGHJ-NPR-TVXY]\\d)$/",
+        "parts": ["b36", "b36", "b36"],
+        "sources": ["html5pattern.com/Postal_Codes", "regexlib.com/REDetails.aspx?regexp_id=1816"]
+    }, {
+        "code": "CH", "name": "Switzerland",
+        "regex": "/^([1-9]\\d{3})$/",
+        "parts": ["b10"],
+        "sources": ["regexlib.com/REDetails.aspx?regexp_id=1162"]
+    }, {
+        "code": "DE", "name": "Germany",
+        "regex": "/^(\\d{5})$/",
+        "parts": ["b10"],
+        "sources": ["html5pattern.com/Postal_Codes"]
+    }, {
+        "code": "DK", "name": "Denmark",
+        "regex": "/^(\\d{3,4})$/",
+        "parts": ["b10"],
+        "sources": ["html5pattern.com/Postal_Codes"]
+    }, {
+        "code": "ES", "name": "Spain",
+        "regex": "/^(0[1-9]\\d{3}|[1-4]\\d{4}|5[0-2]\\d{3})$/",
+        "parts": ["b10"],
+        "sources": ["html5pattern.com/Postal_Codes"]
+    }, {
+        "code": "FK", "name": "Falkland Islands",
+        "regex": "/^(FIQQ)(\\d)([A-Z]{2})$/",
+        "parts": ["b36", "", "b10", "b26"],
+        "sources": ["wki.pe/Postcodes_in_the_United_Kingdom"]
+    }, {
+        "code": "FR", "name": "France",
+        "regex": "/^(\\d{1,5})$/",
+        "parts": ["b10"]
+    }, {
+        "code": "FO", "name": "Faroe Islands",
+        "regex": "/^(\\d{3,4})$/",
+        "parts": ["b10"],
+        "sources": ["html5pattern.com/Postal_Codes"]
+    }, {
+        "code": "GB", "name": "United Kingdom",
+        "regex": "/^([A-Z]{1,2})(\\d{2}|\\d[A-Z]?)(\\d)([A-Z]{2})$/",
+        "parts": ["str", "str", "b36", "b10", "b26"],
+        "sources": ["wki.pe/Postcodes_in_the_United_Kingdom"]
+    }, {
+        "code": "GB+", "name": "British Forces Post Office",
+        "regex": "/^(BFPO)(\\d{1,4})$/",
+        "parts": ["b36", "", "b10"],
+        "sources": ["wki.pe/Postcodes_in_the_United_Kingdom"]
+    }, {
+        "code": "GG", "name": "Guernsey",
+        "regex": "/^(GY)(\\d{2}|\\d[A-Z]?)(\\d)([A-Z]{2})$/",
+        "parts": ["b36", "", "b36", "b10", "b26"],
+        "sources": ["wki.pe/Postcodes_in_the_United_Kingdom"]
+    }, {
+        "code": "GI", "name": "Gibraltar",
+        "regex": "/^(GX)(\\d{1,2})(\\d)([A-Z]{2})$/",
+        "parts": ["b36", "", "b10", "b10", "b26"],
+        "sources": ["wki.pe/Postcodes_in_the_United_Kingdom"]
+    }, {
+        "code": "GS", "name": "South Georgia and the South Sandwich Islands",
+        "regex": "/^(SIQQ)(\\d)([A-Z]{2})$/",
+        "parts": ["b36", "", "b10", "b26"],
+        "sources": ["wki.pe/Postcodes_in_the_United_Kingdom"]
+    }, {
+        "code": "IM", "name": "Isle of Man",
+        "regex": "/^(IM)(\\d{2}|\\d[A-Z]?)(\\d)([A-Z]{2})$/",
+        "parts": ["b36", "", "b36", "b10", "b26"],
+        "sources": ["wki.pe/Postcodes_in_the_United_Kingdom"]
+    }, {
+        "code": "IN", "name": "India",
+        "regex": "/^(\\d{3})(\\d{3})$/",
+        "parts": ["b10", "b10", "b10"],
+        "sources": ["regexlib.com/REDetails.aspx?regexp_id=111"]
+    },{
+        "code": "HU", "name": "Hungary",
+        "regex": "/^(\\d{4})$/",
+        "parts": ["b10"],
+        "sources": ["html5pattern.com/Postal_Codes"]
+    }, {
+        "code": "IO", "name": "British Indian Ocean Territory",
+        "regex": "/^(BBND)(\\d)([A-Z]{2})$/",
+        "parts": ["b36", "", "b10", "b26"],
+        "sources": ["wki.pe/Postcodes_in_the_United_Kingdom"]
+    }, {
+        "code": "IT", "name": "Italy",
+        "regex": "/^(\\d{5})$/",
+        "parts": ["b10"],
+        "sources": ["html5pattern.com/Postal_Codes"]
+    }, {
+        "code": "JE", "name": "Jersey",
+        "regex": "/^(JE)(\\d{2}|\\d[A-Z]?)(\\d)([A-Z]{2})$/",
+        "parts": ["b36", "", "b36", "b10", "b26"],
+        "sources": ["wki.pe/Postcodes_in_the_United_Kingdom"]
+    }, {
+        "code": "JP", "name": "Japan",
+        "regex": "/^(\\d{3})(\\d{4})$/",
+        "parts": ["b10", "b10", "b10"],
+        "sources": ["html5pattern.com/Postal_Codes"]
+    }, {
+        "code": "LU", "name": "Luxembourg",
+        "regex": "/^(L)(\\d{4})$/",
+        "parts": ["b10"],
+        "sources": ["html5pattern.com/Postal_Codes"]
+    }, {
+        "code": "LV", "name": "Latvia",
+        "regex": "/^(LV|)(\\d{4})$/",
+        "parts": ["", "", "b10"],
+        "sources": ["regexlib.com/REDetails.aspx?regexp_id=2026"]
+    }, {
+        "code": "NL", "name": "Netherlands",
+        "regex": "/^([1-9]\\d{3})([A-Z]{2})$/",
+        "parts": ["b36", "b10", "b26"],
+        "sources": ["html5pattern.com/Postal_Codes", "regexlib.com/REDetails.aspx?regexp_id=367"]
+    }, {
+        "code": "SE", "name": "Sweden",
+        "regex": "/^(\\d{3})(\\d{2})$/",
+        "parts": ["b10", "b10", "b10"],
+        "sources": ["html5pattern.com/Postal_Codes"]
+    }, {
+        "code": "SH", "name": "Saint Helena, Ascension and Tristan da Cunha",
+        "regex": "/^(ASCN|STHL|TDCU)(\\d)([A-Z]{2})$/",
+        "parts": ["b36", "str", "b10", "b26"],
+        "sources": ["wki.pe/Postcodes_in_the_United_Kingdom"]
+    }, {
+        "code": "PN", "name": "Pitcairn Islands",
+        "regex": "/^(PCRN)(\\d)([A-Z]{2})$/",
+        "parts": ["b36", "", "b10", "b26"],
+        "sources": ["wki.pe/Postcodes_in_the_United_Kingdom"]
+    }, {
+        "code": "PT", "name": "Portugal",
+        "regex": "/^(\\d{4})(\\d{3})$/",
+        "parts": ["b10", "b10", "b10"],
+        "source": ["regexlib.com/REDetails.aspx?regexp_id=3613"]
+    }, {
+        "code": "RU", "name": "Russia",
+        "regex": "/^\\d{6}$/",
+        "parts": ["b10"]
+    }, {
+        "code": "TC", "name": "Turks and Caicos Islands",
+        "regex": "/^(TKCA)(\\d)([A-Z]{2})$/",
+        "parts": ["b36", "", "b10", "b26"],
+        "sources": ["wki.pe/Postcodes_in_the_United_Kingdom"]
+    }, {
+        "code": "PL", "name": "Poland",
+        "regex": "/^(\\d{2})(\\d{3})$/",
+        "parts": ["b36", "b10", "b26"],
+        "sources": ["html5pattern.com/Postal_Codes"]
+    }, {
+        "code": "US", "name": "United States of America",
+        "regex": "/^(\\d{5})(\\d{4}|)$/",
+        "parts": ["b10", "b10", "b10"],
+        "sources": ["html5pattern.com/Postal_Codes"]
+    }
+]
