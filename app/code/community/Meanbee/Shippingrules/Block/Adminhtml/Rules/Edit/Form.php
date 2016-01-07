@@ -50,6 +50,14 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Edit_Form extends Mage_Adminht
             'disabled'  => !$this->isAllowedToWrite()
         ));
 
+        $fieldset->addField('per_item', 'checkbox', array(
+            'label'     => Mage::helper('meanship')->__('Per Item Pricing'),
+            'name'      => 'per_item',
+            'value'     => 1,
+            'checked'   => $data->getPerItem() == '1',
+            'disabled'  => !$this->isAllowedToWrite()
+        ));
+
         $fieldset->addField('notes', 'textarea', array(
             'label'     => Mage::helper('meanship')->__('Notes'),
             'name'      => 'notes',
@@ -116,6 +124,7 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Edit_Form extends Mage_Adminht
              * The value of the checkbox represents it's value *if it's checked*, therefore should always be one.  We
              * use the 'checked' array option when we create the field to do the 'checking'.
              */
+            $data['per_item'] = 1;
             $data['stop_rules_processing'] = 1;
             $data['stop_all_rules_processing'] = 1;
             $form->setValues($data);
