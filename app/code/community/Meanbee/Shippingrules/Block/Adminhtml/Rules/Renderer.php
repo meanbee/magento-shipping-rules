@@ -32,6 +32,9 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Renderer
     protected function renderCondition($condition)
     {
         switch ($condition->getAttribute()) {
+            case NULL:
+                return $condition->asString();
+                break;
             case 'dest_country_id':
                 $countryHelper = Mage::helper('meanship/country');
                 $useEmojiOne = Mage::helper('meanship/config')->getUseEmojiOne();
