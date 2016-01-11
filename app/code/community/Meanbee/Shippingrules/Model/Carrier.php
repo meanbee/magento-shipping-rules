@@ -30,8 +30,13 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
                 $method->setPrice(0);
             } else {
                 // rate cost is optional property to record how much it costs to vendor to ship
-                $method->setCost($rule_data->getCost());
-                $method->setPrice($rule_data->getPrice());
+                if ($rule_data->getPerItem()) {
+                    $method->setCost($rule_data->getCost() * $request->getData('package_qty'));
+                    $method->setPrice($rule_data->getPrice() * $request->getData('package_qty'));
+                } else {
+                    $method->setCost($rule_data->getCost());
+                    $method->setPrice($rule_data->getPrice());
+                }
             }
 
             $resultArray[] = $method;
@@ -118,7 +123,8 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
             $methods[$rule_name] = new Varien_Object(array(
                 'price' => $rule->getPrice(),
                 'cost'  => $rule->getCost(),
-                'id'    => $rule->getId()
+                'id'    => $rule->getId(),
+                'per_item' => (int) $rule->getPerItem()
             ));
 
             if ($rule->getStopRulesProcessing()) {

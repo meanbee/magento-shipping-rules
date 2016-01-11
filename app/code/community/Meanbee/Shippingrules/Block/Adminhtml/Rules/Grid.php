@@ -112,7 +112,7 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Grid extends Mage_Adminhtml_Bl
      */
     protected function _prepareExportColumns() {
         $columns = array(
-            'rule_id', 'name', 'price', 'cost', 'conditions_serialized', 'stop_rules_processing',
+            'rule_id', 'name', 'price', 'cost', 'per_item', 'conditions_serialized', 'stop_rules_processing',
             'stop_all_rules_processing', 'sort_order', 'is_active', 'version'
         );
 
