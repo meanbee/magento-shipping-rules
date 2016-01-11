@@ -94,6 +94,9 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
 
         foreach ($rule_collection as $rule) {
             /** @var $rule Meanbee_Shippingrules_Model_Rule */
+            if ($stop_flag['_all']) {
+                break;
+            }
             if (!$rule->validate($request)) {
                 continue;
             }
@@ -110,8 +113,6 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
                  */
                 if ($methods[$rule_name]->getPrice() < $rule->getPrice() || $stop_flag[$rule_name]) {
                     continue;
-                } else if ($stop_flag['_all']) {
-                    break;
                 }
             }
 
