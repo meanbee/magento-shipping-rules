@@ -74,7 +74,8 @@ class Meanbee_Shippingrules_Model_Rule_Condition_PostalCode extends Mage_Rule_Mo
         if (!empty($options)) {
             foreach ($options as $v => $label) {
                 if ($v == $value) {
-                    return split(' ', $label, 2)[1];
+                    $labelArr = explode(' ', $label, 2)[1];
+                    return end($labelArr);
                 }
             }
         }
