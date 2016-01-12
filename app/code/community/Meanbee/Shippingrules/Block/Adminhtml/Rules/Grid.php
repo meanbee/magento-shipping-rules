@@ -86,8 +86,7 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Grid extends Mage_Adminhtml_Bl
             'header'    => Mage::helper('meanship')->__('Notes'),
             'align'     =>'left',
             'index'     => 'notes',
-            'type'      => 'text',
-            'filter'    => false
+            'type'      => 'text'
         ));
 
         $this->addColumn('sort_order', array(
@@ -113,7 +112,7 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Grid extends Mage_Adminhtml_Bl
     protected function _prepareExportColumns() {
         $columns = array(
             'rule_id', 'name', 'price', 'cost', 'per_item', 'conditions_serialized', 'stop_rules_processing',
-            'stop_all_rules_processing', 'sort_order', 'is_active', 'version'
+            'stop_all_rules_processing', 'notes', 'sort_order', 'is_active', 'version'
         );
 
         foreach ($columns as $column) {
