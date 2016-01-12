@@ -20,6 +20,7 @@ class Meanbee_Shippingrules_Model_Rule_Condition extends Meanbee_Shippingrules_M
             'base_subtotal_incl_tax' => Mage::helper('meanship')->__('Subtotal incl. Tax'),
             'package_value_with_discount' => Mage::helper('meanship')->__('Subtotal after Discounts'),
             'package_weight' => Mage::helper('meanship')->__('Total Weight'),
+            'promo_coupon_code' => Mage::helper('meanship')->__('Coupon'),
 
             'customer_group_id' => Mage::helper('meanship')->__('Customer Group'),
 
@@ -85,6 +86,7 @@ class Meanbee_Shippingrules_Model_Rule_Condition extends Meanbee_Shippingrules_M
             case 'dest_country_id':
             case 'dest_country_group':
             case 'dest_region_id':
+            case 'promo_coupon_code':
             case 'store_id':
             case 'website_id':
                 return 'multiselect';
@@ -111,6 +113,7 @@ class Meanbee_Shippingrules_Model_Rule_Condition extends Meanbee_Shippingrules_M
             case 'dest_country_id':
             case 'dest_country_group':
             case 'dest_region_id':
+            case 'promo_coupon_code':
             case 'store_id':
             case 'website_id':
                 return 'multiselect';
@@ -131,6 +134,10 @@ class Meanbee_Shippingrules_Model_Rule_Condition extends Meanbee_Shippingrules_M
     public function getValueSelectOptions() {
         if (!$this->hasData('value_select_options')) {
             switch ($this->getAttribute()) {
+                case 'promo_coupon_code':
+                    $options = Mage::getModel('meanship/rule_condition_source_couponCode')
+                        ->toOptionArray();
+                    break;
                 case 'customer_group_id':
                     $options = Mage::getModel('customer/group')
                         ->getCollection()

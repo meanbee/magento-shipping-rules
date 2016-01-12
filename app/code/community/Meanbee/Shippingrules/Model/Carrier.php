@@ -92,6 +92,7 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
         $request = $this->addPostalCodePartsToRequest($request);
         $request = $this->addCountryGroupToRequest($request);
         $request = $this->addNumericPostcodesToRequest($request); /** @deprecated Remove next major version. */
+        $request = $this->addPromoDataToRequest($request);
 
         $stop_flag = array();
 
@@ -267,6 +268,23 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
             }
         }
 
+        return $request;
+    }
+
+    /**
+     * Add coupon code to the request, so conditions can be
+     * dependant on promotions.
+     *
+     * @param Mage_Shipping_Model_Rate_Request $request
+     *
+     * @return Mage_Shipping_Model_Rate_Request
+     */
+    public function addPromoDataToRequest(Mage_Shipping_Model_Rate_Request $request) {
+        $requestItems = $request->getAllItems();
+        if (count($requestItems) >= 0) {
+            $quote = $requestItems[0]->getQuote();
+            $request->setData('promo_coupon_code', $quote->getCouponCode());
+        }
         return $request;
     }
 

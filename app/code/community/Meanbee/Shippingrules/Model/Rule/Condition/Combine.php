@@ -72,6 +72,10 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Combine extends Mage_Rule_Model
                 array(
                     'label' => Mage::helper('meanship')->__('Cart Subtotal after Discounts'),
                     'value' => 'meanship/rule_condition|package_value_with_discount'
+                ),
+                array(
+                    'label' => Mage::helper('meanship')->__('Coupon'),
+                    'value' => 'meanship/rule_condition|promo_coupon_code'
                 )
             )
         );
