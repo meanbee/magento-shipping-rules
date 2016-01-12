@@ -1,9 +1,10 @@
 <?php
+require_once('Emojione/Client.php');
 class Meanbee_Shippingrules_Helper_Emoji extends Mage_Core_Helper_Abstract {
 
-	public function _construct()
+	public function __construct()
 	{
-		$this->setLibraryClient(new Emojione_Client());
+		$this->_libraryClient = new Emojione_Client();
 	}
 
 	/**
@@ -15,8 +16,8 @@ class Meanbee_Shippingrules_Helper_Emoji extends Mage_Core_Helper_Abstract {
 	 */
 	public function unicodeToImage(string $unicode, &$match)
 	{
-		$html = $this->getLibraryClient()->unicodeToImage($unicode);
-		$match = (bool) preg_match("/<img/", $imageCode);
+		$html = $this->_libraryClient->unicodeToImage($unicode);
+		$match = (bool) preg_match("/<img/", $html);
 		return $html;
 	}
 }
