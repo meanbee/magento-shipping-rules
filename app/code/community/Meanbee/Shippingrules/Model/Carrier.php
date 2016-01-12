@@ -88,15 +88,10 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
         $request = $this->addCountryGroupToRequest($request);
         $request = $this->addNumericPostcodesToRequest($request); /** @deprecated Remove next major version. */
 
-        $stop_flag = array(
-            '_all' => false
-        );
+        $stop_flag = array();
 
         foreach ($rule_collection as $rule) {
             /** @var $rule Meanbee_Shippingrules_Model_Rule */
-            if ($stop_flag['_all']) {
-                break;
-            }
             if (!$rule->validate($request)) {
                 continue;
             }
@@ -127,7 +122,7 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
             }
 
             if ($rule->getStopAllRulesProcessing()) {
-                $stop_flag['_all'] = true;
+                break;
             }
         }
 
