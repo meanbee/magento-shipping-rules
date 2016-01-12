@@ -66,7 +66,7 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Grid extends Mage_Adminhtml_Bl
             'header'    => Mage::helper('meanship')->__('Rule Condition Summary'),
             'align'     =>'left',
             'renderer'  => 'Meanbee_Shippingrules_Block_Adminhtml_Rules_Renderer',
-            'filter'    => false,
+            'filter_condition_callback' => array($this, '_ruleConditionFilter'),
             'sortable'  => false
         ));
 
@@ -186,6 +186,21 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Grid extends Mage_Adminhtml_Bl
             ));
         }
 
+        return $this;
+    }
+
+    protected function _ruleConditionFilter($collection, $column)
+    {
+        if (!$value = $column->getFilter()->getValue()) {
+            return $this;
+        }
+        $matched = array();
+        $rules = Mage::getModel('meanship/Rule')->getCollection();
+        foreach ($rules as $rule) {
+            if (strstr(strtolower($rule->getConditions()->asStringRecursive()), strtolower($value)) !== false)
+                array_push($matched, $rule->getId());
+        }
+        $this->getCollection()->addFieldToFilter('rule_id', array('in' => $matched));
         return $this;
     }
 
