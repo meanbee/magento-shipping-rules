@@ -14,7 +14,7 @@ class Meanbee_Shippingrules_Helper_Emoji extends Mage_Core_Helper_Abstract {
 	 * @param  boolean &$match  Side-effect; indicates whether any emoji were found.
 	 * @return string           HTML with image tags.
 	 */
-	public function unicodeToImage(string $unicode, &$match)
+	public function unicodeToImage($unicode, &$match)
 	{
 		$html = $this->_libraryClient->unicodeToImage($unicode);
 		$match = (bool) preg_match("/<img/", $html);

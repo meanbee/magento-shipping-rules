@@ -1,6 +1,4 @@
 <?php
-use Meanbee_Shippingrules_Model_Config_Source_OperatorRenderType;
-use Meanbee_Shippingrules_Model_Config_Source_CountryCondensation;
 
 class Meanbee_Shippingrules_Block_Adminhtml_Rules_Renderer
     extends Mage_Adminhtml_Block_Widget_Grid_Column_Renderer_Abstract
