@@ -19,6 +19,7 @@ class Meanbee_Shippingrules_Model_Rule_Condition extends Meanbee_Shippingrules_M
             'base_subtotal_incl_tax' => Mage::helper('meanship')->__('Subtotal incl. Tax'),
             'package_value_with_discount' => Mage::helper('meanship')->__('Subtotal after Discounts'),
             'package_weight' => Mage::helper('meanship')->__('Total Weight'),
+            'promo_free_shipping' => Mage::helper('meanship')->__('Free Shipping'),
             'promo_coupon_code' => Mage::helper('meanship')->__('Coupon'),
 
             'customer_group_id' => Mage::helper('meanship')->__('Customer Group'),
@@ -90,6 +91,7 @@ class Meanbee_Shippingrules_Model_Rule_Condition extends Meanbee_Shippingrules_M
             case 'website_id':
                 return 'multiselect';
             case 'is_admin_order':
+            case 'promo_free_shipping':
                 return 'select';
             case 'dest_postcode':
             case 'dest_postcode_prefix':
@@ -117,6 +119,7 @@ class Meanbee_Shippingrules_Model_Rule_Condition extends Meanbee_Shippingrules_M
             case 'website_id':
                 return 'multiselect';
             case 'is_admin_order':
+            case 'promo_free_shipping':
                 return 'select';
             default:
                 return 'text';
@@ -165,6 +168,7 @@ class Meanbee_Shippingrules_Model_Rule_Condition extends Meanbee_Shippingrules_M
                         ->toOptionArray();
                     break;
                 case 'is_admin_order':
+                case 'promo_free_shipping':
                     $options = Mage::getModel('adminhtml/system_config_source_yesno')
                         ->toOptionArray();
                     break;

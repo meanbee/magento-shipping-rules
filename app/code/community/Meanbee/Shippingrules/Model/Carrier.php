@@ -272,7 +272,7 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
     }
 
     /**
-     * Add coupon code to the request, so conditions can be
+     * Add promotion data to the request, so conditions can be
      * dependant on promotions.
      *
      * @param Mage_Shipping_Model_Rate_Request $request
@@ -283,6 +283,7 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
         $requestItems = $request->getAllItems();
         if (count($requestItems) >= 0) {
             $quote = $requestItems[0]->getQuote();
+            $request->setData('promo_free_shipping', $quote->getShippingAddress()->getFreeShipping());
             $request->setData('promo_coupon_code', $quote->getCouponCode());
         }
         return $request;
