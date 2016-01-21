@@ -3,10 +3,10 @@
     <adminhtml_shippingrules_index>
         <reference name="head">
             <action method="addJs">
-                <script>Meanbee/shippingrules/grid.js</script>
+                <script>meanbee/shippingrules/grid.js</script>
             </action>
             <action method="addCss">
-                <stylesheet>Meanbee/shippingrules/grid.css</stylesheet>
+                <stylesheet>meanbee/shippingrules/grid.css</stylesheet>
             </action>
         </reference>
         <reference name="content">

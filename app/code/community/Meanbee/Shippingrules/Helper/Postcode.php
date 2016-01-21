@@ -42,7 +42,7 @@ class Meanbee_Shippingrules_Helper_Postcode extends Mage_Core_Helper_Abstract {
         if (isset($this->_postalCodeData)) {
             return $this->_postalCodeData;
         }
-        $json = file_get_contents(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_JS).'meanbee/shippingrules/postalcode_formats.json');
+        $json = file_get_contents(Mage::getBaseDir().'/js/meanbee/shippingrules/postalcode_formats.json');
         $this->_postalCodeData = Zend_Json::decode($json, true);
         return $this->_postalCodeData;
     }
