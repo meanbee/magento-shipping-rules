@@ -1,5 +1,4 @@
 <?php
-use Meanbee_Shippingrules_Helper_Postcode;
 class Meanbee_Shippingrules_Model_Rule_Condition extends Meanbee_Shippingrules_Model_Rule_Condition_Abstract {
 
     /**
@@ -232,7 +231,7 @@ class Meanbee_Shippingrules_Model_Rule_Condition extends Meanbee_Shippingrules_M
      * @param  Mage_Shipping_Model_Rate_Request $request
      * @return boolean                          True if condition(s) passed, False otherwise.
      */
-    public function validate(Mage_Shipping_Model_Rate_Request $request) {
+    public function validate(Varien_Object $request) {
         return $this->validateAttribute($this->getSanitisedValue($request));
     }
 

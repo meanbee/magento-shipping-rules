@@ -49,9 +49,10 @@ class Meanbee_Shippingrules_Model_Rule_Condition_PostalCode extends Mage_Rule_Mo
     {
         $valueOptions = array();
         foreach (Mage::helper('meanship/postcode')->getPostalCodeData() as $postalCodeData) {
-            $valueOptions[$postalCodeData['code']] = Mage::helper('meanship/country')->toRegionalIndicatorSymbols($postalCodeData['code']) . ' '
-                                                    . $postalCodeData['name']
-                                                    . (isset($postalCodeData['prefix']) ? '  ['.$postalCodeData['prefix'].']' : '');
+            $valueOptions[] = array( 'value' => $postalCodeData['code'],
+                                     'label' => Mage::helper('meanship/country')->toRegionalIndicatorSymbols($postalCodeData['code']) . ' '
+                                                . $postalCodeData['name']
+                                                . (isset($postalCodeData['prefix']) ? '  ['.$postalCodeData['prefix'].']' : ''));
         }
         $this->setValueOptions($valueOptions);
         return $this;
@@ -67,14 +68,14 @@ class Meanbee_Shippingrules_Model_Rule_Condition_PostalCode extends Mage_Rule_Mo
     public function getValueName()
     {
         $value = $this->getValue();
-        if (is_null($value) || '' === $value) {
+        if (is_null($value) || '' === $value || $value === true) {
             return '...';
         }
         $options = $this->getValueOptions();
         if (!empty($options)) {
-            foreach ($options as $v => $label) {
-                if ($v == $value) {
-                    $labelArr = explode(' ', $label, 2)[1];
+            foreach ($options as $i => $label) {
+                if ($label['value'] == $value) {
+                    $labelArr = explode(' ', $label['label'], 2);
                     return end($labelArr);
                 }
             }
@@ -92,7 +93,7 @@ class Meanbee_Shippingrules_Model_Rule_Condition_PostalCode extends Mage_Rule_Mo
         return $this->getForm()->addField("{$this->getPrefix()}__{$this->getId()}__value", 'select', array(
             'name'    => "rule[{$this->getPrefix()}][{$this->getId()}][value]",
             'value'   => $this->getValue(),
-            'values'  => array_merge(array('Please choose a country...'), $this->getValueOptions()),
+            'values'  => $this->getValueOptions(),
             'value_name' => $this->getValueName(),
             'after_element_html' => $this->getValueAfterElementHtml(),
             'explicit_apply'     => $this->getExplicitApply()
@@ -151,7 +152,7 @@ class Meanbee_Shippingrules_Model_Rule_Condition_PostalCode extends Mage_Rule_Mo
      *
      * @return string Plaintext descriptor.
      */
-    public function asString()
+    public function asString($format = '')
     {
         return Mage::helper('meanship')->__(
                     'Postal Code of %s matches %s of these conditions:',

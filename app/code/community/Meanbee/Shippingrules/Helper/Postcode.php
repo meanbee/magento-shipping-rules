@@ -53,7 +53,7 @@ class Meanbee_Shippingrules_Helper_Postcode extends Mage_Core_Helper_Abstract {
      * @param  string     $countryCode 2 letter country code (e.g. "GB"; United Kingdom).
      * @return array|null              Postal code format descriptor, null if no match found.
      */
-    public function getPostalCodeDataByCountryCode(string $countryCode) {
+    public function getPostalCodeDataByCountryCode($countryCode) {
         foreach ($this->getPostalCodeData() as $postalCode) {
             if (strtoupper($postalCode['code']) === strtoupper($countryCode)) {
                 return $postalCode;
@@ -88,7 +88,7 @@ class Meanbee_Shippingrules_Helper_Postcode extends Mage_Core_Helper_Abstract {
      *                                 Returns array of valid formats if no country code is provided.
      *                                 Else returns null.
      */
-    public function isValidPostalCode(string $postalCode, string $countryCode = null, array &$matches = array()) {
+    public function isValidPostalCode($postalCode, $countryCode = null, &$matches = array()) {
         $postalCode = $this->sanitisePostcode($postalCode);
         if ($countryCode !== null) {
             $postalCodeData = $this->getPostalCodeDataByCountryCode($countryCode);
@@ -111,7 +111,7 @@ class Meanbee_Shippingrules_Helper_Postcode extends Mage_Core_Helper_Abstract {
      * @param  string  $postcode
      * @return boolean
      */
-    public function isValidPostcode(string $postcode) {
+    public function isValidPostcode($postcode) {
         $postcode = $this->sanitisePostcode($postcode);
         $postcode_length = strlen($postcode);
 
@@ -128,7 +128,7 @@ class Meanbee_Shippingrules_Helper_Postcode extends Mage_Core_Helper_Abstract {
      * @param string $postalCode
      * @return string
      */
-    public function sanitisePostcode(string $postalCode) {
+    public function sanitisePostcode($postalCode) {
         return preg_replace('/\s+/', '', str_replace(array('-', '-', '‒', '–', '—', '―'), '', strtoupper($postalCode)));
     }
 
@@ -139,7 +139,7 @@ class Meanbee_Shippingrules_Helper_Postcode extends Mage_Core_Helper_Abstract {
      * @param int    $fromBase
      * @return int
      */
-    public function toBase10(string $subject, int $fromBase) {
+    public function toBase10($subject, $fromBase) {
         if ($fromBase == 26) {
             $map = array(
                 'A' => '0', 'B' => '1', 'C' => '2', 'D' => '3',
