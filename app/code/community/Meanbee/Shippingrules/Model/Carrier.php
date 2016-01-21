@@ -30,8 +30,13 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
                 $method->setPrice(0);
             } else {
                 // rate cost is optional property to record how much it costs to vendor to ship
-                $method->setCost($rule_data->getCost());
-                $method->setPrice($rule_data->getPrice());
+                if ($rule_data->getPerItem()) {
+                    $method->setCost($rule_data->getCost() * $request->getData('package_qty'));
+                    $method->setPrice($rule_data->getPrice() * $request->getData('package_qty'));
+                } else {
+                    $method->setCost($rule_data->getCost());
+                    $method->setPrice($rule_data->getPrice());
+                }
             }
 
             $resultArray[] = $method;
@@ -45,6 +50,13 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
         return $result;
     }
 
+    /**
+     * Gets allowed shiping methods
+     *
+     * @implements Mage_Shipping_Model_Carrier_Interface
+     *
+     * @return array Allowed shipping methods.
+     */
     public function getAllowedMethods() {
         $methods = array();
 
@@ -60,6 +72,12 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
         return $methods;
     }
 
+    /**
+     * Gets shipping methods whose rules validate when evalutaed against the shipping rate request.
+     *
+     * @param  Mage_Shipping_Model_Rate_Request $request
+     * @return array                                     Array of rules that validated.
+     */
     protected function _getApplicableRules(Mage_Shipping_Model_Rate_Request $request) {
         $methods = array();
 
@@ -70,14 +88,13 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
 
         $request = $this->addCustomerDataToRequest($request);
         $request = $this->addAdminOrderDataToRequest($request);
-        $request = $this->addPostcodePrefixToRequest($request);
+        $request = $this->addPostcodePrefixToRequest($request); /** @deprecated Remove next major version. */
+        $request = $this->addPostalCodePartsToRequest($request);
         $request = $this->addCountryGroupToRequest($request);
-        $request = $this->addNumericPostcodesToRequest($request);
+        $request = $this->addNumericPostcodesToRequest($request); /** @deprecated Remove next major version. */
         $request = $this->addPromoDataToRequest($request);
 
-        $stop_flag = array(
-            '_all' => false
-        );
+        $stop_flag = array();
 
         foreach ($rule_collection as $rule) {
             /** @var $rule Meanbee_Shippingrules_Model_Rule */
@@ -97,15 +114,14 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
                  */
                 if ($methods[$rule_name]->getPrice() < $rule->getPrice() || $stop_flag[$rule_name]) {
                     continue;
-                } else if ($stop_flag['_all']) {
-                    break;
                 }
             }
 
             $methods[$rule_name] = new Varien_Object(array(
                 'price' => $rule->getPrice(),
                 'cost'  => $rule->getCost(),
-                'id'    => $rule->getId()
+                'id'    => $rule->getId(),
+                'per_item' => (int) $rule->getPerItem()
             ));
 
             if ($rule->getStopRulesProcessing()) {
@@ -113,7 +129,7 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
             }
 
             if ($rule->getStopAllRulesProcessing()) {
-                $stop_flag['_all'] = true;
+                break;
             }
         }
 
@@ -125,7 +141,6 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
      * to the request if so.
      *
      * @param Mage_Shipping_Model_Rate_Request $request
-     *
      * @return Mage_Shipping_Model_Rate_Request
      */
     public function addCountryGroupToRequest(Mage_Shipping_Model_Rate_Request $request) {
@@ -172,7 +187,6 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
      * Determine whether or not this is an order placed in the admin area.
      *
      * @param Mage_Shipping_Model_Rate_Request $request
-     *
      * @return Mage_Shipping_Model_Rate_Request
      */
     public function addAdminOrderDataToRequest(Mage_Shipping_Model_Rate_Request $request) {
@@ -188,8 +202,9 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
     /**
      * Extract the postcode prefix from the destination postcode if available.
      *
-     * @param Mage_Shipping_Model_Rate_Request $request
+     * @deprecated Remove next major version.
      *
+     * @param Mage_Shipping_Model_Rate_Request $request
      * @return Mage_Shipping_Model_Rate_Request
      */
     public function addPostcodePrefixToRequest(Mage_Shipping_Model_Rate_Request $request) {
@@ -208,11 +223,39 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
     }
 
     /**
+     * Extract the postcode parts from the destination postal code if available.
+     *
+     * @param Mage_Shipping_Model_Rate_Request $request
+     * @return Mage_Shipping_Model_Rate_Request
+     */
+    public function addPostalCodePartsToRequest(Mage_Shipping_Model_Rate_Request $request) {
+        $postalCodeHelper = Mage::helper('meanship/postcode');
+        $postalCode = $request->getDestPostcode();
+        $countryCode = $request->getDestCountryId();
+
+        $matches = array();
+        $valid = $postalCodeHelper->isValidPostalCode($postalCode, $countryCode, $matches);
+        if ($valid) {
+            $postalCodeData = $postalCodeHelper->getPostalCodeDataByCountryCode($countryCode);
+            foreach ($postalCodeData['parts'] as $part => $type) {
+                if ($type !== Meanbee_Shippingrules_Helper_Postcode::CONSTANT) {
+                    $request->setData("dest_postal_code_p{$part}_{$type}", $matches[$part]);
+                }
+            }
+        } else if ($valid === null) {
+            $request->setData('dest_postal_code_p0_str', $postalCodeHelper->sanitisePostcode($postalCode));
+            $request->setData('dest_postal_code_p0_b36', $postalCodeHelper->sanitisePostcode($postalCode));
+        }
+        return $request;
+    }
+
+    /**
      * If the postcode is numeric then cast to a number and store it on the request so we can perform
      * numerical operations on it in the rule conditions.
      *
-     * @param Mage_Shipping_Model_Rate_Request $request
+     * @deprecated Remove next major version.
      *
+     * @param Mage_Shipping_Model_Rate_Request $request
      * @return Mage_Shipping_Model_Rate_Request
      */
     public function addNumericPostcodesToRequest(Mage_Shipping_Model_Rate_Request $request) {
@@ -237,8 +280,12 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
      * @return Mage_Shipping_Model_Rate_Request
      */
     public function addPromoDataToRequest(Mage_Shipping_Model_Rate_Request $request) {
-        $quote = $request->getAllItems()[0]->getQuote();
-        $request->setData('promo_free_shipping', $quote->getShippingAddress()->getFreeShipping());
+        $requestItems = $request->getAllItems();
+        if (count($requestItems) >= 0) {
+            $quote = $requestItems[0]->getQuote();
+            $request->setData('promo_free_shipping', $quote->getShippingAddress()->getFreeShipping());
+            $request->setData('promo_coupon_code', $quote->getCouponCode());
+        }
         return $request;
     }
 

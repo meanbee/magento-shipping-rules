@@ -1,10 +1,19 @@
 <?php
 class Meanbee_Shippingrules_Model_Rule_Condition_Combine extends Mage_Rule_Model_Condition_Combine {
+    /**
+     * @override
+     */
     public function __construct() {
         parent::__construct();
         $this->setType('meanship/rule_condition_combine');
     }
 
+    /**
+     * Provides list of possible conditions for select field.
+     *
+     * @override
+     * @return array Plaintext array of condition labels with associated attribute codes.
+     */
     public function getNewChildSelectOptions() {
         $conditions = parent::getNewChildSelectOptions();
 
@@ -67,17 +76,20 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Combine extends Mage_Rule_Model
                 array(
                     'label' => Mage::helper('meanship')->__('Free Shipping'),
                     'value' => 'meanship/rule_condition|promo_free_shipping'
+                ),
+                array(
+                    'label' => Mage::helper('meanship')->__('Coupon'),
+                    'value' => 'meanship/rule_condition|promo_coupon_code'
                 )
             )
         );
-
-
 
         $conditions[] = array(
             'label' => Mage::helper('meanship')->__('Destination Conditions'),
             'value' => $this->getDestinationConditions()
         );
 
+        /** @deprecated Remove next major version. */
         $conditions[] = array(
             'label' => Mage::helper('meanship')->__('Specalist Destnation Conditions'),
             'value' => array(
@@ -105,6 +117,10 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Combine extends Mage_Rule_Model
         return $conditions;
     }
 
+    /**
+     * Provides destionation based conditions.
+     * @return array Plaintext array of condition labels with associated attribute codes.
+     */
     public function getDestinationConditions() {
         $conditions = array();
 
@@ -125,14 +141,21 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Combine extends Mage_Rule_Model
             'value' => 'meanship/rule_condition|dest_region_id'
         );
 
+        /** @deprecated Remove next major version. */
         $conditions[] = array(
             'label' => Mage::helper('meanship')->__('Shipping Zip Code'),
             'value' => 'meanship/rule_condition|dest_postcode'
         );
 
+        /** @deprecated Remove next major version. */
         $conditions[] = array(
             'label' => Mage::helper('meanship')->__('Shipping Postcode (UK only) Prefix'),
             'value' => 'meanship/rule_condition|dest_postcode_prefix'
+        );
+
+        $conditions[] = array(
+            'label' => Mage::helper('meanship')->__('Shipping Postal Code'),
+            'value' => 'meanship/rule_condition_postalCode'
         );
 
         return $conditions;
