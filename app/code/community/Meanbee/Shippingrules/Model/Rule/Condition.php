@@ -24,6 +24,8 @@ class Meanbee_Shippingrules_Model_Rule_Condition extends Meanbee_Shippingrules_M
 
             'customer_group_id' => Mage::helper('meanship')->__('Customer Group'),
 
+            'time_time_of_day' => Mage::helper('meanship')->__('Time of Day'),
+
             'dest_country_id' => Mage::helper('meanship')->__('Shipping Country'),
             'dest_country_group' => Mage::helper('meanship')->__('Shipping Country Group'),
             'dest_region_id'  => Mage::helper('meanship')->__('Shipping State'),
@@ -216,11 +218,19 @@ class Meanbee_Shippingrules_Model_Rule_Condition extends Meanbee_Shippingrules_M
             case 'dest_postcode_prefix': /** @deprecated Remove next major version. */
                 $value = Mage::helper('meanship/postcode')->sanitisePostcode($value);
                 break;
+            case 'dest_postcode_numeric':
+                $value = (is_array($value)) ? array_map("intval", $value) : intval($value);
+                break;
             case 'is_admin_order':
                 $value = ($value == '1');
                 break;
-            case 'dest_postcode_numeric':
-                $value = (is_array($value)) ? array_map("intval", $value) : intval($value);
+            case 'time_time_of_day':
+                $time_parts = explode(':', $value, 3);
+                $today = new DateTime('now', new DateTimeZone(Mage::getStoreConfig('general/locale/timezone')));
+                $today->setTime(0, 0, 0);
+                $time = new DateTime('now', new DateTimeZone(Mage::getStoreConfig('general/locale/timezone')));
+                $time->setTime(isset($time_parts[0]) ? $time_parts[0] : 0, isset($time_parts[1]) ? $time_parts[1] : 0, isset($time_parts[2]) ? $time_parts[2] : 0);
+                $value = $time->getTimestamp() - $today->getTimestamp();
                 break;
         }
 

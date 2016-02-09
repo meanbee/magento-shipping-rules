@@ -85,6 +85,16 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Combine extends Mage_Rule_Model
         );
 
         $conditions[] = array(
+            'label' => Mage::helper('meanship')->__('Time Conditions'),
+            'value' => array(
+                array(
+                    'label' => Mage::helper('meanship')->__('Time of Day'),
+                    'value' => 'meanship/rule_condition|time_time_of_day'
+                )
+            )
+        );
+
+        $conditions[] = array(
             'label' => Mage::helper('meanship')->__('Destination Conditions'),
             'value' => $this->getDestinationConditions()
         );

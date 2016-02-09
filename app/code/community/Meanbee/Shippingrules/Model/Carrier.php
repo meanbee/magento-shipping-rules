@@ -93,6 +93,7 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
         $request = $this->addCountryGroupToRequest($request);
         $request = $this->addNumericPostcodesToRequest($request); /** @deprecated Remove next major version. */
         $request = $this->addPromoDataToRequest($request);
+        $request = $this->addTimeDataToRequest($request);
 
         $stop_flag = array();
 
@@ -286,6 +287,23 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
             $request->setData('promo_free_shipping', $quote->getShippingAddress()->getFreeShipping());
             $request->setData('promo_coupon_code', $quote->getCouponCode());
         }
+        return $request;
+    }
+
+    /**
+     * Add temporal information to the request, so conditions can be
+     * dependant on the time the request was made.
+     *
+     * @param Mage_Shipping_Model_Rate_Request $request
+     *
+     * @return Mage_Shipping_Model_Rate_Request
+     */
+    public function addTimeDataToRequest(Mage_Shipping_Model_Rate_Request $request) {
+        $request->setData('time_timestamp', time());
+        $today = new DateTime('now', new DateTimeZone(Mage::getStoreConfig('general/locale/timezone')));
+        $today->setTime(0, 0, 0);
+        $time_of_day = time() - $today->getTimestamp();
+        $request->setData('time_time_of_day', $time_of_day);
         return $request;
     }
 
