@@ -24,6 +24,8 @@ class Meanbee_Shippingrules_Model_Rule_Condition extends Meanbee_Shippingrules_M
 
             'customer_group_id' => Mage::helper('meanship')->__('Customer Group'),
 
+            'time_time_of_day' => Mage::helper('meanship')->__('Time of Day'),
+
             'dest_country_id' => Mage::helper('meanship')->__('Shipping Country'),
             'dest_country_group' => Mage::helper('meanship')->__('Shipping Country Group'),
             'dest_region_id'  => Mage::helper('meanship')->__('Shipping State'),
@@ -216,11 +218,14 @@ class Meanbee_Shippingrules_Model_Rule_Condition extends Meanbee_Shippingrules_M
             case 'dest_postcode_prefix': /** @deprecated Remove next major version. */
                 $value = Mage::helper('meanship/postcode')->sanitisePostcode($value);
                 break;
+            case 'dest_postcode_numeric':
+                $value = (is_array($value)) ? array_map("intval", $value) : intval($value);
+                break;
             case 'is_admin_order':
                 $value = ($value == '1');
                 break;
-            case 'dest_postcode_numeric':
-                $value = (is_array($value)) ? array_map("intval", $value) : intval($value);
+            case 'time_time_of_day':
+                $value = Mage::helper('meanship/time')->getLocalTimeOfDayFromString($value);
                 break;
         }
 
