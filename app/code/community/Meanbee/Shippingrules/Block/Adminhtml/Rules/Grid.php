@@ -65,8 +65,8 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Grid extends Mage_Adminhtml_Bl
         $this->addColumn('conditions', array(
             'header'    => Mage::helper('meanship')->__('Rule Condition Summary'),
             'align'     =>'left',
-            'renderer'  => 'Meanbee_Shippingrules_Block_Adminhtml_Rules_Renderer',
-            'filter'    => false,
+            'renderer'  => 'meanship/adminhtml_rules_renderer',
+            'filter_condition_callback' => array($this, '_ruleConditionFilter'),
             'sortable'  => false
         ));
 
@@ -86,8 +86,7 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Grid extends Mage_Adminhtml_Bl
             'header'    => Mage::helper('meanship')->__('Notes'),
             'align'     =>'left',
             'index'     => 'notes',
-            'type'      => 'text',
-            'filter'    => false
+            'type'      => 'text'
         ));
 
         $this->addColumn('sort_order', array(
@@ -112,8 +111,8 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Grid extends Mage_Adminhtml_Bl
      */
     protected function _prepareExportColumns() {
         $columns = array(
-            'rule_id', 'name', 'price', 'cost', 'conditions_serialized', 'stop_rules_processing',
-            'stop_all_rules_processing', 'sort_order', 'is_active', 'version'
+            'rule_id', 'name', 'price', 'cost', 'per_item', 'conditions_serialized', 'stop_rules_processing',
+            'stop_all_rules_processing', 'notes', 'sort_order', 'is_active', 'version'
         );
 
         foreach ($columns as $column) {
@@ -186,6 +185,21 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Grid extends Mage_Adminhtml_Bl
             ));
         }
 
+        return $this;
+    }
+
+    protected function _ruleConditionFilter($collection, $column)
+    {
+        if (!$value = $column->getFilter()->getValue()) {
+            return $this;
+        }
+        $matched = array();
+        $rules = Mage::getModel('meanship/Rule')->getCollection();
+        foreach ($rules as $rule) {
+            if (strstr(strtolower($rule->getConditions()->asStringRecursive()), strtolower($value)) !== false)
+                array_push($matched, $rule->getId());
+        }
+        $this->getCollection()->addFieldToFilter('rule_id', array('in' => $matched));
         return $this;
     }
 
