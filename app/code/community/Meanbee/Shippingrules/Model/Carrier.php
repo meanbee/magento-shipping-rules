@@ -300,10 +300,7 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
      */
     public function addTimeDataToRequest(Mage_Shipping_Model_Rate_Request $request) {
         $request->setData('time_timestamp', time());
-        $today = new DateTime('now', new DateTimeZone(Mage::getStoreConfig('general/locale/timezone')));
-        $today->setTime(0, 0, 0);
-        $time_of_day = time() - $today->getTimestamp();
-        $request->setData('time_time_of_day', $time_of_day);
+        $request->setData('time_time_of_day', Mage::helper('meanship/time')->getLocalTimeOfDay($value));
         return $request;
     }
 

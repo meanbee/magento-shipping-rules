@@ -225,12 +225,7 @@ class Meanbee_Shippingrules_Model_Rule_Condition extends Meanbee_Shippingrules_M
                 $value = ($value == '1');
                 break;
             case 'time_time_of_day':
-                $time_parts = explode(':', $value, 3);
-                $today = new DateTime('now', new DateTimeZone(Mage::getStoreConfig('general/locale/timezone')));
-                $today->setTime(0, 0, 0);
-                $time = new DateTime('now', new DateTimeZone(Mage::getStoreConfig('general/locale/timezone')));
-                $time->setTime(isset($time_parts[0]) ? $time_parts[0] : 0, isset($time_parts[1]) ? $time_parts[1] : 0, isset($time_parts[2]) ? $time_parts[2] : 0);
-                $value = $time->getTimestamp() - $today->getTimestamp();
+                $value = Mage::helper('meanship/time')->getLocalTimeOfDayFromString($value);
                 break;
         }
 
