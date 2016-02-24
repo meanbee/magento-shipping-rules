@@ -11,7 +11,8 @@ class Meanbee_Shippingrules_Helper_Time extends Mage_Core_Helper_Abstract
      */
     public function getLocalTimeOfDayFromString($str)
     {
-        $today = new DateTime('now', DateTimeZone(Mage::getStoreConfig('general/locale/timezone')));
+        $time_parts = explode(':', $str, 3);
+        $today = new DateTime('now', new DateTimeZone(Mage::getStoreConfig('general/locale/timezone')));
         $time = clone $today;
         $today->setTime(0, 0, 0);
         $time->setTime(
@@ -24,7 +25,7 @@ class Meanbee_Shippingrules_Helper_Time extends Mage_Core_Helper_Abstract
 
     /**
      * Gets current time of day as a day-relative timestamp.
-     * 
+     *
      * @return int      Number of seconds elapsed since 00:00:00 on the current day,
      *                  determined by Store Timezone.
      */
