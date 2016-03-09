@@ -6,7 +6,11 @@ var gulp       = require('gulp'),
     uglify     = require('gulp-uglify');
 
 gulp.task('scripts', function() {
-  return gulp.src(['src/js/*.js', '!src/js/script.js', 'node_modules/gulp-nativejsx/node_modules/nativejsx/dist/jsxdom-prototypes.js'])
+  return gulp.src([
+              'src/skin/adminhtml/default/default/js/meanbee/shippingrules/*.js',
+              '!src/skin/adminhtml/default/default/js/meanbee/shippingrules/script.js',
+              'node_modules/gulp-nativejsx/node_modules/nativejsx/dist/jsxdom-prototypes.js'
+             ])
              .pipe(sourcemaps.init())
              .pipe(babel())
              .pipe(nativejsx())
@@ -17,7 +21,7 @@ gulp.task('scripts', function() {
 });
 
 gulp.task('watch', function() {
-  return gulp.watch(['src/js/*.js', '!src/js/script.js'], ['scripts']);
+  return gulp.watch(['src/skin/adminhtml/default/default/js/meanbee/shippingrules/*.js', '!src/skin/adminhtml/default/default/js/meanbee/shippingrules/script.js'], ['scripts']);
 });
 
 gulp.task('default', ['watch', 'scripts']);
