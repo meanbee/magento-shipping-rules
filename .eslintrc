@@ -27,5 +27,8 @@
         "strict": [2, "global"],
         "valid-jsdoc": [2, { prefer: { "return": "returns"}}],
         "wrap-iife": [2, "inside"]
+    },
+    "globals": {
+        "Meanbee": true
     }
 }

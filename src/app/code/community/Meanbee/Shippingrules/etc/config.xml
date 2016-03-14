@@ -1,8 +1,72 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
-	<modules>
-		<Meanbee_Shippingrules>
-			<version>3.0.0</version>
-		</Meanbee_Shippingrules>
-	</modules>
+    <modules>
+    	<Meanbee_Shippingrules>
+    		<version>3.0.0</version>
+    	</Meanbee_Shippingrules>
+    </modules>
+    <global>
+        <blocks>
+            <meanbee_shippingrules>
+                <class>Meanbee_Shippingrules_Block</class>
+            </meanbee_shippingrules>
+        </blocks>
+        <helpers>
+            <meanbee_shippingrules>
+                <class>Meanbee_Shippingrules_Helper</class>
+            </meanbee_shippingrules>
+        </helpers>
+        <models>
+            <meanbee_shippingrules>
+                <class>Meanbee_Shippingrules_Model</class>
+                <resourceModel>meanbee_shippingrules_resource</resourceModel>
+            </meanbee_shippingrules>
+            <meanbee_shippingrules_resource>
+                <class>Meanbee_Shippingrules_Model_Resource</class>
+                <entities>
+                    <rule><table>meanbee_shippingrules_rule</table></rule>
+                </entities>
+            </meanbee_shippingrules_resource>
+        </models>
+        <resources>
+            <meanbee_shippingrules_setup>
+                <setup>
+                    <module>Meanbee_Shippingrules</module>
+                </setup>
+            </meanbee_shippingrules_setup>
+        </resources>
+    </global>
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <meanbee_shippingrules before="Mage_Adminhtml">Meanbee_Shippingrules</meanbee_shippingrules>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+    <adminhtml>
+        <layout>
+            <updates>
+                <meanbee_shippingrules>
+                    <file>meanbee/shippingrules.xml</file>
+                </meanbee_shippingrules>
+            </updates>
+        </layout>
+        <menu>
+            <catalog>
+                <children>
+                    <meanbee_shippingrules translate="title">
+                        <title>Manage Shipping Rules</title>
+                        <action>adminhtml/shippingrules/index</action>
+                        <!-- Just beneath Manage Categories -->
+                        <sort_order>100</sort_order>
+                        <resource>meanbee_shippingrules</resource>
+                    </meanbee_shippingrules>
+                </children>
+            </catalog>
+        </menu>
+    </adminhtml>
 </config>

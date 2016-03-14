@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<layout>
+	<adminhtml_shippingrules_index>
+		<reference name="head">
+			<action method="addItem">
+				<type>skin_js</type>
+				<script>js/meanbee/shippingrules.js</script>
+			</action>
+		</reference>
+		<reference name="content">
+			<block type="core/template" template="meanbee/shippingrules/jsglobals.phtml" name="globals"/>
+			<block type="meanbee_shippingrules/adminhtml_rules" name="rules">
+				<block type="meanbee_shippingrules/adminhtml_rules_grid" name="grid" />
+			</block>
+		</reference>
+	</adminhtml_shippingrules_index>
+</layout>
