@@ -1,0 +1,189 @@
+-
+  rate_request:
+    dest_postcode: BA1 2BN
+  attr: dest_postcode
+  operator: ^
+  test: BA
+  pass: true
+
+-
+  rate_request:
+    dest_postcode: BA1 2BN
+  attr: dest_postcode
+  operator: !=
+  test: BA1 2BN
+  pass: false
+
+############################################################
+-
+  rate_request:
+    dest_postcode_numeric: 12345
+  attr: dest_postcode_numeric
+  operator: () # is one of
+  test: "12345,67890"
+  pass: true
+
+-
+  rate_request:
+    dest_postcode_numeric: 12345
+  attr: dest_postcode_numeric
+  operator: !() # is not one of
+  test: "12345,67890"
+  pass: false
+
+-
+  rate_request:
+    dest_postcode_numeric: 12345
+  attr: dest_postcode_numeric
+  operator: () # is one of
+  test: "98765,43210"
+  pass: false
+
+-
+  rate_request:
+    dest_postcode_numeric: 12345
+  attr: dest_postcode_numeric
+  operator: !() # is not one of
+  test: "98765,43210"
+  pass: true
+
+############################################################
+-
+  rate_request:
+    dest_country_id: 1
+  attr: dest_country_id
+  operator: ()
+  test:
+    - 1
+    - 2
+    - 3
+  pass: true
+
+-
+  rate_request:
+    dest_country_id: 4
+  attr: dest_country_id
+  operator: ()
+  test:
+    - 1
+    - 2
+    - 3
+  pass: false
+
+############################################################
+-
+  rate_request:
+    dest_region_id: 1
+  attr: dest_region_id
+  operator: ()
+  test:
+    - 1
+    - 2
+    - 3
+  pass: true
+
+-
+  rate_request:
+    dest_region_id: 4
+  attr: dest_region_id
+  operator: ()
+  test:
+    - 1
+    - 2
+    - 3
+  pass: false
+
+############################################################
+-
+  rate_request:
+    customer_group_id: 1
+  attr: customer_group_id
+  operator: ()
+  test:
+    - 1
+    - 2
+    - 3
+  pass: true
+
+-
+  rate_request:
+    customer_group_id: 4
+  attr: customer_group_id
+  operator: ()
+  test:
+    - 1
+    - 2
+    - 3
+  pass: false
+
+############################################################
+-
+  rate_request:
+    package_qty: 1
+  attr: package_qty
+  operator: >=
+  test: 0
+  pass: true
+
+-
+  rate_request:
+    package_qty: 10
+  attr: package_qty
+  operator: <
+  test: 4
+  pass: false
+
+############################################################
+-
+  rate_request:
+    package_weight: 1
+  attr: package_weight
+  operator: >=
+  test: 0
+  pass: true
+
+-
+  rate_request:
+    package_weight: 10
+  attr: package_weight
+  operator: <
+  test: 4
+  pass: false
+
+############################################################
+-
+  rate_request:
+    package_value: 9.99
+  attr: package_value
+  operator: ">"
+  test: 4.01
+  pass: true
+
+-
+  rate_request:
+    package_value: 0.50
+  attr: package_value
+  operator: ==
+  test: 0.51
+  pass: false
+
+############################################################
+-
+  rate_request:
+    package_value: 9.99
+    package_qty: 10
+    package_weight: 5000
+  attr: package_value
+  operator: ">"
+  test: 4.01
+  pass: true
+
+-
+  rate_request:
+    package_value: 9.99
+    package_qty: 10
+    package_weight: 5000
+  attr: package_value
+  operator: ==
+  test: 0.51
+  pass: false

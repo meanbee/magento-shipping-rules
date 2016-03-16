@@ -1,0 +1,47 @@
+#########################################################
+# Correct extraction of outer postcode component
+#########################################################
+-
+    postcode: EC1A 1BB
+    expected: ec1a
+-
+    postcode: W1A 1HQ
+    expected: w1a
+-
+    postcode: M1 1AA
+    expected: m1
+-
+    postcode: B33 8TH
+    expected: b33
+-
+    postcode: CR2 6XH
+    expected: cr2
+-
+    postcode: DN55 1PT
+    expected: dn55
+-
+    postcode: ba103bn
+    expected: ba10
+-
+    postcode: ba13bn
+    expected: ba1
+
+#########################################################
+# Sanity checks on input
+#########################################################
+-
+    postcode: 123456
+    expected: ''
+-
+    postcode: ''
+    expected: ''
+
+#########################################################
+# Handles downcasing and ignores spaces
+#########################################################
+-
+    postcode: SA18 3QT
+    expected: sa18
+-
+    postcode: sa183qt
+    expected: sa18

@@ -1,0 +1,100 @@
+<_>
+    <form_key>7zO13Jn2ag4bnETj</form_key>
+    <_create/>
+    <name>Meanbee_Shippingrules</name>
+    <channel>community</channel>
+    <version_ids>
+        <version_ids>2</version_ids>
+    </version_ids>
+    <summary>Set up shipping as easy as promotion rules.</summary>
+    <description>Provides a GUI, similar to the one for shopping and catalog promotion rules, to specifying shipping rates for your customers.</description>
+    <license>Commercial License</license>
+    <license_uri/>
+    <version>2.1.1</version>
+    <stability>stable</stability>
+    <notes>* Fix &apos;is one of&apos; for numeric values
+        * Add store condition
+        * Show method on admin grid
+        * Add import export
+        * Add postcode prefix</notes>
+    <authors>
+        <name>
+            <name>Meanbee</name>
+        </name>
+        <user>
+            <user>meanbee</user>
+        </user>
+        <email>
+            <email>hello@meanbee.com</email>
+        </email>
+    </authors>
+    <depends_php_min>5.2.0</depends_php_min>
+    <depends_php_max>6.0.0</depends_php_max>
+    <depends>
+        <package>
+            <name>
+                <name/>
+            </name>
+            <channel>
+                <channel/>
+            </channel>
+            <min>
+                <min/>
+            </min>
+            <max>
+                <max/>
+            </max>
+            <files>
+                <files>       </files>
+            </files>
+        </package>
+        <extension>
+            <name>
+                <name>Core</name>
+            </name>
+            <min>
+                <min/>
+            </min>
+            <max>
+                <max/>
+            </max>
+        </extension>
+    </depends>
+    <contents>
+        <target>
+            <target>magelocal</target>
+            <target>magecommunity</target>
+            <target>mageetc</target>
+            <target>magedesign</target>
+            <target>magedesign</target>
+        </target>
+        <path>
+            <path/>
+            <path>Meanbee/Shippingrules/</path>
+            <path>modules/Meanbee_Shippingrules.xml</path>
+            <path>adminhtml/default/default/layout/meanbee/shippingrules.xml</path>
+            <path>adminhtml/default/default/template/meanbee/shippingrules/</path>
+        </path>
+        <type>
+            <type>file</type>
+            <type>dir</type>
+            <type>file</type>
+            <type>file</type>
+            <type>dir</type>
+        </type>
+        <include>
+            <include/>
+            <include/>
+            <include/>
+            <include/>
+            <include/>
+        </include>
+        <ignore>
+            <ignore/>
+            <ignore/>
+            <ignore/>
+            <ignore/>
+            <ignore/>
+        </ignore>
+    </contents>
+</_>

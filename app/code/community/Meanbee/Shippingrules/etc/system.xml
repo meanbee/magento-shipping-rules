@@ -1,0 +1,101 @@
+<?xml version="1.0"?>
+<config>
+    <sections>
+        <carriers>
+            <groups>
+                <meanship translate="label" module="meanship">
+                    <label>Meanbee: Shipping Rules</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>900</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <active translate="label">
+                            <label>Enabled</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </active>
+                        <title translate="label">
+                            <label>Title</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </title>
+                        <show_method_code_on_grid>
+                            <label>Show method code on grid?</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>30</sort_order>
+                            <comment>This displays the internal Magento shipping code on the grid. (Useful if you have a third party integration that requires this kind of information).</comment>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </show_method_code_on_grid>
+                        <sort_order translate="label">
+                            <label>Sort Order</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </sort_order>
+                        <condense_countries_on_grid translate="label">
+                            <label>Condense countries on grid</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>meanship/config_source_countryCondensation</source_model>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </condense_countries_on_grid>
+                        <use_emojione translate="label">
+                            <label>Use Emoji One to display flags</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <depends><condense_countries_on_grid>3</condense_countries_on_grid></depends>
+                            <comment><![CDATA[Emoji provide free by <a href="http://emojione.com/">Emoji One</a>. Allows for a fallback if your device doesn't support the glyphs used.]]></comment>
+                            <sort_order>60</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </use_emojione>
+                        <operator_render_type_on_grid translate="label">
+                            <label>Operator render type on grid</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>meanship/config_source_operatorRenderType</source_model>
+                            <sort_order>70</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </operator_render_type_on_grid>
+                        <clip_conditions_on_grid translate="label">
+                            <label>Clip conditions on grid after</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>80</sort_order>
+                            <comment>After this many conditions in a rule, no more conditions will be shown on the grid. Enter 0 to never clip rules.</comment>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </clip_conditions_on_grid>
+                        <collapse_conditions_on_subcondition_on_grid translate="label">
+                            <label><![CDATA[Collapse conditions on grid after n<sup>th</sup> degree sub-condition.]]></label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>90</sort_order>
+                            <comment>After this level of sub-condition the condition tree will be default collapsed on the grid.</comment>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </collapse_conditions_on_subcondition_on_grid>
+                    </fields>
+                </meanship>
+            </groups>
+        </carriers>
+    </sections>
+</config>

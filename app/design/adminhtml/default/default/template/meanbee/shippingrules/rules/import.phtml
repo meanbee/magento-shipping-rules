@@ -1,0 +1,22 @@
+<?php /** @var Meanbee_Shippingrules_Block_Adminhtml_Rules_Import */ ?>
+
+<div class="content-header">
+    <h3 class="head-shipping-method icon-head head-adminhtml-rules">Import Shipping Rules</h3>
+</div>
+
+<p>
+    Import a Shipping Rules <abbr title="Comma-Separated Values">CSV</abbr> export using this tool.  This tool will not update existing rules and will
+    always create new rules, even if similar looking rules already exist.  The <tt>rule_id</tt> column will be ignored.
+</p>
+
+<form id="meanbee_shippingrules_import" action="<?php echo $this->getPostUrl() ?>" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="form_key" value="<?php echo $this->getFormKey() ?>" />
+    <input type="file" name="csv_import" class="required-entry" />
+    <input type="submit" value="Import Rules" class="form-button" />
+</form>
+
+<div class="validation-advice" id="advice-required-entry-csv_import" style="display: none">You need to specify a file to import.</div>
+
+<script type="text/javascript">
+    new varienForm('meanbee_shippingrules_import');
+</script>

@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<layout>
+    <adminhtml_shippingrules_index>
+        <reference name="head">
+            <action method="addJs">
+                <script>meanbee/shippingrules/grid.js</script>
+            </action>
+            <action method="addCss">
+                <stylesheet>meanbee/shippingrules/grid.css</stylesheet>
+            </action>
+        </reference>
+        <reference name="content">
+            <block type="meanship/adminhtml_rules" name="rules" />
+        </reference>
+    </adminhtml_shippingrules_index>
+    <adminhtml_shippingrules_edit>
+        <reference name="head">
+            <action method="setCanLoadExtJs"><flag>1</flag></action>
+            <action method="setCanLoadRulesJs"><flag>1</flag></action>
+            <action method="addJs"><script>meanbee/shippingrules/form.js</script></action>
+        </reference>
+        <reference name="content">
+            <block type="meanship/adminhtml_rules_edit" name="rules_edit" />
+        </reference>
+    </adminhtml_shippingrules_edit>
+    <adminhtml_shippingrules_import>
+        <reference name="content">
+            <block type="meanship/adminhtml_rules_import" name="import" template="meanbee/shippingrules/rules/import.phtml" />
+        </reference>
+    </adminhtml_shippingrules_import>
+</layout>
