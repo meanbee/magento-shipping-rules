@@ -29,11 +29,15 @@ class Meanbee_Shippingrules_Model_Config_Source_RuleFields
                 'value'     => 'conditions'
             ),
             array(
-                'label' => $this->__('Per Item'),
-                'value'     => 'per_item'
+                'label' => $this->__('Price Per Item'),
+                'value'     => 'price_per_item'
             ),
             array(
-                'label' => $this->__('Stop Processing'),
+                'label' => $this->__('Cost Per Item'),
+                'value'     => 'cost_per_item'
+            ),
+            array(
+                'label' => $this->__('Stop Similar Processing'),
                 'value'     => 'stop_rules_processing'
             ),
             array(
@@ -45,7 +49,7 @@ class Meanbee_Shippingrules_Model_Config_Source_RuleFields
                 'value'     => 'notes'
             ),
             array(
-                'label' => $this->__('Sort Order'),
+                'label' => $this->__('Execution Sort Order'),
                 'value'     => 'sort_order'
             ),
             array(

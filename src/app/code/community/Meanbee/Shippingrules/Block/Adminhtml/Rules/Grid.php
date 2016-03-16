@@ -60,7 +60,11 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Grid
                 'align'    => 'center',
                 'type'     => 'options'
             ),
-            'per_item'   => array(
+            'price_per_item' => array(
+                'align'    => 'center',
+                'type'     => 'options'
+            ),
+            'cost_per_item' => array(
                 'align'    => 'center',
                 'type'     => 'options'
             ),
