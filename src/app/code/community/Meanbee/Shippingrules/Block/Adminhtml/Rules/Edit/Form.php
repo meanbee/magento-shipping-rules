@@ -1,5 +1,5 @@
 <?php
-class Meanbee_shippingrules_block_Adminhtml_Rules_Edit_Form
+class Meanbee_Shippingrules_Block_Adminhtml_Rules_Edit_Form
     extends Mage_Adminhtml_Block_Widget_Form
 {
     protected function _construct()
@@ -17,7 +17,7 @@ class Meanbee_shippingrules_block_Adminhtml_Rules_Edit_Form
             'method' => 'post',
             'enctype' => 'multipart/form-data',
         ));
-        $this->setUseContainer(true);
+        $form->setUseContainer(true);
         $this->setForm($form);
 
         $info_fieldset = $form->addFieldset('meanbee_shippingrules_form_info', array(
@@ -116,5 +116,6 @@ class Meanbee_shippingrules_block_Adminhtml_Rules_Edit_Form
         if ($rule) {
             $form->setValues($rule);
         }
+        return parent::_prepareForm();
     }
 }

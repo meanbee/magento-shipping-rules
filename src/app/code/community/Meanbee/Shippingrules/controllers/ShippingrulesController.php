@@ -53,7 +53,7 @@ class Meanbee_Shippingrules_ShippingrulesController
             $data['stop_rules_processing'] = (int) isset($data['stop_rules_processing']);
             $data['stop_all_rules_processing'] = (int) isset($data['stop_all_rules_processing']);
 
-            $rule->loadPost($data);
+            $rule->addData($data);
 
             Mage::getSingleton('adminhtml/session')->setFormData($data);
             try {

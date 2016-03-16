@@ -106,15 +106,17 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Grid
 
     public function decorateUserValue($value, $row, $column, $isExport)
     {
-        if ($column->getIndex() == 'rule_id') {
-            return sprintf("%s_%s", Mage::helper('meanbee_shippingrules/config')->getMethodCodePrefix(), $value);
+        if (!$isExport && $row) {
+            if ($column->getIndex() == 'rule_id') {
+                return sprintf("%s_%s", Mage::helper('meanbee_shippingrules/config')->getMethodCodePrefix(), $value);
+            }
         }
         return $value;
     }
 
     public function decorateExportValue($value, $row, $column, $isExport)
     {
-        if ($isExport) {
+        if ($isExport && $row) {
             if ($column->getIndex() == 'conditions') {
                 return base64_encode($value);
             }
