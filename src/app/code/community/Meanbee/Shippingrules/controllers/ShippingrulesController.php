@@ -10,6 +10,12 @@ class Meanbee_Shippingrules_ShippingrulesController
              ->renderLayout();
     }
 
+    public function gridAction()
+    {
+        $this->loadLayout();
+        $this->getResponse()->setBody($this->getLayout()->createBlock('meanbee_shippingrules/adminhtml_rules_grid')->toHtml());
+    }
+
     public function newAction()
     {
         $this->_forward('edit');

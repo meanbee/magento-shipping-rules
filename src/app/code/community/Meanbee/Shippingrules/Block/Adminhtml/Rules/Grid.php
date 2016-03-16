@@ -9,6 +9,8 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Grid
         $this->setDefaultSort('name');
         $this->setDefaultDir(Varien_Data_Collection::SORT_ORDER_ASC);
         $this->setSaveParametersInSession(true);
+        $this->setVarNameFilter('filter');
+        $this->setUseAjax(true);
 
         $this->addExportType('*/*/exportCSV', 'CSV');
     }
@@ -152,5 +154,10 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Grid
     public function getRowUrl($row)
     {
         return $this->getUrl('*/*/edit', array('id' => $row->getId()));
+    }
+
+    public function getGridUrl()
+    {
+        return $this->getUrl('*/*/grid', array('_current' => true));
     }
 }
