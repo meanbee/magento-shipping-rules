@@ -21,6 +21,7 @@ class Meanbee_Shippingrules_Model_Rule_Condition extends Meanbee_Shippingrules_M
             'package_weight' => Mage::helper('meanship')->__('Total Weight'),
             'promo_free_shipping' => Mage::helper('meanship')->__('Free Shipping'),
             'promo_coupon_code' => Mage::helper('meanship')->__('Coupon'),
+            'promo_applied_rule_ids' => Mage::helper('meanship')->__('Applied Cart Price Rules'),
 
             'customer_group_id' => Mage::helper('meanship')->__('Customer Group'),
 
@@ -89,6 +90,7 @@ class Meanbee_Shippingrules_Model_Rule_Condition extends Meanbee_Shippingrules_M
             case 'dest_country_group':
             case 'dest_region_id':
             case 'promo_coupon_code':
+            case 'promo_applied_rule_ids':
             case 'store_id':
             case 'website_id':
                 return 'multiselect';
@@ -117,6 +119,7 @@ class Meanbee_Shippingrules_Model_Rule_Condition extends Meanbee_Shippingrules_M
             case 'dest_country_group':
             case 'dest_region_id':
             case 'promo_coupon_code':
+            case 'promo_applied_rule_ids':
             case 'store_id':
             case 'website_id':
                 return 'multiselect';
@@ -140,6 +143,10 @@ class Meanbee_Shippingrules_Model_Rule_Condition extends Meanbee_Shippingrules_M
             switch ($this->getAttribute()) {
                 case 'promo_coupon_code':
                     $options = Mage::getModel('meanship/rule_condition_source_couponCode')
+                        ->toOptionArray();
+                    break;
+                case 'promo_applied_rule_ids':
+                    $options = Mage::getModel('meanship/rule_condition_source_priceRule')
                         ->toOptionArray();
                     break;
                 case 'customer_group_id':
