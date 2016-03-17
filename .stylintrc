@@ -1,0 +1,21 @@
+{
+    "brackets": "always",
+    "colors": "always",
+    "cssLiteral": "never",
+    "depthLimit": 4,
+    "extendPref": "@extend",
+    "globalDupe": true,
+    "indentPref": 4,
+    "leadingZero": "never",
+    "mixed": true,
+    "namingConvention": "lowercase-dash",
+    "namingConventionStrict": true,
+    "none": "always",
+    "paranSpace": "never",
+    "placeholder": false,
+    "quotePref": "single",
+    "semicolons": "always",
+    "sortOrder": "alphabetical",
+    "zeroUnits": "never",
+    "zIndexnormalize": 5
+}
