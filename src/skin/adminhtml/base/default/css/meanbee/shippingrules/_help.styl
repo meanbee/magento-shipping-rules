@@ -1,0 +1,103 @@
+.calculator-tree {
+    .helpWrapper {
+        display: inline;
+        position: relative;
+    }
+    .helpContainer {
+        align-items: center;
+        background: $yellow;
+        border: solid 1px $orange;
+        border-radius: .25em;
+        bottom: 2.08em;
+        display: flex;
+        justify-content: center;
+        left: -10em;
+        margin: auto;
+        position: absolute;
+        right: -10em;
+        text-align: center;
+        top: -6em;
+        width: 10em;
+        &.hidden {
+            border-color: $slate;
+            &::before {
+                border-color: $slate;
+            }
+        }
+        &::before {
+            background: inherit;
+            border: solid 1px $orange;
+            border-width: 0 1px 1px 0;
+            content: '';
+            display: block;
+            height: 1.2em;
+            left: 0;
+            margin: auto;
+            position: absolute;
+            right: 0;
+            top: 4.37em;
+            transform: rotate(45deg);
+            width: 1.2em;
+        }
+    }
+    .exampleWrapper {
+        display: inline-block;
+        margin: .3em 0 0 0;
+    }
+    .examplePostalCode {
+        display: inline-block;
+        padding: 0 .1em;
+        position: relative;
+        .part {
+            display: inline-block;
+            padding: 0 .1em;
+            position: relative;
+            margin: 0 .1em;
+            &::before, &::after {
+                color: $blue-slate;
+                content: attr(data-part);
+                display: block;
+                font-size: smaller;
+                left: 0;
+                position: absolute;
+                right: 0;
+                text-align: center;
+                top: 100%;
+            }
+            &::after {
+                border: solid 1px $blue-slate;
+                border-width: 0 1px 1px;
+                content: '';
+                height: 20%;
+                top: 80%;
+            }
+        }
+        &::before, &::after {
+            bottom: 80%;
+            color: $slate;
+            content: 'Entire Code';
+            display: block;
+            font-size: smaller;
+            left: 0;
+            position: absolute;
+            right: 0;
+            text-align: center;
+            white-space: no-wrap;
+        }
+        &::before {
+            bottom: 110%;
+            left: -2.5em;
+            right: -2.5em;
+        }
+        &::after {
+            border: solid 1px $slate;
+            border-width: 1px 1px 0 1px;
+            content: '';
+            height: 20%;
+        }
+    }
+    .helpWrapper:not(:focus):not(:hover) .helpContainer.hidden {
+        @extend .visually-hidden;
+        top: .5em;
+    }
+}

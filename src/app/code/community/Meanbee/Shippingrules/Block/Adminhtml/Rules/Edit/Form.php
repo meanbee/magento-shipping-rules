@@ -41,7 +41,8 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Edit_Form
         ));
 
         $price_fieldset = $form->addFieldset('meanbee_shippingrules_form_price', array(
-            'legend' => Mage::helper('meanbee_shippingrules')->__('Shipping Method Price')
+            'legend' => Mage::helper('meanbee_shippingrules')->__('Shipping Method Price'),
+            'class'  => 'fieldset-wide'
         ));
         $price_fieldset->addField('price_per_item', 'checkbox', array(
             'checked' => $rule->getPricePerItem() == '1',
@@ -58,7 +59,8 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Edit_Form
         ));
 
         $cost_fieldset = $form->addFieldset('meanbee_shippingrules_form_cost', array(
-            'legend' => Mage::helper('meanbee_shippingrules')->__('Shipping Method Cost')
+            'legend' => Mage::helper('meanbee_shippingrules')->__('Shipping Method Cost'),
+            'class'  => 'fieldset-wide'
         ));
         $cost_fieldset->addField('cost_per_item', 'checkbox', array(
             'checked' => $rule->getPricePerItem() == '1',
@@ -104,7 +106,8 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Edit_Form
         ));
 
         $cond_fieldset = $form->addFieldset('meanbee_shippingrules_form_cond', array(
-            'legend' => Mage::helper('meanbee_shippingrules')->__('Shipping Rule Conditions')
+            'legend' => Mage::helper('meanbee_shippingrules')->__('Shipping Rule Conditions'),
+            'class'  => 'fieldset-wide'
         ));
         $cond_fieldset->addField('conditions', 'text', array(
             'label'    => Mage::helper('meanbee_shippingrules')->__('Conditions'),

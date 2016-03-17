@@ -47,36 +47,36 @@
                 {(function () {
                     if (constant) {
                         return (<span>
-                            Base Price of
+                            Base value of
                             <input id={`${me.prefix}-t${me.id}-value`} type="number" value={me.value} onKeyUp={event => me.value = event.target.value} />
                         </span>);
                     } else {
                         return (<span>
                             +
-                            <select id={`${me.prefix}-t${me.id}-attribute`} value={me.attribute} onChange={event => me.attribute = event.target.attribute}>
-                                {global.Meanbee.ShippingRules.util.toOptions(global.Meanbee.ShippingRules.ajax.getTermFields())}
+                            <select id={`${me.prefix}-t${me.id}-attribute`} value={me.attribute} onChange={event => me.attribute = event.target.value}>
+                                {global.Meanbee.ShippingRules.util.toOptions(global.Meanbee.ShippingRules.ajax.getTermFields(), me.attribute)}
                             </select>
                             ×
                             <input id={`${me.prefix}-t${me.id}-multiplier`} type="number" value={me.multiplier} onKeyUp={event => me.multiplier = event.target.value} />
                             if
                             <select id={`${me.prefix}-t${me.id}-aggregator`} value={me.aggreator} onChange={event => me.aggregator = event.target.value}>
-                                {global.Meanbee.ShippingRules.util.toOptions(global.Meanbee.ShippingRules.ajax.getAggregators())}
+                                {global.Meanbee.ShippingRules.util.toOptions(global.Meanbee.ShippingRules.ajax.getAggregators(), me.aggregator)}
                             </select>
                             of these conditions are
-                            <select id={`${me.prefix}-t${me.id}-value`} value={me.value} onChange={event => me.value= event.target.value}>
-                                {global.Meanbee.ShippingRules.util.toOptions(global.Meanbee.ShippingRules.ajax.getBoolean())}
+                            <select id={`${me.prefix}-t${me.id}-value`} value={me.value} onChange={event => me.value = event.target.value}>
+                                {global.Meanbee.ShippingRules.util.toOptions([{label: 'false', value: '0'}, {label: 'true', value: '1'}], me.value)}
                             </select>:
-                            <button id={`${me.prefix}-t${me.id}-remove`} type="button" class="remove" onClick={() => {
+                            {global.Meanbee.ShippingRules.util.removeButton(me, () => {
                                 me.calculator.removeTerm(me.id);
                                 me.calculator.render();
-                            }}>-</button>
+                            })}
                             <ul>
                                 {me.conditions.map(c => c.render())}
-                                <li><button id={`${me.prefix}-t${me.id}-add`} type="button" class="add" onClick={() => {
+                                <li>{global.Meanbee.ShippingRules.util.addButton(me, () => {
                                     me.calculator.focusedElement = `${me.prefix}-t${me.id}-c${me.conditions.length}`;
                                     me.addCondition();
                                     me.calculator.render();
-                                }}>+</button></li>
+                                })}</li>
                             </ul>
                         </span>);
                     }
@@ -84,19 +84,20 @@
             </li>);
         };
         this.toJSON = function () {
-            return {
+            let obj = {
                 '@type'   : 'Term',
                 term      : constant ? 'Constant' : 'ConditionalMultiple',
                 attribute : this.attribute,
                 multiplier: this.multiplier,
+                value     : this.value
+            }
+            if (!constant) obj.aggregator = {
+                '@type'   : 'Aggregator',
+                aggregator: this.aggregator,
                 value     : this.value,
-                aggregator: {
-                    '@type'   : 'Aggregator',
-                    aggregator: this.aggregator,
-                    value     : this.value,
-                    children : this.conditions
-                }
-            };
+                children  : this.conditions
+            }
+            return obj;
         };
     };
 })(window);

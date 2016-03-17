@@ -12,6 +12,7 @@
         this.format = global.Meanbee.ShippingRules.ajax.getPostalCodeFormats()[0].value;
         this.aggregator = null;
         this.value = null;
+        this.showHelp = false;
         this.addCondition = function () {
             this.conditions.push(new global.Meanbee.ShippingRules.PostalCodeCondition(this.calculator, this, this, `${this.prefix}-c${this.id}`, this.conditions.length));
         };
@@ -48,22 +49,24 @@
                 <select id={`${me.prefix}-c${me.id}-format`} value={me.format} onChange={event => {
                     me.format = event.target.value;
                     me.calculator.render();
-                }}>{global.Meanbee.ShippingRules.util.toOptions(global.Meanbee.ShippingRules.ajax.getPostalCodeFormats())}</select>
+                }}>{global.Meanbee.ShippingRules.util.toOptions(global.Meanbee.ShippingRules.ajax.getPostalCodeFormats(), me.format)}</select>
                 where
                 <select id={`${me.prefix}-c${me.id}-aggregator`} value={me.aggregator} onChange={event => me.aggregator = event.target.value}>
-                    {global.Meanbee.ShippingRules.util.toOptions(global.Meanbee.ShippingRules.ajax.getAggregators())}
+                    {global.Meanbee.ShippingRules.util.toOptions(global.Meanbee.ShippingRules.ajax.getAggregators(), me.aggregator)}
                 </select>
                 of these conditions are
                 <select id={`${me.prefix}-c${me.id}-value`} value={me.value} onChange={event => me.value = event.target.value}>
-                    <option value="1">TRUE</option>
-                    <option value="0">FALSE</option>
+                    {global.Meanbee.ShippingRules.util.toOptions([{label: 'false', value: '0'}, {label: 'true', value: '1'}], me.value)}
                 </select>:
                 {(function () {
                     var formatData = global.Meanbee.ShippingRules.ajax.getPostalCodeFormatByCountryCode(me.format);
                     if (formatData.example) {
                         return (<div class="helpWrapper" tabIndex="0">
-                            <span class="help">?</span>
-                            <div class="helpContainer">
+                            <button type="button" class="help" onclick={event => {
+                                event.target.nextElementSibling.classList.toggle('hidden');
+                                me.showHelp = !me.showHelp;
+                            }}></button>
+                            <div class={`helpContainer ${me.showHelp ? '' : 'hidden'}`}>
                                 <div class="exampleWrapper">
                                     <div class="examplePostalCode">
                                         {formatData.example.map((p, i) => {
@@ -76,18 +79,18 @@
                             </div>
                         </div>);
                     }
-                })()}
-                <button id={`${me.prefix}-t${me.id}-remove`} type="button" class="remove" onClick={() => {
+                })()}&nbsp;
+                {global.Meanbee.ShippingRules.util.removeButton(me, () => {
                     me.group.removeCondition(me.id);
                     me.calculator.render();
-                }}>-</button>
+                })}
                 <ul>
                     {me.conditions.map(c => c.render())}
-                    <li><button id={`${me.prefix}-c${me.id}-cNew`} type="button" class="add" onClick={() => {
+                    <li>{global.Meanbee.ShippingRules.util.addButton(me, () => {
                         me.calculator.focusedElement = `${me.prefix}-c${me.id}-c${me.conditions.length}`;
                         me.addCondition();
                         me.calculator.render();
-                    }}>+</button></li>
+                    })}</li>
                 </ul>
             </li>);
         };

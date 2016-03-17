@@ -12,8 +12,14 @@
 	<adminhtml_shippingrules_edit>
 		<update handle="meanbee_shippingrules" />
 		<reference name="head">
-			<action method="setCanLoadExtJs"><flag>1</flag></action>
-			<action method="setCanLoadRulesJs"><flag>1</flag></action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<script>js/meanbee/shippingrules/script.js</script>
+			</action>
+			<action method="addItem">
+				<type>skin_css</type>
+				<stylesheet>css/meanbee/shippingrules/application.css</stylesheet>
+			</action>
 		</reference>
 		<reference name="content">
 			<block type="meanbee_shippingrules/adminhtml_rules_edit" name="rules_edit" />

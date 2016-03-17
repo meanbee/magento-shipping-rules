@@ -48,10 +48,10 @@
             }}>
                 If
                 <select id={`${me.prefix}-c${me.id}-aggregateAttribute`} value={me.aggregateAttribute} onChange={event => me.aggregateAttribute = event.target.value}>
-                    {global.Meanbee.ShippingRules.util.toOptions(global.Meanbee.ShippingRules.ajax.getAggregateAttributes())}
+                    {global.Meanbee.ShippingRules.util.toOptions(global.Meanbee.ShippingRules.ajax.getAggregateAttributes(), me.aggregateAttribute)}
                 </select>
                 <select id={`${me.prefix}-c${me.id}-comparator`} value={me.comparator} onChange={event => me.comparator = event.target.value}>
-                    {global.Meanbee.ShippingRules.util.toOptions(global.Meanbee.ShippingRules.ajax.getComparators(me.attribute))}
+                    {global.Meanbee.ShippingRules.util.toOptions(global.Meanbee.ShippingRules.ajax.getComparators(me.attribute), me.comparator)}
                 </select>
                 {(function () {
                     var attributeValueField = global.Meanbee.ShippingRules.util.constructInputField(me.attribute, me.comparator, `${me.prefix}-c${me.id}`);
@@ -61,23 +61,23 @@
                 })()}
                 for a subselection of items in cart where
                 <select id={`${me.prefix}-c${me.id}-aggregator`} value={me.aggregator} onChange={event => me.aggregator = event.target.value}>
-                    {global.Meanbee.ShippingRules.util.toOptions(global.Meanbee.ShippingRules.ajax.getAggregators())}
+                    {global.Meanbee.ShippingRules.util.toOptions(global.Meanbee.ShippingRules.ajax.getAggregators(), me.aggregator)}
                 </select>
                 of these conditions are
                 <select id={`${me.prefix}-c${me.id}-value`} value={me.value} onChange={event => me.value = event.target.value}>
-                    {global.Meanbee.ShippingRules.util.toOptions(global.Meanbee.ShippingRules.ajax.getBoolean())}
+                    {global.Meanbee.ShippingRules.util.toOptions([{label: 'false', value: '0'}, {label: 'true', value: '1'}], me.value)}
                 </select>:
-                <button id={`${me.prefix}-c${me.id}-remove`} type="button" class="remove" onClick={() => {
+                {global.Meanbee.ShippingRules.util.removeButton(me, () => {
                     me.group.removeCondition(me.id);
                     me.calculator.render();
-                }}>-</button>
+                })}
                 <ul>
                     {me.conditions.map(c => c.render())}
-                    <li><button id={`${me.prefix}-c${me.id}-add`} type="button" class="add" onClick={() => {
+                    <li>{global.Meanbee.ShippingRules.util.addButton(me, () => {
                         me.calculator.focusedElement = `${me.prefix}-c${me.id}-c${me.conditions.length}`;
                         me.addCondition();
                         me.calculator.render();
-                    }}>+</button></li>
+                    })}</li>
                 </ul>
             </li>);
         };

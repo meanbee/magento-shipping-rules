@@ -48,16 +48,16 @@
                     }
                     me.calculator.focusedElement = `${me.prefix}-c${me.id}`;
                     me.calculator.render();
-                }}>{global.Meanbee.ShippingRules.util.toOptions(global.Meanbee.ShippingRules.ajax.getConditionFields())}</select>
+                }}>{global.Meanbee.ShippingRules.util.toOptions(global.Meanbee.ShippingRules.ajax.getConditionFields(), me.attribute)}</select>
                 <select id={`${me.prefix}-c${me.id}-comparator`} value={me.comparator} onChange={event => {
                     me.comparator = event.target.value;
                     me.calculator.render();
-                }}>{global.Meanbee.ShippingRules.util.toOptions(global.Meanbee.ShippingRules.ajax.getComparators(me.attribute))}</select>
+                }}>{global.Meanbee.ShippingRules.util.toOptions(global.Meanbee.ShippingRules.ajax.getComparators(me.attribute), me.comparator)}</select>
                 {global.Meanbee.ShippingRules.util.constructInputField(me)}
-                <button id={`${me.prefix}-c${me.id}-remove`} type="button" class="remove" onClick={() => {
+                {global.Meanbee.ShippingRules.util.removeButton(me, () => {
                     me.group.removeCondition(me.id);
                     me.calculator.render();
-                }}>-</button>
+                })}
             </li>);
         };
         this.toJSON = function () {
