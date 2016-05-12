@@ -27,6 +27,8 @@ class Meanbee_Shippingrules_Model_Rule_Condition extends Meanbee_Shippingrules_M
 
             'time_time_of_day' => Mage::helper('meanship')->__('Time of Day'),
 
+            'dest_street_address_l1' => Mage::helper('meanship')->__('Shipping Street Address, Line 1'),
+            'dest_street_address_l2' => Mage::helper('meanship')->__('Shipping Street Address, Line 2'),
             'dest_country_id' => Mage::helper('meanship')->__('Shipping Country'),
             'dest_country_group' => Mage::helper('meanship')->__('Shipping Country Group'),
             'dest_region_id'  => Mage::helper('meanship')->__('Shipping State'),
@@ -97,6 +99,8 @@ class Meanbee_Shippingrules_Model_Rule_Condition extends Meanbee_Shippingrules_M
             case 'is_admin_order':
             case 'promo_free_shipping':
                 return 'select';
+            case 'dest_street_address_l1':
+            case 'dest_street_address_l2':
             case 'dest_postcode':
             case 'dest_postcode_prefix':
                 return 'string';
