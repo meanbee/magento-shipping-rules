@@ -1,19 +1,18 @@
 'use strict';
-(function (global) {
-    !('Meanbee' in global) && (global.Meanbee = {});
-    !('ShippingRules' in global.Meanbee) && (global.Meanbee.ShippingRules = {});
-
+var Meanbee = Meanbee || {};
+!('ShippingRules' in Meanbee) && (Meanbee.ShippingRules = {});
+(function (ShippingRules) {
     let canvas = document.createElement('canvas');
     let ctx = canvas.getContext('2d');
     ctx.font = 'bold 10.8px sans-serif';
 
-    global.Meanbee.ShippingRules.util = {
+    ShippingRules.util = {
         toOptions: function (options, selected) {
             selected = Array.isArray(selected) ? selected : [selected];
             let html = [];
             options.forEach(function (option) {
                 if ({}.toString.call(option.value) === '[object Array]') {
-                    html.push(<optgroup label={option.label}>{global.Meanbee.ShippingRules.util.toOptions(option.value, selected)}</optgroup>);
+                    html.push(<optgroup label={option.label}>{ShippingRules.util.toOptions(option.value, selected)}</optgroup>);
                 } else {
                     let optionElement = (() => (<option value={option.value}>{option.label}</option>))();
                     if (~selected.indexOf(option.value)) optionElement.selected = true;
@@ -25,8 +24,8 @@
             return html;
         },
         constructInputField: function (condition) {
-            let comparator = global.Meanbee.ShippingRules.ajax.getComparators(condition.attribute).filter(x => x.value === condition.comparator)[0];
-            let conditionField = global.Meanbee.ShippingRules.ajax.getConditionFieldByValue(condition.attribute);
+            let comparator = ShippingRules.ajax.getComparators(condition.attribute).filter(x => x.value === condition.comparator)[0];
+            let conditionField = ShippingRules.ajax.getConditionFieldByValue(condition.attribute);
             let prefix = `${condition.prefix}-c${condition.id}`;
             if (!comparator) {
                 return (<input id={`${prefix}-value`} />);
@@ -55,12 +54,12 @@
                 break;
             case 'x-multiselect':
                 input = (() => (<select id={`${prefix}-value`} multiple="multiple">
-                        {global.Meanbee.ShippingRules.util.toOptions(conditionField.options, condition.value)}
+                        {ShippingRules.util.toOptions(conditionField.options, condition.value)}
                     </select>))();
                 break;
             case 'select':
                 input = (() => (<select id={`${prefix}-value`}>
-                    {global.Meanbee.ShippingRules.util.toOptions(conditionField.options, condition.value)}
+                    {ShippingRules.util.toOptions(conditionField.options, condition.value)}
                 </select>))();
                 break;
             default:
@@ -79,7 +78,7 @@
             return (<button id={`${ctx.prefix}-t${ctx.id}-add`} type="button" class="add" onClick={handler}></button>);
         },
         removeButton: function (ctx, handler) {
-            return (<button id={`${ctx.prefix}-t${ctx.id}-remove`} type="button" class="remove" onClick={handler}></button>);
+            return (<button id={`${ctx.id}-remove`} aria-label="Remove" type="button" class="remove" onClick={handler}></button>);
         },
         fieldTextSize: function (text) {
             return (Math.floor(ctx.measureText(text).width) + 25) + 'px';
@@ -87,12 +86,12 @@
         resizeFields: function () {
             [].forEach.call(document.querySelectorAll('.calculator-tree select:not([multiple])'), function (select) {
                 let text = select.selectedOptions[0] ? select.selectedOptions[0].innerText : '';
-                select.style.width = Meanbee.ShippingRules.util.fieldTextSize(text);
+                select.style.width = ShippingRules.util.fieldTextSize(text);
             });
             [].forEach.call(document.querySelectorAll('.calculator-tree input'), function (input) {
                 let text = input.value || '---';
-                input.style.width = Meanbee.ShippingRules.util.fieldTextSize(text);
+                input.style.width = ShippingRules.util.fieldTextSize(text);
             });
         }
     };
-})(window);
+})(Meanbee.ShippingRules);

@@ -38,7 +38,7 @@ div.calculator-tree select[id] {
   background: linear-gradient(to top, currentColor 0, currentColor 1px, transparent 1px);
   border: none;
   border-radius: 0;
-  padding-bottom: 0.15em;
+  padding-bottom: 0.2em;
   padding-left: 0.5em;
   vertical-align: bottom;
   width: auto;

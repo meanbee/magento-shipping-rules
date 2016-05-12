@@ -1,75 +1,58 @@
 'use strict';
-(function (global) {
-    !('Meanbee' in global) && (global.Meanbee = {});
-    !('ShippingRules' in global.Meanbee) && (global.Meanbee.ShippingRules = {});
+(function (ShippingRules) {
+    ShippingRules.Condition = class extends ShippingRules.Base
+    {
+        constructor(index, parent, variable) {
+            super(index, parent);
+            this.variable = variable;
+            let validComparators = ShippingRules.Register.comparator.getByType(this.type);
+            let comparator = validComparators[Object.keys(validComparators)[0]];
+            this.comparator = comparator ? new comparator(this.type) : null;
+            this.value = '';
+            this.valueField = comparator ? new (ShippingRules.Register.field.get(this.comparator.getField()))(this, this.value) : null;
+        }
 
-    global.Meanbee.ShippingRules.Condition = function (calculator, group, prefix = '', id = 0) {
-        this.calculator = calculator;
-        this.group = group;
-        this.id = id;
-        this.prefix = prefix;
-        this.attribute = global.Meanbee.ShippingRules.ajax.getConditionFields()[0].value[0].value;
-        this.comparator = global.Meanbee.ShippingRules.ajax.getComparators(this.attribute)[0].value;
-        this.conditionType = global.Meanbee.ShippingRules.ajax.getConditionFields()[0].value[0].type;
-        this.value = null;
-        this.render = function () {
-            var me = this;
-            return (<li id={`${me.prefix}-c${me.id}`} tabIndex="0" onKeyUp={event => {
-                switch (event.which || event.keyCode) {
-                case 37: // Left Arrow
-                    event.stopPropagation();
-                    event.target.parentElement.parentElement.focus();
-                    break;
-                case 38: // Up Arrow
-                    event.stopPropagation();
-                    (event.target.previousElementSibling || event.target.parentElement.lastElementChild.previousElementSibling).focus();
-                    break;
-                case 40: // Down Arrow
-                    event.stopPropagation();
-                    (event.target.nextElementSibling.id ? event.target.nextElementSibling : event.target.parentElement.firstElementChild).focus();
-                    break;
-                case 189: // -
-                    event.stopPropagation();
-                    me.group.removeCondition(me.id);
-                    me.calculator.render();
-                    break;
-                default:
-                    // NO-OP
-                }
+        static getCategory(context) { // eslint-disable-line no-unused-vars
+            return null;
+        }
+
+        static getVariables(context) { // eslint-disable-line no-unused-vars
+            return {};
+        }
+
+        get label() {
+            let variable = this.constructor.getVariables(this.parent && this.parent.context)[this.variable];
+            return variable ? variable.label : '';
+        }
+
+        get type() {
+            let variable = this.constructor.getVariables(this.parent && this.parent.context)[this.variable];
+            return variable ? variable.type : [];
+        }
+
+        renderComparator() {
+            let me = this;
+            return (<select id={`${me.id}-comparator`} onChange={event => {
+                me.comparator = new (ShippingRules.Register.comparator.get(event.target.value));
+                me.valueField = new (ShippingRules.Register.field.get(me.comparator.getField()))(me, me.value);
+                me.root.render();
             }}>
-                <select id={`${me.prefix}-c${me.id}-attribute`} value={me.attribute} onChange={event => {
-                    me.attribute = event.target.value;
-                    me.conditionType = event.target.dataset.type;
-                    if (/^compound_.*$/.test(me.attribute)) {
-                        var condition = me.attribute.substring(8).replace(/_(\w)/g, function (matches) {
-                            return matches[1].toUpperCase();
-                        });
-                        me.group.replaceCondition(me.id, new global.Meanbee.ShippingRules[condition](me.calculator, me.group, me.prefix, me.id));
-                    }
-                    me.calculator.focusedElement = `${me.prefix}-c${me.id}`;
-                    me.calculator.render();
-                }}>{global.Meanbee.ShippingRules.util.toOptions(global.Meanbee.ShippingRules.ajax.getConditionFields(), me.attribute)}</select>
-                <select id={`${me.prefix}-c${me.id}-comparator`} value={me.comparator} onChange={event => {
-                    me.comparator = event.target.value;
-                    me.calculator.render();
-                }}>{global.Meanbee.ShippingRules.util.toOptions(global.Meanbee.ShippingRules.ajax.getComparators(me.attribute), me.comparator)}</select>
-                {global.Meanbee.ShippingRules.util.constructInputField(me)}
-                {global.Meanbee.ShippingRules.util.removeButton(me, () => {
-                    me.group.removeCondition(me.id);
-                    me.calculator.render();
-                })}
-            </li>);
-        };
-        this.toJSON = function () {
-            return {
-                '@type'   : 'Condition',
-                id        : this.id,
-                attribute : this.attribute,
-                conditionType: this.conditionType,
-                comparator: this.comparator,
-                value     : this.value
-            };
-        };
-    };
+                {ShippingRules.Register.comparator.getAsOptions(me.type, me.comparator.name)}
+            </select>);
+        }
 
-})(window);
+        valueChangeHandler(value) {
+            this.value = value;
+        }
+
+        render() {
+            let me = this;
+            return (<li id={me.id} tabIndex={0}>
+                {me.label}
+                {me.renderComparator()}
+                {me.valueField.render()}
+                {me.renderRemoveButton()}
+            </li>);
+        }
+    }
+})(Meanbee.ShippingRules);
