@@ -94,6 +94,7 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
         $request = $this->addNumericPostcodesToRequest($request); /** @deprecated Remove next major version. */
         $request = $this->addPromoDataToRequest($request);
         $request = $this->addTimeDataToRequest($request);
+        $request = $this->addStreetAddressToRequest($request);
 
         $stop_flag = array();
 
@@ -302,6 +303,25 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
     public function addTimeDataToRequest(Mage_Shipping_Model_Rate_Request $request) {
         $request->setData('time_timestamp', time());
         $request->setData('time_time_of_day', Mage::helper('meanship/time')->getLocalTimeOfDay($value));
+        return $request;
+    }
+
+    /**
+     * Add street address information to the request.
+     *
+     * @param Mage_Shipping_Model_Rate_Request $request
+     *
+     * @return Mage_Shipping_Model_Rate_Request
+     */
+    public function addStreetAddressToRequest(Mage_Shipping_Model_Rate_Request $request) {
+        $requestItems = $request->getAllItems();
+        if (count($requestItems) > 0) {
+            $quote = $requestItems[0]->getQuote();
+            $street = $quote->getShippingAddress()->getData('street');
+            $street = explode("\n", $street, 2);
+            $request->setData('dest_street_address_l1', isset($street[0]) ? $street[0] : null);
+            $request->setData('dest_street_address_l2', isset($street[1]) ? $street[1] : null);
+        }
         return $request;
     }
 

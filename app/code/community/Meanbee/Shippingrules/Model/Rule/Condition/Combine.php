@@ -139,6 +139,16 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Combine extends Mage_Rule_Model
         $conditions = array();
 
         $conditions[] =  array(
+            'label' => Mage::helper('meanship')->__('Shipping Street Address, Line 1'),
+            'value' => 'meanship/rule_condition|dest_street_address_l1'
+        );
+
+        $conditions[] =  array(
+            'label' => Mage::helper('meanship')->__('Shipping Street Address, Line 2'),
+            'value' => 'meanship/rule_condition|dest_street_address_l2'
+        );
+
+        $conditions[] =  array(
             'label' => Mage::helper('meanship')->__('Shipping Country'),
             'value' => 'meanship/rule_condition|dest_country_id'
         );
