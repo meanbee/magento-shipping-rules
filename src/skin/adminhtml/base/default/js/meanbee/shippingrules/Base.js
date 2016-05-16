@@ -118,6 +118,8 @@
                         caught = true;
                         if (event.target.parentElement.parentElement.tagName === 'LI') {
                             event.target.parentElement.parentElement.focus();
+                        } else if (event.target.parentElement.parentElement.parentElement.tagName === 'LI') {
+                            event.target.parentElement.parentElement.parentElement.focus();
                         }
                     }
                     break;
@@ -138,6 +140,8 @@
                         event.preventDefault();
                         if (~(i = Array.from(event.target.children).map(child => child.tagName).indexOf('UL'))) {
                             event.target.children[i].children[0].focus();
+                        } else if (~(i = Array.from(event.target.lastChild.children).map(child => child.tagName).indexOf('UL'))) {
+                            event.target.lastChild.children[i].children[0].focus();
                         }
                     }
                     break;
