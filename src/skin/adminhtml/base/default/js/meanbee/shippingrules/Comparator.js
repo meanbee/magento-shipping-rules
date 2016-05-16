@@ -26,5 +26,11 @@
         static name(type) { // eslint-disable-line no-unused-vars
             return {};
         }
+
+        toJSON() {
+            return {
+                register: 'Comparator'
+            }
+        }
     }
 })(Meanbee.ShippingRules);

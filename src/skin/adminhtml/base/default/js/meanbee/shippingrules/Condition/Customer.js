@@ -17,6 +17,12 @@
             }
             return variables;
         }
+
+        toJSON() {
+            let obj = super.toJSON();
+            obj.key = 'Customer';
+            return obj;
+        }
     }
 
     ShippingRules.Register.condition.add('Customer', ShippingRules.Condition.Customer);

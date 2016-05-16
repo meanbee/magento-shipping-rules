@@ -31,6 +31,13 @@
             </ul>);
         }
 
+        init(obj) {
+            if (obj.register !== 'Aggregator' || ShippingRules.Register.aggregator.get(obj.key) !== this.constructor) {
+                return;
+            }
+            this.combinator = obj.type;
+        }
+
         toJSON() {
             return {
                 children: this.children,

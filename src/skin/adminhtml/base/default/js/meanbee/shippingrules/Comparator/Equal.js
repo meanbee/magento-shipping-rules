@@ -28,7 +28,13 @@
                 return 'Text';
             }
         }
+
+        toJSON() {
+            let obj = super.toJSON();
+            obj.key = 'Equal';
+            return obj;
+        }
     }
 
-    ShippingRules.Register.comparator.add('equal', ShippingRules.Comparator.Equal);
+    ShippingRules.Register.comparator.add('Equal', ShippingRules.Comparator.Equal);
 })(Meanbee.ShippingRules);

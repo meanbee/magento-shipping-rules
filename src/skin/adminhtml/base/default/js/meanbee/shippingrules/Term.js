@@ -17,6 +17,13 @@
         get value() {
             return this._value;
         }
+        
+        init(obj) {
+            if (obj.register !== 'Term' || ShippingRules.Register.term.get(obj.key) !== this.constructor) {
+                return;
+            }
+            this.combinator = obj.type;
+        }
 
         toJSON() {
             return {

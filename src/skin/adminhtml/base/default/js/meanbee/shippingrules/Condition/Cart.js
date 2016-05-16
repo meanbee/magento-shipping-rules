@@ -21,6 +21,12 @@
             }
             return variables;
         }
+
+        toJSON() {
+            let obj = super.toJSON();
+            obj.key = 'Cart';
+            return obj;
+        }
     }
 
     ShippingRules.Register.condition.add('Cart', ShippingRules.Condition.Cart);

@@ -54,5 +54,21 @@
                 {me.renderRemoveButton()}
             </li>);
         }
+
+        init(obj) {
+            this.variable = obj.variable;
+            this.value = obj.value;
+            this.comparator = new (ShippingRules.Register.comparator.get(obj.comparator.key))(this.type);
+            this.valueField = new (ShippingRules.Register.field.get(this.comparator.getField()))(this, this.value);
+        }
+
+        toJSON() {
+            return {
+                register: 'Condition',
+                variable: this.variable,
+                comparator: this.comparator,
+                value: this.value
+            }
+        }
     }
 })(Meanbee.ShippingRules);

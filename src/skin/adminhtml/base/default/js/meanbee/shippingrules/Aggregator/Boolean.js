@@ -26,7 +26,7 @@
             if (child instanceof ShippingRules.Condition || child instanceof this.constructor) {
                 this.children.splice(index, 0, child);
                 if (reindex) this.reindexChildren();
-                return this.children[index].id;
+                return this.children[index];
             } else {
                 console.error(`ShippingRules: Boolean Aggregators only accept Conditions and Boolean Aggregators: ${childClass} passed.`);
             }
@@ -63,9 +63,9 @@
                     let variable = selected.value;
                     let id;
                     if (variable === 'this') {
-                        id = me.addChild(me.constructor);
+                        id = me.addChild(me.constructor).id;
                     } else {
-                        id = me.addChild(ShippingRules.Register.condition.get(registerKey), void 0, variable);
+                        id = me.addChild(ShippingRules.Register.condition.get(registerKey), void 0, variable).id;
                     }
                     me.root.rerender();
                     me.root.focus(id);
@@ -85,8 +85,21 @@
             </li>);
         }
 
+        init(obj) {
+            super.init(obj);
+            this.value = obj.value;
+            obj.children.forEach(child => {
+                if (child.register === 'Condition') {
+                    this.addChild(ShippingRules.Register.condition.get(child.key)).init(child);
+                } else if (child.register === 'Aggregator') {
+                    this.addChild(ShippingRules.Register.aggregator.get(child.key)).init(child);
+                }
+            });
+        }
+
         toJSON() {
             let obj = super.toJSON();
+            obj.key = 'Boolean';
             obj.value = this.value;
             return obj;
         }

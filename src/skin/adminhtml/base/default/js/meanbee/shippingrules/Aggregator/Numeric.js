@@ -14,7 +14,7 @@
             if (child instanceof ShippingRules.Term || child instanceof this.constructor) {
                 this.children.splice(index, 0, child);
                 if (reindex) this.reindexChildren();
-                return this.children[index].id;
+                return this.children[index];
             } else {
                 console.error(`ShippingRules: Numeric Aggregators only accept Terms and Numeric Aggregators: ${childClass} passed.`);
             }
@@ -31,7 +31,7 @@
             return (<li id={`${me.id}.${me.children.length}`} onKeyDown={me.keyHandler.bind(me)} tabIndex={0}>
                 <select id={`${me.id}-childselector`} aria-label="Type of value" onChange={(event) => {
                     let child = (event.target.value === 'this') ? me.constructor : ShippingRules.Register.term.get(event.target.value);
-                    let id = me.addChild(child);
+                    let id = me.addChild(child).id;
                     me.root.rerender();
                     me.root.focus(id);
                 }}>
@@ -48,6 +48,23 @@
                 Sum of these values: {me.renderRemoveButton()}
                 {me.renderChildren()}
             </li>);
+        }
+
+        init(obj) {
+            super.init(obj);
+            obj.children.forEach(child => {
+                if (child.register === 'Term') {
+                    this.addChild(ShippingRules.Register.term.get(child.key)).init(child);
+                } else if (child.register === 'Aggregator') {
+                    this.addChild(ShippingRules.Register.aggregator.get(child.key)).init(child);
+                }
+            });
+        }
+
+        toJSON() {
+            let obj = super.toJSON();
+            obj.key = 'Numeric';
+            return obj;
         }
     }
 

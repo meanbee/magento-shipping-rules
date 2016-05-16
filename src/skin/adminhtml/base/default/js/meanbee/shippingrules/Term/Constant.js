@@ -18,7 +18,7 @@
 
         toJSON() {
             let obj = super.toJSON();
-            obj.type = 'Conditional';
+            obj.key = 'Constant';
             return obj;
         }
 

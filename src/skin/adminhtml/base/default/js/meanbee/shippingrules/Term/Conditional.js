@@ -23,8 +23,14 @@
             </li>);
         }
 
+        init(obj) {
+            super.init(obj);
+            this.aggregator.init(obj.aggregator);
+        }
+
         toJSON() {
             let obj = super.toJSON();
+            obj.key = 'Conditional';
             obj.aggregator = this.aggregator;
             return obj;
         }

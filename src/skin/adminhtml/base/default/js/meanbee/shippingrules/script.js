@@ -523,6 +523,11 @@ function _classCallCheck(instance, Constructor) {
         }
         _createClass(_class, [
             {
+                key: 'init',
+                value: function init() {
+                }
+            },
+            {
                 key: 'getObjectById',
                 value: function getObjectById(id) {
                     if (this.id === id) {
@@ -548,6 +553,7 @@ function _classCallCheck(instance, Constructor) {
                     this.container.appendChild(this.render());
                     ShippingRules.util.resizeFields();
                     this.focus(focussedElementId);
+                    this.root.field.value = JSON.stringify(this.root);
                 }
             },
             {
@@ -602,6 +608,8 @@ function _classCallCheck(instance, Constructor) {
                                 caught = true;
                                 if (event.target.parentElement.parentElement.tagName === 'LI') {
                                     event.target.parentElement.parentElement.focus();
+                                } else if (event.target.parentElement.parentElement.parentElement.tagName === 'LI') {
+                                    event.target.parentElement.parentElement.parentElement.focus();
                                 }
                             }
                             break;
@@ -618,12 +626,17 @@ function _classCallCheck(instance, Constructor) {
                             break;
                         case 39:
                             caught = true;
+                            console.log(event);
                             if (event.target.tagName === 'LI') {
                                 event.preventDefault();
                                 if (~(i = Array.from(event.target.children).map(function (child) {
                                         return child.tagName;
                                     }).indexOf('UL'))) {
                                     event.target.children[i].children[0].focus();
+                                } else if (~(i = Array.from(event.target.lastChild.children).map(function (child) {
+                                        return child.tagName;
+                                    }).indexOf('UL'))) {
+                                    event.target.lastChild.children[i].children[0].focus();
                                 }
                             }
                             break;
@@ -715,6 +728,17 @@ function _classCallCheck(instance, Constructor) {
                 },
                 get: function get() {
                     return this._context || this.parent && this.parent.context;
+                }
+            },
+            {
+                key: 'field',
+                set: function set(input) {
+                    this._field = input;
+                    this.init(JSON.parse(input.value));
+                    return this;
+                },
+                get: function get() {
+                    return this._field;
                 }
             }
         ]);
@@ -820,6 +844,15 @@ function _inherits(subClass, superClass) {
                         $$b.appendChildren(me.renderChildSelector());
                         return $$b;
                     }();
+                }
+            },
+            {
+                key: 'init',
+                value: function init(obj) {
+                    if (obj.register !== 'Aggregator' || ShippingRules.Register.aggregator.get(obj.key) !== this.constructor) {
+                        return;
+                    }
+                    this.combinator = obj.type;
                 }
             },
             {
@@ -934,7 +967,7 @@ function _inherits(subClass, superClass) {
                         this.children.splice(index, 0, child);
                         if (reindex)
                             this.reindexChildren();
-                        return this.children[index].id;
+                        return this.children[index];
                     } else {
                         console.error('ShippingRules: Boolean Aggregators only accept Conditions and Boolean Aggregators: ' + childClass + ' passed.');
                     }
@@ -1020,9 +1053,9 @@ function _inherits(subClass, superClass) {
                             var variable = selected.value;
                             var id = undefined;
                             if (variable === 'this') {
-                                id = me.addChild(me.constructor);
+                                id = me.addChild(me.constructor).id;
                             } else {
-                                id = me.addChild(ShippingRules.Register.condition.get(registerKey), void 0, variable);
+                                id = me.addChild(ShippingRules.Register.condition.get(registerKey), void 0, variable).id;
                             }
                             me.root.rerender();
                             me.root.focus(id);
@@ -1068,9 +1101,25 @@ function _inherits(subClass, superClass) {
                 }
             },
             {
+                key: 'init',
+                value: function init(obj) {
+                    var _this2 = this;
+                    _get(Object.getPrototypeOf(_class.prototype), 'init', this).call(this, obj);
+                    this.value = obj.value;
+                    obj.children.forEach(function (child) {
+                        if (child.register === 'Condition') {
+                            _this2.addChild(ShippingRules.Register.condition.get(child.key)).init(child);
+                        } else if (child.register === 'Aggregator') {
+                            _this2.addChild(ShippingRules.Register.aggregator.get(child.key)).init(child);
+                        }
+                    });
+                }
+            },
+            {
                 key: 'toJSON',
                 value: function toJSON() {
                     var obj = _get(Object.getPrototypeOf(_class.prototype), 'toJSON', this).call(this);
+                    obj.key = 'Boolean';
                     obj.value = this.value;
                     return obj;
                 }
@@ -1119,6 +1168,27 @@ var _createClass = function () {
         return Constructor;
     };
 }();
+var _get = function get(object, property, receiver) {
+    if (object === null)
+        object = Function.prototype;
+    var desc = Object.getOwnPropertyDescriptor(object, property);
+    if (desc === undefined) {
+        var parent = Object.getPrototypeOf(object);
+        if (parent === null) {
+            return undefined;
+        } else {
+            return get(parent, property, receiver);
+        }
+    } else if ('value' in desc) {
+        return desc.value;
+    } else {
+        var getter = desc.get;
+        if (getter === undefined) {
+            return undefined;
+        }
+        return getter.call(receiver);
+    }
+};
 function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
         throw new TypeError('Cannot call a class as a function');
@@ -1175,7 +1245,7 @@ function _inherits(subClass, superClass) {
                         this.children.splice(index, 0, child);
                         if (reindex)
                             this.reindexChildren();
-                        return this.children[index].id;
+                        return this.children[index];
                     } else {
                         console.error('ShippingRules: Numeric Aggregators only accept Terms and Numeric Aggregators: ' + childClass + ' passed.');
                     }
@@ -1209,7 +1279,7 @@ function _inherits(subClass, superClass) {
                         $$c.setAttribute('aria-label', 'Type of value');
                         $$c.addEventListener('change', function (event) {
                             var child = event.target.value === 'this' ? me.constructor : ShippingRules.Register.term.get(event.target.value);
-                            var id = me.addChild(child);
+                            var id = me.addChild(child).id;
                             me.root.rerender();
                             me.root.focus(id);
                         });
@@ -1245,6 +1315,28 @@ function _inherits(subClass, superClass) {
                         $$i.appendChildren(me.renderChildren());
                         return $$i;
                     }();
+                }
+            },
+            {
+                key: 'init',
+                value: function init(obj) {
+                    var _this2 = this;
+                    _get(Object.getPrototypeOf(_class.prototype), 'init', this).call(this, obj);
+                    obj.children.forEach(function (child) {
+                        if (child.register === 'Term') {
+                            _this2.addChild(ShippingRules.Register.term.get(child.key)).init(child);
+                        } else if (child.register === 'Aggregator') {
+                            _this2.addChild(ShippingRules.Register.aggregator.get(child.key)).init(child);
+                        }
+                    });
+                }
+            },
+            {
+                key: 'toJSON',
+                value: function toJSON() {
+                    var obj = _get(Object.getPrototypeOf(_class.prototype), 'toJSON', this).call(this);
+                    obj.key = 'Numeric';
+                    return obj;
                 }
             }
         ]);
@@ -1308,6 +1400,15 @@ function _inherits(subClass, superClass) {
             return _this;
         }
         _createClass(_class, [
+            {
+                key: 'init',
+                value: function init(obj) {
+                    if (obj.register !== 'Term' || ShippingRules.Register.term.get(obj.key) !== this.constructor) {
+                        return;
+                    }
+                    this.combinator = obj.type;
+                }
+            },
             {
                 key: 'toJSON',
                 value: function toJSON() {
@@ -1456,9 +1557,17 @@ function _inherits(subClass, superClass) {
                 }
             },
             {
+                key: 'init',
+                value: function init(obj) {
+                    _get(Object.getPrototypeOf(_class.prototype), 'init', this).call(this, obj);
+                    this.aggregator.init(obj.aggregator);
+                }
+            },
+            {
                 key: 'toJSON',
                 value: function toJSON() {
                     var obj = _get(Object.getPrototypeOf(_class.prototype), 'toJSON', this).call(this);
+                    obj.key = 'Conditional';
                     obj.aggregator = this.aggregator;
                     return obj;
                 }
@@ -1585,7 +1694,7 @@ function _inherits(subClass, superClass) {
                 key: 'toJSON',
                 value: function toJSON() {
                     var obj = _get(Object.getPrototypeOf(_class.prototype), 'toJSON', this).call(this);
-                    obj.type = 'Conditional';
+                    obj.key = 'Constant';
                     return obj;
                 }
             }
@@ -1706,6 +1815,26 @@ function _inherits(subClass, superClass) {
                 }
             },
             {
+                key: 'init',
+                value: function init(obj) {
+                    this.variable = obj.variable;
+                    this.value = obj.value;
+                    this.comparator = new (ShippingRules.Register.comparator.get(obj.comparator.key))(this.type);
+                    this.valueField = new (ShippingRules.Register.field.get(this.comparator.getField()))(this, this.value);
+                }
+            },
+            {
+                key: 'toJSON',
+                value: function toJSON() {
+                    return {
+                        register: 'Condition',
+                        variable: this.variable,
+                        comparator: this.comparator,
+                        value: this.value
+                    };
+                }
+            },
+            {
                 key: 'label',
                 get: function get() {
                     var variable = this.constructor.getVariables(this.parent && this.parent.context)[this.variable];
@@ -1756,6 +1885,27 @@ var _createClass = function () {
         return Constructor;
     };
 }();
+var _get = function get(object, property, receiver) {
+    if (object === null)
+        object = Function.prototype;
+    var desc = Object.getOwnPropertyDescriptor(object, property);
+    if (desc === undefined) {
+        var parent = Object.getPrototypeOf(object);
+        if (parent === null) {
+            return undefined;
+        } else {
+            return get(parent, property, receiver);
+        }
+    } else if ('value' in desc) {
+        return desc.value;
+    } else {
+        var getter = desc.get;
+        if (getter === undefined) {
+            return undefined;
+        }
+        return getter.call(receiver);
+    }
+};
 function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
         throw new TypeError('Cannot call a class as a function');
@@ -1789,7 +1939,14 @@ function _inherits(subClass, superClass) {
             _classCallCheck(this, _class);
             return _possibleConstructorReturn(this, Object.getPrototypeOf(_class).call(this, index, parent, variable));
         }
-        _createClass(_class, null, [
+        _createClass(_class, [{
+                key: 'toJSON',
+                value: function toJSON() {
+                    var obj = _get(Object.getPrototypeOf(_class.prototype), 'toJSON', this).call(this);
+                    obj.key = 'Cart';
+                    return obj;
+                }
+            }], [
             {
                 key: 'getCategory',
                 value: function getCategory(context) {
@@ -1850,6 +2007,27 @@ var _createClass = function () {
         return Constructor;
     };
 }();
+var _get = function get(object, property, receiver) {
+    if (object === null)
+        object = Function.prototype;
+    var desc = Object.getOwnPropertyDescriptor(object, property);
+    if (desc === undefined) {
+        var parent = Object.getPrototypeOf(object);
+        if (parent === null) {
+            return undefined;
+        } else {
+            return get(parent, property, receiver);
+        }
+    } else if ('value' in desc) {
+        return desc.value;
+    } else {
+        var getter = desc.get;
+        if (getter === undefined) {
+            return undefined;
+        }
+        return getter.call(receiver);
+    }
+};
 function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
         throw new TypeError('Cannot call a class as a function');
@@ -1883,7 +2061,14 @@ function _inherits(subClass, superClass) {
             _classCallCheck(this, _class);
             return _possibleConstructorReturn(this, Object.getPrototypeOf(_class).call(this, index, parent, variable));
         }
-        _createClass(_class, null, [
+        _createClass(_class, [{
+                key: 'toJSON',
+                value: function toJSON() {
+                    var obj = _get(Object.getPrototypeOf(_class.prototype), 'toJSON', this).call(this);
+                    obj.key = 'Customer';
+                    return obj;
+                }
+            }], [
             {
                 key: 'getCategory',
                 value: function getCategory(context) {
@@ -1939,12 +2124,20 @@ function _classCallCheck(instance, Constructor) {
             _classCallCheck(this, _class);
             this.type = type;
         }
-        _createClass(_class, [{
+        _createClass(_class, [
+            {
+                key: 'toJSON',
+                value: function toJSON() {
+                    return { register: 'Comparator' };
+                }
+            },
+            {
                 key: 'name',
                 get: function get() {
                     return this.constructor.name(this.type);
                 }
-            }], [
+            }
+        ], [
             {
                 key: 'supportedTypes',
                 value: function supportedTypes() {
@@ -2011,6 +2204,27 @@ var _createClass = function () {
         return Constructor;
     };
 }();
+var _get = function get(object, property, receiver) {
+    if (object === null)
+        object = Function.prototype;
+    var desc = Object.getOwnPropertyDescriptor(object, property);
+    if (desc === undefined) {
+        var parent = Object.getPrototypeOf(object);
+        if (parent === null) {
+            return undefined;
+        } else {
+            return get(parent, property, receiver);
+        }
+    } else if ('value' in desc) {
+        return desc.value;
+    } else {
+        var getter = desc.get;
+        if (getter === undefined) {
+            return undefined;
+        }
+        return getter.call(receiver);
+    }
+};
 function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
         throw new TypeError('Cannot call a class as a function');
@@ -2044,7 +2258,8 @@ function _inherits(subClass, superClass) {
             _classCallCheck(this, _class);
             return _possibleConstructorReturn(this, Object.getPrototypeOf(_class).call(this, type));
         }
-        _createClass(_class, [{
+        _createClass(_class, [
+            {
                 key: 'getField',
                 value: function getField() {
                     var _this2 = this;
@@ -2056,7 +2271,16 @@ function _inherits(subClass, superClass) {
                         return 'Text';
                     }
                 }
-            }], [
+            },
+            {
+                key: 'toJSON',
+                value: function toJSON() {
+                    var obj = _get(Object.getPrototypeOf(_class.prototype), 'toJSON', this).call(this);
+                    obj.key = 'Equal';
+                    return obj;
+                }
+            }
+        ], [
             {
                 key: 'supportedTypes',
                 value: function supportedTypes() {
@@ -2090,7 +2314,7 @@ function _inherits(subClass, superClass) {
         ]);
         return _class;
     }(ShippingRules.Comparator);
-    ShippingRules.Register.comparator.add('equal', ShippingRules.Comparator.Equal);
+    ShippingRules.Register.comparator.add('Equal', ShippingRules.Comparator.Equal);
 }(Meanbee.ShippingRules));
 'use strict';
 var _createClass = function () {
@@ -2216,6 +2440,7 @@ function _inherits(subClass, superClass) {
         priceContainer.classList.add('calculator-tree');
         priceField.parentElement.appendChild(priceContainer);
         window.priceCalc = new (Meanbee.ShippingRules.Register.aggregator.get('Numeric'))('priceCalculator', null, priceContainer);
+        window.priceCalc.field = priceField;
         priceContainer.appendChild(window.priceCalc.render());
         var costField = document.getElementById('cost');
         costField.hidden = true;

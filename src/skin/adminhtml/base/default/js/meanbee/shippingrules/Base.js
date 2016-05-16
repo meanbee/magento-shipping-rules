@@ -41,6 +41,18 @@
             return this._context || this.parent && this.parent.context;
         }
 
+        set field(input) {
+            this._field = input;
+            this.init(JSON.parse(input.value));
+            return this;
+        }
+
+        get field() {
+            return this._field;
+        }
+
+        init() {}
+
         getObjectById(id) {
             if (this.id === id) {
                 return this;
@@ -63,6 +75,7 @@
             this.container.appendChild(this.render());
             ShippingRules.util.resizeFields();
             this.focus(focussedElementId);
+            this.root.field.value = JSON.stringify(this.root);
         }
 
         focus(id) {

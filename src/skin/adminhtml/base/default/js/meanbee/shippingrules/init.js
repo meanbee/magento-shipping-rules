@@ -7,6 +7,7 @@
         priceContainer.classList.add('calculator-tree');
         priceField.parentElement.appendChild(priceContainer);
         window.priceCalc = new (Meanbee.ShippingRules.Register.aggregator.get('Numeric'))('priceCalculator', null, priceContainer);
+        window.priceCalc.field = priceField;
         priceContainer.appendChild(window.priceCalc.render());
 
         let costField = document.getElementById('cost');
@@ -15,6 +16,7 @@
         costContainer.classList.add('calculator-tree');
         costField.parentElement.appendChild(costContainer);
         window.costCalc = new (Meanbee.ShippingRules.Register.aggregator.get('Numeric'))('costCalculator', null, costContainer);
+        window.costCalc.field = costField;
         costContainer.appendChild(window.costCalc.render());
 
         let condField = document.getElementById('conditions');
@@ -23,6 +25,7 @@
         condContainer.classList.add('calculator-tree');
         condField.parentElement.appendChild(condContainer);
         window.condCalc = new (Meanbee.ShippingRules.Register.aggregator.get('Boolean'))('conditionCalculator', null, condContainer);
+        window.condCalc.field = condField;
         condContainer.appendChild(window.condCalc.render());
 
         function changeHandler (event) {
