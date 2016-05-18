@@ -23,6 +23,8 @@ class Meanbee_Shippingrules_Model_Rule_Condition extends Meanbee_Shippingrules_M
             'promo_coupon_code' => Mage::helper('meanship')->__('Coupon'),
             'promo_applied_rule_ids' => Mage::helper('meanship')->__('Applied Cart Price Rules'),
 
+            'payment_method' => Mage::helper('meanship')->__('Payment Method'),
+
             'customer_group_id' => Mage::helper('meanship')->__('Customer Group'),
 
             'time_time_of_day' => Mage::helper('meanship')->__('Time of Day'),
@@ -95,6 +97,7 @@ class Meanbee_Shippingrules_Model_Rule_Condition extends Meanbee_Shippingrules_M
             case 'promo_applied_rule_ids':
             case 'store_id':
             case 'website_id':
+            case 'payment_method':
                 return 'multiselect';
             case 'is_admin_order':
             case 'promo_free_shipping':
@@ -126,6 +129,7 @@ class Meanbee_Shippingrules_Model_Rule_Condition extends Meanbee_Shippingrules_M
             case 'promo_applied_rule_ids':
             case 'store_id':
             case 'website_id':
+            case 'payment_method':
                 return 'multiselect';
             case 'is_admin_order':
             case 'promo_free_shipping':
@@ -156,6 +160,10 @@ class Meanbee_Shippingrules_Model_Rule_Condition extends Meanbee_Shippingrules_M
                 case 'customer_group_id':
                     $options = Mage::getModel('customer/group')
                         ->getCollection()
+                        ->toOptionArray();
+                    break;
+                case 'payment_method':
+                    $options = Mage::getModel('meanship/rule_condition_source_paymentMethod')
                         ->toOptionArray();
                     break;
                 case 'dest_country_id':

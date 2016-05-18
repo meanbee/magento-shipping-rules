@@ -93,6 +93,7 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
         $request = $this->addCountryGroupToRequest($request);
         $request = $this->addNumericPostcodesToRequest($request); /** @deprecated Remove next major version. */
         $request = $this->addPromoDataToRequest($request);
+        $request = $this->addPaymentDataToRequest($request);
         $request = $this->addTimeDataToRequest($request);
         $request = $this->addStreetAddressToRequest($request);
 
@@ -293,6 +294,22 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
     }
 
     /**
+     * Add payment data to the request.
+     *
+     * @param Mage_Shipping_Model_Rate_Request $request
+     *
+     * @return Mage_Shipping_Model_Rate_Request
+     */
+    public function addPaymentDataToRequest(Mage_Shipping_Model_Rate_Request $request) {
+        $requestItems = $request->getAllItems();
+        if (count($requestItems) > 0) {
+            $quote = $requestItems[0]->getQuote();
+            $quote->setData('payment_method', $quote->getPayment()->getMethod());
+        }
+        return $request;
+    }
+
+    /**
      * Add temporal information to the request, so conditions can be
      * dependant on the time the request was made.
      *
@@ -302,7 +319,7 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
      */
     public function addTimeDataToRequest(Mage_Shipping_Model_Rate_Request $request) {
         $request->setData('time_timestamp', time());
-        $request->setData('time_time_of_day', Mage::helper('meanship/time')->getLocalTimeOfDay($value));
+        $request->setData('time_time_of_day', Mage::helper('meanship/time')->getLocalTimeOfDay());
         return $request;
     }
 
