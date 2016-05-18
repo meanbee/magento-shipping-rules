@@ -72,7 +72,13 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Combine extends Mage_Rule_Model
                 array(
                     'label' => Mage::helper('meanship')->__('Cart Subtotal after Discounts'),
                     'value' => 'meanship/rule_condition|package_value_with_discount'
-                ),
+                )
+            )
+        );
+
+        $conditions[] = array(
+            'label' => Mage::helper('meanship')->__('Promotional Conditions'),
+            'value' => array(
                 array(
                     'label' => Mage::helper('meanship')->__('Free Shipping'),
                     'value' => 'meanship/rule_condition|promo_free_shipping'
@@ -84,6 +90,16 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Combine extends Mage_Rule_Model
                 array(
                     'label' => Mage::helper('meanship')->__('Applied Cart Price Rules'),
                     'value' => 'meanship/rule_condition|promo_applied_rule_ids'
+                )
+            )
+        );
+
+        $conditions[] = array(
+            'label' => Mage::helper('meanship')->__('Payment Conditions'),
+            'value' => array(
+                array(
+                    'label' => Mage::helper('meanship')->__('Payment Method'),
+                    'value' => 'meanship/rule_condition|payment_method'
                 )
             )
         );
