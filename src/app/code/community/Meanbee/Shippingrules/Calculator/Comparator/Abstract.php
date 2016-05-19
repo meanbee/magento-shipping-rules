@@ -4,26 +4,19 @@ abstract class Meanbee_Shippingrules_Calculator_Comparator_Abstract
 	private $types = array();
 
 	/**
-	 * [getLabel description]
-	 * @todo
-	 * @return string [description]
-	 */
-	public abstract function getLabel();
-
-	/**
-	 * [evaluate description]
-	 * @todo
-	 * @param  mixed   $validValue    [description]
-	 * @param  mixed   $variableValue [description]
-	 * @param  string  $type          [description]
-	 * @return boolean                [description]
+	 * Compares the configured value to the variable value, returning the result.
+	 * @param  mixed   $validValue    Admin configured value
+	 * @param  mixed   $variableValue From Shipping Rate Request
+	 * @param  string  $type
+	 * @return boolean
 	 */
 	public abstract function evaluate($validValue, $variableValue, $type);
 
 	/**
-	 * [addType description]
-	 * @todo
-	 * @param string $typeID [description]
+	 * Associates a type with the comparator, used to add types that the
+	 * comparator can handle.
+	 * @param string $typeID
+	 * @return $this
 	 */
 	public function addType($typeID)
 	{
@@ -34,11 +27,10 @@ abstract class Meanbee_Shippingrules_Calculator_Comparator_Abstract
 	}
 
 	/**
-	 * [removeType description]
-	 * @todo
-	 * @param  string  $typeID [description]
-	 * @param  boolean $bidi   [description]
-	 * @return $this           [description]
+	 * Disassociates a type with the comparator.
+	 * @param  string  $typeID
+	 * @param  boolean $bidi   Should it also check to remove the reverse association.
+	 * @return $this
 	 */
 	public function removeType($typeID, $bidi = true)
 	{
@@ -54,11 +46,10 @@ abstract class Meanbee_Shippingrules_Calculator_Comparator_Abstract
 	}
 
 	/**
-	 * [canHandleType description]
-	 * @todo
-	 * @param  string  $typeId [description]
-	 * @param  boolean $bidi   [description]
-	 * @return boolean         [description]
+	 * Checks whether the comparator is able to handle inputs of the passed type.
+	 * @param  string  $typeId
+	 * @param  boolean $bidi   Should it also check the reverse association.
+	 * @return boolean
 	 */
 	public function canHandleType($typeId, $bidi = true)
 	{

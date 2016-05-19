@@ -28,11 +28,10 @@ class Meanbee_Shippingrules_Calculator_Term_Constant
     }
 
     /**
-     * [evaluate description]
-     * @todo
+     * {@inheritdoc}
      * @implementation Meanbee_Shippingrules_Calculator_Term_Abstract
-     * @param  Mage_Shipping_Model_Rate_Request $request [description]
-     * @return int|float                                 [description]
+     * @param  Mage_Shipping_Model_Rate_Request $request
+     * @return int|float
      */
     public function evaluate($request)
     {
@@ -40,14 +39,15 @@ class Meanbee_Shippingrules_Calculator_Term_Constant
     }
 
     /**
-     * [init description]
-     * @todo
+     * {@inheritdoc}
      * @implementation Meanbee_Shippingrules_Calculator_Term_Abstract
-     * @param  [type] $obj [description]
-     * @return $this       [description]
+     * @param  Array                              $obj Descriptor array.
+     * @param  Meanbee_Shippingrules_Calculator_* $parent Parent object in evaluation tree.
+     * @return $this
      */
-    public function init($obj, $context)
+    public function init($obj, &$parent)
     {
+        parent::init($obj, $parent);
         $this->setValue($obj['value']);
         return $this;
     }

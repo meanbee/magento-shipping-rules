@@ -3,11 +3,10 @@ class Meanbee_Shippingrules_Calculator_Term_Multiple
     extends Meanbee_Shippingrules_Calculator_Term_Variable
 {
     /**
-     * [evaluate description]
-     * @todo
+     * {@inheritdoc}
      * @override
-     * @param  Mage_Shipping_Model_Rate_Request $request [description]
-     * @return int|float                                 [description]
+     * @param  Mage_Shipping_Model_Rate_Request $request
+     * @return int|float
      */
     public function evaluate($request)
     {
@@ -15,14 +14,14 @@ class Meanbee_Shippingrules_Calculator_Term_Multiple
     }
 
     /**
-     * [init description]
-     * @todo
+     * {@inheritdoc}
      * @override
-     * @param  [type] $obj [description]
-     * @return $this       [description]
+     * @param  Array                              $obj Descriptor array
+     * @param  Meanbee_Shippingrules_Calculator_* $parent Parent object in evaluation tree.
+     * @return $this
      */
-    public function init($obj, $context)
+    public function init($obj, &$parent)
     {
-        return parent::init($obj, $context)->setValue($obj['multiplier']);
+        return parent::init($obj, $parent)->setValue($obj['multiplier']);
     }
 }

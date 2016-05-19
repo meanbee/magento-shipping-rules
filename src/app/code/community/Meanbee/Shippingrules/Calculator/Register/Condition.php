@@ -21,30 +21,12 @@ class Meanbee_Shippingrules_Calculator_Register_Condition
 
     /**
      * {@inheritdoc}
-     * @todo
      * @implementation Meanbee_Shippingrules_Calculator_Register_Abstract
-     * @param  mixed   $child [description]
-     * @return boolean        [description]
+     * @param  mixed   $child Potential child
+     * @return boolean
      */
     protected function isValidChild($child)
     {
         return $child instanceof Meanbee_Shippingrules_Calculator_Condition_Abstract;
-    }
-
-    public function getConditions($context) {
-        $collectedConditions = array();
-        foreach ($this->children as $registerKey => $conditionGroup) {
-            $conditions = $conditionGroup->getVariables($context);
-            if (!empty($conditions)) {
-                $key = $conditionGroup->getCategory();
-                $collectedConditions[$key] = array_merge(
-                    isset($collectedConditions[$key]) ? $collectedConditions[$key] : array(),
-                    array_map(function ($condition) use ($registerKey) {
-                        return array_merge(array('registerKey' => $registerKey), $condition);
-                    }, $conditions)
-                );
-            }
-        }
-        return $collectedConditions;
     }
 }

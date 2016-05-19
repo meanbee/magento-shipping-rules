@@ -2,6 +2,9 @@
 abstract class Meanbee_Shippingrules_Calculator_Condition_Abstract
     implements Meanbee_Shippingrules_Calculator_Boolean
 {
+    /** @var Meanbee_Shippingrules_Calculator_* $parent */
+    public $parent;
+
     /** @var mixed|null $value */
     private $value = null;
 
@@ -12,19 +15,10 @@ abstract class Meanbee_Shippingrules_Calculator_Condition_Abstract
     private $variable = null;
 
     /**
-     * [getCategory description]
-     * @todo
-     * @return string [description]
+     * Accessor method to get variable descriptors.
+     * @return array[] Variable descriptorrs.
      */
-    public abstract function getCategory();
-
-    /**
-     * [getVariables description]
-     * @todo
-     * @param  array   $context [description]
-     * @return array[]          [description]
-     */
-    public abstract function getVariables($context);
+    public abstract function getVariables();
 
     /**
      * Retrieves the currently set value.
@@ -94,10 +88,10 @@ abstract class Meanbee_Shippingrules_Calculator_Condition_Abstract
     }
 
     /**
-    * [evaluate description]
-    * @todo
-    * @param Mage_Shipping_Model_Rate_Request $request [description]
-    * @return boolean [description]
+    * Evaluates the truth of the condition
+    * @implementation Meanbee_Shippingrules_Calculator_Boolean
+    * @param Mage_Shipping_Model_Rate_Request $request
+    * @return boolean
     */
     public function evaluate($request)
     {
@@ -108,7 +102,14 @@ abstract class Meanbee_Shippingrules_Calculator_Condition_Abstract
         );
     }
 
-    public function init($obj, $context) {
+    /**
+     * Initialises condition with desccriptor array.
+     * @param  Array $obj Descriptor array.
+     * @param  Meanbee_Shippingrules_Calculator_* $parent Parent object in evaluation tree.
+     * @return $this
+     */
+    public function init($obj, &$parent) {
+        $this->parent = $parent;
         return $this->setVariable($obj['attribute'])
                     ->setComparator(
                         Meanbee_Shippingrules_Calculator_Register_Comparator::instance()->newInstanceOf(

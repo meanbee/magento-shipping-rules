@@ -7,10 +7,9 @@ class Meanbee_Shippingrules_Calculator_Aggregator_Summative
     private $terms = array();
 
     /**
-     * [add description]
-     * @todo
+     * {@inheritdoc}
      * @implementation Meanbee_Shippingrules_Calculator_Numeric
-     * @param  Meanbee_Shippingrules_Calculator_Term_Abstract $term [description]
+     * @param  Meanbee_Shippingrules_Calculator_Term_Abstract $term Child
      * @return $this
      */
     public function add($term)
@@ -22,11 +21,10 @@ class Meanbee_Shippingrules_Calculator_Aggregator_Summative
     }
 
     /**
-     * [evaluate description]
-     * @todo
+     * {@inheritdoc}
      * @implementation Meanbee_Shippingrules_Calculator_Aggregator_Abstract
-     * @param  Mage_Shipping_Model_Rate_Request $request [description]
-     * @return int|float                                 [description]
+     * @param  Mage_Shipping_Model_Rate_Request $request
+     * @return int|float                                 Aggregated value
      */
     public function evaluate($request)
     {

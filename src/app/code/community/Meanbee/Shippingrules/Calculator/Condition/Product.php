@@ -4,20 +4,10 @@ class Meanbee_Shippingrules_Calculator_Condition_Product
 {
 	/**
 	 * {@inheritdoc}
-	 * @todo
 	 * @implementation Meanbee_Shippingrules_Calculator_Condition_Abstract
-	 * @return string [description]
+	 * @return array[] Variable descriptors.
 	 */
-	public function getCategory() {
-		return 'Product Conditions';
-	}
-
-	/**
-	 * {@inheritdoc}
-	 * @implementation Meanbee_Shippingrules_Calculator_Condition_Abstract
-	 * @return array[] [description]
-	 */
-	public function getVariables($context) {
+	public function getVariables() {
 		return array(
 
 		);

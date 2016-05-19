@@ -5,9 +5,8 @@
  */
 trait Meanbee_Shippingrules_Calculator_Singleton_Trait {
     /**
-     * [instance description]
-     * @todo
-     * @return $this [description]
+     * Accessor for instance of singleton class.
+     * @return $this
      */
     static function instance()
 	{

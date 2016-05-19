@@ -9,27 +9,18 @@ class Meanbee_Shippingrules_Calculator_Register_Type
 
     /**
      * {@inheritdoc}
-     * @todo
      * @implementation Meanbee_Shippingrules_Calculator_Register_Abstract
-     * @param  mixed   $child [description]
-     * @return boolean        [description]
+     * @param  mixed   $child Potential child
+     * @return boolean
      */
     protected function isValidChild($child)
     {
         return $child instanceof Meanbee_Shippingrules_Calculator_Type_Abstract;
     }
 
-    /**
-     * [newInstanceOf description]
-     * @override
-     * @param  string $key  [description]
-     * @param  array  $args [description]
-     * @return null         [description]
-     */
     public function newInstanceOf($key, $args)
     {
         // NO-OP
         return null;
     }
-
 }

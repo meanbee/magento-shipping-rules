@@ -9,10 +9,9 @@ class Meanbee_Shippingrules_Calculator_Register_Comparator
 
     /**
      * {@inheritdoc}
-     * @todo
      * @implementation Meanbee_Shippingrules_Calculator_Register_Abstract
-     * @param  mixed   $child [description]
-     * @return boolean        [description]
+     * @param  mixed   $child Potential child
+     * @return boolean
      */
     protected function isValidChild($child)
     {

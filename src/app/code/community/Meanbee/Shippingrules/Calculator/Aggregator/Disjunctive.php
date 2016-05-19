@@ -10,10 +10,9 @@ class Meanbee_Shippingrules_Calculator_Aggregator_Disjunctive
     private $value = true;
 
     /**
-     * [add description]
-     * @todo
+     * {@inheritdoc}
      * @implementation Meanbee_Shippingrules_Calculator_Aggregator_Abstract
-     * @param  Meanbee_Shippingrules_Calculator_Boolean $condition [description]
+     * @param  Meanbee_Shippingrules_Calculator_Boolean $condition Child
      * @return $this
      */
     public function add($condition)
@@ -47,11 +46,10 @@ class Meanbee_Shippingrules_Calculator_Aggregator_Disjunctive
     }
 
     /**
-     * [evaluate description]
-     * @todo
+     * {@inheritdoc}
      * @implementation Meanbee_Shippingrules_Calculator_Aggregator_Abstract
-     * @param  Mage_Shipping_model_Rate_Request $request [description]
-     * @return boolean                                   [description]
+     * @param  Mage_Shipping_model_Rate_Request $request
+     * @return boolean                                   Aggregated value
      */
     public function evaluate($request)
     {
@@ -64,14 +62,14 @@ class Meanbee_Shippingrules_Calculator_Aggregator_Disjunctive
     }
 
     /**
-     * [init description]
-     * @todo
+     * {@inheritdoc}
      * @override
-     * @param  [type] $obj [description]
-     * @return $this       [description]
+     * @param  Array $obj Descriptor array
+     * @param  Meanbee_Shippingrules_Calculator_* $parent Parent object in evaluation tree.
+     * @return $this
      */
-    public function init($obj, $context)
+    public function init($obj, &$parent)
     {
-        return parent::init($obj, $context)->setValue($obj['value']);
+        return parent::init($obj, $parent)->setValue($obj['value']);
     }
 }

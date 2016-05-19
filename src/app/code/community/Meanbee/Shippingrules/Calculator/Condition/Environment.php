@@ -4,28 +4,14 @@ class Meanbee_Shippingrules_Calculator_Condition_Environment
 {
 	/**
 	 * {@inheritdoc}
-	 * @todo
 	 * @implementation Meanbee_Shippingrules_Calculator_Condition_Abstract
-	 * @return string [description]
+	 * @return array[] Variable descriptors.
 	 */
-	public function getCategory() {
-		return 'Magento Environment Conditions';
-	}
-
-	/**
-	 * {@inheritdoc}
-	 * @todo
-	 * @implementation Meanbee_Shippingrules_Calculator_Condition_Abstract
-	 * @return array[] [description]
-	 */
-	public function getVariables($context) {
-		if (!isset($context['group']) || is_null($context)) {
-			return array(
-				'store_id'       => array('label' => 'Magento Store',   'type' => array('enumerated', 'string'), 'options' => array()),
-				'website_id'     => array('label' => 'Magento Website', 'type' => array('enumerated', 'string'), 'options' => array()),
-				'is_admin_order' => array('label' => 'Is Admin Order?', 'type' => array('boolean'))
-			);
-		}
-		return array();
+	public function getVariables() {
+		return array(
+			'store_id'       => array('label' => 'Magento Store',   'type' => array('enumerated', 'string'), 'options' => array()),
+			'website_id'     => array('label' => 'Magento Website', 'type' => array('enumerated', 'string'), 'options' => array()),
+			'is_admin_order' => array('label' => 'Is Admin Order?', 'type' => array('boolean'))
+		);
 	}
 }

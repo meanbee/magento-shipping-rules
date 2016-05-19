@@ -2,8 +2,11 @@
 abstract class Meanbee_Shippingrules_Calculator_Term_Abstract
     implements Meanbee_Shippingrules_Calculator_Numeric
 {
+    /** @var Meanbee_Shippingrules_Calculator_* $parent */
+    public $parent;
+
     /**
-     * [evaluate description]
+     * Evaluates the value of the term
      * @todo
      * @param  Mage_Shipping_Model_Rate_Request $request
      * @return int|float
@@ -11,10 +14,15 @@ abstract class Meanbee_Shippingrules_Calculator_Term_Abstract
     public abstract function evaluate($request);
 
     /**
-     * [init description]
+     * Initialises term with descriptor array.
      * @todo
-     * @param  [type] $obj [description]
-     * @return $this       [description]
+     * @param  Array                              $obj Descriptor Array
+     * @param  Meanbee_Shippingrules_Calculator_* $parent Parent object in evaluation tree.
+     * @return $this
      */
-    public abstract function init($obj, $context);
+    public abstract function init($obj, &$parent)
+    {
+        $this->parent = $parent;
+        return $this;
+    }
 }

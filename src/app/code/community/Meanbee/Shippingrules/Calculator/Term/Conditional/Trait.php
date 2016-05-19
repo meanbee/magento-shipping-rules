@@ -31,11 +31,10 @@ trait Term_Conditional_Trait
     }
 
     /**
-     * [evaluate description]
-     * @todo
+     * {@inheritdoc}
      * @override
-     * @param  Mage_Shipping_Model_Rate_Request $request [description]
-     * @return int|float                                 [description]
+     * @param  Mage_Shipping_Model_Rate_Request $request
+     * @return int|float
      */
     public function evaluate($request)
     {
@@ -45,11 +44,11 @@ trait Term_Conditional_Trait
     }
 
     /**
-     * [init description]
-     * @todo
+     * {@inheritdoc}
      * @override
-     * @param  [type] $obj [description]
-     * @return $this       [description]
+     * @param  Array                              $obj    Descriptor array
+     * @param  Meanbee_Shippingrules_Calculator_* $parent Parent object in evaluation tree.
+     * @return $this
      */
     public function init($obj, $context)
     {

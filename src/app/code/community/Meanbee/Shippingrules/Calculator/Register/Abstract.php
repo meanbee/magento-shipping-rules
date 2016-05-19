@@ -5,10 +5,9 @@ abstract class Meanbee_Shippingrules_Calculator_Register_Abstract
     protected $children = array();
 
     /**
-     * [add description]
-     * @todo
-     * @param  string $key   [description]
-     * @param  mixed  $child [description]
+     * Appends child to register if key is free.
+     * @param  string $key   Register key.
+     * @param  mixed  $child Potential child.
      * @return $this
      */
     public function add($key, $child)
@@ -20,9 +19,8 @@ abstract class Meanbee_Shippingrules_Calculator_Register_Abstract
     }
 
     /**
-     * [remove description]
-     * @todo
-     * @param  string $key [description]
+     * Removes from the register an entry that has the passed key.
+     * @param  string $key Register key.
      * @return mixed
      */
     public function remove($key)
@@ -35,10 +33,9 @@ abstract class Meanbee_Shippingrules_Calculator_Register_Abstract
     }
 
     /**
-     * [has description]
-     * @todo
-     * @param  string  $key [description]
-     * @return boolean      [description]
+     * Checks to see if the key is taken.
+     * @param  string  $key Register key.
+     * @return boolean
      */
     public function has($key)
     {
@@ -46,10 +43,9 @@ abstract class Meanbee_Shippingrules_Calculator_Register_Abstract
     }
 
     /**
-     * [get description]
-     * @todo
-     * @param  string $key [description]
-     * @return mixed       [description]
+     * Accessor for the register entry that has the passed key.
+     * @param  string $key Register key.
+     * @return mixed
      */
     public function get($key)
     {
@@ -57,10 +53,9 @@ abstract class Meanbee_Shippingrules_Calculator_Register_Abstract
     }
 
     /**
-     * [find description]
-     * @todo
-     * @param  mixed        $child [description]
-     * @return string|false        [description]
+     * Finds the key that the passed entry has taken.
+     * @param  mixed        $child Register entry.
+     * @return string|false        Register key.
      */
     public function find($child)
     {
@@ -68,26 +63,26 @@ abstract class Meanbee_Shippingrules_Calculator_Register_Abstract
     }
 
     /**
-     * [new description]
-     * @todo
-     * @param  string $key [description]
-     * @return mixed       [description]
+     * Initialises a new instance off the register entry identified by the
+     * passed key
+     * @param  string $key Register key.
+     * @return mixed       New instance of associated entry.
      */
-    public function newInstanceOf($key, $args, $context)
+    public function newInstanceOf($key, $args, &$parent)
     {
         if ($this->has($key)) {
             $clone = clone $this->get($key);
-            $clone->init($args, $context);
+            $clone->init($args, $parent);
             return $clone;
         }
         return null;
     }
 
     /**
-     * [isValidChild description]
+     * Verifiies that the potential entry is valid for this register.
      * @todo
-     * @param  mixed   $child [description]
-     * @return boolean        [description]
+     * @param  mixed   $child Potential child
+     * @return boolean
      */
     protected abstract function isValidChild($child);
 }

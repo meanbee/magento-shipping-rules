@@ -6,11 +6,7 @@ class Meanbee_Shippingrules_Calculator_Register_Aggregator
 
     /** @var Meanbee_Shippingrules_Calculator_Aggregator_Abstract[] $children */
     protected $children = array();
-
-    /**
-     * [__contruct description]
-     * @todo
-     */
+    
     private function __construct()
     {
         $this->add('summative', new Meanbee_Shippingrules_Calculator_Aggregator_Summative);
@@ -20,10 +16,9 @@ class Meanbee_Shippingrules_Calculator_Register_Aggregator
 
     /**
      * {@inheritdoc}
-     * @todo
      * @implementation Meanbee_Shippingrules_Calculator_Register_Abstract
-     * @param  mixed   $child [description]
-     * @return boolean        [description]
+     * @param  mixed   $child Potential child
+     * @return boolean
      */
     protected function isValidChild($child)
     {

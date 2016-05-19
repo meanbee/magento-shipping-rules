@@ -2,10 +2,9 @@
 interface Meanbee_Shippingrules_Calculator_Numeric
 {
 	/**
-    * [evaluate description]
-    * @todo
-    * @param Mage_Shipping_Model_Rate_Request $request [description]
-    * @return int|float [description]
+    * Evaluates the object to a numeric value.
+    * @param Mage_Shipping_Model_Rate_Request $request
+    * @return int|float
     */
 	public function evaluate($request);
 }

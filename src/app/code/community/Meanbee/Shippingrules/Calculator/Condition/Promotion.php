@@ -4,27 +4,13 @@ class Meanbee_Shippingrules_Calculator_Condition_Promotion
 {
 	/**
 	 * {@inheritdoc}
-	 * @todo
 	 * @implementation Meanbee_Shippingrules_Calculator_Condition_Abstract
-	 * @return string [description]
+	 * @return array[] VVariable descriptors.
 	 */
-	public function getCategory() {
-		return 'Promotion Conditions';
-	}
-
-	/**
-	 * {@inheritdoc}
-	 * @todo
-	 * @implementation Meanbee_Shippingrules_Calculator_Condition_Abstract
-	 * @return array[] [description]
-	 */
-	public function getVariables($context) {
-		if (!isset($context['group']) || is_null($context)) {
-			return array(
-				'promo_free_shipping' => array('label' => 'Free Shipping', 'type' => array('boolean')),
-				'promo_coupon_code'   => array('label' => 'Coupon Code',   'type' => array('enumerated', 'string'), 'options' => array())
-			);
-		}
-		return array();
+	public function getVariables() {
+		return array(
+			'promo_free_shipping' => array('label' => 'Free Shipping', 'type' => array('boolean')),
+			'promo_coupon_code'   => array('label' => 'Coupon Code',   'type' => array('enumerated', 'string'), 'options' => array())
+		);
 	}
 }

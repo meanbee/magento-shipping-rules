@@ -4,25 +4,23 @@ abstract class Meanbee_Shippingrules_Calculator_Type_Abstract
 	private $comparators = array();
 
 	/**
-	 * [sanitiseValidValue description]
-	 * @todo
-	 * @param  mixed $validValue [description]
-	 * @return mixed             [description]
+	 * Called to sanitise the value configured in the administration ready for
+	 * comparison.
+	 * @param  mixed $validValue Configured value
+	 * @return mixed             Sanitised value
 	 */
 	public abstract function sanitiseValidValue($validValue);
 
 	/**
-	 * [sanitiseVariableValue description]
-	 * @todo
-	 * @param  mixed $variableValue [description]
-	 * @return mixed                [description]
+	 * Called to sanitise the value from the customer ready for comparison.
+	 * @param  mixed $variableValue Customer value
+	 * @return mixed                Sanitised value
 	 */
 	public abstract function sanitiseVariableValue($variableValue);
 
 	/**
-	 * [addComparator description]
-	 * @todo
-	 * @param  string $comparatorID [description]
+	 * Adds an association to a comparator that can handle this type.
+	 * @param  string $comparatorID
 	 * @return $this
 	 */
 	public function addComparator($comparatorID)
@@ -34,11 +32,11 @@ abstract class Meanbee_Shippingrules_Calculator_Type_Abstract
 	}
 
 	/**
-	 * [removeComparator description]
+	 * Removes an association with a comparator..
 	 * @todo
-	 * @param  string  $comparatorID [description]
-	 * @param  boolean $bidi         [description]
-	 * @return $this                 [description]
+	 * @param  string  $comparatorID
+	 * @param  boolean $bidi         Should it also remove the reverse association.
+	 * @return $this
 	 */
 	public function removeComparator($comparatorID, $bidi = true)
 	{
@@ -54,11 +52,11 @@ abstract class Meanbee_Shippingrules_Calculator_Type_Abstract
 	}
 
 	/**
-	 * [canbeHandledByComparator description]
+	 * Checks whether the type can be handled by the comparator.
 	 * @todo
-	 * @param  string  $comparatorID [description]
-	 * @param  boolean $bidi         [description]
-	 * @return boolean               [description]
+	 * @param  string  $comparatorID
+	 * @param  boolean $bidi         Should the reverse association also be checked.
+	 * @return boolean
 	 */
 	public function canBeHandledByComparator($comparatorID, $bidi = true)
 	{
