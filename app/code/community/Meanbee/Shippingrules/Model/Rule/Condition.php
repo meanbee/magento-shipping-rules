@@ -28,6 +28,7 @@ class Meanbee_Shippingrules_Model_Rule_Condition extends Meanbee_Shippingrules_M
             'customer_group_id' => Mage::helper('meanship')->__('Customer Group'),
 
             'time_time_of_day' => Mage::helper('meanship')->__('Time of Day'),
+            'time_day_of_week' => Mage::helper('meanship')->__('Day of Week'),
 
             'dest_street_address_l1' => Mage::helper('meanship')->__('Shipping Street Address, Line 1'),
             'dest_street_address_l2' => Mage::helper('meanship')->__('Shipping Street Address, Line 2'),
@@ -98,6 +99,7 @@ class Meanbee_Shippingrules_Model_Rule_Condition extends Meanbee_Shippingrules_M
             case 'store_id':
             case 'website_id':
             case 'payment_method':
+            case 'time_day_of_week':
                 return 'multiselect';
             case 'is_admin_order':
             case 'promo_free_shipping':
@@ -130,6 +132,7 @@ class Meanbee_Shippingrules_Model_Rule_Condition extends Meanbee_Shippingrules_M
             case 'store_id':
             case 'website_id':
             case 'payment_method':
+            case 'time_day_of_week':
                 return 'multiselect';
             case 'is_admin_order':
             case 'promo_free_shipping':
@@ -191,6 +194,10 @@ class Meanbee_Shippingrules_Model_Rule_Condition extends Meanbee_Shippingrules_M
                 case 'is_admin_order':
                 case 'promo_free_shipping':
                     $options = Mage::getModel('adminhtml/system_config_source_yesno')
+                        ->toOptionArray();
+                    break;
+                case 'time_day_of_week':
+                    $options = Mage::getModel('adminhtml/system_config_source_locale_weekdays')
                         ->toOptionArray();
                     break;
                 default:

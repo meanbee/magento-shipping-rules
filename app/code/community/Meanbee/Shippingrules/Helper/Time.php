@@ -35,4 +35,11 @@ class Meanbee_Shippingrules_Helper_Time extends Mage_Core_Helper_Abstract
         $today->setTime(0, 0, 0);
         return time() - $today->getTimestamp();
     }
+
+    public function getLocalDayOfWeek()
+    {
+        $now = new DateTime('now', new DateTimeZone(Mage::getStoreConfig('general/locale/timezone')));
+        $date = $now->format('Y-m-d');
+        return date('w', strtotime($date));
+    }
 }
