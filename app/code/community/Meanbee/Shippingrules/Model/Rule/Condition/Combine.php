@@ -110,6 +110,10 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Combine extends Mage_Rule_Model
                 array(
                     'label' => Mage::helper('meanship')->__('Time of Day'),
                     'value' => 'meanship/rule_condition|time_time_of_day'
+                ),
+                array(
+                    'label' => Mage::helper('meanship')->__('Day of Week'),
+                    'value' => 'meanship/rule_condition|time_day_of_week'
                 )
             )
         );

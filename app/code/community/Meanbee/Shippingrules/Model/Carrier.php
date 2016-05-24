@@ -320,6 +320,7 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
     public function addTimeDataToRequest(Mage_Shipping_Model_Rate_Request $request) {
         $request->setData('time_timestamp', time());
         $request->setData('time_time_of_day', Mage::helper('meanship/time')->getLocalTimeOfDay());
+        $request->setData('time_day_of_week', Mage::helper('meanship/time')->getLocalDayOfWeek());
         return $request;
     }
 
