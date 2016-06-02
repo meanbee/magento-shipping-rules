@@ -4,6 +4,6 @@ class Meanbee_Shippingrules_Model_Resource_Rule_Collection
 {
     protected function _construct()
     {
-    	$this->_init('meanbee_shippingrules/rule');
+        $this->_init('meanbee_shippingrules/rule');
     }
 }

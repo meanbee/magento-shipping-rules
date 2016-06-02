@@ -2,14 +2,12 @@
 class Meanbee_Shippingrules_Calculator_Register_Type
     extends Meanbee_Shippingrules_Calculator_Register_Abstract
 {
-    use Meanbee_Shippingrules_Calculator_Singleton_Trait;
-
     /** @var Meanbee_Shippingrules_Calculator_Type_Abstract[] $children */
     protected $children = array();
 
     public function init()
     {
-        $this->add('number', new Meanbee_Shippingrules_Calculator_Type_Number);
+        $this->add('number', new Meanbee_Shippingrules_Calculator_Type_Number($this->registers));
     }
 
     /**

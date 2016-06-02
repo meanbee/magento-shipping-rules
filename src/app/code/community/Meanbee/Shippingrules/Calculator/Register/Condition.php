@@ -2,8 +2,6 @@
 class Meanbee_Shippingrules_Calculator_Register_Condition
     extends Meanbee_Shippingrules_Calculator_Register_Abstract
 {
-    use Meanbee_Shippingrules_Calculator_Singleton_Trait;
-
     /** @var Meanbee_Shippingrules_Calculator_Condition_Abstract[] $children */
     protected $children = array();
 
