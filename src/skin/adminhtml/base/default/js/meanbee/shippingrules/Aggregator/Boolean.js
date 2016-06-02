@@ -4,8 +4,8 @@
     {
         constructor(index, parent = null, container) {
             super(index, parent, container);
-            this._combinator = ShippingRules.Aggregator.Boolean.CONJUNCTIVE;
-            this.value = 1;
+            this.combinator = ShippingRules.Aggregator.Boolean.CONJUNCTIVE;
+            this.value = true;
         }
 
         set combinator(param) {
@@ -48,7 +48,7 @@
 
         renderValue() {
             let me = this;
-            return (<select id={`${me.id}-value`} onChange={event => me.value = +event.target.value}>
+            return (<select id={`${me.id}-value`} onChange={event => me.value = !!+event.target.value}>
                 <option value="1">TRUE</option>
                 <option value="0">FALSE</option>
             </select>);
@@ -87,19 +87,20 @@
 
         init(obj) {
             super.init(obj);
-            this.value = obj.value;
-            obj.children.forEach(child => {
-                if (child.register === 'Condition') {
-                    this.addChild(ShippingRules.Register.condition.get(child.key)).init(child);
-                } else if (child.register === 'Aggregator') {
-                    this.addChild(ShippingRules.Register.aggregator.get(child.key)).init(child);
-                }
-            });
+            this.value = (typeof obj.value) === 'boolean' ? obj.value : true;
+            if (obj.children) {
+                obj.children.forEach(child => {
+                    if (child.register === 'Condition') {
+                        this.addChild(ShippingRules.Register.condition.get(child.key)).init(child);
+                    } else if (child.register === 'Aggregator') {
+                        this.addChild(ShippingRules.Register.aggregator.get(child.key)).init(child);
+                    }
+                });
+            }
         }
 
         toJSON() {
             let obj = super.toJSON();
-            obj.key = 'Boolean';
             obj.value = this.value;
             return obj;
         }

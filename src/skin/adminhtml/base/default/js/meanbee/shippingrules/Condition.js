@@ -43,6 +43,7 @@
 
         valueChangeHandler(value) {
             this.value = value;
+            this.root.updateJSON();
         }
 
         render() {

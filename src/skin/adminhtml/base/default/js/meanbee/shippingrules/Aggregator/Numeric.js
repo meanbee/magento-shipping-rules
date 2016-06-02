@@ -52,19 +52,15 @@
 
         init(obj) {
             super.init(obj);
-            obj.children.forEach(child => {
-                if (child.register === 'Term') {
-                    this.addChild(ShippingRules.Register.term.get(child.key)).init(child);
-                } else if (child.register === 'Aggregator') {
-                    this.addChild(ShippingRules.Register.aggregator.get(child.key)).init(child);
-                }
-            });
-        }
-
-        toJSON() {
-            let obj = super.toJSON();
-            obj.key = 'Numeric';
-            return obj;
+            if (obj.children) {
+                obj.children.forEach(child => {
+                    if (child.register === 'Term') {
+                        this.addChild(ShippingRules.Register.term.get(child.key)).init(child);
+                    } else if (child.register === 'Aggregator') {
+                        this.addChild(ShippingRules.Register.aggregator.get(child.key)).init(child);
+                    }
+                });
+            }
         }
     }
 

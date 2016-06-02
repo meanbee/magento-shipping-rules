@@ -41,13 +41,13 @@ class Meanbee_Shippingrules_Calculator_Term_Constant
     /**
      * {@inheritdoc}
      * @implementation Meanbee_Shippingrules_Calculator_Term_Abstract
-     * @param  Array                              $obj Descriptor array.
-     * @param  Meanbee_Shippingrules_Calculator_* $parent Parent object in evaluation tree.
+     * @param  Array                                      $obj       Descriptor array.
+     * @param  Meanbee_Shippingrules_Calculator_Registers $registers
      * @return $this
      */
-    public function init($obj, &$parent)
+    public function init($obj, $registers)
     {
-        parent::init($obj, $parent);
+        parent::init($obj, $registers);
         $this->setValue($obj['value']);
         return $this;
     }

@@ -3,6 +3,10 @@ abstract class Meanbee_Shippingrules_Calculator_Comparator_Abstract
 {
 	private $types = array();
 
+	public function __construct($registers) {
+		$this->registers = $registers;
+	}
+
 	/**
 	 * Compares the configured value to the variable value, returning the result.
 	 * @param  mixed   $validValue    Admin configured value
@@ -37,8 +41,8 @@ abstract class Meanbee_Shippingrules_Calculator_Comparator_Abstract
 		if ($this->canHandleType($typeID, $bidi)) {
 			$this->types = array_diff($this->types, [$typeID]);
 			if ($bidi) {
-				$type = Meanbee_Shippingrules_Calculator_Register_Type::instance()->get($typeID);
-				$comparatorID = Meanbee_Shippingrules_Calculator_Register_Comparator::instance()->find($this);
+				$type = $this->registers->getTypeRegister()->get($typeID);
+				$comparatorID = $this->registers->getComparatorRegister()->find($this);
 				$type->removeComparator($comparatorID, false);
 			}
 		}
@@ -57,9 +61,19 @@ abstract class Meanbee_Shippingrules_Calculator_Comparator_Abstract
 			return true;
 		}
 		if ($bidi) {
-			$comparatorID = Meanbee_Shippingrules_Calculator_Register_Comparator::instance()->find($this);
-			return Meanbee_Shippingrules_Calculator_Register_Type::instance()->get($typeId)->canBeHandledByComparator($comparatorID, false);
+			$comparatorID = $this->registers->getComparatorRegister()->find($this);
+			$type = $this->registers->getTypeRegister()->get($typeId);
+			return $type && $type->canBeHandledByComparator($comparatorID, false);
 		}
 		return false;
 	}
+
+	/**
+     * Initialises comparator with desccriptor array.
+     * @param  Array                                      $obj       Descriptor array.
+     * @param  Meanbee_Shippingrules_Calculator_Registers $registers
+     * @return $this
+     */
+    public function init($obj, $registers) {
+    }
 }

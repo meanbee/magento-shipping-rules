@@ -7,7 +7,7 @@ class Meanbee_Shippingrules_Calculator_Register_Term
     /** @var Meanbee_Shippingrules_Calculator_Term_Abstract[] $children */
     protected $children = array();
 
-    private function __construct()
+    public function init()
     {
         $this->add('constant', new Meanbee_Shippingrules_Calculator_Term_Constant);
         $this->add('conditionalMultiple', new Meanbee_Shippingrules_Calculator_Term_Conditional_Multiple);

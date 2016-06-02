@@ -3,7 +3,7 @@
     document.addEventListener('DOMContentLoaded', function () {
         let priceField = document.getElementById('price');
         priceField.hidden = true;
-        let priceContainer = document.createElement('div');
+        let priceContainer = document.createElement('ul');
         priceContainer.classList.add('calculator-tree');
         priceField.parentElement.appendChild(priceContainer);
         window.priceCalc = new (Meanbee.ShippingRules.Register.aggregator.get('Numeric'))('priceCalculator', null, priceContainer);
@@ -12,7 +12,7 @@
 
         let costField = document.getElementById('cost');
         costField.hidden = true;
-        let costContainer = document.createElement('div');
+        let costContainer = document.createElement('ul');
         costContainer.classList.add('calculator-tree');
         costField.parentElement.appendChild(costContainer);
         window.costCalc = new (Meanbee.ShippingRules.Register.aggregator.get('Numeric'))('costCalculator', null, costContainer);
@@ -21,7 +21,7 @@
 
         let condField = document.getElementById('conditions');
         condField.hidden = true;
-        let condContainer = document.createElement('div');
+        let condContainer = document.createElement('ul');
         condContainer.classList.add('calculator-tree');
         condField.parentElement.appendChild(condContainer);
         window.condCalc = new (Meanbee.ShippingRules.Register.aggregator.get('Boolean'))('conditionCalculator', null, condContainer);

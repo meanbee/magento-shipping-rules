@@ -38,14 +38,14 @@ abstract class Meanbee_Shippingrules_Calculator_Type_Abstract
 	 * @param  boolean $bidi         Should it also remove the reverse association.
 	 * @return $this
 	 */
-	public function removeComparator($comparatorID, $bidi = true)
+	public function removeComparator($comparatorID, $registers, $bidi = true)
 	{
 		if ($this->canBeHandledByComparator($comparatorID, $bidi)) {
 			$this->comparators = array_diff($this->comparators, [$comparatorID]);
 			if ($bidi) {
-				$comparator = Meanbee_Shippingrules_Calculator_Register_Comparator::instance()->get($comparatorID);
-				$typeID = Meanbee_Shippingrules_Calculator_Register_Type::instance()->find($this);
-				$comparator->removeType($typeID, false);
+				$comparator = $registers->getComparatorRegister()->get($comparatorID);
+				$typeID = $registers->getTypeRegister()->find($this);
+				$comparator->removeType($typeID, $registers, false);
 			}
 		}
 		return $this;
@@ -58,14 +58,14 @@ abstract class Meanbee_Shippingrules_Calculator_Type_Abstract
 	 * @param  boolean $bidi         Should the reverse association also be checked.
 	 * @return boolean
 	 */
-	public function canBeHandledByComparator($comparatorID, $bidi = true)
+	public function canBeHandledByComparator($comparatorID, $registers, $bidi = true)
 	{
 		if (in_array($comparatorID, $this->comparators)) {
 			return true;
 		}
 		if ($bidi) {
-			$typeID = Meanbee_Shippingrules_Calculator_Register_Type::instance()->find($this);
-			return Meanbee_Shippingrules_Calculator_Register_Comparator::instance()->get($comparatorID)->canHandleType($typeID, false);
+			$typeID = $registers->getTypeRegister()->find($this);
+			return $registers->getComparatorRegister()->get($comparatorID)->canHandleType($typeID, $registers, false);
 		}
 		return false;
 	}

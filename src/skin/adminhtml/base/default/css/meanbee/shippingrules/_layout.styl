@@ -1,11 +1,40 @@
-.calculator-tree {
+ul.calculator-tree {
+    border: none;
+    list-style: none;
     margin-right: .5em;
-    > ul {
+    padding: 0 !important;
+    > li {
         border: none;
-        padding: 0 !important;
-        ul {
-            margin-left: 3px;
-            padding-left: 8px !important;
+    }
+    > li li {
+        border-left: solid 1px $blue-slate;
+        margin: 0 0 0 .5em !important;
+        max-height: 500vmax;
+        overflow: 0;
+        padding-left: 1em;
+        position: relative;
+        transition: opacity .3s, max-height .3s cubic-bezier(.23, 1, .32, 1);
+        &:last-child {
+            border-left: none;
+            &::before {
+                border-bottom: dotted 1px $slate;
+                border-left: solid 1px $blue-slate;
+                content: '';
+                display: block;
+                height: .8em;
+                left: 0;
+                position: absolute;
+                top: 0;
+                width: .8em;
+            }
         }
+        &.deleting {
+            max-height: 0;
+            opacity: 0;
+        }
+    }
+    ul {
+        border: none;
+        padding-left: 0 !important;
     }
 }

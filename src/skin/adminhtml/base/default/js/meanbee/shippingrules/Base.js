@@ -57,6 +57,12 @@
             if (this.id === id) {
                 return this;
             }
+            if (this.aggregator)  {
+                let aggregatorResult = this.aggregator.getObjectById(id);
+                if (aggregatorResult) {
+                    return aggregatorResult;
+                }
+            }
             if (!this.children) {
                 return null;
             }
@@ -75,6 +81,10 @@
             this.container.appendChild(this.render());
             ShippingRules.util.resizeFields();
             this.focus(focussedElementId);
+            this.root.updateJSON();
+        }
+
+        updateJSON() {
             this.root.field.value = JSON.stringify(this.root);
         }
 
@@ -88,8 +98,9 @@
         renderRemoveButton() {
             if (this.parent instanceof ShippingRules.Base) {
                 return ShippingRules.util.removeButton(this, () => {
+                    document.getElementById(this.id).className += 'deleting';
                     this.parent.removeChildByIndex(this.index);
-                    this.root.rerender();
+                    setTimeout(this.root.rerender.bind(this.root), 200);
                     this.focus(this.id);
                 });
             }
@@ -178,9 +189,13 @@
                     if (event.target.tagName === 'LI') {
                         let target = this.root.getObjectById(event.target.id);
                         if (target && target.parent) {
+                            event.target.className += 'deleting';
                             target.parent.removeChildByIndex(target.index);
-                            this.root.rerender();
                             this.focus(target.id);
+                            if ((target = target.parent.children[target.index - 1]) && (event.keyCode === 8)) { // Backspace
+                                this.focus(target.id);
+                            }
+                            setTimeout(this.root.rerender.bind(this.root), 200);
                         }
                     }
                     break;

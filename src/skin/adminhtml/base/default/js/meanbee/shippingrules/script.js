@@ -83,32 +83,6 @@
         fBound.prototype = new fNOP();
         return fBound;
     };
-    Array.prototype.map = function (callback, thisArg) {
-        var T, A, k;
-        if (this == null) {
-            throw new TypeError(' this is null or not defined');
-        }
-        var O = Object(this);
-        var len = O.length >>> 0;
-        if (typeof callback !== 'function') {
-            throw new TypeError(callback + ' is not a function');
-        }
-        if (arguments.length > 1) {
-            T = thisArg;
-        }
-        A = new Array(len);
-        k = 0;
-        while (k < len) {
-            var kValue, mappedValue;
-            if (k in O) {
-                kValue = O[k];
-                mappedValue = callback.call(T, kValue, k, O);
-                A[k] = mappedValue;
-            }
-            k++;
-        }
-        return A;
-    };
     if (typeof Element.prototype.matches !== 'function') {
         Element.prototype.matches = Element.prototype.msMatchesSelector || Element.prototype.mozMatchesSelector || Element.prototype.webkitMatchesSelector || function matches(selector) {
             var element = this;
@@ -533,6 +507,12 @@ function _classCallCheck(instance, Constructor) {
                     if (this.id === id) {
                         return this;
                     }
+                    if (this.aggregator) {
+                        var aggregatorResult = this.aggregator.getObjectById(id);
+                        if (aggregatorResult) {
+                            return aggregatorResult;
+                        }
+                    }
                     if (!this.children) {
                         return null;
                     }
@@ -553,6 +533,12 @@ function _classCallCheck(instance, Constructor) {
                     this.container.appendChild(this.render());
                     ShippingRules.util.resizeFields();
                     this.focus(focussedElementId);
+                    this.root.updateJSON();
+                }
+            },
+            {
+                key: 'updateJSON',
+                value: function updateJSON() {
                     this.root.field.value = JSON.stringify(this.root);
                 }
             },
@@ -571,8 +557,9 @@ function _classCallCheck(instance, Constructor) {
                     var _this = this;
                     if (this.parent instanceof ShippingRules.Base) {
                         return ShippingRules.util.removeButton(this, function () {
+                            document.getElementById(_this.id).className += 'deleting';
                             _this.parent.removeChildByIndex(_this.index);
-                            _this.root.rerender();
+                            setTimeout(_this.root.rerender.bind(_this.root), 200);
                             _this.focus(_this.id);
                         });
                     }
@@ -626,7 +613,6 @@ function _classCallCheck(instance, Constructor) {
                             break;
                         case 39:
                             caught = true;
-                            console.log(event);
                             if (event.target.tagName === 'LI') {
                                 event.preventDefault();
                                 if (~(i = Array.from(event.target.children).map(function (child) {
@@ -673,9 +659,13 @@ function _classCallCheck(instance, Constructor) {
                             if (event.target.tagName === 'LI') {
                                 var target = this.root.getObjectById(event.target.id);
                                 if (target && target.parent) {
+                                    event.target.className += 'deleting';
                                     target.parent.removeChildByIndex(target.index);
-                                    this.root.rerender();
                                     this.focus(target.id);
+                                    if ((target = target.parent.children[target.index - 1]) && event.keyCode === 8) {
+                                        this.focus(target.id);
+                                    }
+                                    setTimeout(this.root.rerender.bind(this.root), 200);
                                 }
                             }
                             break;
@@ -861,7 +851,7 @@ function _inherits(subClass, superClass) {
                     return {
                         children: this.children,
                         register: 'Aggregator',
-                        type: this.combinator
+                        key: this.combinator
                     };
                 }
             }
@@ -947,8 +937,8 @@ function _inherits(subClass, superClass) {
             var container = arguments[2];
             _classCallCheck(this, _class);
             var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(_class).call(this, index, parent, container));
-            _this._combinator = ShippingRules.Aggregator.Boolean.CONJUNCTIVE;
-            _this.value = 1;
+            _this.combinator = ShippingRules.Aggregator.Boolean.CONJUNCTIVE;
+            _this.value = true;
             return _this;
         }
         _createClass(_class, [
@@ -1019,7 +1009,7 @@ function _inherits(subClass, superClass) {
                         var $$g = document.createElement('select');
                         $$g.setAttribute('id', me.id + '-value');
                         $$g.addEventListener('change', function (event) {
-                            return me.value = +event.target.value;
+                            return me.value = !!+event.target.value;
                         });
                         var $$h = document.createElement('option');
                         $$h.setAttribute('value', '1');
@@ -1105,21 +1095,22 @@ function _inherits(subClass, superClass) {
                 value: function init(obj) {
                     var _this2 = this;
                     _get(Object.getPrototypeOf(_class.prototype), 'init', this).call(this, obj);
-                    this.value = obj.value;
-                    obj.children.forEach(function (child) {
-                        if (child.register === 'Condition') {
-                            _this2.addChild(ShippingRules.Register.condition.get(child.key)).init(child);
-                        } else if (child.register === 'Aggregator') {
-                            _this2.addChild(ShippingRules.Register.aggregator.get(child.key)).init(child);
-                        }
-                    });
+                    this.value = typeof obj.value === 'boolean' ? obj.value : true;
+                    if (obj.children) {
+                        obj.children.forEach(function (child) {
+                            if (child.register === 'Condition') {
+                                _this2.addChild(ShippingRules.Register.condition.get(child.key)).init(child);
+                            } else if (child.register === 'Aggregator') {
+                                _this2.addChild(ShippingRules.Register.aggregator.get(child.key)).init(child);
+                            }
+                        });
+                    }
                 }
             },
             {
                 key: 'toJSON',
                 value: function toJSON() {
                     var obj = _get(Object.getPrototypeOf(_class.prototype), 'toJSON', this).call(this);
-                    obj.key = 'Boolean';
                     obj.value = this.value;
                     return obj;
                 }
@@ -1322,21 +1313,15 @@ function _inherits(subClass, superClass) {
                 value: function init(obj) {
                     var _this2 = this;
                     _get(Object.getPrototypeOf(_class.prototype), 'init', this).call(this, obj);
-                    obj.children.forEach(function (child) {
-                        if (child.register === 'Term') {
-                            _this2.addChild(ShippingRules.Register.term.get(child.key)).init(child);
-                        } else if (child.register === 'Aggregator') {
-                            _this2.addChild(ShippingRules.Register.aggregator.get(child.key)).init(child);
-                        }
-                    });
-                }
-            },
-            {
-                key: 'toJSON',
-                value: function toJSON() {
-                    var obj = _get(Object.getPrototypeOf(_class.prototype), 'toJSON', this).call(this);
-                    obj.key = 'Numeric';
-                    return obj;
+                    if (obj.children) {
+                        obj.children.forEach(function (child) {
+                            if (child.register === 'Term') {
+                                _this2.addChild(ShippingRules.Register.term.get(child.key)).init(child);
+                            } else if (child.register === 'Aggregator') {
+                                _this2.addChild(ShippingRules.Register.aggregator.get(child.key)).init(child);
+                            }
+                        });
+                    }
                 }
             }
         ]);
@@ -1796,6 +1781,7 @@ function _inherits(subClass, superClass) {
                 key: 'valueChangeHandler',
                 value: function valueChangeHandler(value) {
                     this.value = value;
+                    this.root.updateJSON();
                 }
             },
             {
@@ -2423,6 +2409,7 @@ function _inherits(subClass, superClass) {
                         $$a.setAttribute('type', 'text');
                         $$a.setAttribute('id', me.idPrefix + '-value');
                         $$a.setAttribute('value', me.value);
+                        $$a.addEventListener('change', me.valueChangeHandler.bind(me));
                         return $$a;
                     }();
                 }
@@ -2436,7 +2423,7 @@ function _inherits(subClass, superClass) {
     document.addEventListener('DOMContentLoaded', function () {
         var priceField = document.getElementById('price');
         priceField.hidden = true;
-        var priceContainer = document.createElement('div');
+        var priceContainer = document.createElement('ul');
         priceContainer.classList.add('calculator-tree');
         priceField.parentElement.appendChild(priceContainer);
         window.priceCalc = new (Meanbee.ShippingRules.Register.aggregator.get('Numeric'))('priceCalculator', null, priceContainer);
@@ -2444,17 +2431,19 @@ function _inherits(subClass, superClass) {
         priceContainer.appendChild(window.priceCalc.render());
         var costField = document.getElementById('cost');
         costField.hidden = true;
-        var costContainer = document.createElement('div');
+        var costContainer = document.createElement('ul');
         costContainer.classList.add('calculator-tree');
         costField.parentElement.appendChild(costContainer);
         window.costCalc = new (Meanbee.ShippingRules.Register.aggregator.get('Numeric'))('costCalculator', null, costContainer);
+        window.costCalc.field = costField;
         costContainer.appendChild(window.costCalc.render());
         var condField = document.getElementById('conditions');
         condField.hidden = true;
-        var condContainer = document.createElement('div');
+        var condContainer = document.createElement('ul');
         condContainer.classList.add('calculator-tree');
         condField.parentElement.appendChild(condContainer);
         window.condCalc = new (Meanbee.ShippingRules.Register.aggregator.get('Boolean'))('conditionCalculator', null, condContainer);
+        window.condCalc.field = condField;
         condContainer.appendChild(window.condCalc.render());
         function changeHandler(event) {
             if (~[

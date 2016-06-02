@@ -7,6 +7,11 @@ class Meanbee_Shippingrules_Calculator_Register_Type
     /** @var Meanbee_Shippingrules_Calculator_Type_Abstract[] $children */
     protected $children = array();
 
+    public function init()
+    {
+        $this->add('number', new Meanbee_Shippingrules_Calculator_Type_Number);
+    }
+
     /**
      * {@inheritdoc}
      * @implementation Meanbee_Shippingrules_Calculator_Register_Abstract

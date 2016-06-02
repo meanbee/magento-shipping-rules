@@ -4,6 +4,11 @@ abstract class Meanbee_Shippingrules_Calculator_Register_Abstract
     /** @var mixed[] $children */
     protected $children = array();
 
+    public function __construct($registers)
+    {
+        $this->registers = $registers;
+    }
+
     /**
      * Appends child to register if key is free.
      * @param  string $key   Register key.
@@ -68,11 +73,11 @@ abstract class Meanbee_Shippingrules_Calculator_Register_Abstract
      * @param  string $key Register key.
      * @return mixed       New instance of associated entry.
      */
-    public function newInstanceOf($key, $args, &$parent)
+    public function newInstanceOf($key, $args)
     {
         if ($this->has($key)) {
             $clone = clone $this->get($key);
-            $clone->init($args, $parent);
+            $clone->init($args, $this->registers);
             return $clone;
         }
         return null;
@@ -85,4 +90,6 @@ abstract class Meanbee_Shippingrules_Calculator_Register_Abstract
      * @return boolean
      */
     protected abstract function isValidChild($child);
+
+    public abstract function init();
 }

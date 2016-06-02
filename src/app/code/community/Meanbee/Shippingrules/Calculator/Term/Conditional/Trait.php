@@ -3,7 +3,7 @@
  * @extends Meanbee_Shippingrules_Calculator_Term_Constant
  * @implements Meanbee_Shippingrules_Calculator_Term_Conditional_Interface
  */
-trait Term_Conditional_Trait
+trait Meanbee_Shippingrules_Calculator_Term_Conditional_Trait
 {
     /** @var Meanbee_Shippingrules_Calculator_Aggregator_Abstract $aggregator */
     private $aggregator = null;
@@ -47,11 +47,10 @@ trait Term_Conditional_Trait
      * {@inheritdoc}
      * @override
      * @param  Array                              $obj    Descriptor array
-     * @param  Meanbee_Shippingrules_Calculator_* $parent Parent object in evaluation tree.
      * @return $this
      */
-    public function init($obj, $context)
+    public function init($obj, $registers)
     {
-        return parent::init($obj, $context)->setAggregator(Meanbee_Shippingrules_Calculator_Register_Aggregator::instance()->newInstanceOf($obj['aggregator']['aggregator'], $obj['aggregator'], $context));
+        return parent::init($obj, $registers)->setAggregator($registers->getAggregatorRegister()->newInstanceOf($obj['aggregator']['aggregator'], $obj['aggregator']));
     }
 }

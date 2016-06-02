@@ -42,7 +42,7 @@
             return {
                 children: this.children,
                 register: 'Aggregator',
-                type:     this.combinator
+                key:     this.combinator
             };
         }
     }

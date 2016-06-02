@@ -4,7 +4,7 @@
     {
         render() {
             let me = this;
-            return (<input type="text" id={`${me.idPrefix}-value`} value={me.value} />);
+            return (<input type="text" id={`${me.idPrefix}-value`} value={me.value} onChange={me.valueChangeHandler.bind(me)} />);
         }
     }
 

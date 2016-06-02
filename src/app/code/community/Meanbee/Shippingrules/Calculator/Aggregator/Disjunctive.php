@@ -65,11 +65,10 @@ class Meanbee_Shippingrules_Calculator_Aggregator_Disjunctive
      * {@inheritdoc}
      * @override
      * @param  Array $obj Descriptor array
-     * @param  Meanbee_Shippingrules_Calculator_* $parent Parent object in evaluation tree.
      * @return $this
      */
-    public function init($obj, &$parent)
+    public function init($obj, $registers)
     {
-        return parent::init($obj, $parent)->setValue($obj['value']);
+        return parent::init($obj, $registers)->setValue($obj['value']);
     }
 }

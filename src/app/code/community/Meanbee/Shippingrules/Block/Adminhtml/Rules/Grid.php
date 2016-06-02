@@ -110,7 +110,7 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Grid
     {
         if (!$isExport && $row) {
             if ($column->getIndex() == 'rule_id') {
-                return sprintf("%s_%s", Mage::helper('meanbee_shippingrules/config')->getMethodCodePrefix(), $value);
+                return sprintf("%s_%s", 'meanbee_shippingrules', $value);
             }
         }
         return $value;

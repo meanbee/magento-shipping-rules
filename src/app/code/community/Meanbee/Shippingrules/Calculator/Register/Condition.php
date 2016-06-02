@@ -7,7 +7,7 @@ class Meanbee_Shippingrules_Calculator_Register_Condition
     /** @var Meanbee_Shippingrules_Calculator_Condition_Abstract[] $children */
     protected $children = array();
 
-    private function __construct()
+    public function init()
     {
         $this->add('cart', new Meanbee_Shippingrules_Calculator_Condition_Cart);
         $this->add('customer', new Meanbee_Shippingrules_Calculator_Condition_Customer);
@@ -28,5 +28,17 @@ class Meanbee_Shippingrules_Calculator_Register_Condition
     protected function isValidChild($child)
     {
         return $child instanceof Meanbee_Shippingrules_Calculator_Condition_Abstract;
+    }
+
+    /**
+     * Called to add variable data to shipping rate request.
+     * @param  Mage_Shipping_Model_Rate_Request $request
+     * @return mage_Shipping_Model_Rate_Request
+     */
+    public function addVariablesToRequest($request) {
+        foreach ($this->children as $key => $child) {
+            $request = $child->addVariablesToRequest($request);
+        }
+        return $request;
     }
 }

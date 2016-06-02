@@ -35,7 +35,7 @@ class Meanbee_Shippingrules_Calculator_Condition_Destination_PostalCode
      * @implementation Meanbee_Shippingrules_Calculator_Condition_Abstract
      * @return array[] Variable descriptors.
      */
-    public function getVariables($context) {
+    public function getVariables() {
         return array(
             'dest_postal_code'       => array('label' => 'Shipping Postal Code', 'type' => array('enumerated'), 'options' => array()),
             'dest_postal_code_full'  => array('label' => 'Entire Postal Code',   'type' => array('numeber_base36')),
@@ -63,15 +63,13 @@ class Meanbee_Shippingrules_Calculator_Condition_Destination_PostalCode
      * {@inheritdoc}
      * @override
      * @param  Array $obj Descriptor array.
-     * @param  Meanbee_Shippingrules_Calculator_* $parent Parent object in evaluation tree.
      * @return $this
      */
-    public function init($obj, &$parent) {
-        $this->parent = $parent;
+    public function init($obj, $registers) {
         $this->setVariable($obj['attribute'])
              ->setComparator(
-                Meanbee_Shippingrules_Calculator_Register_Comparator::instance()->newInstanceOf(
-                    '===',
+                $registers->getComparatorRegister()->newInstanceOf(
+                    'equal',
                     $this->getVariables($context)[$obj['attribute']],
                     $this
                 )
@@ -79,7 +77,7 @@ class Meanbee_Shippingrules_Calculator_Condition_Destination_PostalCode
              ->setValue($obj['value']);
         if ($this->getVariable() === 'dest_postal_code') {
             $this->setAggregator(
-                Meanbee_Shippingrules_Calculator_Register_Aggregator::instance()->newInstanceOf(
+                $registers->getAggregatorRegister()->newInstanceOf(
                     $obj['aggregator']['aggregator'],
                     $obj['aggregator'],
                     array('group' => 'PostalCode', 'format' => $this->getValue())

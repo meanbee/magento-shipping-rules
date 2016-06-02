@@ -6,8 +6,8 @@ class Meanbee_Shippingrules_Calculator_Register_Aggregator
 
     /** @var Meanbee_Shippingrules_Calculator_Aggregator_Abstract[] $children */
     protected $children = array();
-    
-    private function __construct()
+
+    public function init()
     {
         $this->add('summative', new Meanbee_Shippingrules_Calculator_Aggregator_Summative);
         $this->add('conjunctive', new Meanbee_Shippingrules_Calculator_Aggregator_Conjunctive);

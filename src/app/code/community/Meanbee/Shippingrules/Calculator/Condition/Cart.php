@@ -16,4 +16,14 @@ class Meanbee_Shippingrules_Calculator_Condition_Cart
 			'package_value_with_discount' => array('label' => 'Subtotal after Discounts', 'type' => array('number'))
 		);
 	}
+
+	/**
+	 * {@inheritdoc}
+	 * @override
+     * @param  Mage_Shipping_Model_Rate_Request $request
+     * @return Mage_Shipping_Model_Rate_Request $request
+	 */
+	public function addVariablesToRequest($request) {
+		return $request;
+	}
 }

@@ -2,9 +2,6 @@
 abstract class Meanbee_Shippingrules_Calculator_Term_Abstract
     implements Meanbee_Shippingrules_Calculator_Numeric
 {
-    /** @var Meanbee_Shippingrules_Calculator_* $parent */
-    public $parent;
-
     /**
      * Evaluates the value of the term
      * @todo
@@ -16,13 +13,12 @@ abstract class Meanbee_Shippingrules_Calculator_Term_Abstract
     /**
      * Initialises term with descriptor array.
      * @todo
-     * @param  Array                              $obj Descriptor Array
-     * @param  Meanbee_Shippingrules_Calculator_* $parent Parent object in evaluation tree.
+     * @param  Array                                      $obj Descriptor Array
+     * @param  Meanbee_Shippingrules_Calculator_Registers $registers
      * @return $this
      */
-    public abstract function init($obj, &$parent)
+    public function init($obj, $registers)
     {
-        $this->parent = $parent;
         return $this;
     }
 }

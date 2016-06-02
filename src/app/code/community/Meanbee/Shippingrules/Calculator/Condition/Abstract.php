@@ -2,9 +2,6 @@
 abstract class Meanbee_Shippingrules_Calculator_Condition_Abstract
     implements Meanbee_Shippingrules_Calculator_Boolean
 {
-    /** @var Meanbee_Shippingrules_Calculator_* $parent */
-    public $parent;
-
     /** @var mixed|null $value */
     private $value = null;
 
@@ -87,6 +84,20 @@ abstract class Meanbee_Shippingrules_Calculator_Condition_Abstract
         return $this->variable;
     }
 
+    public function getType() {
+        return $this->getVariables()[$this->variable]['type'];
+    }
+
+    /**
+     * Called to add variable data to shipping rate request.
+     * @param  Mage_Shipping_Model_Rate_Request $request
+     * @return Mage_Shipping_Model_Rate_Request
+     */
+    public function addVariablesToRequest($request)
+    {
+        return $request;
+    }
+
     /**
     * Evaluates the truth of the condition
     * @implementation Meanbee_Shippingrules_Calculator_Boolean
@@ -95,27 +106,26 @@ abstract class Meanbee_Shippingrules_Calculator_Condition_Abstract
     */
     public function evaluate($request)
     {
-        return $this->getComparator()->evaluate(
+        $result = $this->getComparator()->evaluate(
             $this->getValue(),
-            $this->getType($this->getVariable()),
-            $request->getData($this->getVariable())
+            $request->getData($this->getVariable()),
+            $this->getType()
         );
+        return $result;
     }
 
     /**
      * Initialises condition with desccriptor array.
-     * @param  Array $obj Descriptor array.
-     * @param  Meanbee_Shippingrules_Calculator_* $parent Parent object in evaluation tree.
+     * @param  Array                                      $obj       Descriptor array.
+     * @param  Meanbee_Shippingrules_Calculator_Registers $registers
      * @return $this
      */
-    public function init($obj, &$parent) {
-        $this->parent = $parent;
-        return $this->setVariable($obj['attribute'])
+    public function init($obj, $registers) {
+        return $this->setVariable($obj['variable'])
                     ->setComparator(
-                        Meanbee_Shippingrules_Calculator_Register_Comparator::instance()->newInstanceOf(
-                            $obj['comparator'],
-                            $this->getVariables($context)[$obj['attribute']],
-                            $context
+                        $registers->getComparatorRegister()->newInstanceOf(
+                            $obj['comparator']['key'],
+                            $this->getVariables()[$obj['variable']]
                         )
                     )
                     ->setValue($obj['value']);

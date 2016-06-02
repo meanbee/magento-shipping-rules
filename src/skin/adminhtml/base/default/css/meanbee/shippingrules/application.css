@@ -15,7 +15,7 @@
   position: absolute !important;
   width: 1px !important;
 }
-.calculator-tree button {
+ul.calculator-tree button {
   background: transparent;
   background-position: center;
   background-repeat: no-repeat;
@@ -23,18 +23,18 @@
   height: 1.2em;
   width: 1.2em;
 }
-.calculator-tree button.add {
+ul.calculator-tree button.add {
   background-image: url("/skin/adminhtml/default/default/images/rule_component_add.gif");
 }
-.calculator-tree button.remove {
+ul.calculator-tree button.remove {
   background-image: url("/skin/adminhtml/default/default/images/rule_component_remove.gif");
 }
-.calculator-tree button.help {
+ul.calculator-tree button.help {
   background-image: url("/skin/adminhtml/default/default/images/fam_help.gif");
   margin-right: 0.5em;
 }
-div.calculator-tree input,
-div.calculator-tree select[id] {
+ul.calculator-tree input,
+ul.calculator-tree select[id] {
   background: linear-gradient(to top, currentColor 0, currentColor 1px, transparent 1px);
   border: none;
   border-radius: 0;
@@ -43,7 +43,7 @@ div.calculator-tree select[id] {
   vertical-align: bottom;
   width: auto;
 }
-div.calculator-tree select[id] {
+ul.calculator-tree select[id] {
   font-size: 0.9em;
   font-weight: bold;
   padding: 0;
@@ -157,16 +157,44 @@ div.calculator-tree select[id] {
 .calculator-tree .helpWrapper:not(:focus):not(:hover) .helpContainer.hidden {
   top: 0.5em;
 }
-.calculator-tree {
-  margin-right: 0.5em;
-}
-.calculator-tree > ul {
+ul.calculator-tree {
   border: none;
+  list-style: none;
+  margin-right: 0.5em;
   padding: 0 !important;
 }
-.calculator-tree > ul ul {
-  margin-left: 3px;
-  padding-left: 8px !important;
+ul.calculator-tree > li {
+  border: none;
+}
+ul.calculator-tree > li li {
+  border-left: solid 1px #6d8791;
+  margin: 0 0 0 0.5em !important;
+  max-height: 500vmax;
+  padding-left: 1em;
+  position: relative;
+  transition: opacity 0.3s, max-height 0.3s;
+}
+ul.calculator-tree > li li:last-child {
+  border-left: none;
+}
+ul.calculator-tree > li li:last-child::before {
+  border-bottom: dotted 1px #666e73;
+  border-left: solid 1px #6d8791;
+  content: '';
+  display: block;
+  height: 0.8em;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 0.8em;
+}
+ul.calculator-tree > li li.deleting {
+  max-height: 0;
+  opacity: 0;
+}
+ul.calculator-tree ul {
+  border: none;
+  padding-left: 0 !important;
 }
 
 /*# sourceMappingURL=application.css.map */

@@ -69,4 +69,14 @@
             </catalog>
         </menu>
     </adminhtml>
+    <default>
+        <carriers>
+            <meanbee_shippingrules>
+                <active>1</active>
+                <model>meanbee_shippingrules/carrier</model>
+                <title>Shipping Method</title>
+                <sort_order>10</sort_order>
+            </meanbee_shippingrules>
+        </carriers>
+    </default>
 </config>
