@@ -8,6 +8,11 @@ class Meanbee_Shippingrules_Calculator_Register_Comparator
     public function init()
     {
         $this->add('equal', new Meanbee_Shippingrules_Calculator_Comparator_Equal($this->registers));
+        $this->add('lessthan', new Meanbee_Shippingrules_Calculator_Comparator_LessThan($this->registers));
+        $this->add('greaterthan', new Meanbee_Shippingrules_Calculator_Comparator_GreaterThan($this->registers));
+        $this->add('lessthanorequal', new Meanbee_Shippingrules_Calculator_Comparator_LessThanOrEqual($this->registers));
+        $this->add('greaterthanorequal', new Meanbee_Shippingrules_Calculator_Comparator_GreaterThanOrEqual($this->registers));
+        $this->add('between', new Meanbee_Shippingrules_Calculator_Comparator_Between($this->registers));
     }
 
     /**

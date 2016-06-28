@@ -58,4 +58,14 @@ abstract class Meanbee_Shippingrules_Calculator_Type_Abstract
         }
         return false;
     }
+
+    public function sanitizeValidValue($value)
+    {
+        return $value;
+    }
+
+    public function sanitizeVariableValue($value)
+    {
+        return $value;
+    }
 }

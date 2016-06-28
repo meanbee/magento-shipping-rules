@@ -19,6 +19,6 @@ class Meanbee_Shippingrules_Calculator_Comparator_Equal
      */
     public function evaluate($validValue, $variableValue, $typeId) {
         $type = $this->getType($typeId);
-        return $type->sanitizeVariableValue($variableValue) == $type->sanitizeValidValue($validValue);
+        return $type->sanitizeVariableValue($variableValue) >= $type->sanitizeValidValue($validValue);
     }
 }

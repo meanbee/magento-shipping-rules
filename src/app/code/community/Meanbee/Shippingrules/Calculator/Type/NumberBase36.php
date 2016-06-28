@@ -1,5 +1,5 @@
 <?php
-class Meanbee_Shippingrules_Calculator_Type_Number
+class Meanbee_Shippingrules_Calculator_Type_NumberBase26
     extends Meanbee_Shippingrules_Calculator_Type_Abstract
 {
     /**
@@ -10,7 +10,7 @@ class Meanbee_Shippingrules_Calculator_Type_Number
      */
     public function sanitizeValidValue($value)
     {
-        return +$value;
+        return (int) $this->hexatrigesimalToDecimal($value);
     }
 
     /**
@@ -21,6 +21,12 @@ class Meanbee_Shippingrules_Calculator_Type_Number
      */
     public function sanitizeVariableValue($value)
     {
-        return +$value;
+        return (int) $this->hexatrigesimalToDecimal($value);
+    }
+    
+    protected function hexatrigesimalToDecimal($base36) {
+        $base36 = strtoupper($base36);
+        $base10 = base_convert($base36, 36, 10);
+        return $base10;
     }
 }

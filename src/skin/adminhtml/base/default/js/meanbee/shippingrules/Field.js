@@ -9,7 +9,8 @@
         }
 
         valueChangeHandler(event) {
-            this.condition.valueChangeHandler(event.target.value);
+            this.value = event.target.value;
+            this.condition.valueChangeHandler(this.value);
         }
     }
 })(Meanbee.ShippingRules);

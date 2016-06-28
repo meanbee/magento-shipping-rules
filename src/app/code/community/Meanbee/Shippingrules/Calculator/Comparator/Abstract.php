@@ -68,6 +68,10 @@ abstract class Meanbee_Shippingrules_Calculator_Comparator_Abstract
         return false;
     }
 
+    protected function getType($typeId) {
+        return $this->registers->getTypeRegister()->get($typeId);
+    }
+
     /**
      * Initialises comparator with desccriptor array.
      * @param  Array                                      $obj       Descriptor array.

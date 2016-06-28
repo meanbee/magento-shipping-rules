@@ -1,26 +1,20 @@
 'use strict';
 (function (ShippingRules) {
-    ShippingRules.Comparator.Equal = class extends ShippingRules.Comparator
+    ShippingRules.Comparator.Between = class extends ShippingRules.Comparator
     {
         constructor(type) {
             super(type);
         }
 
         static supportedTypes() {
-            return ['number', 'currency', 'numeric_b10', 'numeric_b26', 'numeric_b36', 'string', 'enum', 'date', 'time', 'datetime'];
+            return ['number', 'currency', 'numeric_b10', 'numeric_b26', 'numeric_b36', 'date', 'time', 'datetime'];
         }
 
         static name(type) {
             type = type.filter((t => ~this.supportedTypes().indexOf(t)).bind(this));
             switch (type[0]) {
-            case 'number':
-            case 'currency':
-            case 'numeric_b10':
-            case 'numeric_b26':
-            case 'numeric_b36':
-                return 'EQUALS';
             default:
-                return 'IS';
+                return 'IS BETWEEN';
             }
         }
         
@@ -29,22 +23,22 @@
             switch (type[0]) {
             case 'number':
             case 'numeric_b10':
-                return 'Number';
+                return 'NumberX2';
             case 'numeric_b26':
-                return 'NumberBase26';
+                return 'NumberBase26X2';
             case 'numeric_b36':
-                return 'NumberBase36';
+                return 'NumberBase36X2';
             default:
-                return 'Text';
+                return 'TextX2';
             }
         }
 
         toJSON() {
             let obj = super.toJSON();
-            obj.key = 'Equal';
+            obj.key = 'Between';
             return obj;
         }
     }
 
-    ShippingRules.Register.comparator.add('Equal', ShippingRules.Comparator.Equal);
+    ShippingRules.Register.comparator.add('Between', ShippingRules.Comparator.Between);
 })(Meanbee.ShippingRules);

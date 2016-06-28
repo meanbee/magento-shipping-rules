@@ -1,26 +1,28 @@
 'use strict';
 (function (ShippingRules) {
-    ShippingRules.Comparator.Equal = class extends ShippingRules.Comparator
+    ShippingRules.Comparator.GreaterThan = class extends ShippingRules.Comparator
     {
         constructor(type) {
             super(type);
         }
 
         static supportedTypes() {
-            return ['number', 'currency', 'numeric_b10', 'numeric_b26', 'numeric_b36', 'string', 'enum', 'date', 'time', 'datetime'];
+            return ['number', 'currency', 'numeric_b10', 'numeric_b26', 'numeric_b36', 'date', 'time', 'datetime'];
         }
 
         static name(type) {
             type = type.filter((t => ~this.supportedTypes().indexOf(t)).bind(this));
             switch (type[0]) {
-            case 'number':
-            case 'currency':
             case 'numeric_b10':
             case 'numeric_b26':
             case 'numeric_b36':
-                return 'EQUALS';
+                return 'SUCCEEDS';
+            case 'date':
+            case 'time':
+            case 'datetime':
+                return 'IS AFTER';
             default:
-                return 'IS';
+                return 'IS GREATER THAN';
             }
         }
         
@@ -41,10 +43,10 @@
 
         toJSON() {
             let obj = super.toJSON();
-            obj.key = 'Equal';
+            obj.key = 'GreaterThan';
             return obj;
         }
     }
 
-    ShippingRules.Register.comparator.add('Equal', ShippingRules.Comparator.Equal);
+    ShippingRules.Register.comparator.add('GreaterThan', ShippingRules.Comparator.GreaterThan);
 })(Meanbee.ShippingRules);

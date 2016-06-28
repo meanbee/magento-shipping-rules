@@ -19,6 +19,11 @@ class Meanbee_Shippingrules_Calculator_Comparator_Equal
      */
     public function evaluate($validValue, $variableValue, $typeId) {
         $type = $this->getType($typeId);
-        return $type->sanitizeVariableValue($variableValue) == $type->sanitizeValidValue($validValue);
+        if (!(is_array($validValue) && count($validValue) === 2)) return false;
+        sort($validValue);
+        $min = $validValue[0];
+        $max = $validValue[1];
+        $sanitizedVariableValue = $type->sanitizeVariableValue($variableValue);
+        return $type->sanitizeValidValue($min) <= $sanitizedVariableValue && $sanitizedVariableValue <= $type->sanitizeValidValue($max);
     }
 }
