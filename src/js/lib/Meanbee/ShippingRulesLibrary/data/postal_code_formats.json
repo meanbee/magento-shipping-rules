@@ -1,0 +1,260 @@
+[{
+  "decoration": "🇦🇺",
+  "example": ["7800"],
+  "label": "Australia",
+  "parser": "/^(\\d{4})$/",
+  "parts": ["b10"],
+  "value": "AU"
+}, {
+  "decoration": "🇦🇮",
+  "example": ["AI", "2640"],
+  "label": "Anguilla",
+  "parser": "/^(AI)(\\d{4})$/",
+  "parts": ["b36", "", "b10"],
+  "value": "AI"
+}, {
+  "decoration": "🇦🇹",
+  "example": ["8993"],
+  "label": "Austria",
+  "parser": "/^(\\d{4})$/",
+  "parts": ["b10"],
+  "value": "AT"
+}, {
+  "decoration": "🇦🇶",
+  "example": ["BIQQ", "1", "ZZ"],
+  "label": "British Antarctic Territory",
+  "parser": "/^(BIQQ)(\\d)([A-Z]{2})$/",
+  "parts": ["b36", "", "b10", "b26"],
+  "value": "AQ"
+}, {
+  "decoration": "🇧🇪",
+  "example": ["1350"],
+  "label": "Belgium",
+  "parser": "/^(\\d{4})$/",
+  "parts": ["b10"],
+  "value": "BE"
+}, {
+  "decoration": "🇧🇷",
+  "example": ["27", "910", "050"],
+  "label": "Brazil",
+  "parser": "/^(\\d{2})(\\d{3})(\\d{3}|)$/",
+  "parts": ["b10", "b10", "b10", "b10"],
+  "value": "BR"
+}, {
+  "decoration": "🇨🇦",
+  "example": ["K1A", "0B1"],
+  "label": "Canada",
+  "parser": "/^([A-CEGHJ-NPR-TVXY]\\d[A-CEGHJ-NPR-TV-Z])(\\d[A-CEGHJ-NPR-TVXY]\\d)$/",
+  "parts": ["b36", "b36", "b36"],
+  "value": "CA"
+}, {
+  "decoration": "🇨🇭",
+  "example": ["9632"],
+  "label": "Switzerland",
+  "parser": "/^([1-9]\\d{3})$/",
+  "parts": ["b10"],
+  "value": "CH"
+}, {
+  "decoration": "🇩🇪",
+  "example": ["97999"],
+  "label": "Germany",
+  "parser": "/^(\\d{5})$/",
+  "parts": ["b10"],
+  "value": "DE"
+}, {
+  "decoration": "🇩🇰",
+  "example": ["6100"],
+  "label": "Denmark",
+  "parser": "/^(\\d{3,4})$/",
+  "parts": ["b10"],
+  "value": "DK"
+}, {
+  "decoration": "🇪🇸",
+  "example": ["08398"],
+  "label": "Spain",
+  "parser": "/^(0[1-9]\\d{3}|[1-4]\\d{4}|5[0-2]\\d{3})$/",
+  "parts": ["b10"],
+  "value": "ES"
+}, {
+  "decoration": "🇫🇰",
+  "example": ["FIQQ", "1", "ZZ"],
+  "label": "Falkland Islands",
+  "parser": "/^(FIQQ)(\\d)([A-Z]{2})$/",
+  "parts": ["b36", "", "b10", "b26"],
+  "value": "FK"
+}, {
+  "decoration": "🇫🇷",
+  "example": ["97439"],
+  "label": "France",
+  "parser": "/^(\\d{1,5})$/",
+  "parts": ["b10"],
+  "value": "FR"
+}, {
+  "decoration": "🇫🇴",
+  "example": ["970"],
+  "label": "Faroe Islands",
+  "parser": "/^(\\d{3,4})$/",
+  "parts": ["b10"],
+  "value": "FO"
+}, {
+  "decoration": "🇬🇧",
+  "example": ["W", "1A", "3", "BP"],
+  "label": "United Kingdom",
+  "parser": "/^([A-Z]{1,2})(\\d{2}|\\d[A-Z]?)(\\d)([A-Z]{2})$/",
+  "parts": ["str", "str", "b36", "b10", "b26"],
+  "value": "GB"
+}, {
+  "decoration": "🇬🇧",
+  "example": ["BFPO", "9999"],
+  "label": "British Forces Post Office",
+  "parser": "/^(BFPO)(\\d{1,4})$/",
+  "parts": ["b36", "", "b10"],
+  "value": "BFPO"
+}, {
+  "decoration": "🇬🇬",
+  "example": ["GY", "6", "8", "RA"],
+  "label": "Guernsey",
+  "parser": "/^(GY)(\\d{2}|\\d[A-Z]?)(\\d)([A-Z]{2})$/",
+  "parts": ["b36", "", "b36", "b10", "b26"],
+  "value": "GG"
+}, {
+  "decoration": "🇬🇮",
+  "example": ["GX", "11", "1", "AA"],
+  "label": "Gibraltar",
+  "parser": "/^(GX)(\\d{1,2})(\\d)([A-Z]{2})$/",
+  "parts": ["b36", "", "b10", "b10", "b26"],
+  "value": "GI"
+}, {
+  "decoration": "🇬🇸",
+  "example": ["SIQQ", "1", "ZZ"],
+  "label": "South Georgia and the South Sandwich Islands",
+  "parser": "/^(SIQQ)(\\d)([A-Z]{2})$/",
+  "parts": ["b36", "", "b10", "b26"],
+  "value": "GS"
+}, {
+  "decoration": "🇮🇲",
+  "example": ["IM", "4", "7", "AA"],
+  "label": "Isle of Man",
+  "parser": "/^(IM)(\\d{2}|\\d[A-Z]?)(\\d)([A-Z]{2})$/",
+  "parts": ["b36", "", "b36", "b10", "b26"],
+  "value": "IM"
+}, {
+  "decoration": "🇮🇳",
+  "example": ["456", "001"],
+  "label": "India",
+  "parser": "/^(\\d{3})(\\d{3})$/",
+  "parts": ["b10", "b10", "b10"],
+  "value": "IN"
+}, {
+  "decoration": "🇭🇺",
+  "example": ["1037"],
+  "label": "Hungary",
+  "parser": "/^(\\d{4})$/",
+  "parts": ["b10"],
+  "value": "HU"
+}, {
+  "decoration": "🇮🇴",
+  "example": ["BBND", "1", "ZZ"],
+  "label": "British Indian Ocean Territory",
+  "parser": "/^(BBND)(\\d)([A-Z]{2})$/",
+  "parts": ["b36", "", "b10", "b26"],
+  "value": "IO"
+}, {
+  "decoration": "🇮🇹",
+  "example": ["20090"],
+  "label": "Italy",
+  "parser": "/^(\\d{5})$/",
+  "parts": ["b10"],
+  "value": "IT"
+}, {
+  "decoration": "🇯🇪",
+  "example": ["JE", "3", "5", "FL"],
+  "label": "Jersey",
+  "parser": "/^(JE)(\\d{2}|\\d[A-Z]?)(\\d)([A-Z]{2})$/",
+  "parts": ["b36", "", "b36", "b10", "b26"],
+  "value": "JE"
+}, {
+  "decoration": "🇯🇵",
+  "example": ["876", "0854"],
+  "label": "Japan",
+  "parser": "/^(\\d{3})(\\d{4})$/",
+  "parts": ["b10", "b10", "b10"],
+  "value": "JP"
+}, {
+  "decoration": "🇱🇺",
+  "example": ["L", "1248"],
+  "label": "Luxembourg",
+  "parser": "/^(L)(\\d{4})$/",
+  "parts": ["b36", "", "b10"],
+  "value": "LU"
+}, {
+  "decoration": "🇱🇻",
+  "example": ["LV", "9999"],
+  "label": "Latvia",
+  "parser": "/^(LV|)(\\d{4})$/",
+  "parts": ["b36", "", "b10"],
+  "value": "LV"
+}, {
+  "decoration": "🇳🇱",
+  "example": ["2500", "DL"],
+  "label": "Netherlands",
+  "parser": "/^([1-9]\\d{3})([A-Z]{2})$/",
+  "parts": ["b36", "b10", "b26"],
+  "value": "NL"
+}, {
+  "decoration": "🇸🇪",
+  "example": ["732", "45"],
+  "label": "Sweden",
+  "parser": "/^(\\d{3})(\\d{2})$/",
+  "parts": ["b10", "b10", "b10"],
+  "value": "SE"
+}, {
+  "decoration": "🇸🇭",
+  "example": ["ASCN", "1", "ZZ"],
+  "label": "Saint Helena, Ascension and Tristan da Cunha",
+  "parser": "/^(ASCN|STHL|TDCU)(\\d)([A-Z]{2})$/",
+  "parts": ["b36", "str", "b10", "b26"],
+  "value": "SH"
+}, {
+  "decoration": "🇵🇳",
+  "example": ["PCRN", "1", "ZZ"],
+  "label": "Pitcairn Islands",
+  "parser": "/^(PCRN)(\\d)([A-Z]{2})$/",
+  "parts": ["b36", "", "b10", "b26"],
+  "value": "PN"
+}, {
+  "decoration": "🇵🇹",
+  "example": ["1750", "396"],
+  "label": "Portugal",
+  "parser": "/^(\\d{4})(\\d{3})$/",
+  "parts": ["b10", "b10", "b10"],
+  "value": "PT"
+}, {
+  "decoration": "🇷🇺",
+  "example": ["236", "592"],
+  "label": "Russia",
+  "parser": "/^\\d{6}$/",
+  "parts": ["b10", "b10", "b10"],
+  "value": "RU"
+}, {
+  "decoration": "🇹🇨",
+  "example": ["TKCA", "1", "ZZ"],
+  "label": "Turks and Caicos Islands",
+  "parser": "/^(TKCA)(\\d)([A-Z]{2})$/",
+  "parts": ["b36", "", "b10", "b26"],
+  "value": "TC"
+}, {
+  "decoration": "🇵🇱",
+  "example": ["05", "825"],
+  "label": "Poland",
+  "parser": "/^(\\d{2})(\\d{3})$/",
+  "parts": ["b36", "b10", "b26"],
+  "value": "PL"
+}, {
+  "decoration": "🇺🇸",
+  "example": ["21064", "145"],
+  "label": "United States of America",
+  "parser": "/^(\\d{5})(\\d{4}|)$/",
+  "parts": ["b10", "b10", "b10"],
+  "value": "US"
+}]

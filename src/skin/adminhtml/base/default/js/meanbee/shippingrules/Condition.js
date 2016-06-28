@@ -33,9 +33,9 @@
         renderComparator() {
             let me = this;
             return (<select id={`${me.id}-comparator`} onChange={event => {
-                me.comparator = new (ShippingRules.Register.comparator.get(event.target.value));
+                me.comparator = new (ShippingRules.Register.comparator.get(event.target.value))(this.type);
                 me.valueField = new (ShippingRules.Register.field.get(me.comparator.getField()))(me, me.value);
-                me.root.render();
+                me.root.rerender();
             }}>
                 {ShippingRules.Register.comparator.getAsOptions(me.type, me.comparator.name)}
             </select>);
@@ -54,6 +54,10 @@
                 {me.valueField.render()}
                 {me.renderRemoveButton()}
             </li>);
+        }
+
+        refresh() {
+            // NO OP
         }
 
         init(obj) {

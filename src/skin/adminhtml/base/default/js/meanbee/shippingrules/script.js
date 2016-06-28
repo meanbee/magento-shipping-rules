@@ -68,6 +68,684 @@
     }
 ]));
 'use strict';
+var _typeof = typeof Symbol === 'function' && typeof Symbol.iterator === 'symbol' ? function (obj) {
+    return typeof obj;
+} : function (obj) {
+    return obj && typeof Symbol === 'function' && obj.constructor === Symbol ? 'symbol' : typeof obj;
+};
+;
+(function (root, factory) {
+    if (typeof define === 'function' && define.amd) {
+        define(factory);
+    } else if ((typeof module === 'undefined' ? 'undefined' : _typeof(module)) === 'object' && module.exports) {
+        module.exports = factory();
+    } else {
+        root.Popper = factory();
+    }
+}(window, function () {
+    'use strict';
+    var root = window;
+    var DEFAULTS = {
+        placement: 'bottom',
+        gpuAcceleration: true,
+        offset: 0,
+        boundariesElement: 'viewport',
+        boundariesPadding: 5,
+        preventOverflowOrder: [
+            'left',
+            'right',
+            'top',
+            'bottom'
+        ],
+        flipBehavior: 'flip',
+        arrowElement: '[x-arrow]',
+        modifiers: [
+            'shift',
+            'offset',
+            'preventOverflow',
+            'keepTogether',
+            'arrow',
+            'flip',
+            'applyStyle'
+        ],
+        modifiersIgnored: []
+    };
+    function Popper(reference, popper, options) {
+        this._reference = reference.jquery ? reference[0] : reference;
+        this.state = {};
+        var isNotDefined = typeof popper === 'undefined' || popper === null;
+        var isConfig = popper && Object.prototype.toString.call(popper) === '[object Object]';
+        if (isNotDefined || isConfig) {
+            this._popper = this.parse(isConfig ? popper : {});
+        } else {
+            this._popper = popper.jquery ? popper[0] : popper;
+        }
+        this._options = Object.assign({}, DEFAULTS, options);
+        this._options.modifiers = this._options.modifiers.map(function (modifier) {
+            if (this._options.modifiersIgnored.indexOf(modifier) !== -1)
+                return;
+            if (modifier === 'applyStyle') {
+                this._popper.setAttribute('x-placement', this._options.placement);
+            }
+            return this.modifiers[modifier] || modifier;
+        }.bind(this));
+        this.state.position = this._getPosition(this._popper, this._reference);
+        setStyle(this._popper, { position: this.state.position });
+        this.update();
+        this._setupEventListeners();
+        return this;
+    }
+    Popper.prototype.destroy = function () {
+        this._popper.removeAttribute('x-placement');
+        this._popper.style.left = '';
+        this._popper.style.position = '';
+        this._popper.style.top = '';
+        this._popper.style[getSupportedPropertyName('transform')] = '';
+        this._removeEventListeners();
+        if (this._options.removeOnDestroy) {
+            this._popper.remove();
+        }
+        return this;
+    };
+    Popper.prototype.update = function () {
+        var data = {
+            instance: this,
+            styles: {}
+        };
+        data.placement = this._options.placement;
+        data._originalPlacement = this._options.placement;
+        data.offsets = this._getOffsets(this._popper, this._reference, data.placement);
+        data.boundaries = this._getBoundaries(data, this._options.boundariesPadding, this._options.boundariesElement);
+        data = this.runModifiers(data, this._options.modifiers);
+        if (typeof this.state.updateCallback === 'function') {
+            this.state.updateCallback(data);
+        }
+    };
+    Popper.prototype.onCreate = function (callback) {
+        callback(this);
+        return this;
+    };
+    Popper.prototype.onUpdate = function (callback) {
+        this.state.updateCallback = callback;
+        return this;
+    };
+    Popper.prototype.parse = function (config) {
+        var defaultConfig = {
+            tagName: 'div',
+            classNames: ['popper'],
+            attributes: [],
+            parent: root.document.body,
+            content: '',
+            contentType: 'text',
+            arrowTagName: 'div',
+            arrowClassNames: ['popper__arrow'],
+            arrowAttributes: ['x-arrow']
+        };
+        config = Object.assign({}, defaultConfig, config);
+        var d = root.document;
+        var popper = d.createElement(config.tagName);
+        addClassNames(popper, config.classNames);
+        addAttributes(popper, config.attributes);
+        if (config.contentType === 'node') {
+            popper.appendChild(config.content.jquery ? config.content[0] : config.content);
+        } else if (config.contentType === 'html') {
+            popper.innerHTML = config.content;
+        } else {
+            popper.textContent = config.content;
+        }
+        if (config.arrowTagName) {
+            var arrow = d.createElement(config.arrowTagName);
+            addClassNames(arrow, config.arrowClassNames);
+            addAttributes(arrow, config.arrowAttributes);
+            popper.appendChild(arrow);
+        }
+        var parent = config.parent.jquery ? config.parent[0] : config.parent;
+        if (typeof parent === 'string') {
+            parent = d.querySelectorAll(config.parent);
+            if (parent.length > 1) {
+                console.warn('WARNING: the given `parent` query(' + config.parent + ') matched more than one element, the first one will be used');
+            }
+            if (parent.length === 0) {
+                throw 'ERROR: the given `parent` doesn\'t exists!';
+            }
+            parent = parent[0];
+        }
+        if (parent.length > 1 && parent instanceof Element === false) {
+            console.warn('WARNING: you have passed as parent a list of elements, the first one will be used');
+            parent = parent[0];
+        }
+        parent.appendChild(popper);
+        return popper;
+        function addClassNames(element, classNames) {
+            classNames.forEach(function (className) {
+                element.classList.add(className);
+            });
+        }
+        function addAttributes(element, attributes) {
+            attributes.forEach(function (attribute) {
+                element.setAttribute(attribute.split(':')[0], attribute.split(':')[1] || '');
+            });
+        }
+    };
+    Popper.prototype._getPosition = function (popper, reference) {
+        var container = getOffsetParent(reference);
+        var isParentFixed = isFixed(reference, container);
+        return isParentFixed ? 'fixed' : 'absolute';
+    };
+    Popper.prototype._getOffsets = function (popper, reference, placement) {
+        placement = placement.split('-')[0];
+        var popperOffsets = {};
+        popperOffsets.position = this.state.position;
+        var isParentFixed = popperOffsets.position === 'fixed';
+        var referenceOffsets = getOffsetRectRelativeToCustomParent(reference, getOffsetParent(popper), isParentFixed);
+        var popperRect = getOuterSizes(popper);
+        if ([
+                'right',
+                'left'
+            ].indexOf(placement) !== -1) {
+            popperOffsets.top = referenceOffsets.top + referenceOffsets.height / 2 - popperRect.height / 2;
+            if (placement === 'left') {
+                popperOffsets.left = referenceOffsets.left - popperRect.width;
+            } else {
+                popperOffsets.left = referenceOffsets.right;
+            }
+        } else {
+            popperOffsets.left = referenceOffsets.left + referenceOffsets.width / 2 - popperRect.width / 2;
+            if (placement === 'top') {
+                popperOffsets.top = referenceOffsets.top - popperRect.height;
+            } else {
+                popperOffsets.top = referenceOffsets.bottom;
+            }
+        }
+        popperOffsets.width = popperRect.width;
+        popperOffsets.height = popperRect.height;
+        return {
+            popper: popperOffsets,
+            reference: referenceOffsets
+        };
+    };
+    Popper.prototype._setupEventListeners = function () {
+        this.state.updateBound = this.update.bind(this);
+        root.addEventListener('resize', this.state.updateBound);
+        if (this._options.boundariesElement !== 'window') {
+            var target = getScrollParent(this._reference);
+            if (target === root.document.body || target === root.document.documentElement) {
+                target = root;
+            }
+            target.addEventListener('scroll', this.state.updateBound);
+        }
+    };
+    Popper.prototype._removeEventListeners = function () {
+        root.removeEventListener('resize', this.state.updateBound);
+        if (this._options.boundariesElement !== 'window') {
+            var target = getScrollParent(this._reference);
+            if (target === root.document.body || target === root.document.documentElement) {
+                target = root;
+            }
+            target.removeEventListener('scroll', this.state.updateBound);
+        }
+        this.state.updateBound = null;
+    };
+    Popper.prototype._getBoundaries = function (data, padding, boundariesElement) {
+        var boundaries = {};
+        var width, height;
+        if (boundariesElement === 'window') {
+            var body = root.document.body, html = root.document.documentElement;
+            height = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
+            width = Math.max(body.scrollWidth, body.offsetWidth, html.clientWidth, html.scrollWidth, html.offsetWidth);
+            boundaries = {
+                top: 0,
+                right: width,
+                bottom: height,
+                left: 0
+            };
+        } else if (boundariesElement === 'viewport') {
+            var offsetParent = getOffsetParent(this._popper);
+            var scrollParent = getScrollParent(this._popper);
+            var offsetParentRect = getOffsetRect(offsetParent);
+            var scrollTop = data.offsets.popper.position === 'fixed' ? 0 : scrollParent.scrollTop;
+            var scrollLeft = data.offsets.popper.position === 'fixed' ? 0 : scrollParent.scrollLeft;
+            boundaries = {
+                top: 0 - (offsetParentRect.top - scrollTop),
+                right: root.document.documentElement.clientWidth - (offsetParentRect.left - scrollLeft),
+                bottom: root.document.documentElement.clientHeight - (offsetParentRect.top - scrollTop),
+                left: 0 - (offsetParentRect.left - scrollLeft)
+            };
+        } else {
+            if (getOffsetParent(this._popper) === boundariesElement) {
+                boundaries = {
+                    top: 0,
+                    left: 0,
+                    right: boundariesElement.clientWidth,
+                    bottom: boundariesElement.clientHeight
+                };
+            } else {
+                boundaries = getOffsetRect(boundariesElement);
+            }
+        }
+        boundaries.left += padding;
+        boundaries.right -= padding;
+        boundaries.top = boundaries.top + padding;
+        boundaries.bottom = boundaries.bottom - padding;
+        return boundaries;
+    };
+    Popper.prototype.runModifiers = function (data, modifiers, ends) {
+        var modifiersToRun = modifiers.slice();
+        if (ends !== undefined) {
+            modifiersToRun = this._options.modifiers.slice(0, getArrayKeyIndex(this._options.modifiers, ends));
+        }
+        modifiersToRun.forEach(function (modifier) {
+            if (isFunction(modifier)) {
+                data = modifier.call(this, data);
+            }
+        }.bind(this));
+        return data;
+    };
+    Popper.prototype.isModifierRequired = function (requesting, requested) {
+        var index = getArrayKeyIndex(this._options.modifiers, requesting);
+        return !!this._options.modifiers.slice(0, index).filter(function (modifier) {
+            return modifier === requested;
+        }).length;
+    };
+    Popper.prototype.modifiers = {};
+    Popper.prototype.modifiers.applyStyle = function (data) {
+        var styles = { position: data.offsets.popper.position };
+        var left = Math.round(data.offsets.popper.left);
+        var top = Math.round(data.offsets.popper.top);
+        var prefixedProperty;
+        if (this._options.gpuAcceleration && (prefixedProperty = getSupportedPropertyName('transform'))) {
+            styles[prefixedProperty] = 'translate3d(' + left + 'px, ' + top + 'px, 0)';
+            styles.top = 0;
+            styles.left = 0;
+        } else {
+            styles.left = left;
+            styles.top = top;
+        }
+        Object.assign(styles, data.styles);
+        setStyle(this._popper, styles);
+        this._popper.setAttribute('x-placement', data.placement);
+        if (this.isModifierRequired(this.modifiers.applyStyle, this.modifiers.arrow) && data.offsets.arrow) {
+            setStyle(data.arrowElement, data.offsets.arrow);
+        }
+        return data;
+    };
+    Popper.prototype.modifiers.shift = function (data) {
+        var placement = data.placement;
+        var basePlacement = placement.split('-')[0];
+        var shiftVariation = placement.split('-')[1];
+        if (shiftVariation) {
+            var reference = data.offsets.reference;
+            var popper = getPopperClientRect(data.offsets.popper);
+            var shiftOffsets = {
+                y: {
+                    start: { top: reference.top },
+                    end: { top: reference.top + reference.height - popper.height }
+                },
+                x: {
+                    start: { left: reference.left },
+                    end: { left: reference.left + reference.width - popper.width }
+                }
+            };
+            var axis = [
+                'bottom',
+                'top'
+            ].indexOf(basePlacement) !== -1 ? 'x' : 'y';
+            data.offsets.popper = Object.assign(popper, shiftOffsets[axis][shiftVariation]);
+        }
+        return data;
+    };
+    Popper.prototype.modifiers.preventOverflow = function (data) {
+        var order = this._options.preventOverflowOrder;
+        var popper = getPopperClientRect(data.offsets.popper);
+        var check = {
+            left: function left() {
+                var left = popper.left;
+                if (popper.left < data.boundaries.left) {
+                    left = Math.max(popper.left, data.boundaries.left);
+                }
+                return { left: left };
+            },
+            right: function right() {
+                var left = popper.left;
+                if (popper.right > data.boundaries.right) {
+                    left = Math.min(popper.left, data.boundaries.right - popper.width);
+                }
+                return { left: left };
+            },
+            top: function top() {
+                var top = popper.top;
+                if (popper.top < data.boundaries.top) {
+                    top = Math.max(popper.top, data.boundaries.top);
+                }
+                return { top: top };
+            },
+            bottom: function bottom() {
+                var top = popper.top;
+                if (popper.bottom > data.boundaries.bottom) {
+                    top = Math.min(popper.top, data.boundaries.bottom - popper.height);
+                }
+                return { top: top };
+            }
+        };
+        order.forEach(function (direction) {
+            data.offsets.popper = Object.assign(popper, check[direction]());
+        });
+        return data;
+    };
+    Popper.prototype.modifiers.keepTogether = function (data) {
+        var popper = getPopperClientRect(data.offsets.popper);
+        var reference = data.offsets.reference;
+        var f = Math.floor;
+        if (popper.right < f(reference.left)) {
+            data.offsets.popper.left = f(reference.left) - popper.width;
+        }
+        if (popper.left > f(reference.right)) {
+            data.offsets.popper.left = f(reference.right);
+        }
+        if (popper.bottom < f(reference.top)) {
+            data.offsets.popper.top = f(reference.top) - popper.height;
+        }
+        if (popper.top > f(reference.bottom)) {
+            data.offsets.popper.top = f(reference.bottom);
+        }
+        return data;
+    };
+    Popper.prototype.modifiers.flip = function (data) {
+        if (!this.isModifierRequired(this.modifiers.flip, this.modifiers.preventOverflow)) {
+            console.warn('WARNING: preventOverflow modifier is required by flip modifier in order to work, be sure to include it before flip!');
+            return data;
+        }
+        if (data.flipped && data.placement === data._originalPlacement) {
+            return data;
+        }
+        var placement = data.placement.split('-')[0];
+        var placementOpposite = getOppositePlacement(placement);
+        var variation = data.placement.split('-')[1] || '';
+        var flipOrder = [];
+        if (this._options.flipBehavior === 'flip') {
+            flipOrder = [
+                placement,
+                placementOpposite
+            ];
+        } else {
+            flipOrder = this._options.flipBehavior;
+        }
+        flipOrder.forEach(function (step, index) {
+            if (placement !== step || flipOrder.length === index + 1) {
+                return;
+            }
+            placement = data.placement.split('-')[0];
+            placementOpposite = getOppositePlacement(placement);
+            var popperOffsets = getPopperClientRect(data.offsets.popper);
+            var a = [
+                'right',
+                'bottom'
+            ].indexOf(placement) !== -1;
+            if (a && Math.floor(data.offsets.reference[placement]) > Math.floor(popperOffsets[placementOpposite]) || !a && Math.floor(data.offsets.reference[placement]) < Math.floor(popperOffsets[placementOpposite])) {
+                data.flipped = true;
+                data.placement = flipOrder[index + 1];
+                if (variation) {
+                    data.placement += '-' + variation;
+                }
+                data.offsets.popper = this._getOffsets(this._popper, this._reference, data.placement).popper;
+                data = this.runModifiers(data, this._options.modifiers, this._flip);
+            }
+        }.bind(this));
+        return data;
+    };
+    Popper.prototype.modifiers.offset = function (data) {
+        var offset = this._options.offset;
+        var popper = data.offsets.popper;
+        if (data.placement.indexOf('left') !== -1) {
+            popper.top -= offset;
+        } else if (data.placement.indexOf('right') !== -1) {
+            popper.top += offset;
+        } else if (data.placement.indexOf('top') !== -1) {
+            popper.left -= offset;
+        } else if (data.placement.indexOf('bottom') !== -1) {
+            popper.left += offset;
+        }
+        return data;
+    };
+    Popper.prototype.modifiers.arrow = function (data) {
+        var arrow = this._options.arrowElement;
+        if (typeof arrow === 'string') {
+            arrow = this._popper.querySelector(arrow);
+        }
+        if (!arrow) {
+            return data;
+        }
+        if (!this._popper.contains(arrow)) {
+            console.warn('WARNING: `arrowElement` must be child of its popper element!');
+            return data;
+        }
+        if (!this.isModifierRequired(this.modifiers.arrow, this.modifiers.keepTogether)) {
+            console.warn('WARNING: keepTogether modifier is required by arrow modifier in order to work, be sure to include it before arrow!');
+            return data;
+        }
+        var arrowStyle = {};
+        var placement = data.placement.split('-')[0];
+        var popper = getPopperClientRect(data.offsets.popper);
+        var reference = data.offsets.reference;
+        var isVertical = [
+            'left',
+            'right'
+        ].indexOf(placement) !== -1;
+        var len = isVertical ? 'height' : 'width';
+        var side = isVertical ? 'top' : 'left';
+        var altSide = isVertical ? 'left' : 'top';
+        var opSide = isVertical ? 'bottom' : 'right';
+        var arrowSize = getOuterSizes(arrow)[len];
+        if (reference[opSide] - arrowSize < popper[side]) {
+            data.offsets.popper[side] -= popper[side] - (reference[opSide] - arrowSize);
+        }
+        if (reference[side] + arrowSize > popper[opSide]) {
+            data.offsets.popper[side] += reference[side] + arrowSize - popper[opSide];
+        }
+        var center = reference[side] + reference[len] / 2 - arrowSize / 2;
+        var sideValue = center - popper[side];
+        sideValue = Math.max(Math.min(popper[len] - arrowSize, sideValue), 0);
+        arrowStyle[side] = sideValue;
+        arrowStyle[altSide] = '';
+        data.offsets.arrow = arrowStyle;
+        data.arrowElement = arrow;
+        return data;
+    };
+    function getOuterSizes(element) {
+        var _display = element.style.display, _visibility = element.style.visibility;
+        element.style.display = 'block';
+        element.style.visibility = 'hidden';
+        var calcWidthToForceRepaint = element.offsetWidth;
+        var styles = root.getComputedStyle(element);
+        var x = parseFloat(styles.marginTop) + parseFloat(styles.marginBottom);
+        var y = parseFloat(styles.marginLeft) + parseFloat(styles.marginRight);
+        var result = {
+            width: element.offsetWidth + y,
+            height: element.offsetHeight + x
+        };
+        element.style.display = _display;
+        element.style.visibility = _visibility;
+        return result;
+    }
+    function getOppositePlacement(placement) {
+        var hash = {
+            left: 'right',
+            right: 'left',
+            bottom: 'top',
+            top: 'bottom'
+        };
+        return placement.replace(/left|right|bottom|top/g, function (matched) {
+            return hash[matched];
+        });
+    }
+    function getPopperClientRect(popperOffsets) {
+        var offsets = Object.assign({}, popperOffsets);
+        offsets.right = offsets.left + offsets.width;
+        offsets.bottom = offsets.top + offsets.height;
+        return offsets;
+    }
+    function getArrayKeyIndex(arr, keyToFind) {
+        var i = 0, key;
+        for (key in arr) {
+            if (arr[key] === keyToFind) {
+                return i;
+            }
+            i++;
+        }
+        return null;
+    }
+    function getStyleComputedProperty(element, property) {
+        var css = root.getComputedStyle(element, null);
+        return css[property];
+    }
+    function getOffsetParent(element) {
+        var offsetParent = element.offsetParent;
+        return offsetParent === root.document.body || !offsetParent ? root.document.documentElement : offsetParent;
+    }
+    function getScrollParent(element) {
+        if (element === root.document) {
+            if (root.document.body.scrollTop) {
+                return root.document.body;
+            } else {
+                return root.document.documentElement;
+            }
+        }
+        if ([
+                'scroll',
+                'auto'
+            ].indexOf(getStyleComputedProperty(element, 'overflow')) !== -1 || [
+                'scroll',
+                'auto'
+            ].indexOf(getStyleComputedProperty(element, 'overflow-x')) !== -1 || [
+                'scroll',
+                'auto'
+            ].indexOf(getStyleComputedProperty(element, 'overflow-y')) !== -1) {
+            return element;
+        }
+        return element.parentNode ? getScrollParent(element.parentNode) : element;
+    }
+    function isFixed(element) {
+        if (element === root.document.body) {
+            return false;
+        }
+        if (getStyleComputedProperty(element, 'position') === 'fixed') {
+            return true;
+        }
+        return element.parentNode ? isFixed(element.parentNode) : element;
+    }
+    function setStyle(element, styles) {
+        function is_numeric(n) {
+            return n !== '' && !isNaN(parseFloat(n)) && isFinite(n);
+        }
+        Object.keys(styles).forEach(function (prop) {
+            var unit = '';
+            if ([
+                    'width',
+                    'height',
+                    'top',
+                    'right',
+                    'bottom',
+                    'left'
+                ].indexOf(prop) !== -1 && is_numeric(styles[prop])) {
+                unit = 'px';
+            }
+            element.style[prop] = styles[prop] + unit;
+        });
+    }
+    function isFunction(functionToCheck) {
+        var getType = {};
+        return functionToCheck && getType.toString.call(functionToCheck) === '[object Function]';
+    }
+    function getOffsetRect(element) {
+        var elementRect = {
+            width: element.offsetWidth,
+            height: element.offsetHeight,
+            left: element.offsetLeft,
+            top: element.offsetTop
+        };
+        elementRect.right = elementRect.left + elementRect.width;
+        elementRect.bottom = elementRect.top + elementRect.height;
+        return elementRect;
+    }
+    function getBoundingClientRect(element) {
+        var rect = element.getBoundingClientRect();
+        return {
+            left: rect.left,
+            top: rect.top,
+            right: rect.right,
+            bottom: rect.bottom,
+            width: rect.right - rect.left,
+            height: rect.bottom - rect.top
+        };
+    }
+    function getOffsetRectRelativeToCustomParent(element, parent, fixed) {
+        var elementRect = getBoundingClientRect(element);
+        var parentRect = getBoundingClientRect(parent);
+        if (fixed) {
+            var scrollParent = getScrollParent(parent);
+            parentRect.top += scrollParent.scrollTop;
+            parentRect.bottom += scrollParent.scrollTop;
+            parentRect.left += scrollParent.scrollLeft;
+            parentRect.right += scrollParent.scrollLeft;
+        }
+        var rect = {
+            top: elementRect.top - parentRect.top,
+            left: elementRect.left - parentRect.left,
+            bottom: elementRect.top - parentRect.top + elementRect.height,
+            right: elementRect.left - parentRect.left + elementRect.width,
+            width: elementRect.width,
+            height: elementRect.height
+        };
+        return rect;
+    }
+    function getSupportedPropertyName(property) {
+        var prefixes = [
+            '',
+            'ms',
+            'webkit',
+            'moz',
+            'o'
+        ];
+        for (var i = 0; i < prefixes.length; i++) {
+            var toCheck = prefixes[i] ? prefixes[i] + property.charAt(0).toUpperCase() + property.slice(1) : property;
+            if (typeof root.document.body.style[toCheck] !== 'undefined') {
+                return toCheck;
+            }
+        }
+        return null;
+    }
+    if (!Object.assign) {
+        Object.defineProperty(Object, 'assign', {
+            enumerable: false,
+            configurable: true,
+            writable: true,
+            value: function value(target) {
+                if (target === undefined || target === null) {
+                    throw new TypeError('Cannot convert first argument to object');
+                }
+                var to = Object(target);
+                for (var i = 1; i < arguments.length; i++) {
+                    var nextSource = arguments[i];
+                    if (nextSource === undefined || nextSource === null) {
+                        continue;
+                    }
+                    nextSource = Object(nextSource);
+                    var keysArray = Object.keys(nextSource);
+                    for (var nextIndex = 0, len = keysArray.length; nextIndex < len; nextIndex++) {
+                        var nextKey = keysArray[nextIndex];
+                        var desc = Object.getOwnPropertyDescriptor(nextSource, nextKey);
+                        if (desc !== undefined && desc.enumerable) {
+                            to[nextKey] = nextSource[nextKey];
+                        }
+                    }
+                }
+                return to;
+            }
+        });
+    }
+    return Popper;
+}));
+'use strict';
 (function () {
     Function.prototype.bind = function (oThis) {
         if (typeof this !== 'function') {
@@ -114,6 +792,7 @@ var Meanbee = Meanbee || {};
     var canvas = document.createElement('canvas');
     var ctx = canvas.getContext('2d');
     ctx.font = 'bold 10.8px sans-serif';
+    var requests = [];
     ShippingRules.util = {
         toOptions: function toOptions(options, selected) {
             selected = Array.isArray(selected) ? selected : [selected];
@@ -261,6 +940,9 @@ var Meanbee = Meanbee || {};
         fieldTextSize: function fieldTextSize(text) {
             return Math.floor(ctx.measureText(text).width) + 25 + 'px';
         },
+        textWidth: function textWidth(text) {
+            return ctx.measureText(text).width;
+        },
         resizeFields: function resizeFields() {
             [].forEach.call(document.querySelectorAll('.calculator-tree select:not([multiple])'), function (select) {
                 var text = select.selectedOptions[0] ? select.selectedOptions[0].innerText : '';
@@ -270,6 +952,21 @@ var Meanbee = Meanbee || {};
                 var text = input.value || '---';
                 input.style.width = ShippingRules.util.fieldTextSize(text);
             });
+        },
+        loadData: function loadData(name) {
+            var url = '/js/lib/Meanbee/ShippingRulesLibrary/data/' + name.replace(/([a-z])([A-Z])/g, function (_, $1, $2) {
+                return $1 + '_' + $2.toLowerCase();
+            }) + '.json';
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', url);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    if (!('data' in ShippingRules))
+                        ShippingRules.data = {};
+                    ShippingRules.data[name] = JSON.parse(xhr.responseText);
+                }
+            };
+            xhr.send();
         }
     };
 }(Meanbee.ShippingRules));
@@ -347,7 +1044,7 @@ function _classCallCheck(instance, Constructor) {
 (function (ShippingRules) {
     ShippingRules.Register.aggregator = new ShippingRules.Register();
     ShippingRules.Register.aggregator.add = function (key, child) {
-        if (!this.has(key) && new child() instanceof ShippingRules.Aggregator) {
+        if (!this.has(key) && child.prototype instanceof ShippingRules.Aggregator) {
             this.children[key] = child;
         }
         return this;
@@ -357,7 +1054,7 @@ function _classCallCheck(instance, Constructor) {
 (function (ShippingRules) {
     ShippingRules.Register.comparator = new ShippingRules.Register();
     ShippingRules.Register.comparator.add = function (key, child) {
-        if (!this.has(key) && new child() instanceof ShippingRules.Comparator) {
+        if (!this.has(key) && child.prototype instanceof ShippingRules.Comparator) {
             this.children[key] = child;
         }
         return this;
@@ -374,13 +1071,14 @@ function _classCallCheck(instance, Constructor) {
     ShippingRules.Register.comparator.getAsOptions = function (type, selectedName) {
         var options = type ? this.getByType(type) : this.children;
         return Object.keys(options).map(function (key) {
-            return function () {
+            var option = function () {
                 var $$a = document.createElement('option');
                 $$a.setAttribute('value', key);
-                $$a.setAttribute('selected', options[key].name(type) === selectedName);
                 $$a.appendChildren(options[key].name(type));
                 return $$a;
             }();
+            option.selected = options[key].name(type) === selectedName;
+            return option;
         });
     };
 }(Meanbee.ShippingRules));
@@ -411,7 +1109,7 @@ function _defineProperty(obj, key, value) {
 (function (ShippingRules) {
     ShippingRules.Register.condition = new ShippingRules.Register();
     ShippingRules.Register.condition.add = function (key, child) {
-        if (!this.has(key) && new child() instanceof ShippingRules.Condition) {
+        if (!this.has(key) && child.prototype instanceof ShippingRules.Condition) {
             this.children[key] = child;
         }
         return this;
@@ -419,19 +1117,23 @@ function _defineProperty(obj, key, value) {
     ShippingRules.Register.condition.getAsOptions = function (context) {
         var _this = this;
         var categorised = Object.keys(this.children).map(function (key) {
-            return _defineProperty({}, _this.children[key].getCategory(context), Object.keys(_this.children[key].getVariables()).map(function (variable) {
+            if (_this.children[key].loadDependencies)
+                _this.children[key].loadDependencies();
+            return _defineProperty({}, _this.children[key].getCategory(context), Object.keys(_this.children[key].getVariables(context)).map(function (variable) {
                 return function () {
                     var $$a = document.createElement('option');
                     $$a.setAttribute('value', variable);
                     $$a.setAttribute('data-register-key', key);
-                    $$a.appendChildren(_this.children[key].getVariables()[variable].label);
+                    $$a.appendChildren(_this.children[key].getVariables(context)[variable].label);
                     return $$a;
                 }();
             }));
         }).reduce(function (accumulator, current) {
             var k = Object.keys(current)[0];
+            if (!current[k].length)
+                return accumulator;
             return Object.assign(accumulator, accumulator[k] ? _defineProperty({}, k, [].concat(_toConsumableArray(accumulator[k]), _toConsumableArray(current[k]))) : _defineProperty({}, k, current[k]));
-        });
+        }, {});
         return Object.keys(categorised).map(function (category) {
             return function () {
                 var $$c = document.createElement('optgroup');
@@ -446,7 +1148,7 @@ function _defineProperty(obj, key, value) {
 (function (ShippingRules) {
     ShippingRules.Register.field = new ShippingRules.Register();
     ShippingRules.Register.field.add = function (key, child) {
-        if (!this.has(key) && new child() instanceof ShippingRules.Field) {
+        if (!this.has(key) && child.prototype instanceof ShippingRules.Field) {
             this.children[key] = child;
         }
         return this;
@@ -456,7 +1158,7 @@ function _defineProperty(obj, key, value) {
 (function (ShippingRules) {
     ShippingRules.Register.term = new ShippingRules.Register();
     ShippingRules.Register.term.add = function (key, child) {
-        if (!this.has(key) && new child() instanceof ShippingRules.Term) {
+        if (!this.has(key) && child.prototype instanceof ShippingRules.Term) {
             this.children[key] = child;
         }
         return this;
@@ -946,6 +1648,8 @@ function _inherits(subClass, superClass) {
                 key: 'addChild',
                 value: function addChild(childClass, index) {
                     index = index === void 0 || index === null ? this.children.length : index;
+                    if (childClass.loadDependencies)
+                        childClass.loadDependencies();
                     for (var _len = arguments.length, params = Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
                         params[_key - 2] = arguments[_key];
                     }
@@ -1088,6 +1792,14 @@ function _inherits(subClass, superClass) {
                         $$s.appendChildren(me.renderChildren());
                         return $$s;
                     }();
+                }
+            },
+            {
+                key: 'refresh',
+                value: function refresh() {
+                    this.children.forEach(function (c) {
+                        return c.refresh();
+                    });
                 }
             },
             {
@@ -1713,6 +2425,159 @@ var _createClass = function () {
         return Constructor;
     };
 }();
+var _get = function get(object, property, receiver) {
+    if (object === null)
+        object = Function.prototype;
+    var desc = Object.getOwnPropertyDescriptor(object, property);
+    if (desc === undefined) {
+        var parent = Object.getPrototypeOf(object);
+        if (parent === null) {
+            return undefined;
+        } else {
+            return get(parent, property, receiver);
+        }
+    } else if ('value' in desc) {
+        return desc.value;
+    } else {
+        var getter = desc.get;
+        if (getter === undefined) {
+            return undefined;
+        }
+        return getter.call(receiver);
+    }
+};
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError('Cannot call a class as a function');
+    }
+}
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError('this hasn\'t been initialised - super() hasn\'t been called');
+    }
+    return call && (typeof call === 'object' || typeof call === 'function') ? call : self;
+}
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== 'function' && superClass !== null) {
+        throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass);
+    }
+    subClass.prototype = Object.create(superClass && superClass.prototype, {
+        constructor: {
+            value: subClass,
+            enumerable: false,
+            writable: true,
+            configurable: true
+        }
+    });
+    if (superClass)
+        Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
+(function (ShippingRules) {
+    ShippingRules.Term.ProductSubselection = function (_ShippingRules$Term) {
+        _inherits(_class, _ShippingRules$Term);
+        function _class(index, parent) {
+            _classCallCheck(this, _class);
+            var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(_class).call(this, index, parent));
+            _this.aggregator = new ShippingRules.Aggregator.Boolean(0, _this);
+            _this.aggregator.context = _this;
+            _this.multiplier = 1;
+            return _this;
+        }
+        _createClass(_class, [
+            {
+                key: 'renderMultiplier',
+                value: function renderMultiplier() {
+                    var me = this;
+                    return function () {
+                        var $$a = document.createElement('input');
+                        $$a.setAttribute('id', me.id + '-multiplier');
+                        $$a.setAttribute('type', 'number');
+                        $$a.setAttribute('value', me.multiplier);
+                        $$a.addEventListener('keydown', function (event) {
+                            return me.multiplier = event.target.value;
+                        });
+                        return $$a;
+                    }();
+                }
+            },
+            {
+                key: 'renderAttributeSelector',
+                value: function renderAttributeSelector() {
+                    var me = this;
+                    return function () {
+                        var $$b = document.createElement('select');
+                        $$b.setAttribute('id', me.id + '-attribute');
+                        return $$b;
+                    }();
+                }
+            },
+            {
+                key: 'render',
+                value: function render() {
+                    var me = this;
+                    return function () {
+                        var $$c = document.createElement('li');
+                        $$c.setAttribute('id', me.id);
+                        $$c.addEventListener('keydown', me.keyHandler.bind(me));
+                        $$c.setAttribute('tabIndex', 0);
+                        var $$d = document.createTextNode('\n                Sum of ');
+                        $$c.appendChild($$d);
+                        $$c.appendChildren(me.renderAttributeSelector());
+                        var $$f = document.createTextNode(' \u2715 ');
+                        $$c.appendChild($$f);
+                        $$c.appendChildren(me.renderMultiplier());
+                        var $$h = document.createTextNode(' for a subselection of items in cart where ');
+                        $$c.appendChild($$h);
+                        $$c.appendChildren(me.aggregator.renderCombinator());
+                        var $$j = document.createTextNode(' of these conditions are ');
+                        $$c.appendChild($$j);
+                        $$c.appendChildren(me.aggregator.renderValue());
+                        var $$l = document.createTextNode(': ');
+                        $$c.appendChild($$l);
+                        $$c.appendChildren(me.renderRemoveButton());
+                        $$c.appendChildren(me.aggregator.renderChildren());
+                        return $$c;
+                    }();
+                }
+            },
+            {
+                key: 'toJSON',
+                value: function toJSON() {
+                    var obj = _get(Object.getPrototypeOf(_class.prototype), 'toJSON', this).call(this);
+                    obj.key = 'ProductSubselection';
+                    return obj;
+                }
+            }
+        ], [{
+                key: 'name',
+                value: function name() {
+                    return 'Product Subselection';
+                }
+            }]);
+        return _class;
+    }(ShippingRules.Term);
+    ShippingRules.Register.term.add('ProductSubselection', ShippingRules.Term.ProductSubselection);
+}(Meanbee.ShippingRules));
+'use strict';
+var _createClass = function () {
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];
+            descriptor.enumerable = descriptor.enumerable || false;
+            descriptor.configurable = true;
+            if ('value' in descriptor)
+                descriptor.writable = true;
+            Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }
+    return function (Constructor, protoProps, staticProps) {
+        if (protoProps)
+            defineProperties(Constructor.prototype, protoProps);
+        if (staticProps)
+            defineProperties(Constructor, staticProps);
+        return Constructor;
+    };
+}();
 function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
         throw new TypeError('Cannot call a class as a function');
@@ -1763,14 +2628,15 @@ function _inherits(subClass, superClass) {
             {
                 key: 'renderComparator',
                 value: function renderComparator() {
+                    var _this2 = this;
                     var me = this;
                     return function () {
                         var $$c = document.createElement('select');
                         $$c.setAttribute('id', me.id + '-comparator');
                         $$c.addEventListener('change', function (event) {
-                            me.comparator = new (ShippingRules.Register.comparator.get(event.target.value))();
+                            me.comparator = new (ShippingRules.Register.comparator.get(event.target.value))(_this2.type);
                             me.valueField = new (ShippingRules.Register.field.get(me.comparator.getField()))(me, me.value);
-                            me.root.render();
+                            me.root.rerender();
                         });
                         $$c.appendChildren(ShippingRules.Register.comparator.getAsOptions(me.type, me.comparator.name));
                         return $$c;
@@ -1798,6 +2664,11 @@ function _inherits(subClass, superClass) {
                         $$e.appendChildren(me.renderRemoveButton());
                         return $$e;
                     }();
+                }
+            },
+            {
+                key: 'refresh',
+                value: function refresh() {
                 }
             },
             {
@@ -2080,6 +2951,332 @@ function _inherits(subClass, superClass) {
     ShippingRules.Register.condition.add('Customer', ShippingRules.Condition.Customer);
 }(Meanbee.ShippingRules));
 'use strict';
+var _typeof = typeof Symbol === 'function' && typeof Symbol.iterator === 'symbol' ? function (obj) {
+    return typeof obj;
+} : function (obj) {
+    return obj && typeof Symbol === 'function' && obj.constructor === Symbol ? 'symbol' : typeof obj;
+};
+var _createClass = function () {
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];
+            descriptor.enumerable = descriptor.enumerable || false;
+            descriptor.configurable = true;
+            if ('value' in descriptor)
+                descriptor.writable = true;
+            Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }
+    return function (Constructor, protoProps, staticProps) {
+        if (protoProps)
+            defineProperties(Constructor.prototype, protoProps);
+        if (staticProps)
+            defineProperties(Constructor, staticProps);
+        return Constructor;
+    };
+}();
+var _get = function get(object, property, receiver) {
+    if (object === null)
+        object = Function.prototype;
+    var desc = Object.getOwnPropertyDescriptor(object, property);
+    if (desc === undefined) {
+        var parent = Object.getPrototypeOf(object);
+        if (parent === null) {
+            return undefined;
+        } else {
+            return get(parent, property, receiver);
+        }
+    } else if ('value' in desc) {
+        return desc.value;
+    } else {
+        var getter = desc.get;
+        if (getter === undefined) {
+            return undefined;
+        }
+        return getter.call(receiver);
+    }
+};
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError('Cannot call a class as a function');
+    }
+}
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError('this hasn\'t been initialised - super() hasn\'t been called');
+    }
+    return call && (typeof call === 'object' || typeof call === 'function') ? call : self;
+}
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== 'function' && superClass !== null) {
+        throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass);
+    }
+    subClass.prototype = Object.create(superClass && superClass.prototype, {
+        constructor: {
+            value: subClass,
+            enumerable: false,
+            writable: true,
+            configurable: true
+        }
+    });
+    if (superClass)
+        Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
+(function (ShippingRules) {
+    ShippingRules.Condition.PostalCode = function (_ShippingRules$Condit) {
+        _inherits(_class, _ShippingRules$Condit);
+        function _class(index, parent, variable) {
+            _classCallCheck(this, _class);
+            var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(_class).call(this, index, parent, variable));
+            _this.aggregator = new ShippingRules.Aggregator.Boolean(0, _this);
+            _this.aggregator.context = _this;
+            _this.format = null;
+            return _this;
+        }
+        _createClass(_class, [
+            {
+                key: 'renderFormatDecoration',
+                value: function renderFormatDecoration() {
+                    var _this2 = this;
+                    return ShippingRules.data.postalCodeFormats.filter(function (f) {
+                        return f.value === _this2.format && ShippingRules.util.textWidth(f.decoration) < 2 * ShippingRules.util.textWidth('\uD83C\uDDE6');
+                    }).map(function (f) {
+                        return function () {
+                            var $$a = document.createElement('span');
+                            $$a.appendChildren(f.decoration);
+                            return $$a;
+                        }();
+                    });
+                }
+            },
+            {
+                key: 'renderFormatSelector',
+                value: function renderFormatSelector() {
+                    var me = this;
+                    return function () {
+                        var $$c = document.createElement('select');
+                        $$c.setAttribute('id', me.id + '-format');
+                        $$c.addEventListener('change', function (event) {
+                            me.format = event.target.value;
+                            me.refresh();
+                            me.root.rerender();
+                        });
+                        var $$d = document.createElement('option');
+                        $$d.disabled = true;
+                        $$d.setAttribute('selected', !me.format);
+                        $$c.appendChild($$d);
+                        var $$e = document.createTextNode('[SELECT]');
+                        $$d.appendChild($$e);
+                        $$c.appendChildren(ShippingRules.data.postalCodeFormats.sort(function (a, b) {
+                            return a.label.toUpperCase() < b.label.toUpperCase() ? -1 : 1;
+                        }).map(function (format) {
+                            var option = function () {
+                                var $$g = document.createElement('option');
+                                $$g.setAttribute('value', format.value);
+                                $$g.setAttribute('dir', 'rtl');
+                                $$g.appendChildren(format.label);
+                                return $$g;
+                            }();
+                            option.selected = me.format === format.value;
+                            return option;
+                        }));
+                        return $$c;
+                    }();
+                }
+            },
+            {
+                key: 'renderHelp',
+                value: function renderHelp(item) {
+                    var _this3 = this;
+                    item.addEventListener('focus', function () {
+                        var popper = undefined;
+                        if (popper = item.querySelector('.popper')) {
+                            popper.classList.remove('hidden');
+                        } else {
+                            var _ret = function () {
+                                var postalCodeFormatData = ShippingRules.data.postalCodeFormats.filter(function (f) {
+                                    return f.value === _this3.format;
+                                });
+                                if (!postalCodeFormatData)
+                                    return { v: undefined };
+                                var postalCodeFormatDatum = postalCodeFormatData[0];
+                                var help = function () {
+                                    var $$i = document.createElement('div');
+                                    $$i.setAttribute('class', 'popper');
+                                    $$i.setAttribute('tabIndex', 0);
+                                    var $$j = document.createElement('div');
+                                    $$j.setAttribute('class', 'postalcode-full');
+                                    $$i.appendChild($$j);
+                                    $$j.appendChildren(postalCodeFormatDatum.example.map(function (examplePart, index) {
+                                        return function () {
+                                            var $$l = document.createElement('span');
+                                            $$l.setAttribute('class', 'postalcode-part');
+                                            $$l.setAttribute('data-part', index + 1);
+                                            $$l.setAttribute('data-type', postalCodeFormatDatum.parts[index + 1] || 'const');
+                                            $$l.appendChildren(examplePart);
+                                            return $$l;
+                                        }();
+                                    }));
+                                    var $$n = document.createElement('div');
+                                    $$n.setAttribute('class', 'popper__arrow');
+                                    $$i.appendChild($$n);
+                                    return $$i;
+                                }();
+                                item.querySelector('.popper-target').insertAdjacentElement('afterend', help);
+                                _this3._popper = popper = new Popper(item.querySelector('.popper-target'), help, {
+                                    placement: 'top',
+                                    removeOnDestroy: true
+                                });
+                            }();
+                            if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === 'object')
+                                return _ret.v;
+                        }
+                    }, true);
+                    item.addEventListener('blur', function () {
+                        Array.from(item.querySelectorAll('.popper')).forEach(function (popper) {
+                            return popper.classList.add('hidden');
+                        });
+                    }, true);
+                }
+            },
+            {
+                key: 'render',
+                value: function render() {
+                    if (this.parent.context instanceof this.constructor)
+                        return _get(Object.getPrototypeOf(_class.prototype), 'render', this).call(this);
+                    var me = this;
+                    if (!(ShippingRules.data && ShippingRules.data.postalCodeFormats))
+                        return function () {
+                            var $$o = document.createElement('li');
+                            $$o.setAttribute('id', me.id);
+                            var $$p = document.createTextNode('Loading...');
+                            $$o.appendChild($$p);
+                            return $$o;
+                        }();
+                    var item = function () {
+                        var $$q = document.createElement('li');
+                        $$q.setAttribute('id', me.id);
+                        $$q.setAttribute('tabIndex', 0);
+                        $$q.appendChildren(me.label);
+                        var $$s = document.createTextNode(' matches the format of\n                ');
+                        $$q.appendChild($$s);
+                        var $$t = document.createElement('span');
+                        $$t.setAttribute('class', 'popper-target');
+                        $$q.appendChild($$t);
+                        $$t.appendChildren(me.renderFormatDecoration());
+                        $$t.appendChildren(me.renderFormatSelector());
+                        var $$w = document.createElement('span');
+                        $$w.setAttribute('id', me.aggregator.id);
+                        $$q.appendChild($$w);
+                        var $$x = document.createTextNode('\n                    and ');
+                        $$w.appendChild($$x);
+                        $$w.appendChildren(me.aggregator.renderCombinator());
+                        var $$z = document.createTextNode(' of these conditions are ');
+                        $$w.appendChild($$z);
+                        $$w.appendChildren(me.aggregator.renderValue());
+                        var $$bb = document.createTextNode(': ');
+                        $$w.appendChild($$bb);
+                        $$w.appendChildren(me.renderRemoveButton());
+                        $$w.appendChildren(me.aggregator.renderChildren());
+                        return $$q;
+                    }();
+                    this.renderHelp(item);
+                    return item;
+                }
+            },
+            {
+                key: 'refresh',
+                value: function refresh() {
+                    var _this4 = this;
+                    if (this.context instanceof this.constructor) {
+                        if (this.variable in this.constructor.getVariables(this.context)) {
+                            (function () {
+                                var validComparators = ShippingRules.Register.comparator.getByType(_this4.type);
+                                if (Object.keys(validComparators).reduce(function (accumulator, key) {
+                                        return accumulator || _this4.comparator instanceof validComparators[key];
+                                    }, false)) {
+                                    _this4.comparator.type = _this4.type;
+                                } else {
+                                    var comparator = validComparators[Object.keys(validComparators)[0]];
+                                    _this4.comparator = comparator ? new comparator(_this4.type) : function () {
+                                        var $$ee = document.createElement('noscript');
+                                        return $$ee;
+                                    }();
+                                }
+                            }());
+                        } else {
+                            this.parent.removeChildByIndex(this.index);
+                        }
+                    } else {
+                        this.aggregator.refresh();
+                    }
+                    if (this._popper) {
+                        this._popper.destroy();
+                    }
+                }
+            },
+            {
+                key: 'init',
+                value: function init(obj) {
+                    if (this.parent.context instanceof this.constructor)
+                        return _get(Object.getPrototypeOf(_class.prototype), 'init', this).call(this, obj);
+                    this.variable = obj.variable;
+                    this.format = obj.value;
+                    this.aggregator.init(obj.aggregator);
+                }
+            },
+            {
+                key: 'toJSON',
+                value: function toJSON() {
+                    var obj = _get(Object.getPrototypeOf(_class.prototype), 'toJSON', this).call(this);
+                    obj.key = 'Destination_PostalCode';
+                    obj.aggregator = this.aggregator;
+                    obj.value = this.format || obj.value;
+                    return obj;
+                }
+            }
+        ], [
+            {
+                key: 'getCategory',
+                value: function getCategory(context) {
+                    if (context instanceof this)
+                        return 'Postal Code Conditions';
+                    return 'Destination Conditions';
+                }
+            },
+            {
+                key: 'getVariables',
+                value: function getVariables(context) {
+                    var variables = {};
+                    if (!context) {
+                        variables['dest_postal_code'] = {
+                            label: 'Postal Code',
+                            type: ['string']
+                        };
+                    } else if (context instanceof this && context.format) {
+                        var formatData = ShippingRules.data.postalCodeFormats.filter(function (f) {
+                            return f.value === context.format;
+                        });
+                        if (formatData.length) {
+                            formatData[0].parts.forEach(function (part, index) {
+                                if (part)
+                                    variables[index ? 'dest_postal_code_part' + index : 'dest_postal_code_full'] = {
+                                        label: index ? 'Part ' + index : 'Entire Code',
+                                        type: [part === 'str' ? 'string' : 'numeric_' + part]
+                                    };
+                            });
+                        }
+                    }
+                    return variables;
+                }
+            }
+        ]);
+        return _class;
+    }(ShippingRules.Condition);
+    ShippingRules.util.loadData('postalCodeFormats');
+    ShippingRules.Register.condition.add('Destination_PostalCode', ShippingRules.Condition.PostalCode);
+}(Meanbee.ShippingRules));
+'use strict';
 var _createClass = function () {
     function defineProperties(target, props) {
         for (var i = 0; i < props.length; i++) {
@@ -2238,6 +3435,143 @@ function _inherits(subClass, superClass) {
         Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
 }
 (function (ShippingRules) {
+    ShippingRules.Comparator.Between = function (_ShippingRules$Compar) {
+        _inherits(_class, _ShippingRules$Compar);
+        function _class(type) {
+            _classCallCheck(this, _class);
+            return _possibleConstructorReturn(this, Object.getPrototypeOf(_class).call(this, type));
+        }
+        _createClass(_class, [
+            {
+                key: 'getField',
+                value: function getField() {
+                    var _this2 = this;
+                    var type = this.type.filter(function (t) {
+                        return ~_this2.constructor.supportedTypes().indexOf(t);
+                    }.bind(this));
+                    switch (type[0]) {
+                    case 'number':
+                    case 'numeric_b10':
+                        return 'NumberX2';
+                    case 'numeric_b26':
+                        return 'NumberBase26X2';
+                    case 'numeric_b36':
+                        return 'NumberBase36X2';
+                    default:
+                        return 'TextX2';
+                    }
+                }
+            },
+            {
+                key: 'toJSON',
+                value: function toJSON() {
+                    var obj = _get(Object.getPrototypeOf(_class.prototype), 'toJSON', this).call(this);
+                    obj.key = 'Between';
+                    return obj;
+                }
+            }
+        ], [
+            {
+                key: 'supportedTypes',
+                value: function supportedTypes() {
+                    return [
+                        'number',
+                        'currency',
+                        'numeric_b10',
+                        'numeric_b26',
+                        'numeric_b36',
+                        'date',
+                        'time',
+                        'datetime'
+                    ];
+                }
+            },
+            {
+                key: 'name',
+                value: function name(type) {
+                    var _this3 = this;
+                    type = type.filter(function (t) {
+                        return ~_this3.supportedTypes().indexOf(t);
+                    }.bind(this));
+                    switch (type[0]) {
+                    default:
+                        return 'IS BETWEEN';
+                    }
+                }
+            }
+        ]);
+        return _class;
+    }(ShippingRules.Comparator);
+    ShippingRules.Register.comparator.add('Between', ShippingRules.Comparator.Between);
+}(Meanbee.ShippingRules));
+'use strict';
+var _createClass = function () {
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];
+            descriptor.enumerable = descriptor.enumerable || false;
+            descriptor.configurable = true;
+            if ('value' in descriptor)
+                descriptor.writable = true;
+            Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }
+    return function (Constructor, protoProps, staticProps) {
+        if (protoProps)
+            defineProperties(Constructor.prototype, protoProps);
+        if (staticProps)
+            defineProperties(Constructor, staticProps);
+        return Constructor;
+    };
+}();
+var _get = function get(object, property, receiver) {
+    if (object === null)
+        object = Function.prototype;
+    var desc = Object.getOwnPropertyDescriptor(object, property);
+    if (desc === undefined) {
+        var parent = Object.getPrototypeOf(object);
+        if (parent === null) {
+            return undefined;
+        } else {
+            return get(parent, property, receiver);
+        }
+    } else if ('value' in desc) {
+        return desc.value;
+    } else {
+        var getter = desc.get;
+        if (getter === undefined) {
+            return undefined;
+        }
+        return getter.call(receiver);
+    }
+};
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError('Cannot call a class as a function');
+    }
+}
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError('this hasn\'t been initialised - super() hasn\'t been called');
+    }
+    return call && (typeof call === 'object' || typeof call === 'function') ? call : self;
+}
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== 'function' && superClass !== null) {
+        throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass);
+    }
+    subClass.prototype = Object.create(superClass && superClass.prototype, {
+        constructor: {
+            value: subClass,
+            enumerable: false,
+            writable: true,
+            configurable: true
+        }
+    });
+    if (superClass)
+        Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
+(function (ShippingRules) {
     ShippingRules.Comparator.Equal = function (_ShippingRules$Compar) {
         _inherits(_class, _ShippingRules$Compar);
         function _class(type) {
@@ -2253,6 +3587,13 @@ function _inherits(subClass, superClass) {
                         return ~_this2.constructor.supportedTypes().indexOf(t);
                     }.bind(this));
                     switch (type[0]) {
+                    case 'number':
+                    case 'numeric_b10':
+                        return 'Number';
+                    case 'numeric_b26':
+                        return 'NumberBase26';
+                    case 'numeric_b36':
+                        return 'NumberBase36';
                     default:
                         return 'Text';
                     }
@@ -2273,6 +3614,9 @@ function _inherits(subClass, superClass) {
                     return [
                         'number',
                         'currency',
+                        'numeric_b10',
+                        'numeric_b26',
+                        'numeric_b36',
                         'string',
                         'enum',
                         'date',
@@ -2291,6 +3635,9 @@ function _inherits(subClass, superClass) {
                     switch (type[0]) {
                     case 'number':
                     case 'currency':
+                    case 'numeric_b10':
+                    case 'numeric_b26':
+                    case 'numeric_b36':
                         return 'EQUALS';
                     default:
                         return 'IS';
@@ -2301,6 +3648,586 @@ function _inherits(subClass, superClass) {
         return _class;
     }(ShippingRules.Comparator);
     ShippingRules.Register.comparator.add('Equal', ShippingRules.Comparator.Equal);
+}(Meanbee.ShippingRules));
+'use strict';
+var _createClass = function () {
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];
+            descriptor.enumerable = descriptor.enumerable || false;
+            descriptor.configurable = true;
+            if ('value' in descriptor)
+                descriptor.writable = true;
+            Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }
+    return function (Constructor, protoProps, staticProps) {
+        if (protoProps)
+            defineProperties(Constructor.prototype, protoProps);
+        if (staticProps)
+            defineProperties(Constructor, staticProps);
+        return Constructor;
+    };
+}();
+var _get = function get(object, property, receiver) {
+    if (object === null)
+        object = Function.prototype;
+    var desc = Object.getOwnPropertyDescriptor(object, property);
+    if (desc === undefined) {
+        var parent = Object.getPrototypeOf(object);
+        if (parent === null) {
+            return undefined;
+        } else {
+            return get(parent, property, receiver);
+        }
+    } else if ('value' in desc) {
+        return desc.value;
+    } else {
+        var getter = desc.get;
+        if (getter === undefined) {
+            return undefined;
+        }
+        return getter.call(receiver);
+    }
+};
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError('Cannot call a class as a function');
+    }
+}
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError('this hasn\'t been initialised - super() hasn\'t been called');
+    }
+    return call && (typeof call === 'object' || typeof call === 'function') ? call : self;
+}
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== 'function' && superClass !== null) {
+        throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass);
+    }
+    subClass.prototype = Object.create(superClass && superClass.prototype, {
+        constructor: {
+            value: subClass,
+            enumerable: false,
+            writable: true,
+            configurable: true
+        }
+    });
+    if (superClass)
+        Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
+(function (ShippingRules) {
+    ShippingRules.Comparator.GreaterThan = function (_ShippingRules$Compar) {
+        _inherits(_class, _ShippingRules$Compar);
+        function _class(type) {
+            _classCallCheck(this, _class);
+            return _possibleConstructorReturn(this, Object.getPrototypeOf(_class).call(this, type));
+        }
+        _createClass(_class, [
+            {
+                key: 'getField',
+                value: function getField() {
+                    var _this2 = this;
+                    var type = this.type.filter(function (t) {
+                        return ~_this2.constructor.supportedTypes().indexOf(t);
+                    }.bind(this));
+                    switch (type[0]) {
+                    case 'number':
+                    case 'numeric_b10':
+                        return 'Number';
+                    case 'numeric_b26':
+                        return 'NumberBase26';
+                    case 'numeric_b36':
+                        return 'NumberBase36';
+                    default:
+                        return 'Text';
+                    }
+                }
+            },
+            {
+                key: 'toJSON',
+                value: function toJSON() {
+                    var obj = _get(Object.getPrototypeOf(_class.prototype), 'toJSON', this).call(this);
+                    obj.key = 'GreaterThan';
+                    return obj;
+                }
+            }
+        ], [
+            {
+                key: 'supportedTypes',
+                value: function supportedTypes() {
+                    return [
+                        'number',
+                        'currency',
+                        'numeric_b10',
+                        'numeric_b26',
+                        'numeric_b36',
+                        'date',
+                        'time',
+                        'datetime'
+                    ];
+                }
+            },
+            {
+                key: 'name',
+                value: function name(type) {
+                    var _this3 = this;
+                    type = type.filter(function (t) {
+                        return ~_this3.supportedTypes().indexOf(t);
+                    }.bind(this));
+                    switch (type[0]) {
+                    case 'numeric_b10':
+                    case 'numeric_b26':
+                    case 'numeric_b36':
+                        return 'SUCCEEDS';
+                    case 'date':
+                    case 'time':
+                    case 'datetime':
+                        return 'IS AFTER';
+                    default:
+                        return 'IS GREATER THAN';
+                    }
+                }
+            }
+        ]);
+        return _class;
+    }(ShippingRules.Comparator);
+    ShippingRules.Register.comparator.add('GreaterThan', ShippingRules.Comparator.GreaterThan);
+}(Meanbee.ShippingRules));
+'use strict';
+var _createClass = function () {
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];
+            descriptor.enumerable = descriptor.enumerable || false;
+            descriptor.configurable = true;
+            if ('value' in descriptor)
+                descriptor.writable = true;
+            Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }
+    return function (Constructor, protoProps, staticProps) {
+        if (protoProps)
+            defineProperties(Constructor.prototype, protoProps);
+        if (staticProps)
+            defineProperties(Constructor, staticProps);
+        return Constructor;
+    };
+}();
+var _get = function get(object, property, receiver) {
+    if (object === null)
+        object = Function.prototype;
+    var desc = Object.getOwnPropertyDescriptor(object, property);
+    if (desc === undefined) {
+        var parent = Object.getPrototypeOf(object);
+        if (parent === null) {
+            return undefined;
+        } else {
+            return get(parent, property, receiver);
+        }
+    } else if ('value' in desc) {
+        return desc.value;
+    } else {
+        var getter = desc.get;
+        if (getter === undefined) {
+            return undefined;
+        }
+        return getter.call(receiver);
+    }
+};
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError('Cannot call a class as a function');
+    }
+}
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError('this hasn\'t been initialised - super() hasn\'t been called');
+    }
+    return call && (typeof call === 'object' || typeof call === 'function') ? call : self;
+}
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== 'function' && superClass !== null) {
+        throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass);
+    }
+    subClass.prototype = Object.create(superClass && superClass.prototype, {
+        constructor: {
+            value: subClass,
+            enumerable: false,
+            writable: true,
+            configurable: true
+        }
+    });
+    if (superClass)
+        Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
+(function (ShippingRules) {
+    ShippingRules.Comparator.GreaterThanOrEqual = function (_ShippingRules$Compar) {
+        _inherits(_class, _ShippingRules$Compar);
+        function _class(type) {
+            _classCallCheck(this, _class);
+            return _possibleConstructorReturn(this, Object.getPrototypeOf(_class).call(this, type));
+        }
+        _createClass(_class, [
+            {
+                key: 'getField',
+                value: function getField() {
+                    var _this2 = this;
+                    var type = this.type.filter(function (t) {
+                        return ~_this2.constructor.supportedTypes().indexOf(t);
+                    }.bind(this));
+                    switch (type[0]) {
+                    case 'number':
+                    case 'numeric_b10':
+                        return 'Number';
+                    case 'numeric_b26':
+                        return 'NumberBase26';
+                    case 'numeric_b36':
+                        return 'NumberBase36';
+                    default:
+                        return 'Text';
+                    }
+                }
+            },
+            {
+                key: 'toJSON',
+                value: function toJSON() {
+                    var obj = _get(Object.getPrototypeOf(_class.prototype), 'toJSON', this).call(this);
+                    obj.key = 'GreaterThanOrEqual';
+                    return obj;
+                }
+            }
+        ], [
+            {
+                key: 'supportedTypes',
+                value: function supportedTypes() {
+                    return [
+                        'number',
+                        'currency',
+                        'numeric_b10',
+                        'numeric_b26',
+                        'numeric_b36',
+                        'date',
+                        'time',
+                        'datetime'
+                    ];
+                }
+            },
+            {
+                key: 'name',
+                value: function name(type) {
+                    var _this3 = this;
+                    type = type.filter(function (t) {
+                        return ~_this3.supportedTypes().indexOf(t);
+                    }.bind(this));
+                    switch (type[0]) {
+                    case 'numeric_b10':
+                    case 'numeric_b26':
+                    case 'numeric_b36':
+                        return 'SUCCEEDS OR EQUALS';
+                    case 'date':
+                    case 'time':
+                    case 'datetime':
+                        return 'IS AFTER (INCLUSIVE)';
+                    default:
+                        return 'IS GREATER THAN OR EQUALS';
+                    }
+                }
+            }
+        ]);
+        return _class;
+    }(ShippingRules.Comparator);
+    ShippingRules.Register.comparator.add('GreaterThanOrEqual', ShippingRules.Comparator.GreaterThanOrEqual);
+}(Meanbee.ShippingRules));
+'use strict';
+var _createClass = function () {
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];
+            descriptor.enumerable = descriptor.enumerable || false;
+            descriptor.configurable = true;
+            if ('value' in descriptor)
+                descriptor.writable = true;
+            Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }
+    return function (Constructor, protoProps, staticProps) {
+        if (protoProps)
+            defineProperties(Constructor.prototype, protoProps);
+        if (staticProps)
+            defineProperties(Constructor, staticProps);
+        return Constructor;
+    };
+}();
+var _get = function get(object, property, receiver) {
+    if (object === null)
+        object = Function.prototype;
+    var desc = Object.getOwnPropertyDescriptor(object, property);
+    if (desc === undefined) {
+        var parent = Object.getPrototypeOf(object);
+        if (parent === null) {
+            return undefined;
+        } else {
+            return get(parent, property, receiver);
+        }
+    } else if ('value' in desc) {
+        return desc.value;
+    } else {
+        var getter = desc.get;
+        if (getter === undefined) {
+            return undefined;
+        }
+        return getter.call(receiver);
+    }
+};
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError('Cannot call a class as a function');
+    }
+}
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError('this hasn\'t been initialised - super() hasn\'t been called');
+    }
+    return call && (typeof call === 'object' || typeof call === 'function') ? call : self;
+}
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== 'function' && superClass !== null) {
+        throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass);
+    }
+    subClass.prototype = Object.create(superClass && superClass.prototype, {
+        constructor: {
+            value: subClass,
+            enumerable: false,
+            writable: true,
+            configurable: true
+        }
+    });
+    if (superClass)
+        Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
+(function (ShippingRules) {
+    ShippingRules.Comparator.LessThan = function (_ShippingRules$Compar) {
+        _inherits(_class, _ShippingRules$Compar);
+        function _class(type) {
+            _classCallCheck(this, _class);
+            return _possibleConstructorReturn(this, Object.getPrototypeOf(_class).call(this, type));
+        }
+        _createClass(_class, [
+            {
+                key: 'getField',
+                value: function getField() {
+                    var _this2 = this;
+                    var type = this.type.filter(function (t) {
+                        return ~_this2.constructor.supportedTypes().indexOf(t);
+                    }.bind(this));
+                    switch (type[0]) {
+                    case 'number':
+                    case 'numeric_b10':
+                        return 'Number';
+                    case 'numeric_b26':
+                        return 'NumberBase26';
+                    case 'numeric_b36':
+                        return 'NumberBase36';
+                    default:
+                        return 'Text';
+                    }
+                }
+            },
+            {
+                key: 'toJSON',
+                value: function toJSON() {
+                    var obj = _get(Object.getPrototypeOf(_class.prototype), 'toJSON', this).call(this);
+                    obj.key = 'LessThan';
+                    return obj;
+                }
+            }
+        ], [
+            {
+                key: 'supportedTypes',
+                value: function supportedTypes() {
+                    return [
+                        'number',
+                        'currency',
+                        'numeric_b10',
+                        'numeric_b26',
+                        'numeric_b36',
+                        'date',
+                        'time',
+                        'datetime'
+                    ];
+                }
+            },
+            {
+                key: 'name',
+                value: function name(type) {
+                    var _this3 = this;
+                    type = type.filter(function (t) {
+                        return ~_this3.supportedTypes().indexOf(t);
+                    }.bind(this));
+                    switch (type[0]) {
+                    case 'numeric_b10':
+                    case 'numeric_b26':
+                    case 'numeric_b36':
+                        return 'PRECEEDS';
+                    case 'date':
+                    case 'time':
+                    case 'datetime':
+                        return 'IS BEFORE';
+                    default:
+                        return 'IS LESS THAN';
+                    }
+                }
+            }
+        ]);
+        return _class;
+    }(ShippingRules.Comparator);
+    ShippingRules.Register.comparator.add('LessThan', ShippingRules.Comparator.LessThan);
+}(Meanbee.ShippingRules));
+'use strict';
+var _createClass = function () {
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];
+            descriptor.enumerable = descriptor.enumerable || false;
+            descriptor.configurable = true;
+            if ('value' in descriptor)
+                descriptor.writable = true;
+            Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }
+    return function (Constructor, protoProps, staticProps) {
+        if (protoProps)
+            defineProperties(Constructor.prototype, protoProps);
+        if (staticProps)
+            defineProperties(Constructor, staticProps);
+        return Constructor;
+    };
+}();
+var _get = function get(object, property, receiver) {
+    if (object === null)
+        object = Function.prototype;
+    var desc = Object.getOwnPropertyDescriptor(object, property);
+    if (desc === undefined) {
+        var parent = Object.getPrototypeOf(object);
+        if (parent === null) {
+            return undefined;
+        } else {
+            return get(parent, property, receiver);
+        }
+    } else if ('value' in desc) {
+        return desc.value;
+    } else {
+        var getter = desc.get;
+        if (getter === undefined) {
+            return undefined;
+        }
+        return getter.call(receiver);
+    }
+};
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError('Cannot call a class as a function');
+    }
+}
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError('this hasn\'t been initialised - super() hasn\'t been called');
+    }
+    return call && (typeof call === 'object' || typeof call === 'function') ? call : self;
+}
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== 'function' && superClass !== null) {
+        throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass);
+    }
+    subClass.prototype = Object.create(superClass && superClass.prototype, {
+        constructor: {
+            value: subClass,
+            enumerable: false,
+            writable: true,
+            configurable: true
+        }
+    });
+    if (superClass)
+        Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
+(function (ShippingRules) {
+    ShippingRules.Comparator.LessThanOrEqual = function (_ShippingRules$Compar) {
+        _inherits(_class, _ShippingRules$Compar);
+        function _class(type) {
+            _classCallCheck(this, _class);
+            return _possibleConstructorReturn(this, Object.getPrototypeOf(_class).call(this, type));
+        }
+        _createClass(_class, [
+            {
+                key: 'getField',
+                value: function getField() {
+                    var _this2 = this;
+                    var type = this.type.filter(function (t) {
+                        return ~_this2.constructor.supportedTypes().indexOf(t);
+                    }.bind(this));
+                    switch (type[0]) {
+                    case 'number':
+                    case 'numeric_b10':
+                        return 'Number';
+                    case 'numeric_b26':
+                        return 'NumberBase26';
+                    case 'numeric_b36':
+                        return 'NumberBase36';
+                    default:
+                        return 'Text';
+                    }
+                }
+            },
+            {
+                key: 'toJSON',
+                value: function toJSON() {
+                    var obj = _get(Object.getPrototypeOf(_class.prototype), 'toJSON', this).call(this);
+                    obj.key = 'LessThanOrEqual';
+                    return obj;
+                }
+            }
+        ], [
+            {
+                key: 'supportedTypes',
+                value: function supportedTypes() {
+                    return [
+                        'number',
+                        'currency',
+                        'numeric_b10',
+                        'numeric_b26',
+                        'numeric_b36',
+                        'date',
+                        'time',
+                        'datetime'
+                    ];
+                }
+            },
+            {
+                key: 'name',
+                value: function name(type) {
+                    var _this3 = this;
+                    type = type.filter(function (t) {
+                        return ~_this3.supportedTypes().indexOf(t);
+                    }.bind(this));
+                    switch (type[0]) {
+                    case 'numeric_b10':
+                    case 'numeric_b26':
+                    case 'numeric_b36':
+                        return 'PRECEEDS OR EQUALS';
+                    case 'date':
+                    case 'time':
+                    case 'datetime':
+                        return 'IS BEFORE (INCLUSIVE)';
+                    default:
+                        return 'IS LESS THAN OR EQUALS';
+                    }
+                }
+            }
+        ]);
+        return _class;
+    }(ShippingRules.Comparator);
+    ShippingRules.Register.comparator.add('LessThanOrEqual', ShippingRules.Comparator.LessThanOrEqual);
 }(Meanbee.ShippingRules));
 'use strict';
 var _createClass = function () {
@@ -2341,11 +4268,575 @@ function _classCallCheck(instance, Constructor) {
         _createClass(_class, [{
                 key: 'valueChangeHandler',
                 value: function valueChangeHandler(event) {
-                    this.condition.valueChangeHandler(event.target.value);
+                    this.value = event.target.value;
+                    this.condition.valueChangeHandler(this.value);
                 }
             }]);
         return _class;
     }();
+}(Meanbee.ShippingRules));
+'use strict';
+var _createClass = function () {
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];
+            descriptor.enumerable = descriptor.enumerable || false;
+            descriptor.configurable = true;
+            if ('value' in descriptor)
+                descriptor.writable = true;
+            Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }
+    return function (Constructor, protoProps, staticProps) {
+        if (protoProps)
+            defineProperties(Constructor.prototype, protoProps);
+        if (staticProps)
+            defineProperties(Constructor, staticProps);
+        return Constructor;
+    };
+}();
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError('Cannot call a class as a function');
+    }
+}
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError('this hasn\'t been initialised - super() hasn\'t been called');
+    }
+    return call && (typeof call === 'object' || typeof call === 'function') ? call : self;
+}
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== 'function' && superClass !== null) {
+        throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass);
+    }
+    subClass.prototype = Object.create(superClass && superClass.prototype, {
+        constructor: {
+            value: subClass,
+            enumerable: false,
+            writable: true,
+            configurable: true
+        }
+    });
+    if (superClass)
+        Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
+(function (ShippingRules) {
+    ShippingRules.Field.Number = function (_ShippingRules$Field) {
+        _inherits(_class, _ShippingRules$Field);
+        function _class() {
+            _classCallCheck(this, _class);
+            return _possibleConstructorReturn(this, Object.getPrototypeOf(_class).apply(this, arguments));
+        }
+        _createClass(_class, [{
+                key: 'render',
+                value: function render() {
+                    var me = this;
+                    return function () {
+                        var $$a = document.createElement('input');
+                        $$a.setAttribute('type', 'number');
+                        $$a.setAttribute('id', me.idPrefix + '-value');
+                        $$a.setAttribute('value', me.value);
+                        $$a.addEventListener('change', me.valueChangeHandler.bind(me));
+                        return $$a;
+                    }();
+                }
+            }]);
+        return _class;
+    }(ShippingRules.Field);
+    ShippingRules.Register.field.add('Number', ShippingRules.Field.Number);
+}(Meanbee.ShippingRules));
+'use strict';
+var _createClass = function () {
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];
+            descriptor.enumerable = descriptor.enumerable || false;
+            descriptor.configurable = true;
+            if ('value' in descriptor)
+                descriptor.writable = true;
+            Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }
+    return function (Constructor, protoProps, staticProps) {
+        if (protoProps)
+            defineProperties(Constructor.prototype, protoProps);
+        if (staticProps)
+            defineProperties(Constructor, staticProps);
+        return Constructor;
+    };
+}();
+var _get = function get(object, property, receiver) {
+    if (object === null)
+        object = Function.prototype;
+    var desc = Object.getOwnPropertyDescriptor(object, property);
+    if (desc === undefined) {
+        var parent = Object.getPrototypeOf(object);
+        if (parent === null) {
+            return undefined;
+        } else {
+            return get(parent, property, receiver);
+        }
+    } else if ('value' in desc) {
+        return desc.value;
+    } else {
+        var getter = desc.get;
+        if (getter === undefined) {
+            return undefined;
+        }
+        return getter.call(receiver);
+    }
+};
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError('Cannot call a class as a function');
+    }
+}
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError('this hasn\'t been initialised - super() hasn\'t been called');
+    }
+    return call && (typeof call === 'object' || typeof call === 'function') ? call : self;
+}
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== 'function' && superClass !== null) {
+        throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass);
+    }
+    subClass.prototype = Object.create(superClass && superClass.prototype, {
+        constructor: {
+            value: subClass,
+            enumerable: false,
+            writable: true,
+            configurable: true
+        }
+    });
+    if (superClass)
+        Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
+(function (ShippingRules) {
+    ShippingRules.Field.NumberBase26 = function (_ShippingRules$Field) {
+        _inherits(_class, _ShippingRules$Field);
+        function _class() {
+            _classCallCheck(this, _class);
+            return _possibleConstructorReturn(this, Object.getPrototypeOf(_class).apply(this, arguments));
+        }
+        _createClass(_class, [
+            {
+                key: 'render',
+                value: function render() {
+                    var me = this;
+                    return function () {
+                        var $$a = document.createElement('input');
+                        $$a.setAttribute('type', 'text');
+                        $$a.setAttribute('id', me.idPrefix + '-value');
+                        $$a.setAttribute('pattern', '[A-Z]');
+                        $$a.setAttribute('value', me.value);
+                        $$a.addEventListener('change', me.valueChangeHandler.bind(me));
+                        return $$a;
+                    }();
+                }
+            },
+            {
+                key: 'valueChangeHandler',
+                value: function valueChangeHandler(event) {
+                    event.target.value = event.target.value.toUpperCase();
+                    _get(Object.getPrototypeOf(_class.prototype), 'valueChangeHandler', this).call(this);
+                }
+            }
+        ]);
+        return _class;
+    }(ShippingRules.Field);
+    ShippingRules.Register.field.add('NumberBase26', ShippingRules.Field.NumberBase26);
+}(Meanbee.ShippingRules));
+'use strict';
+var _createClass = function () {
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];
+            descriptor.enumerable = descriptor.enumerable || false;
+            descriptor.configurable = true;
+            if ('value' in descriptor)
+                descriptor.writable = true;
+            Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }
+    return function (Constructor, protoProps, staticProps) {
+        if (protoProps)
+            defineProperties(Constructor.prototype, protoProps);
+        if (staticProps)
+            defineProperties(Constructor, staticProps);
+        return Constructor;
+    };
+}();
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError('Cannot call a class as a function');
+    }
+}
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError('this hasn\'t been initialised - super() hasn\'t been called');
+    }
+    return call && (typeof call === 'object' || typeof call === 'function') ? call : self;
+}
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== 'function' && superClass !== null) {
+        throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass);
+    }
+    subClass.prototype = Object.create(superClass && superClass.prototype, {
+        constructor: {
+            value: subClass,
+            enumerable: false,
+            writable: true,
+            configurable: true
+        }
+    });
+    if (superClass)
+        Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
+(function (ShippingRules) {
+    ShippingRules.Field.NumberBase26X2 = function (_ShippingRules$Field) {
+        _inherits(_class, _ShippingRules$Field);
+        function _class() {
+            _classCallCheck(this, _class);
+            return _possibleConstructorReturn(this, Object.getPrototypeOf(_class).apply(this, arguments));
+        }
+        _createClass(_class, [
+            {
+                key: 'render',
+                value: function render() {
+                    var me = this;
+                    return function () {
+                        var $$a = document.createElement('span');
+                        $$a.setAttribute('id', me.idPrefix + '-value');
+                        var $$b = document.createElement('input');
+                        $$b.setAttribute('type', 'text');
+                        $$b.setAttribute('id', me.idPrefix + '-value-0');
+                        $$b.setAttribute('pattern', '[A-Z]');
+                        $$b.setAttribute('value', me.value[0] || '');
+                        $$b.addEventListener('change', me.valueChangeHandler.bind(me));
+                        $$a.appendChild($$b);
+                        var $$c = document.createTextNode('\n                and\n                ');
+                        $$a.appendChild($$c);
+                        var $$d = document.createElement('input');
+                        $$d.setAttribute('type', 'text');
+                        $$d.setAttribute('id', me.idPrefix + '-value-1');
+                        $$d.setAttribute('pattern', '[A-Z]');
+                        $$d.setAttribute('value', me.value[1] || '');
+                        $$d.addEventListener('change', me.valueChangeHandler.bind(me));
+                        $$a.appendChild($$d);
+                        return $$a;
+                    }();
+                }
+            },
+            {
+                key: 'valueChangeHandler',
+                value: function valueChangeHandler(event) {
+                    event.target.value = event.target.value.toUpperCase();
+                    this.value = [
+                        document.getElementById(this.idPrefix + '-value-0').value,
+                        document.getElementById(this.idPrefix + '-value-1').value
+                    ];
+                    this.condition.valueChangeHandler(this.value);
+                }
+            }
+        ]);
+        return _class;
+    }(ShippingRules.Field);
+    ShippingRules.Register.field.add('NumberBase26X2', ShippingRules.Field.NumberBase26X2);
+}(Meanbee.ShippingRules));
+'use strict';
+var _createClass = function () {
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];
+            descriptor.enumerable = descriptor.enumerable || false;
+            descriptor.configurable = true;
+            if ('value' in descriptor)
+                descriptor.writable = true;
+            Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }
+    return function (Constructor, protoProps, staticProps) {
+        if (protoProps)
+            defineProperties(Constructor.prototype, protoProps);
+        if (staticProps)
+            defineProperties(Constructor, staticProps);
+        return Constructor;
+    };
+}();
+var _get = function get(object, property, receiver) {
+    if (object === null)
+        object = Function.prototype;
+    var desc = Object.getOwnPropertyDescriptor(object, property);
+    if (desc === undefined) {
+        var parent = Object.getPrototypeOf(object);
+        if (parent === null) {
+            return undefined;
+        } else {
+            return get(parent, property, receiver);
+        }
+    } else if ('value' in desc) {
+        return desc.value;
+    } else {
+        var getter = desc.get;
+        if (getter === undefined) {
+            return undefined;
+        }
+        return getter.call(receiver);
+    }
+};
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError('Cannot call a class as a function');
+    }
+}
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError('this hasn\'t been initialised - super() hasn\'t been called');
+    }
+    return call && (typeof call === 'object' || typeof call === 'function') ? call : self;
+}
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== 'function' && superClass !== null) {
+        throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass);
+    }
+    subClass.prototype = Object.create(superClass && superClass.prototype, {
+        constructor: {
+            value: subClass,
+            enumerable: false,
+            writable: true,
+            configurable: true
+        }
+    });
+    if (superClass)
+        Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
+(function (ShippingRules) {
+    ShippingRules.Field.NumberBase36 = function (_ShippingRules$Field) {
+        _inherits(_class, _ShippingRules$Field);
+        function _class() {
+            _classCallCheck(this, _class);
+            return _possibleConstructorReturn(this, Object.getPrototypeOf(_class).apply(this, arguments));
+        }
+        _createClass(_class, [
+            {
+                key: 'render',
+                value: function render() {
+                    var me = this;
+                    return function () {
+                        var $$a = document.createElement('input');
+                        $$a.setAttribute('type', 'text');
+                        $$a.setAttribute('id', me.idPrefix + '-value');
+                        $$a.setAttribute('pattern', '[0-9A-Z]');
+                        $$a.setAttribute('value', me.value);
+                        $$a.addEventListener('change', me.valueChangeHandler.bind(me));
+                        return $$a;
+                    }();
+                }
+            },
+            {
+                key: 'valueChangeHandler',
+                value: function valueChangeHandler(event) {
+                    event.target.value = event.target.value.toUpperCase();
+                    _get(Object.getPrototypeOf(_class.prototype), 'valueChangeHandler', this).call(this);
+                }
+            }
+        ]);
+        return _class;
+    }(ShippingRules.Field);
+    ShippingRules.Register.field.add('NumberBase36', ShippingRules.Field.NumberBase36);
+}(Meanbee.ShippingRules));
+'use strict';
+var _createClass = function () {
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];
+            descriptor.enumerable = descriptor.enumerable || false;
+            descriptor.configurable = true;
+            if ('value' in descriptor)
+                descriptor.writable = true;
+            Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }
+    return function (Constructor, protoProps, staticProps) {
+        if (protoProps)
+            defineProperties(Constructor.prototype, protoProps);
+        if (staticProps)
+            defineProperties(Constructor, staticProps);
+        return Constructor;
+    };
+}();
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError('Cannot call a class as a function');
+    }
+}
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError('this hasn\'t been initialised - super() hasn\'t been called');
+    }
+    return call && (typeof call === 'object' || typeof call === 'function') ? call : self;
+}
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== 'function' && superClass !== null) {
+        throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass);
+    }
+    subClass.prototype = Object.create(superClass && superClass.prototype, {
+        constructor: {
+            value: subClass,
+            enumerable: false,
+            writable: true,
+            configurable: true
+        }
+    });
+    if (superClass)
+        Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
+(function (ShippingRules) {
+    ShippingRules.Field.NumberBase36X2 = function (_ShippingRules$Field) {
+        _inherits(_class, _ShippingRules$Field);
+        function _class() {
+            _classCallCheck(this, _class);
+            return _possibleConstructorReturn(this, Object.getPrototypeOf(_class).apply(this, arguments));
+        }
+        _createClass(_class, [
+            {
+                key: 'render',
+                value: function render() {
+                    var me = this;
+                    return function () {
+                        var $$a = document.createElement('span');
+                        $$a.setAttribute('id', me.idPrefix + '-value');
+                        var $$b = document.createElement('input');
+                        $$b.setAttribute('type', 'text');
+                        $$b.setAttribute('id', me.idPrefix + '-value-0');
+                        $$b.setAttribute('pattern', '[0-9A-Z]');
+                        $$b.setAttribute('value', me.value[0] || '');
+                        $$b.addEventListener('change', me.valueChangeHandler.bind(me));
+                        $$a.appendChild($$b);
+                        var $$c = document.createTextNode('\n                and\n                ');
+                        $$a.appendChild($$c);
+                        var $$d = document.createElement('input');
+                        $$d.setAttribute('type', 'text');
+                        $$d.setAttribute('id', me.idPrefix + '-value-1');
+                        $$d.setAttribute('pattern', '[0-9A-Z]');
+                        $$d.setAttribute('value', me.value[1] || '');
+                        $$d.addEventListener('change', me.valueChangeHandler.bind(me));
+                        $$a.appendChild($$d);
+                        return $$a;
+                    }();
+                }
+            },
+            {
+                key: 'valueChangeHandler',
+                value: function valueChangeHandler(event) {
+                    event.target.value = event.target.value.toUpperCase();
+                    this.value = [
+                        document.getElementById(this.idPrefix + '-value-0').value,
+                        document.getElementById(this.idPrefix + '-value-1').value
+                    ];
+                    this.condition.valueChangeHandler(this.value);
+                }
+            }
+        ]);
+        return _class;
+    }(ShippingRules.Field);
+    ShippingRules.Register.field.add('NumberBase36X2', ShippingRules.Field.NumberBase36X2);
+}(Meanbee.ShippingRules));
+'use strict';
+var _createClass = function () {
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];
+            descriptor.enumerable = descriptor.enumerable || false;
+            descriptor.configurable = true;
+            if ('value' in descriptor)
+                descriptor.writable = true;
+            Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }
+    return function (Constructor, protoProps, staticProps) {
+        if (protoProps)
+            defineProperties(Constructor.prototype, protoProps);
+        if (staticProps)
+            defineProperties(Constructor, staticProps);
+        return Constructor;
+    };
+}();
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError('Cannot call a class as a function');
+    }
+}
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError('this hasn\'t been initialised - super() hasn\'t been called');
+    }
+    return call && (typeof call === 'object' || typeof call === 'function') ? call : self;
+}
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== 'function' && superClass !== null) {
+        throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass);
+    }
+    subClass.prototype = Object.create(superClass && superClass.prototype, {
+        constructor: {
+            value: subClass,
+            enumerable: false,
+            writable: true,
+            configurable: true
+        }
+    });
+    if (superClass)
+        Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
+(function (ShippingRules) {
+    ShippingRules.Field.NumberX2 = function (_ShippingRules$Field) {
+        _inherits(_class, _ShippingRules$Field);
+        function _class() {
+            _classCallCheck(this, _class);
+            return _possibleConstructorReturn(this, Object.getPrototypeOf(_class).apply(this, arguments));
+        }
+        _createClass(_class, [
+            {
+                key: 'render',
+                value: function render() {
+                    var me = this;
+                    return function () {
+                        var $$a = document.createElement('span');
+                        $$a.setAttribute('id', me.idPrefix + '-value');
+                        var $$b = document.createElement('input');
+                        $$b.setAttribute('type', 'number');
+                        $$b.setAttribute('id', me.idPrefix + '-value-0');
+                        $$b.setAttribute('value', me.value[0] || '');
+                        $$b.addEventListener('change', me.valueChangeHandler.bind(me));
+                        $$a.appendChild($$b);
+                        var $$c = document.createTextNode('\n                and\n                ');
+                        $$a.appendChild($$c);
+                        var $$d = document.createElement('input');
+                        $$d.setAttribute('type', 'number');
+                        $$d.setAttribute('id', me.idPrefix + '-value-1');
+                        $$d.setAttribute('value', me.value[1] || '');
+                        $$d.addEventListener('change', me.valueChangeHandler.bind(me));
+                        $$a.appendChild($$d);
+                        return $$a;
+                    }();
+                }
+            },
+            {
+                key: 'valueChangeHandler',
+                value: function valueChangeHandler(event) {
+                    this.value = [
+                        document.getElementById(this.idPrefix + '-value-0').value,
+                        document.getElementById(this.idPrefix + '-value-1').value
+                    ];
+                    this.condition.valueChangeHandler(this.value);
+                }
+            }
+        ]);
+        return _class;
+    }(ShippingRules.Field);
+    ShippingRules.Register.field.add('NumberX2', ShippingRules.Field.NumberX2);
 }(Meanbee.ShippingRules));
 'use strict';
 var _createClass = function () {

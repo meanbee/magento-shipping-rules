@@ -1,5 +1,5 @@
 <?php
-class Meanbee_Shippingrules_Calculator_Type_NumberBase26
+class Meanbee_Shippingrules_Calculator_Type_NumberBase36
     extends Meanbee_Shippingrules_Calculator_Type_Abstract
 {
     /**

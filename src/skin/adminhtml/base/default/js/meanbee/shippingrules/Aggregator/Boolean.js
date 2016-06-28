@@ -85,6 +85,10 @@
             </li>);
         }
 
+        refresh() {
+            this.children.forEach(c => c.refresh());
+        }
+
         init(obj) {
             super.init(obj);
             this.value = (typeof obj.value) === 'boolean' ? obj.value : true;

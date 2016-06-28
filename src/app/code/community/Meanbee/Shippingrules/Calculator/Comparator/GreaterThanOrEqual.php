@@ -1,5 +1,5 @@
 <?php
-class Meanbee_Shippingrules_Calculator_Comparator_Equal
+class Meanbee_Shippingrules_Calculator_Comparator_GreaterThanorEqual
     extends Meanbee_Shippingrules_Calculator_Comparator_Abstract
 {
     public function __construct($registers)

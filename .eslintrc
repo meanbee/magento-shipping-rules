@@ -30,6 +30,7 @@
         "wrap-iife": [2, "inside"]
     },
     "globals": {
-        "Meanbee": true
+        "Meanbee": true,
+        "Popper": true
     }
 }

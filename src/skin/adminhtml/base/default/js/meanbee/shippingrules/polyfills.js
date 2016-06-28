@@ -1,6 +1,6 @@
 'use strict';
 (function () {
-    /* Prototype.js implements a polyfill for Function.prototype.bind that is
+    /* Prototype.js implements a polyfill for `Function.prototype.bind` that is
      * functionally incomplete without checking for a native implementation.
      * this polyfill takes prescedence over Prototype.js's fixing the broken native
      * functionality and polyfilling for unsupporting browsers.
@@ -24,7 +24,7 @@
         return fBound;
     };
 
-    /* Prototype.js implements a polyfill for Array.prototype.map that is
+    /* Prototype.js implements a polyfill for `Array.prototype.map` that is
      * functionally incomplete without checking for a native implementation.
      * this polyfill takes prescedence over Prototype.js's fixing the broken native
      * functionality and polyfilling for unsupporting browsers.
@@ -57,7 +57,7 @@
     //     return A;
     // };
 
-    /* Polyfill for Element.prototype.matches
+    /* Polyfill for `Element.prototype.matches`
      * @see http://caniuse.com/#feat=matchesselector
      */
     if (typeof Element.prototype.matches !== 'function') {
@@ -71,7 +71,7 @@
             return Boolean(elements[index]);
         };
     }
-    /* Polyfill for Element.prototype.closest
+    /* Polyfill for `Element.prototype.closest`
      * @see http://caniuse.com/#feat=element-closest
      */
     if (typeof Element.prototype.closest !== 'function') {

@@ -5,6 +5,7 @@ var Meanbee = Meanbee || {};
     let canvas = document.createElement('canvas');
     let ctx = canvas.getContext('2d');
     ctx.font = 'bold 10.8px sans-serif';
+    let requests = [];
 
     ShippingRules.util = {
         toOptions: function (options, selected) {
@@ -83,6 +84,9 @@ var Meanbee = Meanbee || {};
         fieldTextSize: function (text) {
             return (Math.floor(ctx.measureText(text).width) + 25) + 'px';
         },
+        textWidth: function (text) {
+            return ctx.measureText(text).width;
+        },
         resizeFields: function () {
             [].forEach.call(document.querySelectorAll('.calculator-tree select:not([multiple])'), function (select) {
                 let text = select.selectedOptions[0] ? select.selectedOptions[0].innerText : '';
@@ -92,6 +96,18 @@ var Meanbee = Meanbee || {};
                 let text = input.value || '---';
                 input.style.width = ShippingRules.util.fieldTextSize(text);
             });
+        },
+        loadData: function (name) {
+            let url = '/js/lib/Meanbee/ShippingRulesLibrary/data/' + name.replace(/([a-z])([A-Z])/g, (_,$1,$2) => `${$1}_${$2.toLowerCase()}`) + '.json';
+            let xhr = new XMLHttpRequest();
+            xhr.open('GET', url);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    if (!('data' in ShippingRules)) ShippingRules.data = {};
+                    ShippingRules.data[name] = JSON.parse(xhr.responseText);
+                }
+            }
+            xhr.send();
         }
     };
 })(Meanbee.ShippingRules);

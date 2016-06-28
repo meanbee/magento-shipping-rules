@@ -12,6 +12,7 @@ var gulp         = require('gulp'),
 gulp.task('scripts', function() {
     return gulp.src([
         'node_modules/gulp-nativejsx/node_modules/nativejsx/dist/jsxdom-prototypes.js',
+        'node_modules/popper.js/build/popper.js',
         'src/skin/adminhtml/base/default/js/meanbee/shippingrules/polyfills.js',
         'src/skin/adminhtml/base/default/js/meanbee/shippingrules/util.js',
         'src/skin/adminhtml/base/default/js/meanbee/shippingrules/Register.js',
