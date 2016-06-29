@@ -288,7 +288,16 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
             $quote = $requestItems[0]->getQuote();
             $request->setData('promo_free_shipping', $quote->getShippingAddress()->getFreeShipping());
             $request->setData('promo_coupon_code', $quote->getCouponCode());
-            $request->setData('promo_applied_rule_ids', $quote->getAppliedRuleIds());
+            $request->setData(
+                'promo_applied_rule_ids',
+                implode(',', array_unique(explode(',', array_reduce(
+                    $request->getAllItems(),
+                    function ($accumulator, $product) {
+                        return implode(',', array_filter(array($accumulator, $product->getAppliedRuleIds())));
+                    },
+                    $quote->getAppliedRuleIds() ?: ''
+                ))))
+            );
         }
         return $request;
     }
