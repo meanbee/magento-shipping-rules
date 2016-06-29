@@ -302,17 +302,16 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
      * @return string[]
      */
     protected function getAppliedCartPriceRules($requestItems) {
-        if (count($requestItems) > 0) {
-            $quote = $requestItems[0]->getQuote();
-            return array_unique(explode(',', array_reduce(
-                $requestItems,
-                function ($accumulator, $product) {
-                    return implode(',', array_filter(array($accumulator, $product->getAppliedRuleIds())));
-                },
-                $quote->getAppliedRuleIds() ?: ''
-            )));
+        if (count($requestItems) <= 0) {
+            return array();
         }
-        return array();
+        $quote = $requestItems[0]->getQuote();
+        $quoteLevelPriceRules = explode(',', $quote->getAppliedRuleIds()) ?: array();
+        $productLevelPriceRules = array_reduce($requestItems, function ($accumulator, $product) {
+            return array_merge($accumulator, explode(',', $product->getAppliedRuleIds()));
+        }, array());
+        $allPriceRules = array_merge($quoteLevelPriceRules, $productLevelPriceRules);
+        return array_filter(array_unique($allPriceRules));
     }
 
     /**
