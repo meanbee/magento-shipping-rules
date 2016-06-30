@@ -69,6 +69,9 @@ abstract class Meanbee_Shippingrules_Calculator_Comparator_Abstract
     }
 
     protected function getType($typeId) {
+        if (is_array($typeId)) {
+            $typeId = array_slice(array_intersect($this->types, $typeId), 0)[0];
+        }
         return $this->registers->getTypeRegister()->get($typeId);
     }
 
