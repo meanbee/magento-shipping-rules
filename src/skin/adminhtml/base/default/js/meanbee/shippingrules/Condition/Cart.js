@@ -14,7 +14,7 @@
             let variables = {};
             if (!context) {
                 variables['package_weight'] = { label: 'Total Weight', type: ['number'] };
-                variables['package_quantity'] = { label: 'Total Items Quantity', type: ['number'] };
+                variables['package_qty'] = { label: 'Total Items Quantity', type: ['number'] };
                 variables['package_value'] = { label: 'Subtotal excl. Tax', type: ['currency'] };
                 variables['base_subtotal_incl_tax'] = { label: 'Subtotal incl. Tax', type: ['currency'] };
                 variables['package_value_with_discount'] = { label: 'Subtotal after Discount', type: ['currency'] };

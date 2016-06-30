@@ -9,7 +9,10 @@
 
         renderValue() {
             let me = this;
-            return (<input id={`${me.id}-value`} type="number" value={me.value} onKeyDown={event => me.value = event.target.value} />);
+            return (<input id={`${me.id}-value`} type="number" value={me.value} onKeyDown={event => me.value = event.target.value} onChange={event => {
+                me.value = event.target.value;
+                me.root.rerender()
+            }} />);
         }
 
         render() {
@@ -22,9 +25,15 @@
                 </span>
             </li>);
         }
+        
+        refresh() {
+            super.refresh();
+            this.aggregator.refresh();
+        }
 
         init(obj) {
             super.init(obj);
+            this.value = obj.value;
             this.aggregator.init(obj.aggregator);
         }
 

@@ -8,7 +8,8 @@ class Meanbee_Shippingrules_Calculator_Register_Term
     public function init()
     {
         $this->add('constant', new Meanbee_Shippingrules_Calculator_Term_Constant);
-        $this->add('conditionalMultiple', new Meanbee_Shippingrules_Calculator_Term_Conditional_Multiple);
+        $this->add('conditional', new Meanbee_Shippingrules_Calculator_Term_Conditional);
+        $this->add('product_subselection', new Meanbee_Shippingrules_Calculator_Term_Conditional_Multiple);
     }
 
     /**

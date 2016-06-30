@@ -49,22 +49,26 @@
         render() {
             let me = this;
             return (<li id={me.id} tabIndex={0}>
-                {me.label}
+                {me.label || ' '}
                 {me.renderComparator()}
-                {me.valueField.render()}
+                {me.valueField.render ? me.valueField.render() : []}
                 {me.renderRemoveButton()}
             </li>);
         }
 
         refresh() {
-            // NO OP
+            super.refresh();
+            if (this.type.length) {
+                this.comparator.type = this.type;
+                this.valueField = new (ShippingRules.Register.field.get(this.comparator.getField()))(this, this.value);
+            }
         }
 
         init(obj) {
             this.variable = obj.variable;
             this.value = obj.value;
             this.comparator = new (ShippingRules.Register.comparator.get(obj.comparator.key))(this.type);
-            this.valueField = new (ShippingRules.Register.field.get(this.comparator.getField()))(this, this.value);
+            if (this.type.length) this.valueField = new (ShippingRules.Register.field.get(this.comparator.getField()))(this, this.value);
         }
 
         toJSON() {

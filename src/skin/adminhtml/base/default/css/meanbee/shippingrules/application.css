@@ -3,8 +3,7 @@
   outline-color: -webkit-focus-ring-color;
   outline-offset: 2px;
 }
-.visually-hidden,
-.calculator-tree .helpWrapper:not(:focus):not(:hover) .helpContainer.hidden {
+.visually-hidden {
   border: none !important;
   clip: rect(1px 1px 1px 1px);
   clip: rect(1px, 1px, 1px, 1px);
@@ -48,114 +47,130 @@ ul.calculator-tree select[id] {
   font-weight: bold;
   padding: 0;
 }
-.calculator-tree .helpWrapper {
-  display: inline;
-  position: relative;
+[id^="meanbee_shippingrules_form_"] .hor-scroll {
+  overflow: initial;
 }
-.calculator-tree .helpContainer {
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: center;
-  background: #fdfaac;
-  border: solid 1px #f27c12;
-  border-radius: 0.25em;
-  bottom: 2.08em;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-justify-content: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  left: -10em;
-  margin: auto;
-  position: absolute;
-  right: -10em;
+.popper {
+  background: #ffc;
+  border-radius: 5px;
+  -webkit-filter: drop-shadow(0 0 2px #ffa500);
+  filter: drop-shadow(0 0 2px #ffa500);
+  min-height: 2em;
+  min-width: 2em;
+  padding: 5px 5px 5px 5px;
   text-align: center;
-  top: -6em;
-  width: 10em;
+  top: -0.25em !important;
 }
-.calculator-tree .helpContainer.hidden {
-  border-color: #666e73;
+.popper[x-placement^="top"] {
+  margin-bottom: 5px;
 }
-.calculator-tree .helpContainer.hidden::before {
-  border-color: #666e73;
+.popper[x-placement^="top"] .popper__arrow {
+  border-width: 5px 5px 0 5px;
+  border-color: currentColor transparent transparent transparent;
+  bottom: -5px;
+  margin-top: 0;
+  margin-bottom: 0;
 }
-.calculator-tree .helpContainer::before {
-  background: inherit;
-  border: solid 1px #f27c12;
-  border-width: 0 1px 1px 0;
-  content: '';
-  display: block;
-  height: 1.2em;
-  left: 0;
-  margin: auto;
+.popper[x-placement^="right"] {
+  margin-left: 5px;
+}
+.popper[x-placement^="right"] .popper__arrow {
+  border-width: 5px 5px 5px 0;
+  border-color: transparent currentColor transparent transparent;
+  left: -5px;
+  margin-left: 0;
+  margin-right: 0;
+}
+.popper[x-placement^="bottom"] {
+  margin-top: 5px;
+}
+.popper[x-placement^="bottom"] .popper__arrow {
+  border-width: 0 5px 5px 5px;
+  border-color: transparent transparent currentColor transparent;
+  top: -5px;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+.popper[x-placement^="left"] {
+  margin-right: 15px;
+  margin-bottom: 5px;
+}
+.popper[x-placement^="left"] .popper__arrow {
+  border-width: 5px 0 5px 5px;
+  border-color: transparent transparent transparent currentColor;
+  right: -5px;
+  margin-left: 0;
+  margin-right: 0;
+  margin-bottom: 5px;
+}
+.popper[x-placement="left-end"] {
+  border-bottom-right-radius: 0;
+}
+.popper .popper__arrow {
+  border-style: solid;
+  color: #ffc;
+  height: 0;
+  margin: 5px;
   position: absolute;
-  right: 0;
-  top: 4.37em;
-  -webkit-transform: rotate(45deg);
-          transform: rotate(45deg);
-  width: 1.2em;
+  width: 0;
 }
-.calculator-tree .exampleWrapper {
-  display: inline-block;
-  margin: 0.3em 0 0 0;
+.popper.hidden {
+  left: -100vw !important;
+  opacity: 0;
+  pointer-events: none;
 }
-.calculator-tree .examplePostalCode {
-  display: inline-block;
-  padding: 0 0.1em;
+.postalcode-full {
+  margin: 2em 1em;
   position: relative;
 }
-.calculator-tree .examplePostalCode .part {
-  display: inline-block;
-  padding: 0 0.1em;
-  position: relative;
-  margin: 0 0.1em;
-}
-.calculator-tree .examplePostalCode .part::before,
-.calculator-tree .examplePostalCode .part::after {
-  color: #6d8791;
-  content: attr(data-part);
-  display: block;
-  font-size: smaller;
-  left: 0;
-  position: absolute;
-  right: 0;
-  text-align: center;
-  top: 100%;
-}
-.calculator-tree .examplePostalCode .part::after {
-  border: solid 1px #6d8791;
-  border-width: 0 1px 1px;
-  content: '';
-  height: 20%;
-  top: 80%;
-}
-.calculator-tree .examplePostalCode::before,
-.calculator-tree .examplePostalCode::after {
-  bottom: 80%;
-  color: #666e73;
+.postalcode-full::before {
   content: 'Entire Code';
-  display: block;
-  font-size: smaller;
+  font-size: 0.8em;
+  left: -1em;
+  margin: auto;
+  position: absolute;
+  right: -1em;
+  top: -2.5em;
+  white-space: nowrap;
+}
+.postalcode-full:after {
+  border: solid 1px currentColor;
+  border-bottom: none;
+  content: '';
+  height: 0.5em;
   left: 0;
   position: absolute;
   right: 0;
-  text-align: center;
-  white-space: no-wrap;
+  top: -0.4em;
 }
-.calculator-tree .examplePostalCode::before {
-  bottom: 110%;
-  left: -2.5em;
-  right: -2.5em;
+.postalcode-full .postalcode-part {
+  margin: 0 0.161616em;
+  padding: 0 0.161616em;
+  position: relative;
 }
-.calculator-tree .examplePostalCode::after {
-  border: solid 1px #666e73;
-  border-width: 1px 1px 0 1px;
+.postalcode-full .postalcode-part::before {
+  content: attr(data-part);
+  font-size: 0.8em;
+  left: -1em;
+  margin: auto;
+  min-width: 2em;
+  position: absolute;
+  right: -1em;
+  bottom: -2.25em;
+}
+.postalcode-full .postalcode-part:after {
+  border: solid 1px currentColor;
+  border-top: none;
+  bottom: -0.4em;
   content: '';
-  height: 20%;
+  height: 0.5em;
+  left: 0;
+  position: absolute;
+  right: 0;
 }
-.calculator-tree .helpWrapper:not(:focus):not(:hover) .helpContainer.hidden {
-  top: 0.5em;
+.postalcode-full .postalcode-part[data-type='const']::before,
+.postalcode-full .postalcode-part[data-type='const']::after {
+  display: none;
 }
 ul.calculator-tree {
   border: none;
@@ -170,9 +185,10 @@ ul.calculator-tree > li li {
   border-left: solid 1px #6d8791;
   margin: 0 0 0 0.5em !important;
   max-height: 500vmax;
+  overflow: 0;
   padding-left: 1em;
   position: relative;
-  transition: opacity 0.3s, max-height 0.3s;
+  transition: opacity 0.3s, max-height 0.3s cubic-bezier(0.23, 1, 0.32, 1);
 }
 ul.calculator-tree > li li:last-child {
   border-left: none;

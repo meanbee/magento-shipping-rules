@@ -2,6 +2,9 @@
 if (window.Meanbee === undefined) { window.Meanbee = {}; }
 Meanbee.ShippingRules = Object.assign((Meanbee.ShippingRules || {}), {
   version: '<?php echo Mage::helper('meanbee_shippingrules/config')->getVersion() ?>',
-  documentation: '<?php echo Mage::helper('meanbee_shippingrules/config')->getDocumentationURL() ?>'
+  documentation: '<?php echo Mage::helper('meanbee_shippingrules/config')->getDocumentationURL() ?>',
+  ajaxRoutes: {
+    productAttributes: '<?php echo Mage::getSingleton('adminhtml/url')->getUrl('adminhtml/shippingrules/productAttributes'); ?>'
+  }
 });
 </script>

@@ -5,6 +5,9 @@ class Meanbee_Shippingrules_Calculator_Term_Variable
     /** @var string|null $variable */
     private $variable = null;
 
+    /** @var array|null $variable */
+    private $products = null;
+
     /**
      * Retrieves the currently set variable.
      * @return string
@@ -28,6 +31,29 @@ class Meanbee_Shippingrules_Calculator_Term_Variable
     }
 
     /**
+     * Retrieves the currently set products.
+     * @return array
+     */
+    public function getProducts()
+    {
+        return $this->products;
+    }
+    
+    /**
+     * Sets the products to use.
+     * @param array|null $products
+     * @return $this
+     */
+    public function setProducts($products)
+    {
+        if (is_array($products)) {
+            $this->products = $products;
+        }
+        return $this;
+    }
+
+
+    /**
      * {@inheritdoc}
      * @override
      * @param  Mage_Shipping_Model_Rate_Request $request
@@ -35,7 +61,12 @@ class Meanbee_Shippingrules_Calculator_Term_Variable
      */
     public function evaluate($request)
     {
-        return $request->getData($this->setVariable());
+        $products = $this->getProducts() ?: $request->getAllItems();
+        $sum = 0;
+        foreach ($products as $product) {
+            $sum += $product->getData($this->getVariable());
+        }
+        return $sum;
     }
 
     /**
@@ -47,7 +78,6 @@ class Meanbee_Shippingrules_Calculator_Term_Variable
      */
     public function init($obj, $registers)
     {
-        $this->setVariable($obj['attribute']);
-        return parent::init($obj, $registers);
+        return parent::init($obj, $registers)->setVariable($obj['attribute']);
     }
 }

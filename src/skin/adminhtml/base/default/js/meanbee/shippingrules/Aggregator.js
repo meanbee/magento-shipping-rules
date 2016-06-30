@@ -6,6 +6,10 @@
             super(index, parent, container)
             this.children = [];
             this.combinator = null;
+            if (!parent) {
+                if (!ShippingRules.calculators) ShippingRules.calculators = {};
+                ShippingRules.calculators[index] = this;
+            }
         }
 
         removeChildByIndex(index) {
@@ -29,6 +33,11 @@
                 {me.children.map(child => child.render())}
                 {me.renderChildSelector()}
             </ul>);
+        }
+
+        refresh() {
+            super.refresh();
+            this.children.forEach(c => c.refresh());
         }
 
         init(obj) {

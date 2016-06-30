@@ -62,7 +62,13 @@
                 });
             }
         }
+
+        toJSON() {
+            let obj = super.toJSON();
+            obj.key = 'Summative';
+            return obj;
+        }
     }
 
-    ShippingRules.Register.aggregator.add('Numeric', ShippingRules.Aggregator.Numeric);
+    ShippingRules.Register.aggregator.add('Summative', ShippingRules.Aggregator.Numeric);
 })(Meanbee.ShippingRules);

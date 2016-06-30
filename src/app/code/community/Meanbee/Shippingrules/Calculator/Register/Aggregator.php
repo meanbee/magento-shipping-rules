@@ -10,6 +10,8 @@ class Meanbee_Shippingrules_Calculator_Register_Aggregator
         $this->add('summative', new Meanbee_Shippingrules_Calculator_Aggregator_Summative);
         $this->add('conjunctive', new Meanbee_Shippingrules_Calculator_Aggregator_Conjunctive);
         $this->add('disjunctive', new Meanbee_Shippingrules_Calculator_Aggregator_Disjunctive);
+        $this->add('intersectional', new Meanbee_Shippingrules_Calculator_Aggregator_Intersectional);
+        $this->add('unional', new Meanbee_Shippingrules_Calculator_Aggregator_Unional);
     }
 
     /**

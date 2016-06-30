@@ -84,6 +84,10 @@
             this.root.updateJSON();
         }
 
+        refresh() {
+            // NOOP
+        }
+
         updateJSON() {
             this.root.field.value = JSON.stringify(this.root);
         }

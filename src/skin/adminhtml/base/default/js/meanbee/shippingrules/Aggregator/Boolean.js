@@ -4,12 +4,12 @@
     {
         constructor(index, parent = null, container) {
             super(index, parent, container);
-            this.combinator = ShippingRules.Aggregator.Boolean.CONJUNCTIVE;
+            this.combinator = this.constructor.CONJUNCTIVE;
             this.value = true;
         }
 
         set combinator(param) {
-            if (~[ShippingRules.Aggregator.Boolean.CONJUNCTIVE, ShippingRules.Aggregator.Boolean.DISJUNCTIVE].indexOf(param)) {
+            if (~[this.constructor.CONJUNCTIVE, this.constructor.DISJUNCTIVE].indexOf(param)) {
                 this._combinator = param;
             }
             return this;
@@ -40,17 +40,30 @@
 
         renderCombinator() {
             let me = this;
-            return (<select id={`${me.id}-combinator`} onChange={event => me.combinator = event.target.value}>
-                <option value={ShippingRules.Aggregator.Boolean.CONJUNCTIVE}>ALL</option>
-                <option value={ShippingRules.Aggregator.Boolean.DISJUNCTIVE}>ANY</option>
+            return (<select id={`${me.id}-combinator`} onChange={event => {
+                me.combinator = event.target.value;
+                me.root.rerender();
+            }}>
+                {[{ label: 'ALL', value: me.constructor.CONJUNCTIVE},
+                    { label: 'ANY', value: me.constructor.DISJUNCTIVE}].map(combinator => {
+                        let option = (<option value={combinator.value}>{combinator.label}</option>);
+                        if (me.combinator === combinator.value) option.selected = true;
+                        return option;
+                    })}
             </select>);
         }
 
         renderValue() {
             let me = this;
-            return (<select id={`${me.id}-value`} onChange={event => me.value = !!+event.target.value}>
-                <option value="1">TRUE</option>
-                <option value="0">FALSE</option>
+            return (<select id={`${me.id}-value`} onChange={event => {
+                me.value = !!+event.target.value
+                me.root.rerender();
+            }}>
+                {[{ label: 'TRUE', value: 1}, { label: 'FALSE', value: 0}].map(value => {
+                    let option = (<option value={value.value}>{value.label}</option>);
+                    if (me.value === value.value) option.selected = true;
+                    return option;
+                })}
             </select>);
         }
 
@@ -85,10 +98,6 @@
             </li>);
         }
 
-        refresh() {
-            this.children.forEach(c => c.refresh());
-        }
-
         init(obj) {
             super.init(obj);
             this.value = (typeof obj.value) === 'boolean' ? obj.value : true;
@@ -118,5 +127,6 @@
         }
     });
 
-    ShippingRules.Register.aggregator.add('Boolean', ShippingRules.Aggregator.Boolean);
+    ShippingRules.Register.aggregator.add(ShippingRules.Aggregator.Boolean.CONJUNCTIVE, ShippingRules.Aggregator.Boolean);
+    ShippingRules.Register.aggregator.add(ShippingRules.Aggregator.Boolean.DISJUNCTIVE, ShippingRules.Aggregator.Boolean);
 })(Meanbee.ShippingRules);

@@ -51,6 +51,6 @@ trait Meanbee_Shippingrules_Calculator_Term_Conditional_Trait
      */
     public function init($obj, $registers)
     {
-        return parent::init($obj, $registers)->setAggregator($registers->getAggregatorRegister()->newInstanceOf($obj['aggregator']['aggregator'], $obj['aggregator']));
+        return parent::init($obj, $registers)->setAggregator($registers->getAggregatorRegister()->newInstanceOf($obj['aggregator']['key'], $obj['aggregator']));
     }
 }

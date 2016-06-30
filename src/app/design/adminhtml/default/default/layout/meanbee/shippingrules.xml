@@ -13,15 +13,16 @@
 		<update handle="meanbee_shippingrules" />
 		<reference name="head">
 			<action method="addItem">
-				<type>skin_js</type>
-				<script>js/meanbee/shippingrules/script.js</script>
-			</action>
-			<action method="addItem">
 				<type>skin_css</type>
 				<stylesheet>css/meanbee/shippingrules/application.css</stylesheet>
 			</action>
 		</reference>
 		<reference name="content">
+			<block type="core/text" name="shippingrules_script">
+				<action method="setText">
+					<text><![CDATA[<script src="/skin/adminhtml/base/default/js/meanbee/shippingrules/script.js" defer></script>]]></text>
+				</action>
+			</block>
 			<block type="meanbee_shippingrules/adminhtml_rules_edit" name="rules_edit" />
 		</reference>
 	</adminhtml_shippingrules_edit>

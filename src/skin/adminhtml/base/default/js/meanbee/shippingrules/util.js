@@ -5,7 +5,6 @@ var Meanbee = Meanbee || {};
     let canvas = document.createElement('canvas');
     let ctx = canvas.getContext('2d');
     ctx.font = 'bold 10.8px sans-serif';
-    let requests = [];
 
     ShippingRules.util = {
         toOptions: function (options, selected) {
@@ -98,13 +97,18 @@ var Meanbee = Meanbee || {};
             });
         },
         loadData: function (name) {
-            let url = '/js/lib/Meanbee/ShippingRulesLibrary/data/' + name.replace(/([a-z])([A-Z])/g, (_,$1,$2) => `${$1}_${$2.toLowerCase()}`) + '.json';
+            if (!('data' in ShippingRules)) ShippingRules.data = {};
+            let url = name in ShippingRules.ajaxRoutes ? ShippingRules.ajaxRoutes[name] : ('/js/lib/Meanbee/ShippingRulesLibrary/data/' + name.replace(/([a-z])([A-Z])/g, (_,$1,$2) => `${$1}_${$2.toLowerCase()}`) + '.json');
             let xhr = new XMLHttpRequest();
             xhr.open('GET', url);
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4 && xhr.status === 200) {
-                    if (!('data' in ShippingRules)) ShippingRules.data = {};
                     ShippingRules.data[name] = JSON.parse(xhr.responseText);
+                    if (ShippingRules.calculators)
+                        Object.keys(ShippingRules.calculators).forEach(calcName => {
+                            ShippingRules.calculators[calcName].refresh();
+                            ShippingRules.calculators[calcName].rerender();
+                        });
                 }
             }
             xhr.send();

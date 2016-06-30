@@ -1,103 +1,126 @@
-.calculator-tree {
-    .helpWrapper {
-        display: inline;
-        position: relative;
+[id^="meanbee_shippingrules_form_"] .hor-scroll {
+    overflow: initial;
+}
+.popper {
+    background: #FFC;
+    border-radius: 5px;
+    -webkit-filter: drop-shadow(0 0 2px orange);
+            filter: drop-shadow(0 0 2px orange);
+    min-height: 2em;
+    min-width: 2em;
+    padding: 5px 5px 5px 5px;
+    text-align: center;
+    top: -.25em !important;
+    &[x-placement^="top"] {
+        margin-bottom: 5px;
+        .popper__arrow {
+            border-width: 5px 5px 0 5px;
+            border-color: currentColor transparent transparent transparent;
+            bottom: -5px;
+            margin-top: 0;
+            margin-bottom: 0;
+        }
     }
-    .helpContainer {
-        align-items: center;
-        background: $yellow;
-        border: solid 1px $orange;
-        border-radius: .25em;
-        bottom: 2.08em;
-        display: flex;
-        justify-content: center;
-        left: -10em;
+    &[x-placement^="right"] {
+        margin-left: 5px;
+        .popper__arrow {
+            border-width: 5px 5px 5px 0;
+            border-color: transparent currentColor transparent transparent;
+            left: -5px;
+            margin-left: 0;
+            margin-right: 0;
+        }
+    }
+    &[x-placement^="bottom"] {
+        margin-top: 5px;
+        .popper__arrow {
+            border-width: 0 5px 5px 5px;
+            border-color: transparent transparent currentColor transparent;
+            top: -5px;
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+    }
+    &[x-placement^="left"] {
+        margin-right: 15px;
+        margin-bottom: 5px;
+        .popper__arrow {
+            border-width: 5px 0 5px 5px;
+            border-color: transparent transparent transparent currentColor;
+            right: -5px;
+            margin-left: 0;
+            margin-right: 0;
+            margin-bottom: 5px;
+        }
+    }
+    &[x-placement="left-end"] {
+        border-bottom-right-radius: 0;
+    }
+    .popper__arrow {
+        border-style: solid;
+        color: #FFC;
+        height: 0;
+        margin: 5px;
+        position: absolute;
+        width: 0;
+    }
+    &.hidden {
+        left: -100vw !important;
+        opacity: 0;
+        pointer-events: none;
+    }
+}
+
+.postalcode-full {
+    margin: 2em 1em;
+    position: relative;
+    &::before {
+        content: 'Entire Code';
+        font-size: .8em;
+        left: -1em;
         margin: auto;
         position: absolute;
-        right: -10em;
-        text-align: center;
-        top: -6em;
-        width: 10em;
-        &.hidden {
-            border-color: $slate;
-            &::before {
-                border-color: $slate;
-            }
-        }
-        &::before {
-            background: inherit;
-            border: solid 1px $orange;
-            border-width: 0 1px 1px 0;
-            content: '';
-            display: block;
-            height: 1.2em;
-            left: 0;
-            margin: auto;
-            position: absolute;
-            right: 0;
-            top: 4.37em;
-            transform: rotate(45deg);
-            width: 1.2em;
-        }
+        right: -1em;
+        top: -2.5em;
+        white-space: nowrap;
     }
-    .exampleWrapper {
-        display: inline-block;
-        margin: .3em 0 0 0;
+    &:after {
+        border: solid 1px currentColor;
+        border-bottom: none;
+        content: '';
+        height: .5em;
+        left: 0;
+        position: absolute;
+        right: 0;
+        top: -.4em;
     }
-    .examplePostalCode {
-        display: inline-block;
-        padding: 0 .1em;
+    .postalcode-part {
+        margin: 0 .161616em;
+        padding: 0 .161616em;
         position: relative;
-        .part {
-            display: inline-block;
-            padding: 0 .1em;
-            position: relative;
-            margin: 0 .1em;
-            &::before, &::after {
-                color: $blue-slate;
-                content: attr(data-part);
-                display: block;
-                font-size: smaller;
-                left: 0;
-                position: absolute;
-                right: 0;
-                text-align: center;
-                top: 100%;
-            }
-            &::after {
-                border: solid 1px $blue-slate;
-                border-width: 0 1px 1px;
-                content: '';
-                height: 20%;
-                top: 80%;
-            }
+        &::before {
+            content: attr(data-part);
+            font-size: .8em;
+            left: -1em;
+            margin: auto;
+            min-width: 2em;
+            position: absolute;
+            right: -1em;
+            bottom: -2.25em;
         }
-        &::before, &::after {
-            bottom: 80%;
-            color: $slate;
-            content: 'Entire Code';
-            display: block;
-            font-size: smaller;
+        &:after {
+            border: solid 1px currentColor;
+            border-top: none;
+            bottom: -.4em;
+            content: '';
+            height: .5em;
             left: 0;
             position: absolute;
             right: 0;
-            text-align: center;
-            white-space: no-wrap;
         }
-        &::before {
-            bottom: 110%;
-            left: -2.5em;
-            right: -2.5em;
+        &[data-type='const']::before,
+        &[data-type='const']::after {
+            display: none;
         }
-        &::after {
-            border: solid 1px $slate;
-            border-width: 1px 1px 0 1px;
-            content: '';
-            height: 20%;
-        }
-    }
-    .helpWrapper:not(:focus):not(:hover) .helpContainer.hidden {
-        @extend .visually-hidden;
-        top: .5em;
     }
 }

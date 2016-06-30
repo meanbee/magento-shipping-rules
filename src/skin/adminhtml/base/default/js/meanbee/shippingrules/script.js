@@ -761,6 +761,32 @@ var _typeof = typeof Symbol === 'function' && typeof Symbol.iterator === 'symbol
         fBound.prototype = new fNOP();
         return fBound;
     };
+    Array.prototype.map = function (callback, thisArg) {
+        var T, A, k;
+        if (this == null) {
+            throw new TypeError(' this is null or not defined');
+        }
+        var O = Object(this);
+        var len = O.length >>> 0;
+        if (typeof callback !== 'function') {
+            throw new TypeError(callback + ' is not a function');
+        }
+        if (arguments.length > 1) {
+            T = thisArg;
+        }
+        A = new Array(len);
+        k = 0;
+        while (k < len) {
+            var kValue, mappedValue;
+            if (k in O) {
+                kValue = O[k];
+                mappedValue = callback.call(T, kValue, k, O);
+                A[k] = mappedValue;
+            }
+            k++;
+        }
+        return A;
+    };
     if (typeof Element.prototype.matches !== 'function') {
         Element.prototype.matches = Element.prototype.msMatchesSelector || Element.prototype.mozMatchesSelector || Element.prototype.webkitMatchesSelector || function matches(selector) {
             var element = this;
@@ -792,7 +818,6 @@ var Meanbee = Meanbee || {};
     var canvas = document.createElement('canvas');
     var ctx = canvas.getContext('2d');
     ctx.font = 'bold 10.8px sans-serif';
-    var requests = [];
     ShippingRules.util = {
         toOptions: function toOptions(options, selected) {
             selected = Array.isArray(selected) ? selected : [selected];
@@ -954,16 +979,21 @@ var Meanbee = Meanbee || {};
             });
         },
         loadData: function loadData(name) {
-            var url = '/js/lib/Meanbee/ShippingRulesLibrary/data/' + name.replace(/([a-z])([A-Z])/g, function (_, $1, $2) {
+            if (!('data' in ShippingRules))
+                ShippingRules.data = {};
+            var url = name in ShippingRules.ajaxRoutes ? ShippingRules.ajaxRoutes[name] : '/js/lib/Meanbee/ShippingRulesLibrary/data/' + name.replace(/([a-z])([A-Z])/g, function (_, $1, $2) {
                 return $1 + '_' + $2.toLowerCase();
             }) + '.json';
             var xhr = new XMLHttpRequest();
             xhr.open('GET', url);
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4 && xhr.status === 200) {
-                    if (!('data' in ShippingRules))
-                        ShippingRules.data = {};
                     ShippingRules.data[name] = JSON.parse(xhr.responseText);
+                    if (ShippingRules.calculators)
+                        Object.keys(ShippingRules.calculators).forEach(function (calcName) {
+                            ShippingRules.calculators[calcName].refresh();
+                            ShippingRules.calculators[calcName].rerender();
+                        });
                 }
             };
             xhr.send();
@@ -1117,8 +1147,6 @@ function _defineProperty(obj, key, value) {
     ShippingRules.Register.condition.getAsOptions = function (context) {
         var _this = this;
         var categorised = Object.keys(this.children).map(function (key) {
-            if (_this.children[key].loadDependencies)
-                _this.children[key].loadDependencies();
             return _defineProperty({}, _this.children[key].getCategory(context), Object.keys(_this.children[key].getVariables(context)).map(function (variable) {
                 return function () {
                     var $$a = document.createElement('option');
@@ -1236,6 +1264,11 @@ function _classCallCheck(instance, Constructor) {
                     ShippingRules.util.resizeFields();
                     this.focus(focussedElementId);
                     this.root.updateJSON();
+                }
+            },
+            {
+                key: 'refresh',
+                value: function refresh() {
                 }
             },
             {
@@ -1457,6 +1490,27 @@ var _createClass = function () {
         return Constructor;
     };
 }();
+var _get = function get(object, property, receiver) {
+    if (object === null)
+        object = Function.prototype;
+    var desc = Object.getOwnPropertyDescriptor(object, property);
+    if (desc === undefined) {
+        var parent = Object.getPrototypeOf(object);
+        if (parent === null) {
+            return undefined;
+        } else {
+            return get(parent, property, receiver);
+        }
+    } else if ('value' in desc) {
+        return desc.value;
+    } else {
+        var getter = desc.get;
+        if (getter === undefined) {
+            return undefined;
+        }
+        return getter.call(receiver);
+    }
+};
 function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
         throw new TypeError('Cannot call a class as a function');
@@ -1496,6 +1550,11 @@ function _inherits(subClass, superClass) {
             var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(_class).call(this, index, parent, container));
             _this.children = [];
             _this.combinator = null;
+            if (!parent) {
+                if (!ShippingRules.calculators)
+                    ShippingRules.calculators = {};
+                ShippingRules.calculators[index] = _this;
+            }
             return _this;
         }
         _createClass(_class, [
@@ -1536,6 +1595,15 @@ function _inherits(subClass, superClass) {
                         $$b.appendChildren(me.renderChildSelector());
                         return $$b;
                     }();
+                }
+            },
+            {
+                key: 'refresh',
+                value: function refresh() {
+                    _get(Object.getPrototypeOf(_class.prototype), 'refresh', this).call(this);
+                    this.children.forEach(function (c) {
+                        return c.refresh();
+                    });
                 }
             },
             {
@@ -1639,7 +1707,7 @@ function _inherits(subClass, superClass) {
             var container = arguments[2];
             _classCallCheck(this, _class);
             var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(_class).call(this, index, parent, container));
-            _this.combinator = ShippingRules.Aggregator.Boolean.CONJUNCTIVE;
+            _this.combinator = _this.constructor.CONJUNCTIVE;
             _this.value = true;
             return _this;
         }
@@ -1648,8 +1716,6 @@ function _inherits(subClass, superClass) {
                 key: 'addChild',
                 value: function addChild(childClass, index) {
                     index = index === void 0 || index === null ? this.children.length : index;
-                    if (childClass.loadDependencies)
-                        childClass.loadDependencies();
                     for (var _len = arguments.length, params = Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
                         params[_key - 2] = arguments[_key];
                     }
@@ -1689,18 +1755,29 @@ function _inherits(subClass, superClass) {
                         var $$b = document.createElement('select');
                         $$b.setAttribute('id', me.id + '-combinator');
                         $$b.addEventListener('change', function (event) {
-                            return me.combinator = event.target.value;
+                            me.combinator = event.target.value;
+                            me.root.rerender();
                         });
-                        var $$c = document.createElement('option');
-                        $$c.setAttribute('value', ShippingRules.Aggregator.Boolean.CONJUNCTIVE);
-                        $$b.appendChild($$c);
-                        var $$d = document.createTextNode('ALL');
-                        $$c.appendChild($$d);
-                        var $$e = document.createElement('option');
-                        $$e.setAttribute('value', ShippingRules.Aggregator.Boolean.DISJUNCTIVE);
-                        $$b.appendChild($$e);
-                        var $$f = document.createTextNode('ANY');
-                        $$e.appendChild($$f);
+                        $$b.appendChildren([
+                            {
+                                label: 'ALL',
+                                value: me.constructor.CONJUNCTIVE
+                            },
+                            {
+                                label: 'ANY',
+                                value: me.constructor.DISJUNCTIVE
+                            }
+                        ].map(function (combinator) {
+                            var option = function () {
+                                var $$d = document.createElement('option');
+                                $$d.setAttribute('value', combinator.value);
+                                $$d.appendChildren(combinator.label);
+                                return $$d;
+                            }();
+                            if (me.combinator === combinator.value)
+                                option.selected = true;
+                            return option;
+                        }));
                         return $$b;
                     }();
                 }
@@ -1710,22 +1787,33 @@ function _inherits(subClass, superClass) {
                 value: function renderValue() {
                     var me = this;
                     return function () {
-                        var $$g = document.createElement('select');
-                        $$g.setAttribute('id', me.id + '-value');
-                        $$g.addEventListener('change', function (event) {
-                            return me.value = !!+event.target.value;
+                        var $$f = document.createElement('select');
+                        $$f.setAttribute('id', me.id + '-value');
+                        $$f.addEventListener('change', function (event) {
+                            me.value = !!+event.target.value;
+                            me.root.rerender();
                         });
-                        var $$h = document.createElement('option');
-                        $$h.setAttribute('value', '1');
-                        $$g.appendChild($$h);
-                        var $$i = document.createTextNode('TRUE');
-                        $$h.appendChild($$i);
-                        var $$j = document.createElement('option');
-                        $$j.setAttribute('value', '0');
-                        $$g.appendChild($$j);
-                        var $$k = document.createTextNode('FALSE');
-                        $$j.appendChild($$k);
-                        return $$g;
+                        $$f.appendChildren([
+                            {
+                                label: 'TRUE',
+                                value: 1
+                            },
+                            {
+                                label: 'FALSE',
+                                value: 0
+                            }
+                        ].map(function (value) {
+                            var option = function () {
+                                var $$h = document.createElement('option');
+                                $$h.setAttribute('value', value.value);
+                                $$h.appendChildren(value.label);
+                                return $$h;
+                            }();
+                            if (me.value === value.value)
+                                option.selected = true;
+                            return option;
+                        }));
+                        return $$f;
                     }();
                 }
             },
@@ -1734,14 +1822,14 @@ function _inherits(subClass, superClass) {
                 value: function renderChildSelector() {
                     var me = this;
                     return function () {
-                        var $$l = document.createElement('li');
-                        $$l.setAttribute('id', me.id + '.' + me.children.length);
-                        $$l.addEventListener('keydown', me.keyHandler.bind(me));
-                        $$l.setAttribute('tabIndex', 0);
-                        var $$m = document.createElement('select');
-                        $$m.setAttribute('id', me.id + '-childselector');
-                        $$m.setAttribute('aria-label', 'Condition');
-                        $$m.addEventListener('change', function (event) {
+                        var $$j = document.createElement('li');
+                        $$j.setAttribute('id', me.id + '.' + me.children.length);
+                        $$j.addEventListener('keydown', me.keyHandler.bind(me));
+                        $$j.setAttribute('tabIndex', 0);
+                        var $$k = document.createElement('select');
+                        $$k.setAttribute('id', me.id + '-childselector');
+                        $$k.setAttribute('aria-label', 'Condition');
+                        $$k.addEventListener('change', function (event) {
                             var selected = event.target.selectedOptions[0];
                             var registerKey = selected.getAttribute('data-register-key');
                             var variable = selected.value;
@@ -1754,20 +1842,20 @@ function _inherits(subClass, superClass) {
                             me.root.rerender();
                             me.root.focus(id);
                         });
+                        $$j.appendChild($$k);
+                        var $$l = document.createElement('option');
+                        $$l.disabled = true;
+                        $$l.setAttribute('selected', 'selected');
+                        $$k.appendChild($$l);
+                        var $$m = document.createTextNode('[SELECT]');
                         $$l.appendChild($$m);
-                        var $$n = document.createElement('option');
-                        $$n.disabled = true;
-                        $$n.setAttribute('selected', 'selected');
-                        $$m.appendChild($$n);
-                        var $$o = document.createTextNode('[SELECT]');
-                        $$n.appendChild($$o);
-                        $$m.appendChildren(ShippingRules.Register.condition.getAsOptions(me.context));
-                        var $$q = document.createElement('option');
-                        $$q.setAttribute('value', 'this');
-                        $$m.appendChild($$q);
-                        var $$r = document.createTextNode('Condition Combination');
-                        $$q.appendChild($$r);
-                        return $$l;
+                        $$k.appendChildren(ShippingRules.Register.condition.getAsOptions(me.context));
+                        var $$o = document.createElement('option');
+                        $$o.setAttribute('value', 'this');
+                        $$k.appendChild($$o);
+                        var $$p = document.createTextNode('Condition Combination');
+                        $$o.appendChild($$p);
+                        return $$j;
                     }();
                 }
             },
@@ -1776,30 +1864,22 @@ function _inherits(subClass, superClass) {
                 value: function render() {
                     var me = this;
                     return function () {
-                        var $$s = document.createElement('li');
-                        $$s.setAttribute('id', me.id);
-                        $$s.addEventListener('keydown', me.keyHandler.bind(me));
-                        $$s.setAttribute('tabIndex', 0);
-                        var $$t = document.createTextNode('\n                If ');
-                        $$s.appendChild($$t);
-                        $$s.appendChildren(me.renderCombinator());
-                        var $$v = document.createTextNode(' of these conditions are ');
-                        $$s.appendChild($$v);
-                        $$s.appendChildren(me.renderValue());
-                        var $$x = document.createTextNode(': ');
-                        $$s.appendChild($$x);
-                        $$s.appendChildren(me.renderRemoveButton());
-                        $$s.appendChildren(me.renderChildren());
-                        return $$s;
+                        var $$q = document.createElement('li');
+                        $$q.setAttribute('id', me.id);
+                        $$q.addEventListener('keydown', me.keyHandler.bind(me));
+                        $$q.setAttribute('tabIndex', 0);
+                        var $$r = document.createTextNode('\n                If ');
+                        $$q.appendChild($$r);
+                        $$q.appendChildren(me.renderCombinator());
+                        var $$t = document.createTextNode(' of these conditions are ');
+                        $$q.appendChild($$t);
+                        $$q.appendChildren(me.renderValue());
+                        var $$v = document.createTextNode(': ');
+                        $$q.appendChild($$v);
+                        $$q.appendChildren(me.renderRemoveButton());
+                        $$q.appendChildren(me.renderChildren());
+                        return $$q;
                     }();
-                }
-            },
-            {
-                key: 'refresh',
-                value: function refresh() {
-                    this.children.forEach(function (c) {
-                        return c.refresh();
-                    });
                 }
             },
             {
@@ -1831,8 +1911,8 @@ function _inherits(subClass, superClass) {
                 key: 'combinator',
                 set: function set(param) {
                     if (~[
-                            ShippingRules.Aggregator.Boolean.CONJUNCTIVE,
-                            ShippingRules.Aggregator.Boolean.DISJUNCTIVE
+                            this.constructor.CONJUNCTIVE,
+                            this.constructor.DISJUNCTIVE
                         ].indexOf(param)) {
                         this._combinator = param;
                     }
@@ -1849,7 +1929,8 @@ function _inherits(subClass, superClass) {
         CONJUNCTIVE: { value: 'Conjunctive' },
         DISJUNCTIVE: { value: 'Disjunctive' }
     });
-    ShippingRules.Register.aggregator.add('Boolean', ShippingRules.Aggregator.Boolean);
+    ShippingRules.Register.aggregator.add(ShippingRules.Aggregator.Boolean.CONJUNCTIVE, ShippingRules.Aggregator.Boolean);
+    ShippingRules.Register.aggregator.add(ShippingRules.Aggregator.Boolean.DISJUNCTIVE, ShippingRules.Aggregator.Boolean);
 }(Meanbee.ShippingRules));
 'use strict';
 var _createClass = function () {
@@ -2035,11 +2116,322 @@ function _inherits(subClass, superClass) {
                         });
                     }
                 }
+            },
+            {
+                key: 'toJSON',
+                value: function toJSON() {
+                    var obj = _get(Object.getPrototypeOf(_class.prototype), 'toJSON', this).call(this);
+                    obj.key = 'Summative';
+                    return obj;
+                }
             }
         ]);
         return _class;
     }(ShippingRules.Aggregator);
-    ShippingRules.Register.aggregator.add('Numeric', ShippingRules.Aggregator.Numeric);
+    ShippingRules.Register.aggregator.add('Summative', ShippingRules.Aggregator.Numeric);
+}(Meanbee.ShippingRules));
+'use strict';
+var _createClass = function () {
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];
+            descriptor.enumerable = descriptor.enumerable || false;
+            descriptor.configurable = true;
+            if ('value' in descriptor)
+                descriptor.writable = true;
+            Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }
+    return function (Constructor, protoProps, staticProps) {
+        if (protoProps)
+            defineProperties(Constructor.prototype, protoProps);
+        if (staticProps)
+            defineProperties(Constructor, staticProps);
+        return Constructor;
+    };
+}();
+var _get = function get(object, property, receiver) {
+    if (object === null)
+        object = Function.prototype;
+    var desc = Object.getOwnPropertyDescriptor(object, property);
+    if (desc === undefined) {
+        var parent = Object.getPrototypeOf(object);
+        if (parent === null) {
+            return undefined;
+        } else {
+            return get(parent, property, receiver);
+        }
+    } else if ('value' in desc) {
+        return desc.value;
+    } else {
+        var getter = desc.get;
+        if (getter === undefined) {
+            return undefined;
+        }
+        return getter.call(receiver);
+    }
+};
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError('Cannot call a class as a function');
+    }
+}
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError('this hasn\'t been initialised - super() hasn\'t been called');
+    }
+    return call && (typeof call === 'object' || typeof call === 'function') ? call : self;
+}
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== 'function' && superClass !== null) {
+        throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass);
+    }
+    subClass.prototype = Object.create(superClass && superClass.prototype, {
+        constructor: {
+            value: subClass,
+            enumerable: false,
+            writable: true,
+            configurable: true
+        }
+    });
+    if (superClass)
+        Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
+(function (ShippingRules) {
+    ShippingRules.Aggregator.ProductSet = function (_ShippingRules$Aggreg) {
+        _inherits(_class, _ShippingRules$Aggreg);
+        function _class(index) {
+            var parent = arguments.length <= 1 || arguments[1] === undefined ? function () {
+                var $$a = document.createElement('noscript');
+                return $$a;
+            }() : arguments[1];
+            var container = arguments[2];
+            _classCallCheck(this, _class);
+            var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(_class).call(this, index, parent, container));
+            _this.combinator = _this.constructor.INTERSECTIONAL;
+            _this.value = true;
+            return _this;
+        }
+        _createClass(_class, [
+            {
+                key: 'addChild',
+                value: function addChild(childClass, index) {
+                    index = index === void 0 || index === null ? this.children.length : index;
+                    for (var _len = arguments.length, params = Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
+                        params[_key - 2] = arguments[_key];
+                    }
+                    var reindex = index !== this.children.length, child = new (Function.prototype.bind.apply(childClass, [null].concat([
+                            index,
+                            this
+                        ], params)))();
+                    if (child instanceof ShippingRules.Condition || child instanceof this.constructor) {
+                        this.children.splice(index, 0, child);
+                        if (reindex)
+                            this.reindexChildren();
+                        return this.children[index];
+                    } else {
+                        console.error('ShippingRules: ProductSet Aggregators only accept Conditions and Boolean Aggregators: ' + childClass + ' passed.');
+                    }
+                }
+            },
+            {
+                key: 'replaceChildByIndex',
+                value: function replaceChildByIndex(newChildClass, index) {
+                    this.removeChildByIndex(index);
+                    for (var _len2 = arguments.length, params = Array(_len2 > 2 ? _len2 - 2 : 0), _key2 = 2; _key2 < _len2; _key2++) {
+                        params[_key2 - 2] = arguments[_key2];
+                    }
+                    this.addChild.apply(this, [
+                        newChildClass,
+                        index
+                    ].concat(params));
+                    return this;
+                }
+            },
+            {
+                key: 'renderCombinator',
+                value: function renderCombinator() {
+                    var me = this;
+                    return function () {
+                        var $$b = document.createElement('select');
+                        $$b.setAttribute('id', me.id + '-combinator');
+                        $$b.addEventListener('change', function (event) {
+                            me.combinator = event.target.value;
+                            me.root.rerender();
+                        });
+                        $$b.appendChildren([
+                            {
+                                label: 'ALL',
+                                value: me.constructor.INTERSECTIONAL
+                            },
+                            {
+                                label: 'ANY',
+                                value: me.constructor.UNIONAL
+                            }
+                        ].map(function (combinator) {
+                            var option = function () {
+                                var $$d = document.createElement('option');
+                                $$d.setAttribute('value', combinator.value);
+                                $$d.appendChildren(combinator.label);
+                                return $$d;
+                            }();
+                            if (me.combinator === combinator.value)
+                                option.selected = true;
+                            return option;
+                        }));
+                        return $$b;
+                    }();
+                }
+            },
+            {
+                key: 'renderValue',
+                value: function renderValue() {
+                    var me = this;
+                    return function () {
+                        var $$f = document.createElement('select');
+                        $$f.setAttribute('id', me.id + '-value');
+                        $$f.addEventListener('change', function (event) {
+                            me.value = !!+event.target.value;
+                            me.root.rerender();
+                        });
+                        $$f.appendChildren([
+                            {
+                                label: 'TRUE',
+                                value: 1
+                            },
+                            {
+                                label: 'FALSE',
+                                value: 0
+                            }
+                        ].map(function (value) {
+                            var option = function () {
+                                var $$h = document.createElement('option');
+                                $$h.setAttribute('value', value.value);
+                                $$h.appendChildren(value.label);
+                                return $$h;
+                            }();
+                            if (me.value === value.value)
+                                option.selected = true;
+                            return option;
+                        }));
+                        return $$f;
+                    }();
+                }
+            },
+            {
+                key: 'renderChildSelector',
+                value: function renderChildSelector() {
+                    var me = this;
+                    return function () {
+                        var $$j = document.createElement('li');
+                        $$j.setAttribute('id', me.id + '.' + me.children.length);
+                        $$j.addEventListener('keydown', me.keyHandler.bind(me));
+                        $$j.setAttribute('tabIndex', 0);
+                        var $$k = document.createElement('select');
+                        $$k.setAttribute('id', me.id + '-childselector');
+                        $$k.setAttribute('aria-label', 'Condition');
+                        $$k.addEventListener('change', function (event) {
+                            var selected = event.target.selectedOptions[0];
+                            var registerKey = selected.getAttribute('data-register-key');
+                            var variable = selected.value;
+                            var id = undefined;
+                            if (variable === 'this') {
+                                id = me.addChild(me.constructor).id;
+                            } else {
+                                id = me.addChild(ShippingRules.Register.condition.get(registerKey), void 0, variable).id;
+                            }
+                            me.root.rerender();
+                            me.root.focus(id);
+                        });
+                        $$j.appendChild($$k);
+                        var $$l = document.createElement('option');
+                        $$l.disabled = true;
+                        $$l.setAttribute('selected', 'selected');
+                        $$k.appendChild($$l);
+                        var $$m = document.createTextNode('[SELECT]');
+                        $$l.appendChild($$m);
+                        $$k.appendChildren(ShippingRules.Register.condition.getAsOptions(me.context));
+                        var $$o = document.createElement('option');
+                        $$o.setAttribute('value', 'this');
+                        $$k.appendChild($$o);
+                        var $$p = document.createTextNode('Condition Combination');
+                        $$o.appendChild($$p);
+                        return $$j;
+                    }();
+                }
+            },
+            {
+                key: 'render',
+                value: function render() {
+                    var me = this;
+                    return function () {
+                        var $$q = document.createElement('li');
+                        $$q.setAttribute('id', me.id);
+                        $$q.addEventListener('keydown', me.keyHandler.bind(me));
+                        $$q.setAttribute('tabIndex', 0);
+                        var $$r = document.createTextNode('\n                If ');
+                        $$q.appendChild($$r);
+                        $$q.appendChildren(me.renderCombinator());
+                        var $$t = document.createTextNode(' of these conditions are ');
+                        $$q.appendChild($$t);
+                        $$q.appendChildren(me.renderValue());
+                        var $$v = document.createTextNode(': ');
+                        $$q.appendChild($$v);
+                        $$q.appendChildren(me.renderRemoveButton());
+                        $$q.appendChildren(me.renderChildren());
+                        return $$q;
+                    }();
+                }
+            },
+            {
+                key: 'init',
+                value: function init(obj) {
+                    var _this2 = this;
+                    _get(Object.getPrototypeOf(_class.prototype), 'init', this).call(this, obj);
+                    this.value = typeof obj.value === 'boolean' ? obj.value : true;
+                    if (obj.children) {
+                        obj.children.forEach(function (child) {
+                            if (child.register === 'Condition') {
+                                _this2.addChild(ShippingRules.Register.condition.get(child.key)).init(child);
+                            } else if (child.register === 'Aggregator') {
+                                _this2.addChild(ShippingRules.Register.aggregator.get(child.key)).init(child);
+                            }
+                        });
+                    }
+                }
+            },
+            {
+                key: 'toJSON',
+                value: function toJSON() {
+                    var obj = _get(Object.getPrototypeOf(_class.prototype), 'toJSON', this).call(this);
+                    obj.value = this.value;
+                    return obj;
+                }
+            },
+            {
+                key: 'combinator',
+                set: function set(param) {
+                    if (~[
+                            this.constructor.INTERSECTIONAL,
+                            this.constructor.UNIONAL
+                        ].indexOf(param)) {
+                        this._combinator = param;
+                    }
+                    return this;
+                },
+                get: function get() {
+                    return this._combinator;
+                }
+            }
+        ]);
+        return _class;
+    }(ShippingRules.Aggregator);
+    Object.defineProperties(ShippingRules.Aggregator.ProductSet, {
+        INTERSECTIONAL: { value: 'Intersectional' },
+        UNIONAL: { value: 'Unional' }
+    });
+    ShippingRules.Register.aggregator.add(ShippingRules.Aggregator.ProductSet.INTERSECTIONAL, ShippingRules.Aggregator.ProductSet);
+    ShippingRules.Register.aggregator.add(ShippingRules.Aggregator.ProductSet.UNIONAL, ShippingRules.Aggregator.ProductSet);
 }(Meanbee.ShippingRules));
 'use strict';
 var _createClass = function () {
@@ -2220,6 +2612,10 @@ function _inherits(subClass, superClass) {
                         $$a.addEventListener('keydown', function (event) {
                             return me.value = event.target.value;
                         });
+                        $$a.addEventListener('change', function (event) {
+                            me.value = event.target.value;
+                            me.root.rerender();
+                        });
                         return $$a;
                     }();
                 }
@@ -2254,9 +2650,17 @@ function _inherits(subClass, superClass) {
                 }
             },
             {
+                key: 'refresh',
+                value: function refresh() {
+                    _get(Object.getPrototypeOf(_class.prototype), 'refresh', this).call(this);
+                    this.aggregator.refresh();
+                }
+            },
+            {
                 key: 'init',
                 value: function init(obj) {
                     _get(Object.getPrototypeOf(_class.prototype), 'init', this).call(this, obj);
+                    this.value = obj.value;
                     this.aggregator.init(obj.aggregator);
                 }
             },
@@ -2366,6 +2770,10 @@ function _inherits(subClass, superClass) {
                         $$a.addEventListener('keydown', function (event) {
                             return me.value = event.target.value;
                         });
+                        $$a.addEventListener('change', function (event) {
+                            me.value = event.target.value;
+                            me.root.rerender();
+                        });
                         return $$a;
                     }();
                 }
@@ -2385,6 +2793,14 @@ function _inherits(subClass, superClass) {
                         $$b.appendChildren(me.renderRemoveButton());
                         return $$b;
                     }();
+                }
+            },
+            {
+                key: 'init',
+                value: function init(obj) {
+                    console.log(obj);
+                    _get(Object.getPrototypeOf(_class.prototype), 'init', this).call(this, obj);
+                    this.value = obj.value;
                 }
             },
             {
@@ -2478,23 +2894,28 @@ function _inherits(subClass, superClass) {
         function _class(index, parent) {
             _classCallCheck(this, _class);
             var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(_class).call(this, index, parent));
-            _this.aggregator = new ShippingRules.Aggregator.Boolean(0, _this);
+            _this.aggregator = new ShippingRules.Aggregator.ProductSet(0, _this);
             _this.aggregator.context = _this;
-            _this.multiplier = 1;
+            _this.value = 1;
+            _this.attribute = null;
             return _this;
         }
         _createClass(_class, [
             {
-                key: 'renderMultiplier',
-                value: function renderMultiplier() {
+                key: 'renderValue',
+                value: function renderValue() {
                     var me = this;
                     return function () {
                         var $$a = document.createElement('input');
-                        $$a.setAttribute('id', me.id + '-multiplier');
+                        $$a.setAttribute('id', me.id + '-value');
                         $$a.setAttribute('type', 'number');
-                        $$a.setAttribute('value', me.multiplier);
+                        $$a.setAttribute('value', me.value);
                         $$a.addEventListener('keydown', function (event) {
-                            return me.multiplier = event.target.value;
+                            return me.value = event.target.value;
+                        });
+                        $$a.addEventListener('change', function (event) {
+                            me.value = event.target.value;
+                            me.root.rerender();
                         });
                         return $$a;
                     }();
@@ -2504,10 +2925,39 @@ function _inherits(subClass, superClass) {
                 key: 'renderAttributeSelector',
                 value: function renderAttributeSelector() {
                     var me = this;
+                    if (!ShippingRules.data.productAttributes)
+                        return function () {
+                            var $$b = document.createElement('select');
+                            $$b.setAttribute('id', me.id + '-attribute');
+                            return $$b;
+                        }();
                     return function () {
-                        var $$b = document.createElement('select');
-                        $$b.setAttribute('id', me.id + '-attribute');
-                        return $$b;
+                        var $$c = document.createElement('select');
+                        $$c.setAttribute('id', me.id + '-attribute');
+                        $$c.addEventListener('change', function (event) {
+                            me.attribute = event.target.value;
+                            me.root.rerender();
+                        });
+                        var $$d = document.createElement('option');
+                        $$d.disabled = true;
+                        $$d.setAttribute('selected', 'selected');
+                        $$c.appendChild($$d);
+                        var $$e = document.createTextNode('[SELECT]');
+                        $$d.appendChild($$e);
+                        $$c.appendChildren(Object.keys(ShippingRules.data.productAttributes).filter(function (id) {
+                            return ~ShippingRules.data.productAttributes[id].type.indexOf('number');
+                        }).map(function (id) {
+                            var option = function () {
+                                var $$g = document.createElement('option');
+                                $$g.setAttribute('value', id);
+                                $$g.appendChildren(ShippingRules.data.productAttributes[id].label);
+                                return $$g;
+                            }();
+                            if (me.attribute === id)
+                                option.selected = true;
+                            return option;
+                        }));
+                        return $$c;
                     }();
                 }
             },
@@ -2516,35 +2966,52 @@ function _inherits(subClass, superClass) {
                 value: function render() {
                     var me = this;
                     return function () {
-                        var $$c = document.createElement('li');
-                        $$c.setAttribute('id', me.id);
-                        $$c.addEventListener('keydown', me.keyHandler.bind(me));
-                        $$c.setAttribute('tabIndex', 0);
-                        var $$d = document.createTextNode('\n                Sum of ');
-                        $$c.appendChild($$d);
-                        $$c.appendChildren(me.renderAttributeSelector());
-                        var $$f = document.createTextNode(' \u2715 ');
-                        $$c.appendChild($$f);
-                        $$c.appendChildren(me.renderMultiplier());
-                        var $$h = document.createTextNode(' for a subselection of items in cart where ');
-                        $$c.appendChild($$h);
-                        $$c.appendChildren(me.aggregator.renderCombinator());
-                        var $$j = document.createTextNode(' of these conditions are ');
-                        $$c.appendChild($$j);
-                        $$c.appendChildren(me.aggregator.renderValue());
-                        var $$l = document.createTextNode(': ');
-                        $$c.appendChild($$l);
-                        $$c.appendChildren(me.renderRemoveButton());
-                        $$c.appendChildren(me.aggregator.renderChildren());
-                        return $$c;
+                        var $$i = document.createElement('li');
+                        $$i.setAttribute('id', me.id);
+                        $$i.addEventListener('keydown', me.keyHandler.bind(me));
+                        $$i.setAttribute('tabIndex', 0);
+                        var $$j = document.createTextNode('\n                Sum of ');
+                        $$i.appendChild($$j);
+                        $$i.appendChildren(me.renderAttributeSelector());
+                        var $$l = document.createTextNode(' \u2715 ');
+                        $$i.appendChild($$l);
+                        $$i.appendChildren(me.renderValue());
+                        var $$n = document.createTextNode(' for a subselection of items in cart where ');
+                        $$i.appendChild($$n);
+                        $$i.appendChildren(me.aggregator.renderCombinator());
+                        var $$p = document.createTextNode(' of these conditions are ');
+                        $$i.appendChild($$p);
+                        $$i.appendChildren(me.aggregator.renderValue());
+                        var $$r = document.createTextNode(': ');
+                        $$i.appendChild($$r);
+                        $$i.appendChildren(me.renderRemoveButton());
+                        $$i.appendChildren(me.aggregator.renderChildren());
+                        return $$i;
                     }();
+                }
+            },
+            {
+                key: 'refresh',
+                value: function refresh() {
+                    _get(Object.getPrototypeOf(_class.prototype), 'refresh', this).call(this);
+                    this.aggregator.refresh();
+                }
+            },
+            {
+                key: 'init',
+                value: function init(obj) {
+                    this.attribute = obj.attribute;
+                    this.value = obj.value;
+                    this.aggregator.init(obj.aggregator);
                 }
             },
             {
                 key: 'toJSON',
                 value: function toJSON() {
                     var obj = _get(Object.getPrototypeOf(_class.prototype), 'toJSON', this).call(this);
-                    obj.key = 'ProductSubselection';
+                    obj.key = 'Product_Subselection';
+                    obj.attribute = this.attribute;
+                    obj.aggregator = this.aggregator;
                     return obj;
                 }
             }
@@ -2556,7 +3023,7 @@ function _inherits(subClass, superClass) {
             }]);
         return _class;
     }(ShippingRules.Term);
-    ShippingRules.Register.term.add('ProductSubselection', ShippingRules.Term.ProductSubselection);
+    ShippingRules.Register.term.add('Product_Subselection', ShippingRules.Term.ProductSubselection);
 }(Meanbee.ShippingRules));
 'use strict';
 var _createClass = function () {
@@ -2578,6 +3045,27 @@ var _createClass = function () {
         return Constructor;
     };
 }();
+var _get = function get(object, property, receiver) {
+    if (object === null)
+        object = Function.prototype;
+    var desc = Object.getOwnPropertyDescriptor(object, property);
+    if (desc === undefined) {
+        var parent = Object.getPrototypeOf(object);
+        if (parent === null) {
+            return undefined;
+        } else {
+            return get(parent, property, receiver);
+        }
+    } else if ('value' in desc) {
+        return desc.value;
+    } else {
+        var getter = desc.get;
+        if (getter === undefined) {
+            return undefined;
+        }
+        return getter.call(receiver);
+    }
+};
 function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
         throw new TypeError('Cannot call a class as a function');
@@ -2658,9 +3146,9 @@ function _inherits(subClass, superClass) {
                         var $$e = document.createElement('li');
                         $$e.setAttribute('id', me.id);
                         $$e.setAttribute('tabIndex', 0);
-                        $$e.appendChildren(me.label);
+                        $$e.appendChildren(me.label || ' ');
                         $$e.appendChildren(me.renderComparator());
-                        $$e.appendChildren(me.valueField.render());
+                        $$e.appendChildren(me.valueField.render ? me.valueField.render() : []);
                         $$e.appendChildren(me.renderRemoveButton());
                         return $$e;
                     }();
@@ -2669,6 +3157,11 @@ function _inherits(subClass, superClass) {
             {
                 key: 'refresh',
                 value: function refresh() {
+                    _get(Object.getPrototypeOf(_class.prototype), 'refresh', this).call(this);
+                    if (this.type.length) {
+                        this.comparator.type = this.type;
+                        this.valueField = new (ShippingRules.Register.field.get(this.comparator.getField()))(this, this.value);
+                    }
                 }
             },
             {
@@ -2677,7 +3170,8 @@ function _inherits(subClass, superClass) {
                     this.variable = obj.variable;
                     this.value = obj.value;
                     this.comparator = new (ShippingRules.Register.comparator.get(obj.comparator.key))(this.type);
-                    this.valueField = new (ShippingRules.Register.field.get(this.comparator.getField()))(this, this.value);
+                    if (this.type.length)
+                        this.valueField = new (ShippingRules.Register.field.get(this.comparator.getField()))(this, this.value);
                 }
             },
             {
@@ -2819,7 +3313,7 @@ function _inherits(subClass, superClass) {
                             label: 'Total Weight',
                             type: ['number']
                         };
-                        variables['package_quantity'] = {
+                        variables['package_qty'] = {
                             label: 'Total Items Quantity',
                             type: ['number']
                         };
@@ -3097,7 +3591,7 @@ function _inherits(subClass, superClass) {
                                 var postalCodeFormatData = ShippingRules.data.postalCodeFormats.filter(function (f) {
                                     return f.value === _this3.format;
                                 });
-                                if (!postalCodeFormatData)
+                                if (!postalCodeFormatData || !postalCodeFormatData.length)
                                     return { v: undefined };
                                 var postalCodeFormatDatum = postalCodeFormatData[0];
                                 var help = function () {
@@ -3253,7 +3747,7 @@ function _inherits(subClass, superClass) {
                             label: 'Postal Code',
                             type: ['string']
                         };
-                    } else if (context instanceof this && context.format) {
+                    } else if (context instanceof this && context.format && ShippingRules.data.postalCodeFormats) {
                         var formatData = ShippingRules.data.postalCodeFormats.filter(function (f) {
                             return f.value === context.format;
                         });
@@ -3275,6 +3769,175 @@ function _inherits(subClass, superClass) {
     }(ShippingRules.Condition);
     ShippingRules.util.loadData('postalCodeFormats');
     ShippingRules.Register.condition.add('Destination_PostalCode', ShippingRules.Condition.PostalCode);
+}(Meanbee.ShippingRules));
+'use strict';
+var _createClass = function () {
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];
+            descriptor.enumerable = descriptor.enumerable || false;
+            descriptor.configurable = true;
+            if ('value' in descriptor)
+                descriptor.writable = true;
+            Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }
+    return function (Constructor, protoProps, staticProps) {
+        if (protoProps)
+            defineProperties(Constructor.prototype, protoProps);
+        if (staticProps)
+            defineProperties(Constructor, staticProps);
+        return Constructor;
+    };
+}();
+var _get = function get(object, property, receiver) {
+    if (object === null)
+        object = Function.prototype;
+    var desc = Object.getOwnPropertyDescriptor(object, property);
+    if (desc === undefined) {
+        var parent = Object.getPrototypeOf(object);
+        if (parent === null) {
+            return undefined;
+        } else {
+            return get(parent, property, receiver);
+        }
+    } else if ('value' in desc) {
+        return desc.value;
+    } else {
+        var getter = desc.get;
+        if (getter === undefined) {
+            return undefined;
+        }
+        return getter.call(receiver);
+    }
+};
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError('Cannot call a class as a function');
+    }
+}
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError('this hasn\'t been initialised - super() hasn\'t been called');
+    }
+    return call && (typeof call === 'object' || typeof call === 'function') ? call : self;
+}
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== 'function' && superClass !== null) {
+        throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass);
+    }
+    subClass.prototype = Object.create(superClass && superClass.prototype, {
+        constructor: {
+            value: subClass,
+            enumerable: false,
+            writable: true,
+            configurable: true
+        }
+    });
+    if (superClass)
+        Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
+(function (ShippingRules) {
+    ShippingRules.Condition.ProductSubselection = function (_ShippingRules$Condit) {
+        _inherits(_class, _ShippingRules$Condit);
+        function _class(index, parent, variable) {
+            _classCallCheck(this, _class);
+            var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(_class).call(this, index, parent, variable));
+            _this.term = new ShippingRules.Term.ProductSubselection(0, _this);
+            _this.term.aggregator.context = _this;
+            return _this;
+        }
+        _createClass(_class, [
+            {
+                key: 'render',
+                value: function render() {
+                    if (this.parent.context instanceof this.constructor || this.parent.context instanceof ShippingRules.Term.ProductSubselection)
+                        return _get(Object.getPrototypeOf(_class.prototype), 'render', this).call(this);
+                    var me = this;
+                    return function () {
+                        var $$a = document.createElement('li');
+                        $$a.setAttribute('id', me.id);
+                        $$a.addEventListener('keydown', me.keyHandler.bind(me));
+                        $$a.setAttribute('tabIndex', 0);
+                        var $$b = document.createTextNode('\n                If sum of ');
+                        $$a.appendChild($$b);
+                        $$a.appendChildren(me.term.renderAttributeSelector());
+                        $$a.appendChildren(me.renderComparator());
+                        $$a.appendChildren(me.valueField.render ? me.valueField.render() : []);
+                        var $$f = document.createTextNode(' for a subselection of items in cart where ');
+                        $$a.appendChild($$f);
+                        $$a.appendChildren(me.term.aggregator.renderCombinator());
+                        var $$h = document.createTextNode(' of these conditions are ');
+                        $$a.appendChild($$h);
+                        $$a.appendChildren(me.term.aggregator.renderValue());
+                        var $$j = document.createTextNode(': ');
+                        $$a.appendChild($$j);
+                        $$a.appendChildren(me.renderRemoveButton());
+                        $$a.appendChildren(me.term.aggregator.renderChildren());
+                        return $$a;
+                    }();
+                }
+            },
+            {
+                key: 'refresh',
+                value: function refresh() {
+                    _get(Object.getPrototypeOf(_class.prototype), 'refresh', this).call(this);
+                    this.term.refresh();
+                }
+            },
+            {
+                key: 'init',
+                value: function init(obj) {
+                    _get(Object.getPrototypeOf(_class.prototype), 'init', this).call(this, obj);
+                    if (this.parent.context instanceof this.constructor || this.parent.context instanceof ShippingRules.Term.ProductSubselection)
+                        return;
+                    this.term.init(obj.term);
+                }
+            },
+            {
+                key: 'toJSON',
+                value: function toJSON() {
+                    var obj = _get(Object.getPrototypeOf(_class.prototype), 'toJSON', this).call(this);
+                    obj.key = 'Product_Subselection';
+                    obj.term = this.term;
+                    return obj;
+                }
+            }
+        ], [
+            {
+                key: 'getCategory',
+                value: function getCategory(context) {
+                    if (context instanceof this || context instanceof ShippingRules.Term.ProductSubselection)
+                        return 'Product Attributes';
+                    return 'Product Conditions';
+                }
+            },
+            {
+                key: 'getVariables',
+                value: function getVariables(context) {
+                    var variables = {};
+                    if (!context) {
+                        variables['product_subselection'] = {
+                            label: 'Product Subselection',
+                            type: ['number']
+                        };
+                    } else if ((context instanceof this || context instanceof ShippingRules.Term.ProductSubselection) && ShippingRules.data.productAttributes) {
+                        variables = Object.assign(variables, ShippingRules.data.productAttributes);
+                    }
+                    return variables;
+                }
+            },
+            {
+                key: 'name',
+                value: function name() {
+                    return 'Product Subselection';
+                }
+            }
+        ]);
+        return _class;
+    }(ShippingRules.Condition);
+    ShippingRules.util.loadData('productAttributes');
+    ShippingRules.Register.condition.add('Product_Subselection', ShippingRules.Condition.ProductSubselection);
 }(Meanbee.ShippingRules));
 'use strict';
 var _createClass = function () {
@@ -4917,25 +5580,25 @@ function _inherits(subClass, superClass) {
         var priceContainer = document.createElement('ul');
         priceContainer.classList.add('calculator-tree');
         priceField.parentElement.appendChild(priceContainer);
-        window.priceCalc = new (Meanbee.ShippingRules.Register.aggregator.get('Numeric'))('priceCalculator', null, priceContainer);
-        window.priceCalc.field = priceField;
-        priceContainer.appendChild(window.priceCalc.render());
+        var priceCalc = new (Meanbee.ShippingRules.Register.aggregator.get('Summative'))('priceCalculator', null, priceContainer);
+        priceCalc.field = priceField;
+        priceContainer.appendChild(priceCalc.render());
         var costField = document.getElementById('cost');
         costField.hidden = true;
         var costContainer = document.createElement('ul');
         costContainer.classList.add('calculator-tree');
         costField.parentElement.appendChild(costContainer);
-        window.costCalc = new (Meanbee.ShippingRules.Register.aggregator.get('Numeric'))('costCalculator', null, costContainer);
-        window.costCalc.field = costField;
-        costContainer.appendChild(window.costCalc.render());
+        var costCalc = new (Meanbee.ShippingRules.Register.aggregator.get('Summative'))('costCalculator', null, costContainer);
+        costCalc.field = costField;
+        costContainer.appendChild(costCalc.render());
         var condField = document.getElementById('conditions');
         condField.hidden = true;
         var condContainer = document.createElement('ul');
         condContainer.classList.add('calculator-tree');
         condField.parentElement.appendChild(condContainer);
-        window.condCalc = new (Meanbee.ShippingRules.Register.aggregator.get('Boolean'))('conditionCalculator', null, condContainer);
-        window.condCalc.field = condField;
-        condContainer.appendChild(window.condCalc.render());
+        var condCalc = new (Meanbee.ShippingRules.Register.aggregator.get('Conjunctive'))('conditionCalculator', null, condContainer);
+        condCalc.field = condField;
+        condContainer.appendChild(condCalc.render());
         function changeHandler(event) {
             if (~[
                     'INPUT',
