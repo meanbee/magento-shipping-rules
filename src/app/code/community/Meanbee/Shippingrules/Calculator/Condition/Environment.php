@@ -14,4 +14,15 @@ class Meanbee_Shippingrules_Calculator_Condition_Environment
             'is_admin_order' => array('label' => 'Is Admin Order?', 'type' => array('boolean'))
         );
     }
+
+    /**
+     * {@inheritdoc}
+     * @override
+     * @param  Mage_Shipping_Model_Rate_Request $request
+     * @return Mage_Shipping_Model_Rate_Request
+     */
+    public function addVariablesToRequest($request) {
+        // TODO: Is Admin Order? [is_admin_order]
+        return $request;
+    }
 }
