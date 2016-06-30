@@ -4,7 +4,7 @@ abstract class Meanbee_Shippingrules_Calculator_Aggregator_Abstract
     /**
      * Aggregates the results of evaluation of its children
      * @param  Mage_Shipping_Model_Rate_Request $request
-     * @return bool|int|float                            Aggregated value
+     * @return bool|int|float|array                      Aggregated value
      */
     public abstract function evaluate($request);
 
