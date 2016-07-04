@@ -1243,6 +1243,12 @@ function _classCallCheck(instance, Constructor) {
                             return aggregatorResult;
                         }
                     }
+                    if (this.term) {
+                        var termResult = this.term.getObjectById(id);
+                        if (termResult) {
+                            return termResult;
+                        }
+                    }
                     if (!this.children) {
                         return null;
                     }
@@ -1253,6 +1259,23 @@ function _classCallCheck(instance, Constructor) {
                         }
                     }
                     return null;
+                }
+            },
+            {
+                key: 'delete',
+                value: function _delete(navDir) {
+                    if (this.parent) {
+                        document.getElementById(this.id).className += 'deleting';
+                        this.parent.removeChildByIndex(this.index);
+                        this.focus(this.id);
+                        var target = undefined;
+                        if ((target = this.parent.children[this.index - 1]) && !navDir) {
+                            this.focus(target.id);
+                        }
+                        this.root.updateJSON();
+                        setTimeout(this.root.rerender.bind(this.root), 200);
+                        ShippingRules.history.pushState();
+                    }
                 }
             },
             {
@@ -1289,15 +1312,8 @@ function _classCallCheck(instance, Constructor) {
             {
                 key: 'renderRemoveButton',
                 value: function renderRemoveButton() {
-                    var _this = this;
                     if (this.parent instanceof ShippingRules.Base) {
-                        return ShippingRules.util.removeButton(this, function () {
-                            document.getElementById(_this.id).className += 'deleting';
-                            _this.parent.removeChildByIndex(_this.index);
-                            setTimeout(_this.root.rerender.bind(_this.root), 200);
-                            _this.focus(_this.id);
-                            ShippingRules.history.pushState();
-                        });
+                        return ShippingRules.util.removeButton(this, this.delete.bind(this));
                     }
                     return [];
                 }
@@ -1305,185 +1321,93 @@ function _classCallCheck(instance, Constructor) {
             {
                 key: 'keyHandler',
                 value: function keyHandler(event) {
-                    var i = undefined;
-                    var caught = false;
                     if (~[
                             'INPUT',
                             'SELECT',
                             'BUTTON',
                             'TEXTAREA'
                         ].indexOf(event.target.tagName)) {
-                        caught = true;
                         if (event.keyCode === 27) {
-                            event.preventDefault();
-                            event.target.closest('li').focus();
+                            ShippingRules.navigateTo.escape(event);
                         }
                     } else {
                         switch (event.keyCode) {
                         case 13:
-                            if (event.target.tagName === 'LI') {
-                                caught = true;
-                                event.target.querySelector('input, select, button, textarea').focus();
-                            }
+                            ShippingRules.navigateTo.firstField(event);
+                            break;
+                        case 27:
+                            ShippingRules.navigateTo.escape(event);
                             break;
                         case 37:
-                            if (event.target.tagName === 'LI') {
-                                caught = true;
-                                if (event.target.parentElement.parentElement.tagName === 'LI') {
-                                    event.target.parentElement.parentElement.focus();
-                                } else if (event.target.parentElement.parentElement.parentElement.tagName === 'LI') {
-                                    event.target.parentElement.parentElement.parentElement.focus();
-                                }
-                            }
+                            ShippingRules.navigateTo.parentTree(event);
                             break;
                         case 38:
-                            caught = true;
-                            if (event.target.tagName === 'LI') {
-                                event.preventDefault();
-                                var treeItems = Array.from(this.root.container.querySelectorAll('li'));
-                                i = treeItems.indexOf(event.target);
-                                if (treeItems[i - 1]) {
-                                    treeItems[i - 1].focus();
-                                }
-                            }
+                            ShippingRules.navigateTo.previous(event, this);
                             break;
                         case 39:
-                            caught = true;
-                            if (event.target.tagName === 'LI') {
-                                event.preventDefault();
-                                if (~(i = Array.from(event.target.children).map(function (child) {
-                                        return child.tagName;
-                                    }).indexOf('UL'))) {
-                                    event.target.children[i].children[0].focus();
-                                } else if (~(i = Array.from(event.target.lastChild.children).map(function (child) {
-                                        return child.tagName;
-                                    }).indexOf('UL'))) {
-                                    event.target.lastChild.children[i].children[0].focus();
-                                }
-                            }
+                            ShippingRules.navigateTo.childTree(event);
                             break;
                         case 40:
-                            caught = true;
-                            if (event.target.tagName === 'LI') {
-                                var treeItems = Array.from(this.root.container.querySelectorAll('li'));
-                                i = treeItems.indexOf(event.target);
-                                if (treeItems[i + 1]) {
-                                    treeItems[i + 1].focus();
-                                }
-                            }
+                            ShippingRules.navigateTo.next(event, this);
                             break;
                         case 45:
                         case 59:
                         case 61:
                         case 107:
                         case 187:
-                            caught = true;
-                            if (event.target.tagName === 'LI') {
-                                var target = this.root.getObjectById(event.target.id);
-                                while (target.children === void 0) {
-                                    target = target.parent;
-                                }
-                                this.focus(target.id + '-childselector');
-                            }
+                            ShippingRules.navigateTo.new(event, this);
                             break;
                         case 8:
                         case 46:
                         case 109:
                         case 173:
                         case 189:
-                            caught = true;
                             if (event.target.tagName === 'LI') {
-                                var target = this.root.getObjectById(event.target.id);
-                                if (target && target.parent) {
-                                    event.target.className += 'deleting';
-                                    target.parent.removeChildByIndex(target.index);
-                                    this.focus(target.id);
-                                    if ((target = target.parent.children[target.index - 1]) && event.keyCode === 8) {
-                                        this.focus(target.id);
-                                    }
-                                    setTimeout(this.root.rerender.bind(this.root), 200);
-                                }
+                                event.preventDefault();
+                                this.root.getObjectById(event.target.id).delete(event.keyCode !== 8);
                             }
                             break;
                         case 67:
-                            caught = true;
                             if (event.metaKey || event.ctrlKey) {
-                                if (window.Storage) {
-                                    if (event.target.tagName === 'LI') {
-                                        var targetDescriptor = JSON.stringify(this.root.getObjectById(event.target.id));
-                                        window.sessionStorage.meanbeeShippingRulesClipboard = targetDescriptor;
-                                    }
+                                event.preventDefault();
+                                if (event.target.tagName === 'LI') {
+                                    ShippingRules.clipboard.copy(this.root.getObjectById(event.target.id));
                                 }
                             }
                             break;
                         case 86:
-                            caught = true;
                             if (event.metaKey || event.ctrlKey) {
-                                if (window.Storage) {
-                                    if (event.target.tagName === 'LI') {
-                                        var target = this.root.getObjectById(event.target.id);
-                                        var clipboardItemDescriptor = JSON.parse(window.sessionStorage.meanbeeShippingRulesClipboard);
-                                        var clipboardItem = ShippingRules.Register[clipboardItemDescriptor.register.toLowerCase()].get(clipboardItemDescriptor.key);
-                                        if (target.aggregator) {
-                                            target = target.aggregator;
-                                        }
-                                        var child = undefined;
-                                        if (target.children) {
-                                            child = target.addChild(clipboardItem);
-                                        }
-                                        if (!child) {
-                                            console.log(target.index);
-                                            child = (target.parent.children ? target.parent : target.parent.parent).addChild(clipboardItem, target.index);
-                                        }
-                                        if (child) {
-                                            child.init(clipboardItemDescriptor);
-                                            target.refresh();
-                                            this.root.rerender();
-                                            document.getElementById(child.id).focus();
-                                        }
-                                    }
+                                event.preventDefault();
+                                if (event.target.tagName === 'LI') {
+                                    ShippingRules.clipboard.paste(this.root.getObjectById(event.target.id));
                                 }
                             }
                             break;
                         case 88:
-                            caught = true;
                             if (event.metaKey || event.ctrlKey) {
-                                if (window.Storage) {
-                                    if (event.target.tagName === 'LI') {
-                                        var target = this.root.getObjectById(event.target.id);
-                                        window.sessionStorage.meanbeeShippingRulesClipboard = JSON.stringify(target);
-                                        if (target && target.parent) {
-                                            event.target.className += 'deleting';
-                                            target.parent.removeChildByIndex(target.index);
-                                            this.focus(target.id);
-                                            if ((target = target.parent.children[target.index - 1]) && event.keyCode === 8) {
-                                                this.focus(target.id);
-                                            }
-                                            setTimeout(this.root.rerender.bind(this.root), 200);
-                                        }
-                                    }
+                                event.preventDefault();
+                                if (event.target.tagName === 'LI') {
+                                    ShippingRules.clipboard.copy(this.root.getObjectById(event.target.id));
+                                    this.root.getObjectById(event.target.id).delete();
                                 }
                             }
                             break;
                         case 89:
-                            caught = true;
                             if (event.metaKey || event.ctrlKey) {
+                                event.preventDefault();
                                 ShippingRules.history.redo();
                             }
                             break;
                         case 90:
-                            caught = true;
                             if (event.metaKey || event.ctrlKey) {
+                                event.preventDefault();
                                 ShippingRules.history.undo();
                             }
                             break;
                         default:
                         }
-                        if (caught) {
-                            event.preventDefault();
-                        }
                     }
-                    if (caught) {
+                    if (event.target.tagName === 'LI') {
                         event.stopPropagation();
                     }
                 }
@@ -5781,6 +5705,210 @@ function _classCallCheck(instance, Constructor) {
         return _class;
     }();
     ShippingRules.history = new ShippingRules.History();
+}(Meanbee.ShippingRules));
+'use strict';
+var _createClass = function () {
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];
+            descriptor.enumerable = descriptor.enumerable || false;
+            descriptor.configurable = true;
+            if ('value' in descriptor)
+                descriptor.writable = true;
+            Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }
+    return function (Constructor, protoProps, staticProps) {
+        if (protoProps)
+            defineProperties(Constructor.prototype, protoProps);
+        if (staticProps)
+            defineProperties(Constructor, staticProps);
+        return Constructor;
+    };
+}();
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError('Cannot call a class as a function');
+    }
+}
+(function (ShippingRules) {
+    ShippingRules.Clipboard = function () {
+        function _class() {
+            _classCallCheck(this, _class);
+        }
+        _createClass(_class, [
+            {
+                key: 'copy',
+                value: function copy(target) {
+                    if (window.Storage) {
+                        var targetDescriptor = JSON.stringify(target);
+                        window.sessionStorage.meanbeeShippingRulesClipboard = targetDescriptor;
+                    }
+                }
+            },
+            {
+                key: 'paste',
+                value: function paste(target) {
+                    if (window.Storage) {
+                        var clipboardItemDescriptor = JSON.parse(window.sessionStorage.meanbeeShippingRulesClipboard);
+                        var clipboardItem = ShippingRules.Register[clipboardItemDescriptor.register.toLowerCase()].get(clipboardItemDescriptor.key);
+                        if (target.aggregator) {
+                            target = target.aggregator;
+                        }
+                        var child = undefined;
+                        if (target.children) {
+                            child = target.addChild(clipboardItem);
+                        }
+                        if (!child) {
+                            child = (target.parent.children ? target.parent : target.parent.parent).addChild(clipboardItem, target.index);
+                        }
+                        if (child) {
+                            child.init(clipboardItemDescriptor);
+                            target.refresh();
+                            this.root.rerender();
+                            document.getElementById(child.id).focus();
+                            ShippingRules.history.pushState();
+                        }
+                    }
+                }
+            }
+        ]);
+        return _class;
+    }();
+    ShippingRules.clipboard = new ShippingRules.Clipboard();
+}(Meanbee.ShippingRules));
+'use strict';
+var _createClass = function () {
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];
+            descriptor.enumerable = descriptor.enumerable || false;
+            descriptor.configurable = true;
+            if ('value' in descriptor)
+                descriptor.writable = true;
+            Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }
+    return function (Constructor, protoProps, staticProps) {
+        if (protoProps)
+            defineProperties(Constructor.prototype, protoProps);
+        if (staticProps)
+            defineProperties(Constructor, staticProps);
+        return Constructor;
+    };
+}();
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError('Cannot call a class as a function');
+    }
+}
+(function (ShippingRules) {
+    ShippingRules.Navigation = function () {
+        function _class() {
+            _classCallCheck(this, _class);
+        }
+        _createClass(_class, [
+            {
+                key: 'escape',
+                value: function escape(event) {
+                    event.preventDefault();
+                    if (~[
+                            'INPUT',
+                            'SELECT',
+                            'BUTTON',
+                            'TEXTAREA'
+                        ].indexOf(event.target.tagName)) {
+                        event.target.closest('li').focus();
+                    } else {
+                        document.body.focus();
+                    }
+                }
+            },
+            {
+                key: 'firstField',
+                value: function firstField(event) {
+                    if (event.target.tagName === 'LI') {
+                        event.preventDefault();
+                        event.target.querySelector('input, select, button, textarea').focus();
+                    }
+                }
+            },
+            {
+                key: 'parentTree',
+                value: function parentTree(event) {
+                    if (event.target.tagName === 'LI') {
+                        event.preventDefault();
+                        if (event.target.parentElement.parentElement.tagName === 'LI') {
+                            event.target.parentElement.parentElement.focus();
+                        } else if (event.target.parentElement.parentElement.parentElement.tagName === 'LI') {
+                            event.target.parentElement.parentElement.parentElement.focus();
+                        }
+                    }
+                }
+            },
+            {
+                key: 'childTree',
+                value: function childTree(event) {
+                    if (event.target.tagName === 'LI') {
+                        event.preventDefault();
+                        var i = undefined;
+                        if (~(i = Array.from(event.target.children).map(function (child) {
+                                return child.tagName;
+                            }).indexOf('UL'))) {
+                            event.target.children[i].children[0].focus();
+                        } else if (~(i = Array.from(event.target.lastChild.children).map(function (child) {
+                                return child.tagName;
+                            }).indexOf('UL'))) {
+                            event.target.lastChild.children[i].children[0].focus();
+                        }
+                    }
+                }
+            },
+            {
+                key: 'previous',
+                value: function previous(event, context) {
+                    if (event.target.tagName === 'LI') {
+                        event.preventDefault();
+                        var i = undefined;
+                        var treeItems = Array.from(context.root.container.querySelectorAll('li'));
+                        i = treeItems.indexOf(event.target);
+                        if (treeItems[i - 1]) {
+                            treeItems[i - 1].focus();
+                        }
+                    }
+                }
+            },
+            {
+                key: 'next',
+                value: function next(event, context) {
+                    if (event.target.tagName === 'LI') {
+                        event.preventDefault();
+                        var i = undefined;
+                        var treeItems = Array.from(context.root.container.querySelectorAll('li'));
+                        i = treeItems.indexOf(event.target);
+                        if (treeItems[i + 1]) {
+                            treeItems[i + 1].focus();
+                        }
+                    }
+                }
+            },
+            {
+                key: 'new',
+                value: function _new(event, context) {
+                    if (event.target.tagName === 'LI') {
+                        event.preventDefault();
+                        var target = target.root.getObjectById(event.target.id);
+                        while (target.children === void 0) {
+                            target = target.parent;
+                        }
+                        context.focus(target.id + '-childselector');
+                    }
+                }
+            }
+        ]);
+        return _class;
+    }();
+    ShippingRules.navigateTo = new ShippingRules.Navigation();
 }(Meanbee.ShippingRules));
 'use strict';
 (function () {

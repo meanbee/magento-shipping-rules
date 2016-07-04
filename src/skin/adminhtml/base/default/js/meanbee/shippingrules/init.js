@@ -27,7 +27,7 @@
         let condCalc = new (Meanbee.ShippingRules.Register.aggregator.get('Conjunctive'))('conditionCalculator', null, condContainer);
         condCalc.field = condField;
         condContainer.appendChild(condCalc.render());
-        
+
         Meanbee.ShippingRules.history.pushState();
 
         function changeHandler (event) {

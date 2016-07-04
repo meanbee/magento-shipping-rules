@@ -63,6 +63,12 @@
                     return aggregatorResult;
                 }
             }
+            if (this.term)  {
+                let termResult = this.term.getObjectById(id);
+                if (termResult) {
+                    return termResult;
+                }
+            }
             if (!this.children) {
                 return null;
             }
@@ -73,6 +79,21 @@
                 }
             }
             return null;
+        }
+
+        delete(navDir) {
+            if (this.parent) {
+                document.getElementById(this.id).className += 'deleting';
+                this.parent.removeChildByIndex(this.index);
+                this.focus(this.id);
+                let target;
+                if ((target = this.parent.children[this.index - 1]) && !navDir) {
+                    this.focus(target.id);
+                }
+                this.root.updateJSON();
+                setTimeout(this.root.rerender.bind(this.root), 200);
+                ShippingRules.history.pushState();
+            }
         }
 
         rerender() {
@@ -101,188 +122,94 @@
 
         renderRemoveButton() {
             if (this.parent instanceof ShippingRules.Base) {
-                return ShippingRules.util.removeButton(this, () => {
-                    document.getElementById(this.id).className += 'deleting';
-                    this.parent.removeChildByIndex(this.index);
-                    setTimeout(this.root.rerender.bind(this.root), 200);
-                    this.focus(this.id);
-                    ShippingRules.history.pushState();
-                });
+                return ShippingRules.util.removeButton(this, this.delete.bind(this));
             }
             return [];
         }
 
         keyHandler(event) {
-            let i;
-            let caught = false;
             if (~['INPUT', 'SELECT', 'BUTTON', 'TEXTAREA'].indexOf(event.target.tagName)) {
-                caught = true;
                 if (event.keyCode === 27) { // Escape
-                    event.preventDefault();
-                    event.target.closest('li').focus();
+                    ShippingRules.navigateTo.escape(event);
                 }
             } else {
                 switch  (event.keyCode) {
                 case 13: // Enter
-                    if (event.target.tagName === 'LI') {
-                        caught = true;
-                        event.target.querySelector('input, select, button, textarea').focus();
-                    }
+                    ShippingRules.navigateTo.firstField(event);
+                    break;
+                case 27: // Escape
+                    ShippingRules.navigateTo.escape(event);
                     break;
                 case 37: // Left Arrow
-                    if (event.target.tagName === 'LI') {
-                        caught = true;
-                        if (event.target.parentElement.parentElement.tagName === 'LI') {
-                            event.target.parentElement.parentElement.focus();
-                        } else if (event.target.parentElement.parentElement.parentElement.tagName === 'LI') {
-                            event.target.parentElement.parentElement.parentElement.focus();
-                        }
-                    }
+                    ShippingRules.navigateTo.parentTree(event);
                     break;
                 case 38: // Up Arrow
-                    caught = true;
-                    if (event.target.tagName === 'LI') {
-                        event.preventDefault();
-                        let treeItems = Array.from(this.root.container.querySelectorAll('li'));
-                        i = treeItems.indexOf(event.target);
-                        if (treeItems[i - 1]) {
-                            treeItems[i - 1].focus();
-                        }
-                    }
+                    ShippingRules.navigateTo.previous(event, this);
                     break;
                 case 39: // Right Arrow
-                    caught = true;
-                    if (event.target.tagName === 'LI') {
-                        event.preventDefault();
-                        if (~(i = Array.from(event.target.children).map(child => child.tagName).indexOf('UL'))) {
-                            event.target.children[i].children[0].focus();
-                        } else if (~(i = Array.from(event.target.lastChild.children).map(child => child.tagName).indexOf('UL'))) {
-                            event.target.lastChild.children[i].children[0].focus();
-                        }
-                    }
+                    ShippingRules.navigateTo.childTree(event);
                     break;
                 case 40: // Down Arrow
-                    caught = true;
-                    if (event.target.tagName === 'LI') {
-                        let treeItems = Array.from(this.root.container.querySelectorAll('li'));
-                        i = treeItems.indexOf(event.target);
-                        if (treeItems[i + 1]) {
-                            treeItems[i + 1].focus();
-                        }
-                    }
+                    ShippingRules.navigateTo.next(event, this);
                     break;
                 case 45: // Insert
                 case 59: // Equals [Plus, onshift]
                 case 61: // Equals [Plus, onshift] (firefox)
                 case 107: // Add [NumPad]
                 case 187: // Equals [Plus, onshift]
-                    caught = true;
-                    if (event.target.tagName === 'LI') {
-                        let target = this.root.getObjectById(event.target.id);
-                        while (target.children === void 0) {
-                            target = target.parent;
-                        }
-                        this.focus(target.id + '-childselector');
-                    }
+                    ShippingRules.navigateTo.new(event, this);
                     break;
                 case 8: // Backspace
                 case 46: // Delete
                 case 109: // Subtract [NumPad]
                 case 173: // Minus (firefox)
                 case 189: // Dash
-                    caught = true;
                     if (event.target.tagName === 'LI') {
-                        let target = this.root.getObjectById(event.target.id);
-                        if (target && target.parent) {
-                            event.target.className += 'deleting';
-                            target.parent.removeChildByIndex(target.index);
-                            this.focus(target.id);
-                            if ((target = target.parent.children[target.index - 1]) && (event.keyCode === 8)) { // Backspace
-                                this.focus(target.id);
-                            }
-                            setTimeout(this.root.rerender.bind(this.root), 200);
-                        }
+                        event.preventDefault();
+                        this.root.getObjectById(event.target.id).delete(event.keyCode !== 8); // Backspace
                     }
                     break;
                 case 67: // C
-                    caught = true;
                     if (event.metaKey || event.ctrlKey) { // ⌘C | Ctrl-C
-                        if (window.Storage) {
-                            if (event.target.tagName === 'LI') {
-                                let targetDescriptor = JSON.stringify(this.root.getObjectById(event.target.id));
-                                window.sessionStorage.meanbeeShippingRulesClipboard = targetDescriptor;
-                            }
+                        event.preventDefault();
+                        if (event.target.tagName === 'LI') {
+                            ShippingRules.clipboard.copy(this.root.getObjectById(event.target.id));
                         }
                     }
                     break;
                 case 86: // V
-                    caught = true;
                     if (event.metaKey || event.ctrlKey) { // ⌘V | Ctrl-V
-                        if (window.Storage) {
-                            if (event.target.tagName === 'LI') {
-                                let target = this.root.getObjectById(event.target.id);
-                                let clipboardItemDescriptor = JSON.parse(window.sessionStorage.meanbeeShippingRulesClipboard);
-                                let clipboardItem = ShippingRules.Register[clipboardItemDescriptor.register.toLowerCase()].get(clipboardItemDescriptor.key);
-                                if (target.aggregator) {
-                                    target = target.aggregator;
-                                }
-                                let child;
-                                if (target.children) {
-                                    child = target.addChild(clipboardItem);
-                                }
-                                if (!child) {
-                                    console.log(target.index);
-                                    child = (target.parent.children ? target.parent : target.parent.parent).addChild(clipboardItem, target.index);
-                                }
-                                if (child) {
-                                    child.init(clipboardItemDescriptor);
-                                    target.refresh();
-                                    this.root.rerender();
-                                    document.getElementById(child.id).focus();
-                                }
-                            }
+                        event.preventDefault();
+                        if (event.target.tagName === 'LI') {
+                            ShippingRules.clipboard.paste(this.root.getObjectById(event.target.id));
                         }
                     }
                     break;
                 case 88: // X
-                    caught = true;
                     if (event.metaKey || event.ctrlKey) { // ⌘X | Ctrl-X
-                        if (window.Storage) {
-                            if (event.target.tagName === 'LI') {
-                                let target = this.root.getObjectById(event.target.id);
-                                window.sessionStorage.meanbeeShippingRulesClipboard = JSON.stringify(target);
-                                if (target && target.parent) {
-                                    event.target.className += 'deleting';
-                                    target.parent.removeChildByIndex(target.index);
-                                    this.focus(target.id);
-                                    if ((target = target.parent.children[target.index - 1]) && (event.keyCode === 8)) { // Backspace
-                                        this.focus(target.id);
-                                    }
-                                    setTimeout(this.root.rerender.bind(this.root), 200);
-                                }
-                            }
+                        event.preventDefault();
+                        if (event.target.tagName === 'LI') {
+                            ShippingRules.clipboard.copy(this.root.getObjectById(event.target.id));
+                            this.root.getObjectById(event.target.id).delete();
                         }
                     }
                     break;
                 case 89: // Y
-                    caught = true;
                     if (event.metaKey || event.ctrlKey) { // ⌘Y | Ctrl-Y
+                        event.preventDefault();
                         ShippingRules.history.redo();
                     }
                     break;
                 case 90: // Z
-                    caught = true;
                     if (event.metaKey || event.ctrlKey) { // ⌘Z | Ctrl-Z
+                        event.preventDefault();
                         ShippingRules.history.undo();
                     }
                     break;
                 default:
                 }
-                if (caught) {
-                    event.preventDefault();
-                }
             }
-            if (caught)  {
+            if (event.target.tagName === 'LI') {
                 event.stopPropagation();
             }
         }
