@@ -39,6 +39,7 @@
                 me.format = event.target.value;
                 me.refresh();
                 me.root.rerender();
+                ShippingRules.history.pushState();
             }}>
                 <option disabled={true} selected={!me.format}>[SELECT]</option>
                 {ShippingRules.data.postalCodeFormats.sort((a, b) => ((a.label.toUpperCase() < b.label.toUpperCase()) ? -1 : 1)).map((format) => {

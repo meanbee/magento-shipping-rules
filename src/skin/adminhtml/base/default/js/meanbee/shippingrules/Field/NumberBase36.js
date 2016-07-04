@@ -4,7 +4,10 @@
     {
         render() {
             let me = this;
-            return (<input type="text" id={`${me.idPrefix}-value`} pattern="[0-9A-Z]" value={me.value} onKeyUp={me.valueChangeHandler.bind(me)} onChange={me.valueChangeHandler.bind(me)} />);
+            return (<input type="text" id={`${me.idPrefix}-value`} pattern="[0-9A-Z]" value={me.value} onKeyUp={me.valueChangeHandler.bind(me)} onChange={(event) => {
+                me.valueChangeHandler(event);
+                ShippingRules.history.pushState();
+            }} />);
         }
 
         valueChangeHandler(event) {

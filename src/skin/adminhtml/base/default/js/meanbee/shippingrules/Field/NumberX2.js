@@ -5,9 +5,15 @@
         render() {
             let me = this;
             return (<span id={`${me.idPrefix}-value`}>
-                <input type="number" id={`${me.idPrefix}-value-0`} value={me.value[0] || ''} onKeyUp={me.valueChangeHandler.bind(me)} onChange={me.valueChangeHandler.bind(me)} />
+                <input type="number" id={`${me.idPrefix}-value-0`} value={me.value[0] || ''} onKeyUp={me.valueChangeHandler.bind(me)} onChange={(event) => {
+                    me.valueChangeHandler(event);
+                    ShippingRules.history.pushState();
+                }} />
                 and
-                <input type="number" id={`${me.idPrefix}-value-1`} value={me.value[1] || ''} onKeyUp={me.valueChangeHandler.bind(me)} onChange={me.valueChangeHandler.bind(me)} />
+                <input type="number" id={`${me.idPrefix}-value-1`} value={me.value[1] || ''} onKeyUp={me.valueChangeHandler.bind(me)} onChange={(event) => {
+                    me.valueChangeHandler(event);
+                    ShippingRules.history.pushState();
+                }} />
             </span>);
         }
 

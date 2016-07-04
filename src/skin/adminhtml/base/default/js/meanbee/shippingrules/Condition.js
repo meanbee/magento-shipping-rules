@@ -36,6 +36,7 @@
                 me.comparator = new (ShippingRules.Register.comparator.get(event.target.value))(this.type);
                 me.valueField = new (ShippingRules.Register.field.get(me.comparator.getField()))(me, me.value);
                 me.root.rerender();
+                ShippingRules.history.pushState();
             }}>
                 {ShippingRules.Register.comparator.getAsOptions(me.type, me.comparator.name)}
             </select>);

@@ -28,6 +28,7 @@ gulp.task('scripts', function() {
         'src/skin/adminhtml/base/default/js/meanbee/shippingrules/Comparator/*.js',
         'src/skin/adminhtml/base/default/js/meanbee/shippingrules/Field.js',
         'src/skin/adminhtml/base/default/js/meanbee/shippingrules/Field/*.js',
+        'src/skin/adminhtml/base/default/js/meanbee/shippingrules/History.js',
         'src/skin/adminhtml/base/default/js/meanbee/shippingrules/init.js',
         '!src/skin/adminhtml/base/default/js/meanbee/shippingrules/script.js'
     ])

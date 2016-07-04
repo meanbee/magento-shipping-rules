@@ -1296,6 +1296,7 @@ function _classCallCheck(instance, Constructor) {
                             _this.parent.removeChildByIndex(_this.index);
                             setTimeout(_this.root.rerender.bind(_this.root), 200);
                             _this.focus(_this.id);
+                            ShippingRules.history.pushState();
                         });
                     }
                     return [];
@@ -1462,6 +1463,18 @@ function _classCallCheck(instance, Constructor) {
                                         }
                                     }
                                 }
+                            }
+                            break;
+                        case 89:
+                            caught = true;
+                            if (event.metaKey || event.ctrlKey) {
+                                ShippingRules.history.redo();
+                            }
+                            break;
+                        case 90:
+                            caught = true;
+                            if (event.metaKey || event.ctrlKey) {
+                                ShippingRules.history.undo();
                             }
                             break;
                         default:
@@ -1817,6 +1830,7 @@ function _inherits(subClass, superClass) {
                         $$b.addEventListener('change', function (event) {
                             me.combinator = event.target.value;
                             me.root.rerender();
+                            ShippingRules.history.pushState();
                         });
                         $$b.appendChildren([
                             {
@@ -1852,6 +1866,7 @@ function _inherits(subClass, superClass) {
                         $$f.addEventListener('change', function (event) {
                             me.value = !!+event.target.value;
                             me.root.rerender();
+                            ShippingRules.history.pushState();
                         });
                         $$f.appendChildren([
                             {
@@ -1901,6 +1916,7 @@ function _inherits(subClass, superClass) {
                             }
                             me.root.rerender();
                             me.root.focus(id);
+                            ShippingRules.history.pushState();
                         });
                         $$j.appendChild($$k);
                         var $$l = document.createElement('option');
@@ -1949,6 +1965,7 @@ function _inherits(subClass, superClass) {
                     _get(Object.getPrototypeOf(_class.prototype), 'init', this).call(this, obj);
                     this.value = typeof obj.value === 'boolean' ? obj.value : true;
                     if (obj.children) {
+                        this.children = [];
                         obj.children.forEach(function (child) {
                             if (child.register === 'Condition') {
                                 _this2.addChild(ShippingRules.Register.condition.get(child.key)).init(child);
@@ -2126,6 +2143,7 @@ function _inherits(subClass, superClass) {
                             var id = me.addChild(child).id;
                             me.root.rerender();
                             me.root.focus(id);
+                            ShippingRules.history.pushState();
                         });
                         $$b.appendChild($$c);
                         var $$d = document.createElement('option');
@@ -2167,6 +2185,7 @@ function _inherits(subClass, superClass) {
                     var _this2 = this;
                     _get(Object.getPrototypeOf(_class.prototype), 'init', this).call(this, obj);
                     if (obj.children) {
+                        this.children = [];
                         obj.children.forEach(function (child) {
                             if (child.register === 'Term') {
                                 _this2.addChild(ShippingRules.Register.term.get(child.key)).init(child);
@@ -2318,6 +2337,7 @@ function _inherits(subClass, superClass) {
                         $$b.addEventListener('change', function (event) {
                             me.combinator = event.target.value;
                             me.root.rerender();
+                            ShippingRules.history.pushState();
                         });
                         $$b.appendChildren([
                             {
@@ -2353,6 +2373,7 @@ function _inherits(subClass, superClass) {
                         $$f.addEventListener('change', function (event) {
                             me.value = !!+event.target.value;
                             me.root.rerender();
+                            ShippingRules.history.pushState();
                         });
                         $$f.appendChildren([
                             {
@@ -2402,6 +2423,7 @@ function _inherits(subClass, superClass) {
                             }
                             me.root.rerender();
                             me.root.focus(id);
+                            ShippingRules.history.pushState();
                         });
                         $$j.appendChild($$k);
                         var $$l = document.createElement('option');
@@ -2450,6 +2472,7 @@ function _inherits(subClass, superClass) {
                     _get(Object.getPrototypeOf(_class.prototype), 'init', this).call(this, obj);
                     this.value = typeof obj.value === 'boolean' ? obj.value : true;
                     if (obj.children) {
+                        this.children = [];
                         obj.children.forEach(function (child) {
                             if (child.register === 'Condition') {
                                 _this2.addChild(ShippingRules.Register.condition.get(child.key)).init(child);
@@ -2675,6 +2698,7 @@ function _inherits(subClass, superClass) {
                         $$a.addEventListener('change', function (event) {
                             me.value = event.target.value;
                             me.root.rerender();
+                            ShippingRules.history.pushState();
                         });
                         return $$a;
                     }();
@@ -2833,6 +2857,7 @@ function _inherits(subClass, superClass) {
                         $$a.addEventListener('change', function (event) {
                             me.value = event.target.value;
                             me.root.rerender();
+                            ShippingRules.history.pushState();
                         });
                         return $$a;
                     }();
@@ -2975,6 +3000,7 @@ function _inherits(subClass, superClass) {
                         $$a.addEventListener('change', function (event) {
                             me.value = event.target.value;
                             me.root.rerender();
+                            ShippingRules.history.pushState();
                         });
                         return $$a;
                     }();
@@ -2996,6 +3022,7 @@ function _inherits(subClass, superClass) {
                         $$c.addEventListener('change', function (event) {
                             me.attribute = event.target.value;
                             me.root.rerender();
+                            ShippingRules.history.pushState();
                         });
                         var $$d = document.createElement('option');
                         $$d.disabled = true;
@@ -3184,6 +3211,7 @@ function _inherits(subClass, superClass) {
                             me.comparator = new (ShippingRules.Register.comparator.get(event.target.value))(_this2.type);
                             me.valueField = new (ShippingRules.Register.field.get(me.comparator.getField()))(me, me.value);
                             me.root.rerender();
+                            ShippingRules.history.pushState();
                         });
                         $$c.appendChildren(ShippingRules.Register.comparator.getAsOptions(me.type, me.comparator.name));
                         return $$c;
@@ -3613,6 +3641,7 @@ function _inherits(subClass, superClass) {
                             me.format = event.target.value;
                             me.refresh();
                             me.root.rerender();
+                            ShippingRules.history.pushState();
                         });
                         var $$d = document.createElement('option');
                         $$d.disabled = true;
@@ -5060,7 +5089,10 @@ function _inherits(subClass, superClass) {
                         $$a.setAttribute('id', me.idPrefix + '-value');
                         $$a.setAttribute('value', me.value);
                         $$a.addEventListener('keyup', me.valueChangeHandler.bind(me));
-                        $$a.addEventListener('change', me.valueChangeHandler.bind(me));
+                        $$a.addEventListener('change', function (event) {
+                            me.valueChangeHandler(event);
+                            ShippingRules.history.pushState();
+                        });
                         return $$a;
                     }();
                 }
@@ -5155,7 +5187,10 @@ function _inherits(subClass, superClass) {
                         $$a.setAttribute('pattern', '[A-Z]');
                         $$a.setAttribute('value', me.value);
                         $$a.addEventListener('keyup', me.valueChangeHandler.bind(me));
-                        $$a.addEventListener('change', me.valueChangeHandler.bind(me));
+                        $$a.addEventListener('change', function (event) {
+                            me.valueChangeHandler(event);
+                            ShippingRules.history.pushState();
+                        });
                         return $$a;
                     }();
                 }
@@ -5239,7 +5274,10 @@ function _inherits(subClass, superClass) {
                         $$b.setAttribute('pattern', '[A-Z]');
                         $$b.setAttribute('value', me.value[0] || '');
                         $$b.addEventListener('keyup', me.valueChangeHandler.bind(me));
-                        $$b.addEventListener('change', me.valueChangeHandler.bind(me));
+                        $$b.addEventListener('change', function (event) {
+                            me.valueChangeHandler(event);
+                            ShippingRules.history.pushState();
+                        });
                         $$a.appendChild($$b);
                         var $$c = document.createTextNode('\n                and\n                ');
                         $$a.appendChild($$c);
@@ -5249,7 +5287,10 @@ function _inherits(subClass, superClass) {
                         $$d.setAttribute('pattern', '[A-Z]');
                         $$d.setAttribute('value', me.value[1] || '');
                         $$d.addEventListener('keyup', me.valueChangeHandler.bind(me));
-                        $$d.addEventListener('change', me.valueChangeHandler.bind(me));
+                        $$d.addEventListener('change', function (event) {
+                            me.valueChangeHandler(event);
+                            ShippingRules.history.pushState();
+                        });
                         $$a.appendChild($$d);
                         return $$a;
                     }();
@@ -5357,7 +5398,10 @@ function _inherits(subClass, superClass) {
                         $$a.setAttribute('pattern', '[0-9A-Z]');
                         $$a.setAttribute('value', me.value);
                         $$a.addEventListener('keyup', me.valueChangeHandler.bind(me));
-                        $$a.addEventListener('change', me.valueChangeHandler.bind(me));
+                        $$a.addEventListener('change', function (event) {
+                            me.valueChangeHandler(event);
+                            ShippingRules.history.pushState();
+                        });
                         return $$a;
                     }();
                 }
@@ -5441,7 +5485,10 @@ function _inherits(subClass, superClass) {
                         $$b.setAttribute('pattern', '[0-9A-Z]');
                         $$b.setAttribute('value', me.value[0] || '');
                         $$b.addEventListener('keyup', me.valueChangeHandler.bind(me));
-                        $$b.addEventListener('change', me.valueChangeHandler.bind(me));
+                        $$b.addEventListener('change', function (event) {
+                            me.valueChangeHandler(event);
+                            ShippingRules.history.pushState();
+                        });
                         $$a.appendChild($$b);
                         var $$c = document.createTextNode('\n                and\n                ');
                         $$a.appendChild($$c);
@@ -5451,7 +5498,10 @@ function _inherits(subClass, superClass) {
                         $$d.setAttribute('pattern', '[0-9A-Z]');
                         $$d.setAttribute('value', me.value[1] || '');
                         $$d.addEventListener('keyup', me.valueChangeHandler.bind(me));
-                        $$d.addEventListener('change', me.valueChangeHandler.bind(me));
+                        $$d.addEventListener('change', function (event) {
+                            me.valueChangeHandler(event);
+                            ShippingRules.history.pushState();
+                        });
                         $$a.appendChild($$d);
                         return $$a;
                     }();
@@ -5539,7 +5589,10 @@ function _inherits(subClass, superClass) {
                         $$b.setAttribute('id', me.idPrefix + '-value-0');
                         $$b.setAttribute('value', me.value[0] || '');
                         $$b.addEventListener('keyup', me.valueChangeHandler.bind(me));
-                        $$b.addEventListener('change', me.valueChangeHandler.bind(me));
+                        $$b.addEventListener('change', function (event) {
+                            me.valueChangeHandler(event);
+                            ShippingRules.history.pushState();
+                        });
                         $$a.appendChild($$b);
                         var $$c = document.createTextNode('\n                and\n                ');
                         $$a.appendChild($$c);
@@ -5548,7 +5601,10 @@ function _inherits(subClass, superClass) {
                         $$d.setAttribute('id', me.idPrefix + '-value-1');
                         $$d.setAttribute('value', me.value[1] || '');
                         $$d.addEventListener('keyup', me.valueChangeHandler.bind(me));
-                        $$d.addEventListener('change', me.valueChangeHandler.bind(me));
+                        $$d.addEventListener('change', function (event) {
+                            me.valueChangeHandler(event);
+                            ShippingRules.history.pushState();
+                        });
                         $$a.appendChild($$d);
                         return $$a;
                     }();
@@ -5632,7 +5688,10 @@ function _inherits(subClass, superClass) {
                         $$a.setAttribute('id', me.idPrefix + '-value');
                         $$a.setAttribute('value', me.value);
                         $$a.addEventListener('keyup', me.valueChangeHandler.bind(me));
-                        $$a.addEventListener('change', me.valueChangeHandler.bind(me));
+                        $$a.addEventListener('change', function (event) {
+                            me.valueChangeHandler(event);
+                            ShippingRules.history.pushState();
+                        });
                         return $$a;
                     }();
                 }
@@ -5640,6 +5699,88 @@ function _inherits(subClass, superClass) {
         return _class;
     }(ShippingRules.Field);
     ShippingRules.Register.field.add('Text', ShippingRules.Field.Text);
+}(Meanbee.ShippingRules));
+'use strict';
+var _createClass = function () {
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];
+            descriptor.enumerable = descriptor.enumerable || false;
+            descriptor.configurable = true;
+            if ('value' in descriptor)
+                descriptor.writable = true;
+            Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }
+    return function (Constructor, protoProps, staticProps) {
+        if (protoProps)
+            defineProperties(Constructor.prototype, protoProps);
+        if (staticProps)
+            defineProperties(Constructor, staticProps);
+        return Constructor;
+    };
+}();
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError('Cannot call a class as a function');
+    }
+}
+(function (ShippingRules) {
+    ShippingRules.History = function () {
+        function _class() {
+            _classCallCheck(this, _class);
+            this.history = [];
+            this.pointer = 0;
+        }
+        _createClass(_class, [
+            {
+                key: 'pushState',
+                value: function pushState() {
+                    var historyEntry = {};
+                    Object.keys(ShippingRules.calculators).forEach(function (calculator) {
+                        historyEntry[calculator] = JSON.stringify(ShippingRules.calculators[calculator]);
+                    });
+                    this.history.length = this.pointer;
+                    this.history[this.pointer] = historyEntry;
+                    this.pointer++;
+                }
+            },
+            {
+                key: 'undo',
+                value: function undo() {
+                    this.pointer--;
+                    var historyEntry = this.history[this.pointer - 1];
+                    if (!historyEntry) {
+                        this.pointer++;
+                        return;
+                    }
+                    this.renderHistoricState(historyEntry);
+                }
+            },
+            {
+                key: 'redo',
+                value: function redo() {
+                    var historyEntry = this.history[this.pointer];
+                    if (!historyEntry) {
+                        return;
+                    }
+                    this.pointer++;
+                    this.renderHistoricState(historyEntry);
+                }
+            },
+            {
+                key: 'renderHistoricState',
+                value: function renderHistoricState(historyEntry) {
+                    Object.keys(historyEntry).forEach(function (calculator) {
+                        ShippingRules.calculators[calculator].init(JSON.parse(historyEntry[calculator]));
+                        ShippingRules.calculators[calculator].rerender();
+                    });
+                }
+            }
+        ]);
+        return _class;
+    }();
+    ShippingRules.history = new ShippingRules.History();
 }(Meanbee.ShippingRules));
 'use strict';
 (function () {
@@ -5668,6 +5809,7 @@ function _inherits(subClass, superClass) {
         var condCalc = new (Meanbee.ShippingRules.Register.aggregator.get('Conjunctive'))('conditionCalculator', null, condContainer);
         condCalc.field = condField;
         condContainer.appendChild(condCalc.render());
+        Meanbee.ShippingRules.history.pushState();
         function changeHandler(event) {
             if (~[
                     'INPUT',

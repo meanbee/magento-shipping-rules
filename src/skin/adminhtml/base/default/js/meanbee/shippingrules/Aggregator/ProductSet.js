@@ -43,6 +43,7 @@
             return (<select id={`${me.id}-combinator`} onChange={event => {
                 me.combinator = event.target.value;
                 me.root.rerender();
+                ShippingRules.history.pushState();
             }}>
                 {[{ label: 'ALL', value: me.constructor.INTERSECTIONAL},
                     { label: 'ANY', value: me.constructor.UNIONAL}].map(combinator => {
@@ -58,6 +59,7 @@
             return (<select id={`${me.id}-value`} onChange={event => {
                 me.value = !!+event.target.value
                 me.root.rerender();
+                ShippingRules.history.pushState();
             }}>
                 {[{ label: 'TRUE', value: 1}, { label: 'FALSE', value: 0}].map(value => {
                     let option = (<option value={value.value}>{value.label}</option>);
@@ -82,6 +84,7 @@
                     }
                     me.root.rerender();
                     me.root.focus(id);
+                    ShippingRules.history.pushState();
                 }}>
                     <option disabled="disabled" selected="selected">[SELECT]</option>
                     {ShippingRules.Register.condition.getAsOptions(me.context)}
@@ -102,6 +105,7 @@
             super.init(obj);
             this.value = (typeof obj.value) === 'boolean' ? obj.value : true;
             if (obj.children) {
+                this.children = [];
                 obj.children.forEach(child => {
                     if (child.register === 'Condition') {
                         this.addChild(ShippingRules.Register.condition.get(child.key)).init(child);

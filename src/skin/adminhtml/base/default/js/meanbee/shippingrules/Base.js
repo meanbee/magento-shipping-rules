@@ -106,6 +106,7 @@
                     this.parent.removeChildByIndex(this.index);
                     setTimeout(this.root.rerender.bind(this.root), 200);
                     this.focus(this.id);
+                    ShippingRules.history.pushState();
                 });
             }
             return [];
@@ -261,6 +262,18 @@
                                 }
                             }
                         }
+                    }
+                    break;
+                case 89: // Y
+                    caught = true;
+                    if (event.metaKey || event.ctrlKey) { // ⌘Y | Ctrl-Y
+                        ShippingRules.history.redo();
+                    }
+                    break;
+                case 90: // Z
+                    caught = true;
+                    if (event.metaKey || event.ctrlKey) { // ⌘Z | Ctrl-Z
+                        ShippingRules.history.undo();
                     }
                     break;
                 default:

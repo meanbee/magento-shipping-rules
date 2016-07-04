@@ -14,7 +14,8 @@
             let me = this;
             return (<input id={`${me.id}-value`} type="number" value={me.value} onKeyDown={event => me.value = event.target.value} onChange={event => {
                 me.value = event.target.value;
-                me.root.rerender()
+                me.root.rerender();
+                ShippingRules.history.pushState();
             }} />);
         }
 
@@ -24,6 +25,7 @@
             return (<select id={`${me.id}-attribute`} onChange={event => {
                 me.attribute = event.target.value;
                 me.root.rerender();
+                ShippingRules.history.pushState();
             }}>
                 <option disabled="disabled" selected="selected">[SELECT]</option>
                 {Object.keys(ShippingRules.data.productAttributes)

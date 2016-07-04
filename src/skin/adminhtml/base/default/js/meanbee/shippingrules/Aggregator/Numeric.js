@@ -34,6 +34,7 @@
                     let id = me.addChild(child).id;
                     me.root.rerender();
                     me.root.focus(id);
+                    ShippingRules.history.pushState();
                 }}>
                     <option disabled="disabled" selected="selected">[SELECT]</option>
                     {ShippingRules.Register.term.getAsOptions()}
@@ -53,6 +54,7 @@
         init(obj) {
             super.init(obj);
             if (obj.children) {
+                this.children = [];
                 obj.children.forEach(child => {
                     if (child.register === 'Term') {
                         this.addChild(ShippingRules.Register.term.get(child.key)).init(child);
