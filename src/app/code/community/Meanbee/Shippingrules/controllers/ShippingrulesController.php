@@ -149,6 +149,14 @@ class Meanbee_Shippingrules_ShippingrulesController
         });
     }
 
+    public function productAttributesAction()
+    {
+        $registers = new Meanbee_Shippingrules_Calculator_Registers;
+        $attributes = $registers->getConditionRegister()->get('product_subselection')->getAttributes();
+        $this->getResponse()->setHeader('Content-type', 'application/json');
+        $this->getResponse()->setBody(json_encode($attributes, true));
+    }
+
     protected function _massAction($infinitive, $past, $present, $callback)
     {
         if ($this->getRequest()->isPost()) {
@@ -195,5 +203,4 @@ class Meanbee_Shippingrules_ShippingrulesController
         Mage::getSingleton('adminhtml/session')->addNotice(Mage::helper('meanbee_shippingrules')->__($message));
         return $this;
     }
-
 }

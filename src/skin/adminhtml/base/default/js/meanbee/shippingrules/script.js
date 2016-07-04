@@ -1404,6 +1404,66 @@ function _classCallCheck(instance, Constructor) {
                                 }
                             }
                             break;
+                        case 67:
+                            caught = true;
+                            if (event.metaKey || event.ctrlKey) {
+                                if (window.Storage) {
+                                    if (event.target.tagName === 'LI') {
+                                        var targetDescriptor = JSON.stringify(this.root.getObjectById(event.target.id));
+                                        window.sessionStorage.meanbeeShippingRulesClipboard = targetDescriptor;
+                                    }
+                                }
+                            }
+                            break;
+                        case 86:
+                            caught = true;
+                            if (event.metaKey || event.ctrlKey) {
+                                if (window.Storage) {
+                                    if (event.target.tagName === 'LI') {
+                                        var target = this.root.getObjectById(event.target.id);
+                                        var clipboardItemDescriptor = JSON.parse(window.sessionStorage.meanbeeShippingRulesClipboard);
+                                        var clipboardItem = ShippingRules.Register[clipboardItemDescriptor.register.toLowerCase()].get(clipboardItemDescriptor.key);
+                                        if (target.aggregator) {
+                                            target = target.aggregator;
+                                        }
+                                        var child = undefined;
+                                        if (target.children) {
+                                            child = target.addChild(clipboardItem);
+                                        }
+                                        if (!child) {
+                                            console.log(target.index);
+                                            child = (target.parent.children ? target.parent : target.parent.parent).addChild(clipboardItem, target.index);
+                                        }
+                                        if (child) {
+                                            child.init(clipboardItemDescriptor);
+                                            target.refresh();
+                                            this.root.rerender();
+                                            document.getElementById(child.id).focus();
+                                        }
+                                    }
+                                }
+                            }
+                            break;
+                        case 88:
+                            caught = true;
+                            if (event.metaKey || event.ctrlKey) {
+                                if (window.Storage) {
+                                    if (event.target.tagName === 'LI') {
+                                        var target = this.root.getObjectById(event.target.id);
+                                        window.sessionStorage.meanbeeShippingRulesClipboard = JSON.stringify(target);
+                                        if (target && target.parent) {
+                                            event.target.className += 'deleting';
+                                            target.parent.removeChildByIndex(target.index);
+                                            this.focus(target.id);
+                                            if ((target = target.parent.children[target.index - 1]) && event.keyCode === 8) {
+                                                this.focus(target.id);
+                                            }
+                                            setTimeout(this.root.rerender.bind(this.root), 200);
+                                        }
+                                    }
+                                }
+                            }
+                            break;
                         default:
                         }
                         if (caught) {
@@ -1729,7 +1789,7 @@ function _inherits(subClass, superClass) {
                             this.reindexChildren();
                         return this.children[index];
                     } else {
-                        console.error('ShippingRules: Boolean Aggregators only accept Conditions and Boolean Aggregators: ' + childClass + ' passed.');
+                        console.warn('ShippingRules: Boolean Aggregators only accept Conditions and Boolean Aggregators: ' + childClass + ' passed.');
                     }
                 }
             },
@@ -2031,7 +2091,7 @@ function _inherits(subClass, superClass) {
                             this.reindexChildren();
                         return this.children[index];
                     } else {
-                        console.error('ShippingRules: Numeric Aggregators only accept Terms and Numeric Aggregators: ' + childClass + ' passed.');
+                        console.warn('ShippingRules: Numeric Aggregators only accept Terms and Numeric Aggregators: ' + childClass + ' passed.');
                     }
                 }
             },
@@ -2230,7 +2290,7 @@ function _inherits(subClass, superClass) {
                             this.reindexChildren();
                         return this.children[index];
                     } else {
-                        console.error('ShippingRules: ProductSet Aggregators only accept Conditions and Boolean Aggregators: ' + childClass + ' passed.');
+                        console.warn('ShippingRules: ProductSet Aggregators only accept Conditions and Boolean Aggregators: ' + childClass + ' passed.');
                     }
                 }
             },
@@ -2798,7 +2858,6 @@ function _inherits(subClass, superClass) {
             {
                 key: 'init',
                 value: function init(obj) {
-                    console.log(obj);
                     _get(Object.getPrototypeOf(_class.prototype), 'init', this).call(this, obj);
                     this.value = obj.value;
                 }
@@ -3725,7 +3784,7 @@ function _inherits(subClass, superClass) {
                     var obj = _get(Object.getPrototypeOf(_class.prototype), 'toJSON', this).call(this);
                     obj.key = 'Destination_PostalCode';
                     obj.aggregator = this.aggregator;
-                    obj.value = this.format || obj.value;
+                    obj.value = this.format || this.value;
                     return obj;
                 }
             }
@@ -5000,6 +5059,7 @@ function _inherits(subClass, superClass) {
                         $$a.setAttribute('type', 'number');
                         $$a.setAttribute('id', me.idPrefix + '-value');
                         $$a.setAttribute('value', me.value);
+                        $$a.addEventListener('keyup', me.valueChangeHandler.bind(me));
                         $$a.addEventListener('change', me.valueChangeHandler.bind(me));
                         return $$a;
                     }();
@@ -5094,6 +5154,7 @@ function _inherits(subClass, superClass) {
                         $$a.setAttribute('id', me.idPrefix + '-value');
                         $$a.setAttribute('pattern', '[A-Z]');
                         $$a.setAttribute('value', me.value);
+                        $$a.addEventListener('keyup', me.valueChangeHandler.bind(me));
                         $$a.addEventListener('change', me.valueChangeHandler.bind(me));
                         return $$a;
                     }();
@@ -5103,7 +5164,7 @@ function _inherits(subClass, superClass) {
                 key: 'valueChangeHandler',
                 value: function valueChangeHandler(event) {
                     event.target.value = event.target.value.toUpperCase();
-                    _get(Object.getPrototypeOf(_class.prototype), 'valueChangeHandler', this).call(this);
+                    _get(Object.getPrototypeOf(_class.prototype), 'valueChangeHandler', this).call(this, event);
                 }
             }
         ]);
@@ -5177,6 +5238,7 @@ function _inherits(subClass, superClass) {
                         $$b.setAttribute('id', me.idPrefix + '-value-0');
                         $$b.setAttribute('pattern', '[A-Z]');
                         $$b.setAttribute('value', me.value[0] || '');
+                        $$b.addEventListener('keyup', me.valueChangeHandler.bind(me));
                         $$b.addEventListener('change', me.valueChangeHandler.bind(me));
                         $$a.appendChild($$b);
                         var $$c = document.createTextNode('\n                and\n                ');
@@ -5186,6 +5248,7 @@ function _inherits(subClass, superClass) {
                         $$d.setAttribute('id', me.idPrefix + '-value-1');
                         $$d.setAttribute('pattern', '[A-Z]');
                         $$d.setAttribute('value', me.value[1] || '');
+                        $$d.addEventListener('keyup', me.valueChangeHandler.bind(me));
                         $$d.addEventListener('change', me.valueChangeHandler.bind(me));
                         $$a.appendChild($$d);
                         return $$a;
@@ -5293,6 +5356,7 @@ function _inherits(subClass, superClass) {
                         $$a.setAttribute('id', me.idPrefix + '-value');
                         $$a.setAttribute('pattern', '[0-9A-Z]');
                         $$a.setAttribute('value', me.value);
+                        $$a.addEventListener('keyup', me.valueChangeHandler.bind(me));
                         $$a.addEventListener('change', me.valueChangeHandler.bind(me));
                         return $$a;
                     }();
@@ -5302,7 +5366,7 @@ function _inherits(subClass, superClass) {
                 key: 'valueChangeHandler',
                 value: function valueChangeHandler(event) {
                     event.target.value = event.target.value.toUpperCase();
-                    _get(Object.getPrototypeOf(_class.prototype), 'valueChangeHandler', this).call(this);
+                    _get(Object.getPrototypeOf(_class.prototype), 'valueChangeHandler', this).call(this, event);
                 }
             }
         ]);
@@ -5376,6 +5440,7 @@ function _inherits(subClass, superClass) {
                         $$b.setAttribute('id', me.idPrefix + '-value-0');
                         $$b.setAttribute('pattern', '[0-9A-Z]');
                         $$b.setAttribute('value', me.value[0] || '');
+                        $$b.addEventListener('keyup', me.valueChangeHandler.bind(me));
                         $$b.addEventListener('change', me.valueChangeHandler.bind(me));
                         $$a.appendChild($$b);
                         var $$c = document.createTextNode('\n                and\n                ');
@@ -5385,6 +5450,7 @@ function _inherits(subClass, superClass) {
                         $$d.setAttribute('id', me.idPrefix + '-value-1');
                         $$d.setAttribute('pattern', '[0-9A-Z]');
                         $$d.setAttribute('value', me.value[1] || '');
+                        $$d.addEventListener('keyup', me.valueChangeHandler.bind(me));
                         $$d.addEventListener('change', me.valueChangeHandler.bind(me));
                         $$a.appendChild($$d);
                         return $$a;
@@ -5472,6 +5538,7 @@ function _inherits(subClass, superClass) {
                         $$b.setAttribute('type', 'number');
                         $$b.setAttribute('id', me.idPrefix + '-value-0');
                         $$b.setAttribute('value', me.value[0] || '');
+                        $$b.addEventListener('keyup', me.valueChangeHandler.bind(me));
                         $$b.addEventListener('change', me.valueChangeHandler.bind(me));
                         $$a.appendChild($$b);
                         var $$c = document.createTextNode('\n                and\n                ');
@@ -5480,6 +5547,7 @@ function _inherits(subClass, superClass) {
                         $$d.setAttribute('type', 'number');
                         $$d.setAttribute('id', me.idPrefix + '-value-1');
                         $$d.setAttribute('value', me.value[1] || '');
+                        $$d.addEventListener('keyup', me.valueChangeHandler.bind(me));
                         $$d.addEventListener('change', me.valueChangeHandler.bind(me));
                         $$a.appendChild($$d);
                         return $$a;
@@ -5563,6 +5631,7 @@ function _inherits(subClass, superClass) {
                         $$a.setAttribute('type', 'text');
                         $$a.setAttribute('id', me.idPrefix + '-value');
                         $$a.setAttribute('value', me.value);
+                        $$a.addEventListener('keyup', me.valueChangeHandler.bind(me));
                         $$a.addEventListener('change', me.valueChangeHandler.bind(me));
                         return $$a;
                     }();

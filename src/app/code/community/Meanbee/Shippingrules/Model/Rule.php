@@ -78,7 +78,9 @@ class Meanbee_Shippingrules_Model_Rule extends Mage_Core_Model_Abstract
      */
     static function addVariablesToRequest($request, $registers)
     {
-        return $registers->getConditionRegister()->addVariablesToRequest($request);
+        $request = $registers->getConditionRegister()->addVariablesToRequest($request);
+        Mage::log(json_encode($request->getData(), JSON_PRETTY_PRINT), Zend_Log::DEBUG, 'meanbee_shippingrules.log');
+        return $request;
     }
 
     protected function getTotalQuantity($request) {

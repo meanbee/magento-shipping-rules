@@ -16,7 +16,7 @@
                 if (reindex) this.reindexChildren();
                 return this.children[index];
             } else {
-                console.error(`ShippingRules: Numeric Aggregators only accept Terms and Numeric Aggregators: ${childClass} passed.`);
+                console.warn(`ShippingRules: Numeric Aggregators only accept Terms and Numeric Aggregators: ${childClass} passed.`);
             }
         }
 

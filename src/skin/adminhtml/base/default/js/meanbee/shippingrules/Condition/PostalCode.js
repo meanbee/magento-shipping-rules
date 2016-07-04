@@ -124,7 +124,7 @@
             let obj = super.toJSON();
             obj.key = 'Destination_PostalCode';
             obj.aggregator = this.aggregator;
-            obj.value = this.format || obj.value;
+            obj.value = this.format || this.value;
             return obj;
         }
     }

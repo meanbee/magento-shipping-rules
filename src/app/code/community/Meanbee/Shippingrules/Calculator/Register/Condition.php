@@ -12,9 +12,9 @@ class Meanbee_Shippingrules_Calculator_Register_Condition
         $this->add('destination', new Meanbee_Shippingrules_Calculator_Condition_Destination);
         $this->add('destination_postalcode', new Meanbee_Shippingrules_Calculator_Condition_Destination_PostalCode);
         $this->add('environment', new Meanbee_Shippingrules_Calculator_Condition_Environment);
-        $this->add('product', new Meanbee_Shippingrules_Calculator_Condition_Product);
         $this->add('promotion', new Meanbee_Shippingrules_Calculator_Condition_Promotion);
         $this->add('time', new Meanbee_Shippingrules_Calculator_Condition_Time);
+        $this->add('product_subselection', new Meanbee_Shippingrules_Calculator_Condition_ProductSubselection);
     }
 
     /**

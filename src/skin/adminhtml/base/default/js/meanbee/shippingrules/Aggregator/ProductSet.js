@@ -28,7 +28,7 @@
                 if (reindex) this.reindexChildren();
                 return this.children[index];
             } else {
-                console.error(`ShippingRules: ProductSet Aggregators only accept Conditions and Boolean Aggregators: ${childClass} passed.`);
+                console.warn(`ShippingRules: ProductSet Aggregators only accept Conditions and Boolean Aggregators: ${childClass} passed.`);
             }
         }
 

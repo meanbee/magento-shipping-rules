@@ -203,6 +203,66 @@
                         }
                     }
                     break;
+                case 67: // C
+                    caught = true;
+                    if (event.metaKey || event.ctrlKey) { // ⌘C | Ctrl-C
+                        if (window.Storage) {
+                            if (event.target.tagName === 'LI') {
+                                let targetDescriptor = JSON.stringify(this.root.getObjectById(event.target.id));
+                                window.sessionStorage.meanbeeShippingRulesClipboard = targetDescriptor;
+                            }
+                        }
+                    }
+                    break;
+                case 86: // V
+                    caught = true;
+                    if (event.metaKey || event.ctrlKey) { // ⌘V | Ctrl-V
+                        if (window.Storage) {
+                            if (event.target.tagName === 'LI') {
+                                let target = this.root.getObjectById(event.target.id);
+                                let clipboardItemDescriptor = JSON.parse(window.sessionStorage.meanbeeShippingRulesClipboard);
+                                let clipboardItem = ShippingRules.Register[clipboardItemDescriptor.register.toLowerCase()].get(clipboardItemDescriptor.key);
+                                if (target.aggregator) {
+                                    target = target.aggregator;
+                                }
+                                let child;
+                                if (target.children) {
+                                    child = target.addChild(clipboardItem);
+                                }
+                                if (!child) {
+                                    console.log(target.index);
+                                    child = (target.parent.children ? target.parent : target.parent.parent).addChild(clipboardItem, target.index);
+                                }
+                                if (child) {
+                                    child.init(clipboardItemDescriptor);
+                                    target.refresh();
+                                    this.root.rerender();
+                                    document.getElementById(child.id).focus();
+                                }
+                            }
+                        }
+                    }
+                    break;
+                case 88: // X
+                    caught = true;
+                    if (event.metaKey || event.ctrlKey) { // ⌘X | Ctrl-X
+                        if (window.Storage) {
+                            if (event.target.tagName === 'LI') {
+                                let target = this.root.getObjectById(event.target.id);
+                                window.sessionStorage.meanbeeShippingRulesClipboard = JSON.stringify(target);
+                                if (target && target.parent) {
+                                    event.target.className += 'deleting';
+                                    target.parent.removeChildByIndex(target.index);
+                                    this.focus(target.id);
+                                    if ((target = target.parent.children[target.index - 1]) && (event.keyCode === 8)) { // Backspace
+                                        this.focus(target.id);
+                                    }
+                                    setTimeout(this.root.rerender.bind(this.root), 200);
+                                }
+                            }
+                        }
+                    }
+                    break;
                 default:
                 }
                 if (caught) {

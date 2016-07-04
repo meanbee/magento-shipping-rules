@@ -44,8 +44,7 @@ class Meanbee_Shippingrules_Model_Carrier
         $registers = new Meanbee_Shippingrules_Calculator_Registers;
 
         $request = Meanbee_Shippingrules_Model_Rule::addVariablesToRequest($request, $registers);
-        Mage::log(json_encode($request->getData()), Zend_Log::DEBUG, 'system.log', true);
-
+        // Mage::log(array_map(function ($item) { return json_encode($item->getData()); }, $request->getAllItems()), Zend_Log::DEBUG, 'debug.log', true);
         $resultArray = array();
         foreach ($methods = $this->getMatchedRules($request, $registers) as $methodName => $rule) {
             /** @var Mage_Shipping_Model_Rate_Result_Method $method */
@@ -74,7 +73,6 @@ class Meanbee_Shippingrules_Model_Carrier
         foreach ($resultArray as $method) {
             $result->append($method);
         }
-        Mage::log($result, Zend_Log::DEBUG, 'system.log', true);
         return $result;
     }
 

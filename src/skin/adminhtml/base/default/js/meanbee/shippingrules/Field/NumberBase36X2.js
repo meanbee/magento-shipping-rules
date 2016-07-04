@@ -5,9 +5,9 @@
         render() {
             let me = this;
             return (<span id={`${me.idPrefix}-value`}>
-                <input type="text" id={`${me.idPrefix}-value-0`} pattern="[0-9A-Z]" value={me.value[0] || ''} onChange={me.valueChangeHandler.bind(me)} />
+                <input type="text" id={`${me.idPrefix}-value-0`} pattern="[0-9A-Z]" value={me.value[0] || ''} onKeyUp={me.valueChangeHandler.bind(me)} onChange={me.valueChangeHandler.bind(me)} />
                 and
-                <input type="text" id={`${me.idPrefix}-value-1`} pattern="[0-9A-Z]" value={me.value[1] || ''} onChange={me.valueChangeHandler.bind(me)} />
+                <input type="text" id={`${me.idPrefix}-value-1`} pattern="[0-9A-Z]" value={me.value[1] || ''} onKeyUp={me.valueChangeHandler.bind(me)} onChange={me.valueChangeHandler.bind(me)} />
             </span>);
         }
 
