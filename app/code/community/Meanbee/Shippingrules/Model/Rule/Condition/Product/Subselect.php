@@ -117,9 +117,11 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Product_Subselect extends Mage_
      * @param Mage_Sales_Model_Quote_Item $item
      * @return Mage_Sales_Model_Quote_Item
      */
-    protected function _getParentItemIfExists(Mage_Sales_Model_Quote_Item $item) {
-        if ($item->hasParentItemId()) {
-            return $item->getParentItem();
+    protected function _getParentItemIfExists(Mage_Core_Model_Abstract $item) {
+        if ($item instanceof Mage_Sales_Model_Quote_Item) {
+            if ($item->hasParentItemId()) {
+                return $item->getParentItem();
+            }
         }
         return $item;
     }
