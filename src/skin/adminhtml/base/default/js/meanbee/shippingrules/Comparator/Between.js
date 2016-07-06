@@ -29,6 +29,8 @@
                 return 'NumberBase26X2';
             case 'numeric_b36':
                 return 'NumberBase36X2';
+            case 'time':
+                return 'TimeX2';
             default:
                 return 'TextX2';
             }

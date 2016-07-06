@@ -47,6 +47,9 @@ ul.calculator-tree select[id] {
   font-weight: bold;
   padding: 0;
 }
+ul.calculator-tree input[type="time"]::-webkit-clear-button {
+  display: none;
+}
 [id^="meanbee_shippingrules_form_"] .hor-scroll {
   overflow: initial;
 }

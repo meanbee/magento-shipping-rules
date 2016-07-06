@@ -37,6 +37,8 @@
                 return 'NumberBase36';
             case 'enum':
                 return 'Select';
+            case 'time':
+                return 'Time';
             default:
                 return 'Text';
             }

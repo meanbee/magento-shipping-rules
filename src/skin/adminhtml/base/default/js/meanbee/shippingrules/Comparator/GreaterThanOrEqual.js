@@ -37,6 +37,8 @@
                 return 'NumberBase26';
             case 'numeric_b36':
                 return 'NumberBase36';
+            case 'time':
+                return 'Time';
             default:
                 return 'Text';
             }

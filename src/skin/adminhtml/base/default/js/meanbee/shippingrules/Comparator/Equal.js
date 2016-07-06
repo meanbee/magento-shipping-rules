@@ -39,6 +39,8 @@
                 return 'Select';
             case 'boolean':
                 return 'Boolean';
+            case 'time':
+                return 'Time';
             default:
                 return 'Text';
             }
