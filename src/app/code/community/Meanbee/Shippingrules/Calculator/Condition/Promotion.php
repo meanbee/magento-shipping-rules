@@ -22,8 +22,36 @@ class Meanbee_Shippingrules_Calculator_Condition_Promotion
      * @return Mage_Shipping_Model_Rate_Request
      */
     public function addVariablesToRequest($request) {
-        // TODO: Coupon Code [promo_coupon_code]
-        // TODO: Applied Cart Price Rules [promo_applied_cart_price_rules]
+        $requestItems = $request->getAllItems();
+        if (count($requestItems) > 0) {
+            $quote = $requestItems[0]->getQuote();
+            if(null != $quote->getShippingAddress()) {
+                $request->setData('promo_free_shipping', $quote->getShippingAddress()->getFreeShipping());
+            }
+            $request->setData('promo_coupon_code', $quote->getCouponCode());
+            $request->setData('promo_applied_rule_ids', implode(',', $this->getAppliedCartPriceRules($requestItems)) ?: null);
+        }
         return $request;
+    }
+
+    /**
+     * Gets an array of ids of all cart price rules that have been applied to
+     * the cart or any product in the cart, without duplicates, regardless of
+     * whether or not the billing and delivery addresses differ.
+     * @param  Array $requestItems Array of items from the
+     *                             Mage_Shipping_Model_Rate_Request object.
+     * @return string[]
+     */
+    protected function getAppliedCartPriceRules($requestItems) {
+        if (count($requestItems) <= 0) {
+            return array();
+        }
+        $quote = $requestItems[0]->getQuote();
+        $quoteLevelPriceRules = explode(',', $quote->getAppliedRuleIds()) ?: array();
+        $productLevelPriceRules = array_reduce($requestItems, function ($accumulator, $product) {
+            return array_merge($accumulator, explode(',', $product->getAppliedRuleIds()));
+        }, array());
+        $allPriceRules = array_merge($quoteLevelPriceRules, $productLevelPriceRules);
+        return array_filter(array_unique($allPriceRules));
     }
 }

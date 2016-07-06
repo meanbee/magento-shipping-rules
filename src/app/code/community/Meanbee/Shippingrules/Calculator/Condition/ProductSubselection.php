@@ -95,14 +95,12 @@ class Meanbee_Shippingrules_Calculator_Condition_ProductSubselection
                 $this->getTerm()->evaluate($request),
                 $this->getType()
             );
-            Mage::log(array($this->getVariable(), $this->getTerm()->evaluate($request), $comp, $this->getValue(), $this->getType(), json_encode($result)), Zend_Log::DEBUG, 'meanbee_shippingrules.log', true);
         } else {
             $result = $this->getComparator()->evaluate(
                 $this->getValue(),
                 $request->getData('current_item')->getProduct()->getData($this->getVariable()) ?: $request->getData('current_item')->getData($this->getVariable()),
                 $this->getType()
             );
-            Mage::log(array($this->getVariable(), $request->getData('current_item')->getProduct()->getData($this->getVariable()) ?: $request->getData('current_item')->getData($this->getVariable()), $comp, $this->getValue(), $this->getType(), json_encode($result)), Zend_Log::DEBUG, 'meanbee_shippingrules.log', true);
         }
         return $result;
     }
