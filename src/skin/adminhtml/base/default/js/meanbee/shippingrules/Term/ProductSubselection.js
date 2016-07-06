@@ -12,7 +12,7 @@
 
         renderValue() {
             let me = this;
-            return (<input id={`${me.id}-value`} type="number" value={me.value} onKeyDown={event => me.value = event.target.value} onChange={event => {
+            return (<input id={`${me.id}-value`} type="number" value={me.value} onCopy={me.copyText} onKeyDown={event => me.value = event.target.value} onChange={event => {
                 me.value = event.target.value;
                 me.root.rerender();
                 ShippingRules.history.pushState();
@@ -21,17 +21,17 @@
 
         renderAttributeSelector() {
             let me = this;
-            if (!ShippingRules.data.productAttributes) return (<select id={`${me.id}-attribute`}></select>);
+            if (!ShippingRules.data['condition/product_subselection/attributes']) return (<select id={`${me.id}-attribute`}></select>);
             return (<select id={`${me.id}-attribute`} onChange={event => {
                 me.attribute = event.target.value;
                 me.root.rerender();
                 ShippingRules.history.pushState();
             }}>
                 <option disabled="disabled" selected="selected">[SELECT]</option>
-                {Object.keys(ShippingRules.data.productAttributes)
-                    .filter((id) => ~ShippingRules.data.productAttributes[id].type.indexOf('number'))
+                {Object.keys(ShippingRules.data['condition/product_subselection/attributes'])
+                    .filter((id) => ~ShippingRules.data['condition/product_subselection/attributes'][id].type.indexOf('number'))
                     .map((id) => {
-                        let option = (<option value={id}>{ShippingRules.data.productAttributes[id].label}</option>);
+                        let option = (<option value={id}>{ShippingRules.data['condition/product_subselection/attributes'][id].label}</option>);
                         if (me.attribute === id) option.selected = true;
                         return option;
                     })}

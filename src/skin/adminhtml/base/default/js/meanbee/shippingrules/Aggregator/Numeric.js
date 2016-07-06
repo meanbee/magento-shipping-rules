@@ -45,7 +45,7 @@
 
         render() {
             let me = this;
-            return (<li id={me.id} onKeyDown={me.keyHandler.bind(me)} tabIndex={0}>
+            return (<li id={me.id} onKeyDown={me.keyHandler.bind(me)} onCopy={me.copyText} tabIndex={0}>
                 Sum of these values: {me.renderRemoveButton()}
                 {me.renderChildren()}
             </li>);

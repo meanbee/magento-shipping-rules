@@ -17,7 +17,7 @@
 
         render() {
             let me = this;
-            return (<li id={me.id} onKeyDown={me.keyHandler.bind(me)} tabIndex={0}>Constant value of {me.renderValue()} {me.renderRemoveButton()}</li>);
+            return (<li id={me.id} onKeyDown={me.keyHandler.bind(me)} onCopy={me.copyText} tabIndex={0}>Constant value of {me.renderValue()} {me.renderRemoveButton()}</li>);
         }
 
         init(obj) {

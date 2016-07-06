@@ -171,7 +171,6 @@
                     break;
                 case 67: // C
                     if (event.metaKey || event.ctrlKey) { // ⌘C | Ctrl-C
-                        event.preventDefault();
                         if (event.target.tagName === 'LI') {
                             ShippingRules.clipboard.copy(this.root.getObjectById(event.target.id));
                         }
@@ -212,6 +211,22 @@
             if (event.target.tagName === 'LI') {
                 event.stopPropagation();
             }
+        }
+
+        copyText(event) {
+            let text = Array.from(this.childNodes).map(function naturalise(node) {
+                if (node instanceof Text) return node.data.trim();
+                if (node instanceof HTMLSelectElement) {
+                    if (node.id.endsWith('-childselector')) return [];
+                    return node.selectedOptions[0].innerText;
+                }
+                if (node instanceof HTMLInputElement) return node.value;
+                if (node instanceof HTMLUListElement) return '<ul>' + ShippingRules.util.flatten(Array.from(node.childNodes).map(naturalise)).join(' ') + '</ul>';
+                if (node instanceof HTMLLIElement) return '<li>' + ShippingRules.util.flatten(Array.from(node.childNodes).map(naturalise)).join(' ') + '</li>';
+                return ShippingRules.util.flatten(Array.from(node.childNodes).map(naturalise));
+            }).join(' ').replace(/<li><\/li>/g,'').replace(/>\s</g,'><').replace(/<ul><\/ul>/g,'');
+            event.clipboardData.setData('text/html', text);
+            event.preventDefault();
         }
     }
 })(Meanbee.ShippingRules);

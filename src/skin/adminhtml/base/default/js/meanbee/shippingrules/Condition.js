@@ -49,7 +49,7 @@
 
         render() {
             let me = this;
-            return (<li id={me.id} tabIndex={0}>
+            return (<li id={me.id} tabIndex={0} onCopy={me.copyText}>
                 {me.label || ' '}
                 {me.renderComparator()}
                 {me.valueField.render ? me.valueField.render() : []}

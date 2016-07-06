@@ -26,7 +26,7 @@
         render() {
             if (this.parent.context instanceof this.constructor || this.parent.context instanceof ShippingRules.Term.ProductSubselection) return super.render();
             let me = this;
-            return (<li id={me.id} onKeyDown={me.keyHandler.bind(me)} tabIndex={0}>
+            return (<li id={me.id} onKeyDown={me.keyHandler.bind(me)} onCopy={me.copyText} tabIndex={0}>
                 If sum of {me.term.renderAttributeSelector()} {me.renderComparator()} {me.valueField.render ? me.valueField.render() : []} for a subselection of items in cart where {me.term.aggregator.renderCombinator()} of these conditions are {me.term.aggregator.renderValue()}: {me.renderRemoveButton()}
                 {me.term.aggregator.renderChildren()}
             </li>);

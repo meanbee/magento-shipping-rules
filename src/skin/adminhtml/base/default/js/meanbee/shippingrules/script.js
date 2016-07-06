@@ -984,7 +984,7 @@ var Meanbee = Meanbee || {};
                 select.style.width = ShippingRules.util.fieldTextSize(text);
             });
             [].forEach.call(document.querySelectorAll('.calculator-tree input'), function (input) {
-                var text = input.value || '---';
+                var text = input.value || (input.type === 'time' ? '-------' : '---');
                 input.style.width = ShippingRules.util.fieldTextSize(text);
             });
         },
@@ -1447,7 +1447,7 @@ function _classCallCheck(instance, Constructor) {
                             return '<li>' + ShippingRules.util.flatten(Array.from(node.childNodes).map(naturalise)).join(' ') + '</li>';
                         return ShippingRules.util.flatten(Array.from(node.childNodes).map(naturalise));
                     }).join(' ').replace(/<li><\/li>/g, '').replace(/>\s</g, '><').replace(/<ul><\/ul>/g, '');
-                    event.clipboardData.setData('text/plain', text);
+                    event.clipboardData.setData('text/html', text);
                     event.preventDefault();
                 }
             },
@@ -1906,6 +1906,7 @@ function _inherits(subClass, superClass) {
                         var $$q = document.createElement('li');
                         $$q.setAttribute('id', me.id);
                         $$q.addEventListener('keydown', me.keyHandler.bind(me));
+                        $$q.addEventListener('copy', me.copyText);
                         $$q.setAttribute('tabIndex', 0);
                         var $$r = document.createTextNode('\n                If ');
                         $$q.appendChild($$r);
@@ -2133,6 +2134,7 @@ function _inherits(subClass, superClass) {
                         var $$i = document.createElement('li');
                         $$i.setAttribute('id', me.id);
                         $$i.addEventListener('keydown', me.keyHandler.bind(me));
+                        $$i.addEventListener('copy', me.copyText);
                         $$i.setAttribute('tabIndex', 0);
                         var $$j = document.createTextNode('\n                Sum of these values: ');
                         $$i.appendChild($$j);
@@ -2413,6 +2415,7 @@ function _inherits(subClass, superClass) {
                         var $$q = document.createElement('li');
                         $$q.setAttribute('id', me.id);
                         $$q.addEventListener('keydown', me.keyHandler.bind(me));
+                        $$q.addEventListener('copy', me.copyText);
                         $$q.setAttribute('tabIndex', 0);
                         var $$r = document.createTextNode('\n                If ');
                         $$q.appendChild($$r);
@@ -2675,6 +2678,7 @@ function _inherits(subClass, superClass) {
                         var $$b = document.createElement('li');
                         $$b.setAttribute('id', me.id);
                         $$b.addEventListener('keydown', me.keyHandler.bind(me));
+                        $$b.addEventListener('copy', me.copyText);
                         $$b.setAttribute('tabIndex', 0);
                         var $$c = document.createTextNode('\n                Constant value of ');
                         $$b.appendChild($$c);
@@ -2834,6 +2838,7 @@ function _inherits(subClass, superClass) {
                         var $$b = document.createElement('li');
                         $$b.setAttribute('id', me.id);
                         $$b.addEventListener('keydown', me.keyHandler.bind(me));
+                        $$b.addEventListener('copy', me.copyText);
                         $$b.setAttribute('tabIndex', 0);
                         var $$c = document.createTextNode('Constant value of ');
                         $$b.appendChild($$c);
@@ -2957,6 +2962,7 @@ function _inherits(subClass, superClass) {
                         $$a.setAttribute('id', me.id + '-value');
                         $$a.setAttribute('type', 'number');
                         $$a.setAttribute('value', me.value);
+                        $$a.addEventListener('copy', me.copyText);
                         $$a.addEventListener('keydown', function (event) {
                             return me.value = event.target.value;
                         });
@@ -2973,7 +2979,7 @@ function _inherits(subClass, superClass) {
                 key: 'renderAttributeSelector',
                 value: function renderAttributeSelector() {
                     var me = this;
-                    if (!ShippingRules.data.productAttributes)
+                    if (!ShippingRules.data['condition/product_subselection/attributes'])
                         return function () {
                             var $$b = document.createElement('select');
                             $$b.setAttribute('id', me.id + '-attribute');
@@ -2993,13 +2999,13 @@ function _inherits(subClass, superClass) {
                         $$c.appendChild($$d);
                         var $$e = document.createTextNode('[SELECT]');
                         $$d.appendChild($$e);
-                        $$c.appendChildren(Object.keys(ShippingRules.data.productAttributes).filter(function (id) {
-                            return ~ShippingRules.data.productAttributes[id].type.indexOf('number');
+                        $$c.appendChildren(Object.keys(ShippingRules.data['condition/product_subselection/attributes']).filter(function (id) {
+                            return ~ShippingRules.data['condition/product_subselection/attributes'][id].type.indexOf('number');
                         }).map(function (id) {
                             var option = function () {
                                 var $$g = document.createElement('option');
                                 $$g.setAttribute('value', id);
-                                $$g.appendChildren(ShippingRules.data.productAttributes[id].label);
+                                $$g.appendChildren(ShippingRules.data['condition/product_subselection/attributes'][id].label);
                                 return $$g;
                             }();
                             if (me.attribute === id)
@@ -3938,6 +3944,8 @@ function _inherits(subClass, superClass) {
                     var item = function () {
                         var $$q = document.createElement('li');
                         $$q.setAttribute('id', me.id);
+                        $$q.addEventListener('keyup', me.keyhandler.bind(me));
+                        $$q.addEventListener('copy', me.copyText);
                         $$q.setAttribute('tabIndex', 0);
                         $$q.appendChildren(me.label);
                         var $$s = document.createTextNode(' matches the format of\n                ');
@@ -4146,6 +4154,7 @@ function _inherits(subClass, superClass) {
                         var $$a = document.createElement('li');
                         $$a.setAttribute('id', me.id);
                         $$a.addEventListener('keydown', me.keyHandler.bind(me));
+                        $$a.addEventListener('copy', me.copyText);
                         $$a.setAttribute('tabIndex', 0);
                         var $$b = document.createTextNode('\n                If sum of ');
                         $$a.appendChild($$b);
@@ -4633,6 +4642,8 @@ function _inherits(subClass, superClass) {
                         return 'NumberBase26X2';
                     case 'numeric_b36':
                         return 'NumberBase36X2';
+                    case 'time':
+                        return 'TimeX2';
                     default:
                         return 'TextX2';
                     }
@@ -4775,6 +4786,8 @@ function _inherits(subClass, superClass) {
                         return 'Select';
                     case 'boolean':
                         return 'Boolean';
+                    case 'time':
+                        return 'Time';
                     default:
                         return 'Text';
                     }
@@ -4922,6 +4935,8 @@ function _inherits(subClass, superClass) {
                         return 'NumberBase26';
                     case 'numeric_b36':
                         return 'NumberBase36';
+                    case 'time':
+                        return 'Time';
                     default:
                         return 'Text';
                     }
@@ -5068,6 +5083,8 @@ function _inherits(subClass, superClass) {
                         return 'NumberBase26';
                     case 'numeric_b36':
                         return 'NumberBase36';
+                    case 'time':
+                        return 'Time';
                     default:
                         return 'Text';
                     }
@@ -5214,6 +5231,8 @@ function _inherits(subClass, superClass) {
                         return 'NumberBase26';
                     case 'numeric_b36':
                         return 'NumberBase36';
+                    case 'time':
+                        return 'Time';
                     default:
                         return 'Text';
                     }
@@ -5360,6 +5379,8 @@ function _inherits(subClass, superClass) {
                         return 'NumberBase26';
                     case 'numeric_b36':
                         return 'NumberBase36';
+                    case 'time':
+                        return 'Time';
                     default:
                         return 'Text';
                     }
@@ -5508,6 +5529,8 @@ function _inherits(subClass, superClass) {
                         return 'NumberBase36';
                     case 'enum':
                         return 'Select';
+                    case 'time':
+                        return 'Time';
                     default:
                         return 'Text';
                     }
@@ -6565,6 +6588,183 @@ function _inherits(subClass, superClass) {
         return _class;
     }(ShippingRules.Field);
     ShippingRules.Register.field.add('TextX2', ShippingRules.Field.TextX2);
+}(Meanbee.ShippingRules));
+'use strict';
+var _createClass = function () {
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];
+            descriptor.enumerable = descriptor.enumerable || false;
+            descriptor.configurable = true;
+            if ('value' in descriptor)
+                descriptor.writable = true;
+            Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }
+    return function (Constructor, protoProps, staticProps) {
+        if (protoProps)
+            defineProperties(Constructor.prototype, protoProps);
+        if (staticProps)
+            defineProperties(Constructor, staticProps);
+        return Constructor;
+    };
+}();
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError('Cannot call a class as a function');
+    }
+}
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError('this hasn\'t been initialised - super() hasn\'t been called');
+    }
+    return call && (typeof call === 'object' || typeof call === 'function') ? call : self;
+}
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== 'function' && superClass !== null) {
+        throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass);
+    }
+    subClass.prototype = Object.create(superClass && superClass.prototype, {
+        constructor: {
+            value: subClass,
+            enumerable: false,
+            writable: true,
+            configurable: true
+        }
+    });
+    if (superClass)
+        Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
+(function (ShippingRules) {
+    ShippingRules.Field.Time = function (_ShippingRules$Field) {
+        _inherits(_class, _ShippingRules$Field);
+        function _class() {
+            _classCallCheck(this, _class);
+            return _possibleConstructorReturn(this, Object.getPrototypeOf(_class).apply(this, arguments));
+        }
+        _createClass(_class, [{
+                key: 'render',
+                value: function render() {
+                    var me = this;
+                    return function () {
+                        var $$a = document.createElement('input');
+                        $$a.setAttribute('type', 'time');
+                        $$a.setAttribute('id', me.idPrefix + '-value');
+                        $$a.setAttribute('value', me.value);
+                        $$a.addEventListener('keyup', me.valueChangeHandler.bind(me));
+                        $$a.addEventListener('change', function (event) {
+                            me.valueChangeHandler(event);
+                            ShippingRules.history.pushState();
+                        });
+                        return $$a;
+                    }();
+                }
+            }]);
+        return _class;
+    }(ShippingRules.Field);
+    ShippingRules.Register.field.add('Time', ShippingRules.Field.Time);
+}(Meanbee.ShippingRules));
+'use strict';
+var _createClass = function () {
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];
+            descriptor.enumerable = descriptor.enumerable || false;
+            descriptor.configurable = true;
+            if ('value' in descriptor)
+                descriptor.writable = true;
+            Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }
+    return function (Constructor, protoProps, staticProps) {
+        if (protoProps)
+            defineProperties(Constructor.prototype, protoProps);
+        if (staticProps)
+            defineProperties(Constructor, staticProps);
+        return Constructor;
+    };
+}();
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError('Cannot call a class as a function');
+    }
+}
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError('this hasn\'t been initialised - super() hasn\'t been called');
+    }
+    return call && (typeof call === 'object' || typeof call === 'function') ? call : self;
+}
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== 'function' && superClass !== null) {
+        throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass);
+    }
+    subClass.prototype = Object.create(superClass && superClass.prototype, {
+        constructor: {
+            value: subClass,
+            enumerable: false,
+            writable: true,
+            configurable: true
+        }
+    });
+    if (superClass)
+        Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
+(function (ShippingRules) {
+    ShippingRules.Field.TimeX2 = function (_ShippingRules$Field) {
+        _inherits(_class, _ShippingRules$Field);
+        function _class() {
+            _classCallCheck(this, _class);
+            return _possibleConstructorReturn(this, Object.getPrototypeOf(_class).apply(this, arguments));
+        }
+        _createClass(_class, [
+            {
+                key: 'render',
+                value: function render() {
+                    var me = this;
+                    return function () {
+                        var $$a = document.createElement('span');
+                        $$a.setAttribute('id', me.idPrefix + '-value');
+                        var $$b = document.createElement('input');
+                        $$b.setAttribute('type', 'time');
+                        $$b.setAttribute('id', me.idPrefix + '-value-0');
+                        $$b.setAttribute('value', me.value[0] || '');
+                        $$b.addEventListener('keyup', me.valueChangeHandler.bind(me));
+                        $$b.addEventListener('change', function (event) {
+                            me.valueChangeHandler(event);
+                            ShippingRules.history.pushState();
+                        });
+                        $$a.appendChild($$b);
+                        var $$c = document.createTextNode('\n                and\n                ');
+                        $$a.appendChild($$c);
+                        var $$d = document.createElement('input');
+                        $$d.setAttribute('type', 'time');
+                        $$d.setAttribute('id', me.idPrefix + '-value-1');
+                        $$d.setAttribute('value', me.value[1] || '');
+                        $$d.addEventListener('keyup', me.valueChangeHandler.bind(me));
+                        $$d.addEventListener('change', function (event) {
+                            me.valueChangeHandler(event);
+                            ShippingRules.history.pushState();
+                        });
+                        $$a.appendChild($$d);
+                        return $$a;
+                    }();
+                }
+            },
+            {
+                key: 'valueChangeHandler',
+                value: function valueChangeHandler() {
+                    this.value = [
+                        document.getElementById(this.idPrefix + '-value-0').value,
+                        document.getElementById(this.idPrefix + '-value-1').value
+                    ];
+                    this.condition.valueChangeHandler(this.value);
+                }
+            }
+        ]);
+        return _class;
+    }(ShippingRules.Field);
+    ShippingRules.Register.field.add('TimeX2', ShippingRules.Field.TimeX2);
 }(Meanbee.ShippingRules));
 'use strict';
 var _createClass = function () {

@@ -92,7 +92,7 @@ var Meanbee = Meanbee || {};
                 select.style.width = ShippingRules.util.fieldTextSize(text);
             });
             [].forEach.call(document.querySelectorAll('.calculator-tree input'), function (input) {
-                let text = input.value || '---';
+                let text = input.value || (input.type === 'time' ? '-------' : '---');
                 input.style.width = ShippingRules.util.fieldTextSize(text);
             });
         },
