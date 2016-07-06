@@ -29,6 +29,7 @@
         getField() {
             let type = this.type.filter((t => ~this.constructor.supportedTypes().indexOf(t)).bind(this));
             switch (type[0]) {
+            case 'currency':
             case 'number':
             case 'numeric_b10':
                 return 'Number';

@@ -11,9 +11,9 @@ class Meanbee_Shippingrules_Calculator_Condition_Destination
         return array(
             'dest_street_address_l1' => array('label' => 'Street Address, Line 1', 'type' => array('string')),
             'dest_street_address_l2' => array('label' => 'Street Address, Line 2', 'type' => array('string')),
-            'dest_country_id'        => array('label' => 'Shipping Country',       'type' => array('enumerated'), 'options' => array()),
-            'dest_country_group'     => array('label' => 'Shipping Country Group', 'type' => array('enumerated'), 'options' => array()),
-            'dest_region_id'         => array('label' => 'Shipping State',         'type' => array('enumerated'), 'options' => array())
+            'dest_country_id'        => array('label' => 'Shipping Country',       'type' => array('enumerated')),
+            'dest_country_group'     => array('label' => 'Shipping Country Group', 'type' => array('enumerated')),
+            'dest_region_id'         => array('label' => 'Shipping State',         'type' => array('enumerated'))
         );
     }
 
@@ -65,5 +65,18 @@ class Meanbee_Shippingrules_Calculator_Condition_Destination
             $destination_country_group = 'eu';
         }
         return $destination_country_group;
+    }
+
+    public function ajaxOptions($variable) {
+        switch ($variable) {
+            case 'dest_country_id':
+                return Mage::getResourceModel('directory/country_collection')->loadData()->toOptionArray(false);
+            case 'dest_region_id':
+                return Mage::getResourceModel('directory/region_collection')->loadData()->toOptionArray(false);
+            case 'dest_country_group':
+                return array(
+                    array('label' => Mage::helper('meanbee_shippingrules')->__('European Union'), 'value' => 'eu')
+                );
+        }
     }
 }

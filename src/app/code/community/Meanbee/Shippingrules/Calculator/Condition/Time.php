@@ -9,7 +9,7 @@ class Meanbee_Shippingrules_Calculator_Condition_Time
      */
     public function getVariables() {
         return array(
-            'time_time_of_day' => array('label' => 'Time of Day', 'type' => 'time'),
+            'time_time_of_day' => array('label' => 'Time of Day', 'type' => array('time')),
             'time_day_of_week' => array('label' => 'Day of Week', 'type' => array('enumerated'))
         );
     }
@@ -49,5 +49,12 @@ class Meanbee_Shippingrules_Calculator_Condition_Time
         $now = new DateTime('now', new DateTimeZone(Mage::getStoreConfig('general/locale/timezone')));
         $date = $now->format('Y-m-d');
         return date('w', strtotime($date));
+    }
+
+    public function ajaxOptions($variable) {
+        switch ($variable) {
+            case 'time_day_of_week':
+                return Mage::getModel('adminhtml/system_config_source_locale_weekdays')->toOptionArray();
+        }
     }
 }

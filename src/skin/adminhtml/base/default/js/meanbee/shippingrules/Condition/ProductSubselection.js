@@ -17,8 +17,8 @@
             let variables = {};
             if (!context) {
                 variables['product_subselection'] = { label: 'Product Subselection', type: ['number'] };
-            } else if ((context instanceof this || context instanceof ShippingRules.Term.ProductSubselection) && ShippingRules.data.productAttributes) {
-                variables = Object.assign(variables, ShippingRules.data.productAttributes);
+            } else if ((context instanceof this || context instanceof ShippingRules.Term.ProductSubselection) && ShippingRules.data['condition/product_subselection/attributes']) {
+                variables = Object.assign(variables, ShippingRules.data['condition/product_subselection/attributes']);
             }
             return variables;
         }
@@ -55,6 +55,6 @@
         }
     }
 
-    ShippingRules.util.loadData('productAttributes');
+    ShippingRules.util.loadData('condition/product_subselection/attributes');
     ShippingRules.Register.condition.add('Product_Subselection', ShippingRules.Condition.ProductSubselection);
 })(Meanbee.ShippingRules);

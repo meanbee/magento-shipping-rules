@@ -9,7 +9,7 @@ class Meanbee_Shippingrules_Calculator_Condition_Customer
      */
     public function getVariables() {
         return array(
-            'customer_group' => array('label' => 'Customer Group', 'type' => array('enumerated'), 'options' => array())
+            'customer_group' => array('label' => 'Customer Group', 'type' => array('enumerated'))
         );
     }
 
@@ -38,5 +38,12 @@ class Meanbee_Shippingrules_Calculator_Condition_Customer
             return +Mage::helper('customer')->getCustomer()->getGroupId();
         }
         return +Mage_Customer_Model_Group::NOT_LOGGED_IN_ID;
+    }
+
+    public function ajaxOptions($variable) {
+        switch ($variable) {
+            case 'customer_group':
+                return Mage::getModel('customer/group')->getCollection()->toOptionArray();
+        }
     }
 }

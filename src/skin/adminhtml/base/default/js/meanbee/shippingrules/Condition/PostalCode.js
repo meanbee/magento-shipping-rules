@@ -18,8 +18,8 @@
             let variables = {};
             if (!context) {
                 variables['dest_postal_code'] = { label: 'Postal Code', type: ['string'] };
-            } else if (context instanceof this && context.format && ShippingRules.data.postalCodeFormats) {
-                let formatData = ShippingRules.data.postalCodeFormats.filter(f => f.value === context.format);
+            } else if (context instanceof this && context.format && ShippingRules.data['condition/destination_postalcode/formats']) {
+                let formatData = ShippingRules.data['condition/destination_postalcode/formats'].filter(f => f.value === context.format);
                 if (formatData.length) {
                     formatData[0].parts.forEach((part, index) => {
                         if (part) variables[index ? 'dest_postal_code_part' + index : 'dest_postal_code_full'] = { label: index ? 'Part ' + index : 'Entire Code', type: [part === 'str' ? 'string' : 'numeric_' + part]};
@@ -30,7 +30,7 @@
         }
 
         renderFormatDecoration() {
-            return ShippingRules.data.postalCodeFormats.filter(f => (f.value === this.format && ShippingRules.util.textWidth(f.decoration) < 2 * ShippingRules.util.textWidth('🇦'))).map(f => (<span>{f.decoration}</span>));
+            return ShippingRules.data['condition/destination_postalcode/formats'].filter(f => (f.value === this.format && ShippingRules.util.textWidth(f.decoration) < 2 * ShippingRules.util.textWidth('🇦'))).map(f => (<span>{f.decoration}</span>));
         }
 
         renderFormatSelector() {
@@ -42,7 +42,7 @@
                 ShippingRules.history.pushState();
             }}>
                 <option disabled={true} selected={!me.format}>[SELECT]</option>
-                {ShippingRules.data.postalCodeFormats.sort((a, b) => ((a.label.toUpperCase() < b.label.toUpperCase()) ? -1 : 1)).map((format) => {
+                {ShippingRules.data['condition/destination_postalcode/formats'].sort((a, b) => ((a.label.toUpperCase() < b.label.toUpperCase()) ? -1 : 1)).map((format) => {
                     let option = (<option value={format.value} dir='rtl'>{format.label}</option>);
                     option.selected = me.format === format.value;
                     return option;
@@ -56,7 +56,7 @@
                 if ((popper = item.querySelector('.popper'))) {
                     popper.classList.remove('hidden');
                 } else {
-                    let postalCodeFormatData = ShippingRules.data.postalCodeFormats.filter(f => f.value === this.format);
+                    let postalCodeFormatData = ShippingRules.data['condition/destination_postalcode/formats'].filter(f => f.value === this.format);
                     if (!postalCodeFormatData || !postalCodeFormatData.length) return;
                     let postalCodeFormatDatum = postalCodeFormatData[0];
                     let help = (<div class="popper" tabIndex={0}><div class="postalcode-full">
@@ -77,7 +77,7 @@
         render() {
             if (this.parent.context instanceof this.constructor) return super.render();
             let me = this;
-            if (!(ShippingRules.data && ShippingRules.data.postalCodeFormats)) return (<li id={me.id}>Loading...</li>);
+            if (!(ShippingRules.data && ShippingRules.data['condition/destination_postalcode/formats'])) return (<li id={me.id}>Loading...</li>);
             let item = (<li id={me.id} tabIndex={0}>
                 {me.label} matches the format of
                 <span class="popper-target">
@@ -130,6 +130,6 @@
         }
     }
 
-    ShippingRules.util.loadData('postalCodeFormats');
+    ShippingRules.util.loadData('condition/destination_postalcode/formats');
     ShippingRules.Register.condition.add('Destination_PostalCode', ShippingRules.Condition.PostalCode);
 })(Meanbee.ShippingRules);

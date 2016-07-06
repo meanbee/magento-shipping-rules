@@ -9,8 +9,8 @@ class Meanbee_Shippingrules_Calculator_Condition_Environment
      */
     public function getVariables() {
         return array(
-            'store_id'       => array('label' => 'Magento Store',   'type' => array('enumerated', 'string'), 'options' => array()),
-            'website_id'     => array('label' => 'Magento Website', 'type' => array('enumerated', 'string'), 'options' => array()),
+            'store_id'       => array('label' => 'Magento Store',   'type' => array('enumerated', 'string')),
+            'website_id'     => array('label' => 'Magento Website', 'type' => array('enumerated', 'string')),
             'is_admin_order' => array('label' => 'Is Admin Order?', 'type' => array('boolean'))
         );
     }
@@ -33,5 +33,14 @@ class Meanbee_Shippingrules_Calculator_Condition_Environment
      */
     protected function getIsAdminOrder() {
         return Mage::getSingleton('adminhtml/session_quote')->hasData('quote_id');
+    }
+
+    public function ajaxOptions($variable) {
+        switch ($variable) {
+            case 'store_id':
+                return Mage::getResourceModel('core/store_collection')->toOptionArray();
+            case 'website_id':
+                return Mage::getResourceModel('core/website_collection')->toOptionArray();
+        }
     }
 }

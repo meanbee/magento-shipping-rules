@@ -44,4 +44,20 @@ class Meanbee_Shippingrules_Calculator_Registers {
     {
         return $this->type;
     }
+
+    public function getRegister($registerName) {
+        switch ($registerName) {
+            case 'aggregator':
+                return $this->getAggregatorRegister();
+            case 'comparator':
+                return $this->getComparatorRegister();
+            case 'condition':
+                return $this->getConditionRegister();
+            case 'term':
+                return $this->getTermRegister();
+            case 'type':
+                return $this->getTypeRegister();
+        }
+        return null;
+    }
 }

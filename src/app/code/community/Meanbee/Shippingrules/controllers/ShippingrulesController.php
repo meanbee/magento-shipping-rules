@@ -149,14 +149,38 @@ class Meanbee_Shippingrules_ShippingrulesController
         });
     }
 
-    public function productAttributesAction()
+    public function ajaxAction()
     {
-        $registers = new Meanbee_Shippingrules_Calculator_Registers;
-        $attributes = $registers->getConditionRegister()->get('product_subselection')->getAttributes();
-        $this->getResponse()->setHeader('Content-type', 'application/json');
-        $this->getResponse()->setBody(json_encode($attributes, true));
-    }
+        $request = $this->getRequest();
+        
+        $module = $request->getModuleName();
+        $controller = $request->getControllerName();
+        $action = $request->getActionName();
+        $parameterStr = rtrim(preg_replace("~^/$module/$controller/$action/~", '', $request->getPathInfo()), '/');
+        $parameters = explode('/', $parameterStr);
+        $arguments = array_slice($parameters, 3);
 
+        $registers = new Meanbee_Shippingrules_Calculator_Registers;
+        if (($register = $registers->getRegister($parameters[0]))) {
+            if (($registerItem = $register->get($parameters[1]))) {
+                if (in_array('ajax'.ucfirst($parameters[2]), get_class_methods($registerItem))) {
+                    $result = call_user_func(array($registerItem, 'ajax'.ucfirst($parameters[2])), ...$arguments);
+                } else {
+                    $result = array('error' => true, 'type' => 400, 'message' => "Ajax method, `{$parameters[2]}` does not exist.");
+                }
+            } else {
+                $result = array('error' => true, 'type' => 400, 'message' => "Register item, `{$parameters[1]}` does not exist.");
+            }
+        } else {
+            $result = array('error' => true, 'type' => 400, 'message' => "Register, `{$parameters[0]}` does not exist.");
+        }
+        if ($result['error']) {
+            $this->getResponse()->setHttpResponseCode($result['type'] ?: 500);
+        }
+        $this->getResponse()->setHeader('Content-type', 'application/json');
+        $this->getResponse()->setBody(json_encode($result));
+    }
+    
     protected function _massAction($infinitive, $past, $present, $callback)
     {
         if ($this->getRequest()->isPost()) {

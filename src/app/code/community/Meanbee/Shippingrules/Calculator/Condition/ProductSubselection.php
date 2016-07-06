@@ -32,12 +32,12 @@ class Meanbee_Shippingrules_Calculator_Condition_ProductSubselection
      * @return array[] Variable descriptors.
      */
     public function getVariables() {
-        return array_merge($this->getAttributes(), array(
+        return array_merge($this->ajaxAttributes(), array(
             'product_subselection' => array('label' => 'Product Subselection', 'type' => array('number'))
         ));
     }
 
-    public function getAttributes() {
+    public function ajaxAttributes() {
         $attributes = array(
             'qty' => array('label' => 'Quantity in Cart', 'type' => array('number')),
             'price' => array('label' => 'Price in Cart', type => array('number'))

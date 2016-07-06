@@ -63,8 +63,7 @@ class Meanbee_Shippingrules_Calculator_Condition_Destination_PostalCode
 
     private function evaluatePostalCode(&$request)
     {
-        $postalCodeFormatsPath = implode(DIRECTORY_SEPARATOR, array($_SERVER['DOCUMENT_ROOT'],'js','lib','Meanbee','ShippingRulesLibrary','data','postal_code_formats.json'));
-        $postalCodeFormats = json_decode(file_get_contents($postalCodeFormatsPath), true);
+        $postalCodeFormats = $this->ajaxFormats();
         $formatData = array_filter($postalCodeFormats, array($this, 'filterPostalCodeFormatData'));
         foreach ($formatData as $format) {
             $matches = array();
@@ -87,6 +86,12 @@ class Meanbee_Shippingrules_Calculator_Condition_Destination_PostalCode
     private function filterPostalCodeFormatData($format)
     {
         return isset($format['value']) && ($format['value'] === $this->getValue());
+    }
+
+    public function ajaxFormats()
+    {
+        $postalCodeFormatsPath = implode(DIRECTORY_SEPARATOR, array($_SERVER['DOCUMENT_ROOT'],'js','lib','Meanbee','ShippingRulesLibrary','data','postal_code_formats.json'));
+        return json_decode(file_get_contents($postalCodeFormatsPath), true);
     }
 
     /**

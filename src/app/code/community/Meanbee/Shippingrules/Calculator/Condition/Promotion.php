@@ -9,9 +9,9 @@ class Meanbee_Shippingrules_Calculator_Condition_Promotion
      */
     public function getVariables() {
         return array(
-            'free_shipping'                  => array('label' => 'Free Shipping',            'type' => array('boolean')),
-            'promo_coupon_code'              => array('label' => 'Coupon Code',              'type' => array('enumerated', 'string'), 'options' => array()),
-            'promo_applied_cart_price_rules' => array('label' => 'Applied Cart Price Rules', 'type' => array('enumerated'), 'options' => array())
+            'promo_free_shipping'    => array('label' => 'Free Shipping',            'type' => array('boolean')),
+            'promo_coupon_code'      => array('label' => 'Coupon Code',              'type' => array('enumerated', 'string')),
+            'promo_applied_rule_ids' => array('label' => 'Applied Cart Price Rules', 'type' => array('enumerated'))
         );
     }
 
@@ -53,5 +53,26 @@ class Meanbee_Shippingrules_Calculator_Condition_Promotion
         }, array());
         $allPriceRules = array_merge($quoteLevelPriceRules, $productLevelPriceRules);
         return array_filter(array_unique($allPriceRules));
+    }
+
+    public function ajaxOptions($variable) {
+        switch ($variable) {
+            case 'promo_coupon_code':
+                $options = array();
+                $cart_rules = Mage::getResourceModel('salesrule/rule_collection');
+                foreach ($cart_rules as $cart_rule) {
+                    if ($cart_rule->getCode()) {
+                        array_push($options, array('label' => $cart_rule->getName(), 'value' => $cart_rule->getCode()));
+                    }
+                }
+                return $options;
+            case 'promo_applied_rule_ids':
+                $options = array();
+                $cart_rules = Mage::getResourceModel('salesrule/rule_collection');
+                foreach ($cart_rules as $cart_rule) {
+                    array_push($options, array('label' => $cart_rule->getName(), 'value' => $cart_rule->getId()));
+                }
+                return $options;
+        }
     }
 }

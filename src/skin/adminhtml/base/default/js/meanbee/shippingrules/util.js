@@ -96,22 +96,29 @@ var Meanbee = Meanbee || {};
                 input.style.width = ShippingRules.util.fieldTextSize(text);
             });
         },
-        loadData: function (name) {
+        loadData: function (path) {
             if (!('data' in ShippingRules)) ShippingRules.data = {};
-            let url = name in ShippingRules.ajaxRoutes ? ShippingRules.ajaxRoutes[name] : ('/js/lib/Meanbee/ShippingRulesLibrary/data/' + name.replace(/([a-z])([A-Z])/g, (_,$1,$2) => `${$1}_${$2.toLowerCase()}`) + '.json');
+            if (ShippingRules.data[path]) return;
+            let url = ShippingRules.ajaxBasePath + path;
             let xhr = new XMLHttpRequest();
-            xhr.open('GET', url);
+            xhr.open('POST', url);
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4 && xhr.status === 200) {
-                    ShippingRules.data[name] = JSON.parse(xhr.responseText);
+                    ShippingRules.data[path] = JSON.parse(xhr.responseText);
                     if (ShippingRules.calculators)
                         Object.keys(ShippingRules.calculators).forEach(calcName => {
                             ShippingRules.calculators[calcName].refresh();
                             ShippingRules.calculators[calcName].rerender();
                         });
                 }
-            }
-            xhr.send();
+            };
+            let formData = new FormData();
+            formData.set('form_key', ShippingRules.formKey);
+            xhr.send(formData);
+        },
+        flatten: function flatten (arr) {
+            const flat = [].concat(...arr)
+            return flat.some(Array.isArray) ? flatten(flat) : flat;
         }
     };
 })(Meanbee.ShippingRules);

@@ -1,28 +1,26 @@
 'use strict';
 (function (ShippingRules) {
-    ShippingRules.Comparator.LessThan = class extends ShippingRules.Comparator
+    ShippingRules.Comparator.NotEqual = class extends ShippingRules.Comparator
     {
         constructor(type) {
             super(type);
         }
 
         static supportedTypes() {
-            return ['number', 'currency', 'numeric_b10', 'numeric_b26', 'numeric_b36', 'date', 'time', 'datetime'];
+            return ['number', 'currency', 'numeric_b10', 'numeric_b26', 'numeric_b36', 'string', 'enum', 'date', 'time', 'datetime'];
         }
 
         static name(type) {
             type = type.filter((t => ~this.supportedTypes().indexOf(t)).bind(this));
             switch (type[0]) {
+            case 'currency':
+            case 'number':
             case 'numeric_b10':
             case 'numeric_b26':
             case 'numeric_b36':
-                return 'PRECEEDS';
-            case 'date':
-            case 'time':
-            case 'datetime':
-                return 'IS BEFORE';
+                return 'DOESN\'T EQUAL';
             default:
-                return 'IS LESS THAN';
+                return 'IS NOT';
             }
         }
         
@@ -37,6 +35,8 @@
                 return 'NumberBase26';
             case 'numeric_b36':
                 return 'NumberBase36';
+            case 'enum':
+                return 'Select';
             default:
                 return 'Text';
             }
@@ -44,10 +44,10 @@
 
         toJSON() {
             let obj = super.toJSON();
-            obj.key = 'LessThan';
+            obj.key = 'NotEqual';
             return obj;
         }
     }
 
-    ShippingRules.Register.comparator.add('LessThan', ShippingRules.Comparator.LessThan);
+    ShippingRules.Register.comparator.add('NotEqual', ShippingRules.Comparator.NotEqual);
 })(Meanbee.ShippingRules);

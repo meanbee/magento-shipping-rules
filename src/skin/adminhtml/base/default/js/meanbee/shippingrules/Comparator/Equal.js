@@ -7,14 +7,14 @@
         }
 
         static supportedTypes() {
-            return ['number', 'currency', 'numeric_b10', 'numeric_b26', 'numeric_b36', 'string', 'enum', 'date', 'time', 'datetime'];
+            return ['number', 'currency', 'numeric_b10', 'numeric_b26', 'numeric_b36', 'string', 'enum', 'date', 'time', 'datetime', 'boolean'];
         }
 
         static name(type) {
             type = type.filter((t => ~this.supportedTypes().indexOf(t)).bind(this));
             switch (type[0]) {
-            case 'number':
             case 'currency':
+            case 'number':
             case 'numeric_b10':
             case 'numeric_b26':
             case 'numeric_b36':
@@ -27,6 +27,7 @@
         getField() {
             let type = this.type.filter((t => ~this.constructor.supportedTypes().indexOf(t)).bind(this));
             switch (type[0]) {
+            case 'currency':
             case 'number':
             case 'numeric_b10':
                 return 'Number';
@@ -34,6 +35,10 @@
                 return 'NumberBase26';
             case 'numeric_b36':
                 return 'NumberBase36';
+            case 'enum':
+                return 'Select';
+            case 'boolean':
+                return 'Boolean';
             default:
                 return 'Text';
             }
