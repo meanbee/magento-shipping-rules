@@ -21,7 +21,7 @@ class Meanbee_Shippingrules_Calculator_Condition_Customer
      */
     public function addVariablesToRequest($request)
     {
-        $request->setData('customer_group', $this->getCustomerGroupId());
+        $request->setData('customer_group', $this->getCustomerGroupId($request));
         
         return $request;
     }
@@ -30,12 +30,11 @@ class Meanbee_Shippingrules_Calculator_Condition_Customer
      * Gets the ID of the customer group to which the current customer belongs.
      * @return int
      */
-    protected function getCustomerGroupId() {
-        if (Mage::getSingleton('adminhtml/session_quote')->getCustomer()->hasData()) {
-            return +Mage::getSingleton('adminhtml/session_quote')->getCustomer()->getGroupId();
-        }
-        if (Mage::helper('customer')->getCustomer()->hasData()) {
-            return +Mage::helper('customer')->getCustomer()->getGroupId();
+    protected function getCustomerGroupId($request) {
+        $requestItems = $request->getAllItems();
+        if (count($requestItems) > 0) {
+            $quote = $requestItems[0]->getQuote();
+            return +$quote->getCustomerGroupId();
         }
         return +Mage_Customer_Model_Group::NOT_LOGGED_IN_ID;
     }

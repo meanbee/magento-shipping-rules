@@ -22,7 +22,7 @@ class Meanbee_Shippingrules_Calculator_Condition_Environment
      * @return Mage_Shipping_Model_Rate_Request
      */
     public function addVariablesToRequest($request) {
-        $request->setData('is_admin_order', $this->getIsAdminOrder());
+        $request->setData('is_admin_order', $this->getIsAdminOrder($request));
 
         return $request;
     }
@@ -31,8 +31,13 @@ class Meanbee_Shippingrules_Calculator_Condition_Environment
      * Gets whether or not the order has been made by an administrator.
      * @return boolean
      */
-    protected function getIsAdminOrder() {
-        return Mage::getSingleton('adminhtml/session_quote')->hasData('quote_id');
+    protected function getIsAdminOrder($request) {
+        $requestItems = $request->getAllItems();
+        if (count($requestItems) > 0) {
+            $quote = $requestItems[0]->getQuote();
+            return !!$quote->getIsSuperMode();
+        }
+        return false;
     }
 
     public function ajaxOptions($variable) {

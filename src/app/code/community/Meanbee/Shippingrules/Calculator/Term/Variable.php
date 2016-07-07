@@ -63,9 +63,11 @@ class Meanbee_Shippingrules_Calculator_Term_Variable
     {
         $products = $this->getProducts() ?: $request->getAllItems();
         $sum = 0;
-        foreach ($products as $product) {
-            $sum += ($product->getProduct()->getData($this->getVariable()) ?: $product->getData($this->getVariable()))
-                  * ($this->getVariable() === 'qty' ? 1 : $product->getQty());
+        if (!empty($products)) {
+            foreach ($products as $product) {
+                $sum += ($product->getProduct()->getData($this->getVariable()) ?: $product->getData($this->getVariable()))
+                      * ($this->getVariable() === 'qty' ? 1 : $product->getQty());
+            }
         }
         return $sum;
     }

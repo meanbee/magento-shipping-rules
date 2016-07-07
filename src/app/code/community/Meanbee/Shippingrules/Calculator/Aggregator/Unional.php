@@ -55,10 +55,12 @@ class Meanbee_Shippingrules_Calculator_Aggregator_Unional
     {
         $result = array();
         $products = $request->getAllItems();
-        foreach ($products as $product) {
-            $request->setData('current_item', $product);
-            if ($this->evaluateOverProduct($request)) {
-                $result[] = $product;
+        if (!empty($products)) {
+            foreach ($products as $product) {
+                $request->setData('current_item', $product);
+                if ($this->evaluateOverProduct($request)) {
+                    $result[] = $product;
+                }
             }
         }
         return $result;

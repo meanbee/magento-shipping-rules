@@ -20,7 +20,7 @@ class Meanbee_Shippingrules_Model_Carrier
             ->setOrder('display_sort_order', Varien_Data_Collection::SORT_ORDER_ASC);
 
         foreach ($ruleCollection as $rule) {
-            /** @var Meanbee_Shippingrules_Model_Rule */
+            /** @var Meanbee_Shippingrules_Model_Rule $rule */
             $methods[$rule->getId()] = $rule->getName();
         }
         return $methods;

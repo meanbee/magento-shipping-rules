@@ -40,7 +40,7 @@ class Meanbee_Shippingrules_Calculator_Condition_ProductSubselection
     public function ajaxAttributes() {
         $attributes = array(
             'qty' => array('label' => 'Quantity in Cart', 'type' => array('number')),
-            'price' => array('label' => 'Price in Cart', type => array('number'))
+            'price' => array('label' => 'Price in Cart', 'type' => array('number'))
         );
         $productAttributes = Mage::getResourceSingleton('catalog/product')
             ->loadAllAttributes()
