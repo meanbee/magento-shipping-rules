@@ -49,7 +49,7 @@
 
         render() {
             let me = this;
-            return (<li id={me.id} tabIndex={0} onCopy={me.copyText}>
+            return (<li id={me.id} tabIndex={0} onCopy={me.copyText} draggable="true" onDragStart={me.drag.bind(me)} onDragOver={me.allowDrop.bind(me)} onDrop={me.drop.bind(me)} onDragEnter={me.dragIn.bind(me)} onDragLeave={me.dragOut.bind(me)}>
                 {me.label || ' '}
                 {me.renderComparator()}
                 {me.valueField.render ? me.valueField.render() : []}

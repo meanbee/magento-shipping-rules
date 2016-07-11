@@ -40,7 +40,7 @@
 
         render() {
             let me = this;
-            return (<li id={me.id} onKeyDown={me.keyHandler.bind(me)} tabIndex={0}>
+            return (<li id={me.id} onKeyDown={me.keyHandler.bind(me)} tabIndex={0} draggable="true" onDragStart={me.drag.bind(me)} onDragOver={me.allowDrop.bind(me)} onDrop={me.drop.bind(me)} onDragEnter={me.dragIn.bind(me)} onDragLeave={me.dragOut.bind(me)}>
                 Sum of {me.renderAttributeSelector()} ✕ {me.renderValue()} for a subselection of items in cart where {me.aggregator.renderCombinator()} of these conditions are {me.aggregator.renderValue()}: {me.renderRemoveButton()}
                 {me.aggregator.renderChildren()}
             </li>);

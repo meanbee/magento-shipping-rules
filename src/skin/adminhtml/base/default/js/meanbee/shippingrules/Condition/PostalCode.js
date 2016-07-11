@@ -78,7 +78,8 @@
             if (this.parent.context instanceof this.constructor) return super.render();
             let me = this;
             if (!(ShippingRules.data && ShippingRules.data['condition/destination_postalcode/formats'])) return (<li id={me.id}>Loading...</li>);
-            let item = (<li id={me.id} onKeyUp={me.keyhandler.bind(me)} onCopy={me.copyText} tabIndex={0}>
+            let item = (<li id={me.id} onKeyUp={me.keyHandler.bind(me)} onCopy={me.copyText} tabIndex={0} draggable="true"
+                onDragStart={me.drag.bind(me)} onDragOver={me.allowDrop.bind(me)} onDrop={me.drop.bind(me)} onDragEnter={me.dragIn.bind(me)} onDragLeave={me.dragOut.bind(me)}>
                 {me.label} matches the format of
                 <span class="popper-target">
                     {me.renderFormatDecoration()}

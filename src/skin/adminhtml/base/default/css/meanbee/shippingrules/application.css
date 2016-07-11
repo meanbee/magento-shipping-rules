@@ -177,9 +177,14 @@ ul.calculator-tree input[type="time"]::-webkit-clear-button {
 }
 ul.calculator-tree {
   border: none;
+  cursor: default;
   list-style: none;
   margin-right: 0.5em;
   padding: 0 !important;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
 }
 ul.calculator-tree > li {
   border: none;
@@ -214,6 +219,12 @@ ul.calculator-tree > li li.deleting {
 ul.calculator-tree ul {
   border: none;
   padding-left: 0 !important;
+}
+ul.calculator-tree li {
+  border-bottom: solid 2px transparent;
+}
+ul.calculator-tree li .drop-target {
+  border-bottom-color: #00f;
 }
 
 /*# sourceMappingURL=application.css.map */

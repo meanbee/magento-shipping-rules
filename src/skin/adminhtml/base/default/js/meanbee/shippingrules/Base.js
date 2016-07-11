@@ -85,9 +85,9 @@
             if (this.parent) {
                 document.getElementById(this.id).className += 'deleting';
                 this.parent.removeChildByIndex(this.index);
-                this.focus(this.id);
+                if (navDir > 0) this.focus(this.id);
                 let target;
-                if ((target = this.parent.children[this.index - 1]) && !navDir) {
+                if ((target = this.parent.children[this.index - 1]) && navDir < 0) {
                     this.focus(target.id);
                 }
                 this.root.updateJSON();
@@ -166,7 +166,7 @@
                 case 189: // Dash
                     if (event.target.tagName === 'LI') {
                         event.preventDefault();
-                        this.root.getObjectById(event.target.id).delete(event.keyCode !== 8); // Backspace
+                        this.root.getObjectById(event.target.id).delete(event.keyCode === 8 ? -1 : +1); // Backspace
                     }
                     break;
                 case 67: // C
@@ -189,7 +189,7 @@
                         event.preventDefault();
                         if (event.target.tagName === 'LI') {
                             ShippingRules.clipboard.copy(this.root.getObjectById(event.target.id));
-                            this.root.getObjectById(event.target.id).delete();
+                            this.root.getObjectById(event.target.id).delete(+1);
                         }
                     }
                     break;
@@ -214,19 +214,77 @@
         }
 
         copyText(event) {
-            let text = Array.from(this.childNodes).map(function naturalise(node) {
+            event.clipboardData.setData('text/html', this.toText(event.target, 'rich'));
+            event.preventDefault();
+        }
+
+        toText(target, format) {
+            let text = Array.from(target.childNodes).map(function naturalise(node) {
                 if (node instanceof Text) return node.data.trim();
                 if (node instanceof HTMLSelectElement) {
                     if (node.id.endsWith('-childselector')) return [];
                     return node.selectedOptions[0].innerText;
                 }
                 if (node instanceof HTMLInputElement) return node.value;
-                if (node instanceof HTMLUListElement) return '<ul>' + ShippingRules.util.flatten(Array.from(node.childNodes).map(naturalise)).join(' ') + '</ul>';
-                if (node instanceof HTMLLIElement) return '<li>' + ShippingRules.util.flatten(Array.from(node.childNodes).map(naturalise)).join(' ') + '</li>';
+                if (node instanceof HTMLUListElement) return (format === 'rich' ? '<ul>' : '') + ShippingRules.util.flatten(Array.from(node.childNodes).map(naturalise)).join(' ') + (format === 'rich' ? '</ul>' : '');
+                if (node instanceof HTMLLIElement) return (format === 'rich' ? '<li>' : '\n\t') + ShippingRules.util.flatten(Array.from(node.childNodes).map(naturalise)).join(' ') + (format === 'rich' ? '</li>' : '');
                 return ShippingRules.util.flatten(Array.from(node.childNodes).map(naturalise));
             }).join(' ').replace(/<li><\/li>/g,'').replace(/>\s</g,'><').replace(/<ul><\/ul>/g,'');
-            event.clipboardData.setData('text/html', text);
+            return text;
+        }
+
+        drag(event) {
+            event.effectAllowed = 'copyMove';
+            event.dataTransfer.setData('calculator', this.root.id);
+            event.dataTransfer.setData('descriptor', JSON.stringify(this));
+            event.dataTransfer.setData('id', this.id);
+            event.dataTransfer.items.add(this.toText(event.target, 'plain'), 'text/plain');
+            event.dataTransfer.items.add(this.toText(event.target, 'rich'), 'text/html');
+            event.stopPropagation();
+        }
+
+        drop(event) {
             event.preventDefault();
+            let index = 0, parent;
+            if (this.children) {
+                parent = this;
+            } else if (this.aggregator) {
+                parent = this.aggregator;
+            } else if (this.term && this.term.aggregator) {
+                parent = this.term.aggregator;
+            } else {
+                parent = this.parent;
+                index = this.index + 1;
+            }
+            let origin = ShippingRules.calculators[event.dataTransfer.getData('calculator')].getObjectById(event.dataTransfer.getData('id'));
+            let childDesc = JSON.parse(event.dataTransfer.getData('descriptor'));
+            let child = parent.addChild(ShippingRules.Register[childDesc.register.toLowerCase()].get(childDesc.key), index);
+            child.init(childDesc);
+            if (!(event.metaKey || event.ctrlKey || event.altKey || event.shiftKey || event.dataTransfer.effectAllowed === 'copy')) {
+                origin.delete(0);
+            }
+            this.focus(child.id);
+            this.root.rerender();
+            ShippingRules.history.pushState();
+            event.stopPropagation();
+        }
+
+        allowDrop(event) {
+            event.preventDefault();
+            if (event.metaKey || event.ctrlKey || event.altKey || event.shiftKey) {
+                event.dataTransfer.dropEffect = 'copy';
+            } else {
+                event.dataTransfer.dropEffect = 'move';
+            }
+        }
+
+        dragIn (event) {
+            event.target.classList.add('drop-target');
+            event.stopPropagation();
+        }
+
+        dragOut (event) {
+            event.target.classList.remove('drop-target');
         }
     }
 })(Meanbee.ShippingRules);

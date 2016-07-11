@@ -1284,9 +1284,10 @@ function _classCallCheck(instance, Constructor) {
                     if (this.parent) {
                         document.getElementById(this.id).className += 'deleting';
                         this.parent.removeChildByIndex(this.index);
-                        this.focus(this.id);
+                        if (navDir > 0)
+                            this.focus(this.id);
                         var target = undefined;
-                        if ((target = this.parent.children[this.index - 1]) && !navDir) {
+                        if ((target = this.parent.children[this.index - 1]) && navDir < 0) {
                             this.focus(target.id);
                         }
                         this.root.updateJSON();
@@ -1381,7 +1382,7 @@ function _classCallCheck(instance, Constructor) {
                         case 189:
                             if (event.target.tagName === 'LI') {
                                 event.preventDefault();
-                                this.root.getObjectById(event.target.id).delete(event.keyCode !== 8);
+                                this.root.getObjectById(event.target.id).delete(event.keyCode === 8 ? -1 : +1);
                             }
                             break;
                         case 67:
@@ -1404,7 +1405,7 @@ function _classCallCheck(instance, Constructor) {
                                 event.preventDefault();
                                 if (event.target.tagName === 'LI') {
                                     ShippingRules.clipboard.copy(this.root.getObjectById(event.target.id));
-                                    this.root.getObjectById(event.target.id).delete();
+                                    this.root.getObjectById(event.target.id).delete(+1);
                                 }
                             }
                             break;
@@ -1431,7 +1432,14 @@ function _classCallCheck(instance, Constructor) {
             {
                 key: 'copyText',
                 value: function copyText(event) {
-                    var text = Array.from(this.childNodes).map(function naturalise(node) {
+                    event.clipboardData.setData('text/html', this.toText(event.target, 'rich'));
+                    event.preventDefault();
+                }
+            },
+            {
+                key: 'toText',
+                value: function toText(target, format) {
+                    var text = Array.from(target.childNodes).map(function naturalise(node) {
                         if (node instanceof Text)
                             return node.data.trim();
                         if (node instanceof HTMLSelectElement) {
@@ -1442,13 +1450,76 @@ function _classCallCheck(instance, Constructor) {
                         if (node instanceof HTMLInputElement)
                             return node.value;
                         if (node instanceof HTMLUListElement)
-                            return '<ul>' + ShippingRules.util.flatten(Array.from(node.childNodes).map(naturalise)).join(' ') + '</ul>';
+                            return (format === 'rich' ? '<ul>' : '') + ShippingRules.util.flatten(Array.from(node.childNodes).map(naturalise)).join(' ') + (format === 'rich' ? '</ul>' : '');
                         if (node instanceof HTMLLIElement)
-                            return '<li>' + ShippingRules.util.flatten(Array.from(node.childNodes).map(naturalise)).join(' ') + '</li>';
+                            return (format === 'rich' ? '<li>' : '\n\t') + ShippingRules.util.flatten(Array.from(node.childNodes).map(naturalise)).join(' ') + (format === 'rich' ? '</li>' : '');
                         return ShippingRules.util.flatten(Array.from(node.childNodes).map(naturalise));
                     }).join(' ').replace(/<li><\/li>/g, '').replace(/>\s</g, '><').replace(/<ul><\/ul>/g, '');
-                    event.clipboardData.setData('text/html', text);
+                    return text;
+                }
+            },
+            {
+                key: 'drag',
+                value: function drag(event) {
+                    event.effectAllowed = 'copyMove';
+                    event.dataTransfer.setData('calculator', this.root.id);
+                    event.dataTransfer.setData('descriptor', JSON.stringify(this));
+                    event.dataTransfer.setData('id', this.id);
+                    event.dataTransfer.items.add(this.toText(event.target, 'plain'), 'text/plain');
+                    event.dataTransfer.items.add(this.toText(event.target, 'rich'), 'text/html');
+                    event.stopPropagation();
+                }
+            },
+            {
+                key: 'drop',
+                value: function drop(event) {
                     event.preventDefault();
+                    var index = 0, parent = undefined;
+                    if (this.children) {
+                        parent = this;
+                    } else if (this.aggregator) {
+                        parent = this.aggregator;
+                    } else if (this.term && this.term.aggregator) {
+                        parent = this.term.aggregator;
+                    } else {
+                        parent = this.parent;
+                        index = this.index + 1;
+                    }
+                    var origin = ShippingRules.calculators[event.dataTransfer.getData('calculator')].getObjectById(event.dataTransfer.getData('id'));
+                    var childDesc = JSON.parse(event.dataTransfer.getData('descriptor'));
+                    var child = parent.addChild(ShippingRules.Register[childDesc.register.toLowerCase()].get(childDesc.key), index);
+                    child.init(childDesc);
+                    if (!(event.metaKey || event.ctrlKey || event.altKey || event.shiftKey || event.dataTransfer.effectAllowed === 'copy')) {
+                        origin.delete(0);
+                    }
+                    this.focus(child.id);
+                    this.root.rerender();
+                    ShippingRules.history.pushState();
+                    event.stopPropagation();
+                }
+            },
+            {
+                key: 'allowDrop',
+                value: function allowDrop(event) {
+                    event.preventDefault();
+                    if (event.metaKey || event.ctrlKey || event.altKey || event.shiftKey) {
+                        event.dataTransfer.dropEffect = 'copy';
+                    } else {
+                        event.dataTransfer.dropEffect = 'move';
+                    }
+                }
+            },
+            {
+                key: 'dragIn',
+                value: function dragIn(event) {
+                    event.target.classList.add('drop-target');
+                    event.stopPropagation();
+                }
+            },
+            {
+                key: 'dragOut',
+                value: function dragOut(event) {
+                    event.target.classList.remove('drop-target');
                 }
             },
             {
@@ -1908,6 +1979,12 @@ function _inherits(subClass, superClass) {
                         $$q.addEventListener('keydown', me.keyHandler.bind(me));
                         $$q.addEventListener('copy', me.copyText);
                         $$q.setAttribute('tabIndex', 0);
+                        $$q.setAttribute('draggable', 'true');
+                        $$q.addEventListener('dragstart', me.drag.bind(me));
+                        $$q.addEventListener('dragover', me.allowDrop.bind(me));
+                        $$q.addEventListener('drop', me.drop.bind(me));
+                        $$q.addEventListener('dragenter', me.dragIn.bind(me));
+                        $$q.addEventListener('dragleave', me.dragOut.bind(me));
                         var $$r = document.createTextNode('\n                If ');
                         $$q.appendChild($$r);
                         $$q.appendChildren(me.renderCombinator());
@@ -2136,6 +2213,12 @@ function _inherits(subClass, superClass) {
                         $$i.addEventListener('keydown', me.keyHandler.bind(me));
                         $$i.addEventListener('copy', me.copyText);
                         $$i.setAttribute('tabIndex', 0);
+                        $$i.setAttribute('draggable', 'true');
+                        $$i.addEventListener('dragstart', me.drag.bind(me));
+                        $$i.addEventListener('dragover', me.allowDrop.bind(me));
+                        $$i.addEventListener('drop', me.drop.bind(me));
+                        $$i.addEventListener('dragenter', me.dragIn.bind(me));
+                        $$i.addEventListener('dragleave', me.dragOut.bind(me));
                         var $$j = document.createTextNode('\n                Sum of these values: ');
                         $$i.appendChild($$j);
                         $$i.appendChildren(me.renderRemoveButton());
@@ -2417,6 +2500,12 @@ function _inherits(subClass, superClass) {
                         $$q.addEventListener('keydown', me.keyHandler.bind(me));
                         $$q.addEventListener('copy', me.copyText);
                         $$q.setAttribute('tabIndex', 0);
+                        $$q.setAttribute('draggable', 'true');
+                        $$q.addEventListener('dragstart', me.drag.bind(me));
+                        $$q.addEventListener('dragover', me.allowDrop.bind(me));
+                        $$q.addEventListener('drop', me.drop.bind(me));
+                        $$q.addEventListener('dragenter', me.dragIn.bind(me));
+                        $$q.addEventListener('dragleave', me.dragOut.bind(me));
                         var $$r = document.createTextNode('\n                If ');
                         $$q.appendChild($$r);
                         $$q.appendChildren(me.renderCombinator());
@@ -2680,6 +2769,12 @@ function _inherits(subClass, superClass) {
                         $$b.addEventListener('keydown', me.keyHandler.bind(me));
                         $$b.addEventListener('copy', me.copyText);
                         $$b.setAttribute('tabIndex', 0);
+                        $$b.setAttribute('draggable', 'true');
+                        $$b.addEventListener('dragstart', me.drag.bind(me));
+                        $$b.addEventListener('dragover', me.allowDrop.bind(me));
+                        $$b.addEventListener('drop', me.drop.bind(me));
+                        $$b.addEventListener('dragenter', me.dragIn.bind(me));
+                        $$b.addEventListener('dragleave', me.dragOut.bind(me));
                         var $$c = document.createTextNode('\n                Constant value of ');
                         $$b.appendChild($$c);
                         $$b.appendChildren(me.renderValue());
@@ -3025,6 +3120,12 @@ function _inherits(subClass, superClass) {
                         $$i.setAttribute('id', me.id);
                         $$i.addEventListener('keydown', me.keyHandler.bind(me));
                         $$i.setAttribute('tabIndex', 0);
+                        $$i.setAttribute('draggable', 'true');
+                        $$i.addEventListener('dragstart', me.drag.bind(me));
+                        $$i.addEventListener('dragover', me.allowDrop.bind(me));
+                        $$i.addEventListener('drop', me.drop.bind(me));
+                        $$i.addEventListener('dragenter', me.dragIn.bind(me));
+                        $$i.addEventListener('dragleave', me.dragOut.bind(me));
                         var $$j = document.createTextNode('\n                Sum of ');
                         $$i.appendChild($$j);
                         $$i.appendChildren(me.renderAttributeSelector());
@@ -3203,6 +3304,12 @@ function _inherits(subClass, superClass) {
                         $$e.setAttribute('id', me.id);
                         $$e.setAttribute('tabIndex', 0);
                         $$e.addEventListener('copy', me.copyText);
+                        $$e.setAttribute('draggable', 'true');
+                        $$e.addEventListener('dragstart', me.drag.bind(me));
+                        $$e.addEventListener('dragover', me.allowDrop.bind(me));
+                        $$e.addEventListener('drop', me.drop.bind(me));
+                        $$e.addEventListener('dragenter', me.dragIn.bind(me));
+                        $$e.addEventListener('dragleave', me.dragOut.bind(me));
                         $$e.appendChildren(me.label || ' ');
                         $$e.appendChildren(me.renderComparator());
                         $$e.appendChildren(me.valueField.render ? me.valueField.render() : []);
@@ -3944,9 +4051,15 @@ function _inherits(subClass, superClass) {
                     var item = function () {
                         var $$q = document.createElement('li');
                         $$q.setAttribute('id', me.id);
-                        $$q.addEventListener('keyup', me.keyhandler.bind(me));
+                        $$q.addEventListener('keyup', me.keyHandler.bind(me));
                         $$q.addEventListener('copy', me.copyText);
                         $$q.setAttribute('tabIndex', 0);
+                        $$q.setAttribute('draggable', 'true');
+                        $$q.addEventListener('dragstart', me.drag.bind(me));
+                        $$q.addEventListener('dragover', me.allowDrop.bind(me));
+                        $$q.addEventListener('drop', me.drop.bind(me));
+                        $$q.addEventListener('dragenter', me.dragIn.bind(me));
+                        $$q.addEventListener('dragleave', me.dragOut.bind(me));
                         $$q.appendChildren(me.label);
                         var $$s = document.createTextNode(' matches the format of\n                ');
                         $$q.appendChild($$s);
@@ -4156,6 +4269,12 @@ function _inherits(subClass, superClass) {
                         $$a.addEventListener('keydown', me.keyHandler.bind(me));
                         $$a.addEventListener('copy', me.copyText);
                         $$a.setAttribute('tabIndex', 0);
+                        $$a.setAttribute('draggable', 'true');
+                        $$a.addEventListener('dragstart', me.drag.bind(me));
+                        $$a.addEventListener('dragover', me.allowDrop.bind(me));
+                        $$a.addEventListener('drop', me.drop.bind(me));
+                        $$a.addEventListener('dragenter', me.dragIn.bind(me));
+                        $$a.addEventListener('dragleave', me.dragOut.bind(me));
                         var $$b = document.createTextNode('\n                If sum of ');
                         $$a.appendChild($$b);
                         $$a.appendChildren(me.term.renderAttributeSelector());
