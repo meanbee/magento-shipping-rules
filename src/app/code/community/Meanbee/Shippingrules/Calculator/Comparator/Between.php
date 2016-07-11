@@ -24,19 +24,6 @@ class Meanbee_Shippingrules_Calculator_Comparator_Between
         $min = $validValue[0];
         $max = $validValue[1];
         $sanitizedVariableValue = $type->sanitizeVariableValue($variableValue);
-        Mage::log(
-            array(
-                $min,
-                $type->sanitizeValidValue($min),
-                $max,
-                $type->sanitizeValidValue($max),
-                $variableValue,
-                $sanitizedVariableValue
-            ),
-            Zend_Log::DEBUG,
-            'debug.log',
-            true
-        );
         return $type->sanitizeValidValue($min) <= $sanitizedVariableValue && $sanitizedVariableValue <= $type->sanitizeValidValue($max);
     }
 }
