@@ -10,7 +10,7 @@ class Meanbee_Shippingrules_Calculator_Type_NumberBase26
      */
     public function sanitizeValidValue($value)
     {
-        return (int) $this->alphaHexavigesimalToDecimal($value);
+        return $this->alphaHexavigesimalToDecimal($value);
     }
 
     /**
@@ -21,7 +21,7 @@ class Meanbee_Shippingrules_Calculator_Type_NumberBase26
      */
     public function sanitizeVariableValue($value)
     {
-        return (int) $this->alphaHexavigesimalToDecimal($value);
+        return $this->alphaHexavigesimalToDecimal($value);
     }
 
     protected function alphaHexavigesimalToHexavigesimal($alpha26)
@@ -36,9 +36,15 @@ class Meanbee_Shippingrules_Calculator_Type_NumberBase26
             'U' => 'K', 'V' => 'L', 'W' => 'M', 'X' => 'N',
             'Y' => 'O', 'Z' => 'P'
         );
-        $charArray = str_split($alpha26, 1);
+        $charArray = str_split($alpha26);
         $base26 = '';
-        foreach ($charArray as $char) $base26 .= $map[$char];
+        foreach ($charArray as $char) {
+            if (array_key_exists($char, $map)) {
+                $base26 .= $map[$char];
+            } else {
+                return NAN;
+            }
+        }
         return $base26;
     }
 
@@ -50,6 +56,9 @@ class Meanbee_Shippingrules_Calculator_Type_NumberBase26
 
     protected function alphaHexavigesimalToDecimal($alpha26) {
         $base26 = $this->alphaHexavigesimalToHexavigesimal($alpha26);
+        if (!is_string($base26)) {
+            return NAN;
+        }
         $base10 = $this->hexavigesimalToDecimal($base26);
         return $base10;
     }

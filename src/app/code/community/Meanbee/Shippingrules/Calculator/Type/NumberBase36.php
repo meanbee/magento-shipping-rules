@@ -10,7 +10,7 @@ class Meanbee_Shippingrules_Calculator_Type_NumberBase36
      */
     public function sanitizeValidValue($value)
     {
-        return (int) $this->hexatrigesimalToDecimal($value);
+        return $this->hexatrigesimalToDecimal($value);
     }
 
     /**
@@ -21,7 +21,7 @@ class Meanbee_Shippingrules_Calculator_Type_NumberBase36
      */
     public function sanitizeVariableValue($value)
     {
-        return (int) $this->hexatrigesimalToDecimal($value);
+        return $this->hexatrigesimalToDecimal($value);
     }
     
     protected function hexatrigesimalToDecimal($base36) {

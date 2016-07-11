@@ -24,7 +24,7 @@ abstract class Meanbee_Shippingrules_Calculator_Comparator_Abstract
      */
     public function addType($typeID)
     {
-        if (!$this->canHandleType($typeID)) {
+        if (!$this->canHandleType($typeID, false)) {
             array_push($this->types, $typeID);
         }
         return $this;
@@ -39,7 +39,7 @@ abstract class Meanbee_Shippingrules_Calculator_Comparator_Abstract
     public function removeType($typeID, $bidi = true)
     {
         if ($this->canHandleType($typeID, $bidi)) {
-            $this->types = array_diff($this->types, [$typeID]);
+            $this->types = array_diff($this->types, array($typeID));
             if ($bidi) {
                 $type = $this->registers->getTypeRegister()->get($typeID);
                 $comparatorID = $this->registers->getComparatorRegister()->find($this);
