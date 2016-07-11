@@ -14,8 +14,8 @@ abstract class Meanbee_Shippingrules_Calculator_Type_Abstract
      */
     public function addComparator($comparatorID)
     {
-        if (!$this->canBeHandledByComparator($comparatorID)) {
-            array_push($thi->comparators, $comparatorID);
+        if (!$this->canBeHandledByComparator($comparatorID, false)) {
+            array_push($this->comparators, $comparatorID);
         }
         return $this;
     }
