@@ -53,17 +53,17 @@ class Meanbee_Shippingrules_Calculator_Condition_Destination_PostalCode
     * @param Mage_Shipping_Model_Rate_Request $request
     * @return boolean
     */
-    public function evaluate($request)
+    public function evaluate($request, $formats = null)
     {
         if ($this->getVariable() === 'dest_postal_code') {
-            return $this->evaluatePostalCode($request) && $this->getAggregator()->evaluate($request);
+            return $this->evaluatePostalCode($request, $formats) && $this->getAggregator()->evaluate($request);
         }
-         return parent::evaluate($request);
+        return parent::evaluate($request);
     }
 
-    private function evaluatePostalCode(&$request)
+    private function evaluatePostalCode(&$request, $formats = null)
     {
-        $postalCodeFormats = $this->ajaxFormats();
+        $postalCodeFormats = $formats ?: $this->ajaxFormats();
         $formatData = array_filter($postalCodeFormats, array($this, 'filterPostalCodeFormatData'));
         foreach ($formatData as $format) {
             $matches = array();
@@ -77,7 +77,6 @@ class Meanbee_Shippingrules_Calculator_Condition_Destination_PostalCode
                 }
                 $request->setData($part ? 'dest_postal_code_part'.$part : 'dest_postal_code_full', $matches[$part]);
             }
-            Mage::log(json_encode($request->getData(), JSON_PRETTY_PRINT), Zend_Log::DEBUG, 'meanbee_shippingrules.log', true);
             return true;
         }
         return false;
