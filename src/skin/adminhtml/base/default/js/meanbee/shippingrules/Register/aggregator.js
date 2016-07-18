@@ -1,12 +1,12 @@
-'use strict';
-(function (ShippingRules) {
+import Register from '../Register';
+import Aggregator from '../Aggregator';
 
-    ShippingRules.Register.aggregator = new ShippingRules.Register;
-    ShippingRules.Register.aggregator.add = function (key, child) {
-        if (!this.has(key) && child.prototype instanceof ShippingRules.Aggregator) {
-            this.children[key] = child;
-        }
-        return this;
-    };
+let aggregatorRegister = new Register;
+aggregatorRegister.add = function (key, child) {
+    if (!this.has(key) && child.prototype instanceof Aggregator) {
+        this.children[key] = child;
+    }
+    return this;
+};
 
-})(Meanbee.ShippingRules);
+export default aggregatorRegister;

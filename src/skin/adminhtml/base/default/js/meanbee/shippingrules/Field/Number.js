@@ -1,15 +1,12 @@
-'use strict';
-(function (ShippingRules) {
-    ShippingRules.Field.Number = class extends ShippingRules.Field
-    {
-        render() {
-            let me = this;
-            return (<input type="number" id={`${me.idPrefix}-value`} value={me.value} onKeyUp={me.valueChangeHandler.bind(me)} onChange={(event) => {
-                me.valueChangeHandler(event);
-                ShippingRules.history.pushState();
-            }} />);
-        }
-    }
+import Field from '../Field';
 
-    ShippingRules.Register.field.add('Number', ShippingRules.Field.Number);
-})(Meanbee.ShippingRules);
+export default class Number extends Field
+{
+    render() {
+        let me = this;
+        return (<input type="number" id={`${me.idPrefix}-value`} value={me.value} onKeyUp={me.valueChangeHandler.bind(me)} onChange={(event) => {
+            me.valueChangeHandler(event);
+            Meanbee.ShippingRules.history.pushState();
+        }} />);
+    }
+}

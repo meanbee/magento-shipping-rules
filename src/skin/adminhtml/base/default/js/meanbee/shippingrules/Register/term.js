@@ -1,12 +1,12 @@
-'use strict';
-(function (ShippingRules) {
+import Register from '../Register';
+import Term from '../Term';
 
-    ShippingRules.Register.term = new ShippingRules.Register;
-    ShippingRules.Register.term.add = function (key, child) {
-        if (!this.has(key) && child.prototype instanceof ShippingRules.Term) {
-            this.children[key] = child;
-        }
-        return this;
-    };
+let termRegister = new Register;
+termRegister.add = function (key, child) {
+    if (!this.has(key) && child.prototype instanceof Term) {
+        this.children[key] = child;
+    }
+    return this;
+};
 
-})(Meanbee.ShippingRules);
+export default termRegister;

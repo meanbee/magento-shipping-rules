@@ -1,12 +1,12 @@
-'use strict';
-(function (ShippingRules) {
+import Register from '../Register';
+import Field from '../Field';
 
-    ShippingRules.Register.field = new ShippingRules.Register;
-    ShippingRules.Register.field.add = function (key, child) {
-        if (!this.has(key) && child.prototype instanceof ShippingRules.Field) {
-            this.children[key] = child;
-        }
-        return this;
-    };
+let fieldRegister = new Register;
+fieldRegister.add = function (key, child) {
+    if (!this.has(key) && child.prototype instanceof Field) {
+        this.children[key] = child;
+    }
+    return this;
+};
 
-})(Meanbee.ShippingRules);
+export default fieldRegister;

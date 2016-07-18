@@ -1,15 +1,12 @@
-'use strict';
-(function (ShippingRules) {
-    ShippingRules.Field.Text = class extends ShippingRules.Field
-    {
-        render() {
-            let me = this;
-            return (<input type="text" id={`${me.idPrefix}-value`} value={me.value} onKeyUp={me.valueChangeHandler.bind(me)} onChange={(event) => {
-                me.valueChangeHandler(event);
-                ShippingRules.history.pushState();
-            }} />);
-        }
-    }
+import Field from '../Field';
 
-    ShippingRules.Register.field.add('Text', ShippingRules.Field.Text);
-})(Meanbee.ShippingRules);
+export default class Text extends Field
+{
+    render() {
+        let me = this;
+        return (<input type="text" id={`${me.idPrefix}-value`} value={me.value} onKeyUp={me.valueChangeHandler.bind(me)} onChange={(event) => {
+            me.valueChangeHandler(event);
+            Meanbee.ShippingRules.history.pushState();
+        }} />);
+    }
+}

@@ -5,6 +5,7 @@
     },
     "extends": "eslint:recommended",
     "parserOptions": {
+        "sourceType": "module",
         "ecmaFeatures": {
             "jsx": true
         }
@@ -20,13 +21,13 @@
         "no-floating-decimal": 2,
         "no-nested-ternary": 2,
         "no-undefined": 2,
-        "quotes": [2, 'single'],
+        "quotes": [2, "single"],
         "radix": 2,
         "keyword-spacing": [2],
         "space-before-blocks": 2,
-        "spaced-comment": [2, "always", { exceptions: ["-"]}],
+        "spaced-comment": [2, "always", { "exceptions": ["-"]}],
         "strict": [2, "global"],
-        "valid-jsdoc": [2, { prefer: { "return": "returns"}}],
+        "valid-jsdoc": [2, { "prefer": { "return": "returns"}}],
         "wrap-iife": [2, "inside"]
     },
     "globals": {

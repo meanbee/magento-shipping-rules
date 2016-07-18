@@ -1,5 +1,4 @@
-'use strict';
-(function () {
+export default (function () {
     /* Prototype.js implements a polyfill for `Function.prototype.bind` that is
      * functionally incomplete without checking for a native implementation.
      * this polyfill takes prescedence over Prototype.js's fixing the broken native
