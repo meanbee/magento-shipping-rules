@@ -27,9 +27,15 @@ class Meanbee_Shippingrules_Calculator_Condition_Promotion
             $quote = $requestItems[0]->getQuote();
             if(null != $quote->getShippingAddress()) {
                 $request->setData('promo_free_shipping', $quote->getShippingAddress()->getFreeShipping());
+            } else {
+                $request->setData('promo_free_shipping', false);
             }
             $request->setData('promo_coupon_code', $quote->getCouponCode());
-            $request->setData('promo_applied_rule_ids', implode(',', $this->getAppliedCartPriceRules($requestItems)) ?: null);
+            $request->setData('promo_applied_rule_ids', implode(',', $this->getAppliedCartPriceRules($requestItems)) ?: '');
+        } else {
+            $request->setData('promo_free_shipping', false);
+            $request->setData('promo_coupon_code', false);
+            $request->setData('promo_applied_rule_ids', '');
         }
         return $request;
     }

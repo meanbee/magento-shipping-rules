@@ -45,12 +45,12 @@ class Meanbee_Shippingrules_Calculator_Condition_Destination
             if(null != $quote->getShippingAddress()) {
                 $street = $quote->getShippingAddress()->getData('street');
                 $street = explode("\n", $street, 2);
-                $street[0] = isset($street[0]) ? $street[0] : null;
-                $street[1] = isset($street[1]) ? $street[1] : null;
+                $street[0] = isset($street[0]) ? $street[0] : false;
+                $street[1] = isset($street[1]) ? $street[1] : false;
                 return $street;
             }
         }
-        return array(null, null);
+        return array(false, false);
     }
 
     /**
@@ -60,7 +60,7 @@ class Meanbee_Shippingrules_Calculator_Condition_Destination
      */
     protected function getCountryGroup($request) {
         $destination_country = $request->getDestCountryId();
-        $destination_country_group = null;
+        $destination_country_group = false;
         if (version_compare(Mage::getVersion(), '1.7', '>=') && Mage::helper('core')->isCountryInEU($destination_country)) {
             $destination_country_group = 'eu';
         }
