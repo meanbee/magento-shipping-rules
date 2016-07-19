@@ -3,13 +3,13 @@ let canvas = document.createElement('canvas');
 let ctx = canvas.getContext('2d');
 ctx.font = 'bold 10.8px sans-serif';
 
-export default {
-    toOptions: function (options, selected) {
+let util = {
+    toOptions: function toOptions(options, selected) {
         selected = Array.isArray(selected) ? selected : [selected];
         let html = [];
         options.forEach(function (option) {
             if ({}.toString.call(option.value) === '[object Array]') {
-                html.push(<optgroup label={option.label}>{Meanbee.ShippingRules.util.toOptions(option.value, selected)}</optgroup>);
+                html.push(<optgroup label={option.label}>{toOptions(option.value, selected)}</optgroup>);
             } else {
                 let optionElement = (() => (<option value={option.value}>{option.label}</option>))();
                 if (~selected.indexOf(option.value)) optionElement.selected = true;
@@ -51,12 +51,12 @@ export default {
             break;
         case 'x-multiselect':
             input = (() => (<select id={`${prefix}-value`} multiple="multiple">
-                {Meanbee.ShippingRules.util.toOptions(conditionField.options, condition.value)}
+                {util.toOptions(conditionField.options, condition.value)}
             </select>))();
             break;
         case 'select':
             input = (() => (<select id={`${prefix}-value`}>
-                {Meanbee.ShippingRules.util.toOptions(conditionField.options, condition.value)}
+                {util.toOptions(conditionField.options, condition.value)}
             </select>))();
             break;
         default:
@@ -86,11 +86,11 @@ export default {
     resizeFields: function () {
         [].forEach.call(document.querySelectorAll('.calculator-tree select:not([multiple])'), function (select) {
             let text = select.selectedOptions[0] ? select.selectedOptions[0].innerText : '';
-            select.style.width = Meanbee.ShippingRules.util.fieldTextSize(text);
+            select.style.width = util.fieldTextSize(text);
         });
         [].forEach.call(document.querySelectorAll('.calculator-tree input'), function (input) {
             let text = input.value || (input.type === 'time' ? '-------' : '---');
-            input.style.width = Meanbee.ShippingRules.util.fieldTextSize(text);
+            input.style.width = util.fieldTextSize(text);
         });
     },
     loadData: function (path) {
@@ -118,3 +118,5 @@ export default {
         return flat.some(Array.isArray) ? flatten(flat) : flat;
     }
 };
+
+export default util;

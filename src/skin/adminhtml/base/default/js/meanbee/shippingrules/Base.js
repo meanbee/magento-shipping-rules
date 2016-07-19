@@ -1,5 +1,6 @@
 import navigateTo from './navigation';
 import clipboard from './clipboard'
+import util from './util';
 
 export default class Base
 {
@@ -102,7 +103,7 @@ export default class Base
         let focussedElementId = document.activeElement.id;
         this.container.innerHTML = '';
         this.container.appendChild(this.render());
-        Meanbee.ShippingRules.util.resizeFields();
+        util.resizeFields();
         this.focus(focussedElementId);
         this.root.updateJSON();
     }
@@ -124,7 +125,7 @@ export default class Base
 
     renderRemoveButton() {
         if (this.parent instanceof Base) {
-            return Meanbee.ShippingRules.util.removeButton(this, this.delete.bind(this));
+            return util.removeButton(this, this.delete.bind(this));
         }
         return [];
     }
@@ -228,9 +229,9 @@ export default class Base
                 return node.selectedOptions[0].innerText;
             }
             if (node instanceof HTMLInputElement) return node.value;
-            if (node instanceof HTMLUListElement) return (format === 'rich' ? '<ul>' : '') + ShippingRules.util.flatten(Array.from(node.childNodes).map(naturalise)).join(' ') + (format === 'rich' ? '</ul>' : '');
-            if (node instanceof HTMLLIElement) return (format === 'rich' ? '<li>' : '\n\t') + ShippingRules.util.flatten(Array.from(node.childNodes).map(naturalise)).join(' ') + (format === 'rich' ? '</li>' : '');
-            return ShippingRules.util.flatten(Array.from(node.childNodes).map(naturalise));
+            if (node instanceof HTMLUListElement) return (format === 'rich' ? '<ul>' : '') + util.flatten(Array.from(node.childNodes).map(naturalise)).join(' ') + (format === 'rich' ? '</ul>' : '');
+            if (node instanceof HTMLLIElement) return (format === 'rich' ? '<li>' : '\n\t') + util.flatten(Array.from(node.childNodes).map(naturalise)).join(' ') + (format === 'rich' ? '</li>' : '');
+            return util.flatten(Array.from(node.childNodes).map(naturalise));
         }).join(' ').replace(/<li><\/li>/g,'').replace(/>\s</g,'><').replace(/<ul><\/ul>/g,'');
         return text;
     }
@@ -258,16 +259,16 @@ export default class Base
             parent = this.parent;
             index = this.index + 1;
         }
-        let origin = ShippingRules.calculators[event.dataTransfer.getData('calculator')].getObjectById(event.dataTransfer.getData('id'));
+        let origin = Meanbee.ShippingRules.calculators[event.dataTransfer.getData('calculator')].getObjectById(event.dataTransfer.getData('id'));
         let childDesc = JSON.parse(event.dataTransfer.getData('descriptor'));
-        let child = parent.addChild(ShippingRules.Register[childDesc.register.toLowerCase()].get(childDesc.key), index);
+        let child = parent.addChild(Meanbee.ShippingRules.registers[childDesc.register.toLowerCase()].get(childDesc.key), index);
         child.init(childDesc);
         if (!(event.metaKey || event.ctrlKey || event.altKey || event.shiftKey || event.dataTransfer.effectAllowed === 'copy')) {
             origin.delete(0);
         }
         this.focus(child.id);
         this.root.rerender();
-        ShippingRules.history.pushState();
+        Meanbee.ShippingRules.history.pushState();
         event.stopPropagation();
     }
 

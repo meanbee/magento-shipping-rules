@@ -1,6 +1,7 @@
 import Condition from '../Condition';
 import BooleanAggregator from '../Aggregator/Boolean';
 import Popper from 'popper.js';
+import util from '../util';
 
 export default class PostalCode extends Condition
 {
@@ -32,7 +33,7 @@ export default class PostalCode extends Condition
     }
 
     renderFormatDecoration() {
-        return Meanbee.ShippingRules.data['condition/destination_postalcode/formats'].filter(f => (f.value === this.format && Meanbee.ShippingRules.util.textWidth(f.decoration) < 2 * Meanbee.ShippingRules.util.textWidth('🇦'))).map(f => (<span>{f.decoration}</span>));
+        return Meanbee.ShippingRules.data['condition/destination_postalcode/formats'].filter(f => (f.value === this.format && util.textWidth(f.decoration) < 2 * util.textWidth('🇦'))).map(f => (<span>{f.decoration}</span>));
     }
 
     renderFormatSelector() {

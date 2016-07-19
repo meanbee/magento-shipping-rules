@@ -1,4 +1,5 @@
 import Field from '../Field';
+import util from '../util';
 
 export default class Select extends Field
 {
@@ -6,7 +7,7 @@ export default class Select extends Field
         super(condition, value);
         let conditionDescriptor = condition.toJSON();
         this.dataKey = `${conditionDescriptor.register.toLowerCase()}/${conditionDescriptor.key.toLowerCase()}/options/${condition.variable}`;
-        Meanbee.ShippingRules.util.loadData(this.dataKey);
+        util.loadData(this.dataKey);
     }
     render() {
         let me = this;

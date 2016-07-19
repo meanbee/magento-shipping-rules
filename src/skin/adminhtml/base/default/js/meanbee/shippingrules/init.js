@@ -4,7 +4,7 @@ import comparatorRegister from './Register/comparator';
 import conditionRegister from './Register/condition';
 import fieldRegister from './Register/field';
 import termRegister from './Register/term';
-import utilities from './util';
+import util from './util';
 import History from './History';
 
 import BooleanAggregator from './Aggregator/Boolean';
@@ -74,7 +74,6 @@ window.React = {
         field: fieldRegister,
         term: termRegister
     };
-    Meanbee.ShippingRules.util = utilities;
     Meanbee.ShippingRules.history = new History;
 
     Meanbee.ShippingRules.registers.aggregator.add(BooleanAggregator.CONJUNCTIVE, BooleanAggregator);
@@ -117,8 +116,8 @@ window.React = {
     Meanbee.ShippingRules.registers.term.add('Constant', ConstantTerm);
     Meanbee.ShippingRules.registers.term.add('Product_Subselection', ProductSubselectionTerm);
 
-    Meanbee.ShippingRules.util.loadData('condition/product_subselection/attributes');
-    Meanbee.ShippingRules.util.loadData('condition/destination_postalcode/formats');
+    util.loadData('condition/product_subselection/attributes');
+    util.loadData('condition/destination_postalcode/formats');
     
     document.addEventListener('DOMContentLoaded', function () {
         let priceField = document.getElementById('price');
@@ -151,12 +150,12 @@ window.React = {
         Meanbee.ShippingRules.history.pushState();
 
         function changeHandler (event) {
-            if (~['INPUT', 'SELECT'].indexOf(event.target.tagName)) Meanbee.ShippingRules.util.resizeFields();
+            if (~['INPUT', 'SELECT'].indexOf(event.target.tagName)) util.resizeFields();
         }
 
         document.body.addEventListener('change', changeHandler, false);
         document.body.addEventListener('keyup', changeHandler, false);
 
-        Meanbee.ShippingRules.util.resizeFields();
+        util.resizeFields();
     });
 })();

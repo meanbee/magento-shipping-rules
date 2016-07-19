@@ -59,23 +59,23 @@
 	
 	var _aggregator2 = _interopRequireDefault(_aggregator);
 	
-	var _comparator = __webpack_require__(9);
+	var _comparator = __webpack_require__(10);
 	
 	var _comparator2 = _interopRequireDefault(_comparator);
 	
-	var _condition = __webpack_require__(11);
+	var _condition = __webpack_require__(12);
 	
 	var _condition2 = _interopRequireDefault(_condition);
 	
-	var _field = __webpack_require__(13);
+	var _field = __webpack_require__(14);
 	
 	var _field2 = _interopRequireDefault(_field);
 	
-	var _term = __webpack_require__(15);
+	var _term = __webpack_require__(16);
 	
 	var _term2 = _interopRequireDefault(_term);
 	
-	var _util = __webpack_require__(17);
+	var _util = __webpack_require__(9);
 	
 	var _util2 = _interopRequireDefault(_util);
 	
@@ -251,7 +251,6 @@
 	        field: _field2.default,
 	        term: _term2.default
 	    };
-	    Meanbee.ShippingRules.util = _util2.default;
 	    Meanbee.ShippingRules.history = new _History2.default();
 	
 	    Meanbee.ShippingRules.registers.aggregator.add(_Boolean2.default.CONJUNCTIVE, _Boolean2.default);
@@ -294,8 +293,8 @@
 	    Meanbee.ShippingRules.registers.term.add('Constant', _Constant2.default);
 	    Meanbee.ShippingRules.registers.term.add('Product_Subselection', _ProductSubselection4.default);
 	
-	    Meanbee.ShippingRules.util.loadData('condition/product_subselection/attributes');
-	    Meanbee.ShippingRules.util.loadData('condition/destination_postalcode/formats');
+	    _util2.default.loadData('condition/product_subselection/attributes');
+	    _util2.default.loadData('condition/destination_postalcode/formats');
 	
 	    document.addEventListener('DOMContentLoaded', function () {
 	        var priceField = document.getElementById('price');
@@ -328,13 +327,13 @@
 	        Meanbee.ShippingRules.history.pushState();
 	
 	        function changeHandler(event) {
-	            if (~['INPUT', 'SELECT'].indexOf(event.target.tagName)) Meanbee.ShippingRules.util.resizeFields();
+	            if (~['INPUT', 'SELECT'].indexOf(event.target.tagName)) _util2.default.resizeFields();
 	        }
 	
 	        document.body.addEventListener('change', changeHandler, false);
 	        document.body.addEventListener('keyup', changeHandler, false);
 	
-	        Meanbee.ShippingRules.util.resizeFields();
+	        _util2.default.resizeFields();
 	    });
 	})();
 
@@ -657,6 +656,10 @@
 	
 	var _clipboard2 = _interopRequireDefault(_clipboard);
 	
+	var _util = __webpack_require__(9);
+	
+	var _util2 = _interopRequireDefault(_util);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -724,7 +727,7 @@
 	            var focussedElementId = document.activeElement.id;
 	            this.container.innerHTML = '';
 	            this.container.appendChild(this.render());
-	            Meanbee.ShippingRules.util.resizeFields();
+	            _util2.default.resizeFields();
 	            this.focus(focussedElementId);
 	            this.root.updateJSON();
 	        }
@@ -750,7 +753,7 @@
 	        key: 'renderRemoveButton',
 	        value: function renderRemoveButton() {
 	            if (this.parent instanceof Base) {
-	                return Meanbee.ShippingRules.util.removeButton(this, this.delete.bind(this));
+	                return _util2.default.removeButton(this, this.delete.bind(this));
 	            }
 	            return [];
 	        }
@@ -876,9 +879,9 @@
 	                    return node.selectedOptions[0].innerText;
 	                }
 	                if (node instanceof HTMLInputElement) return node.value;
-	                if (node instanceof HTMLUListElement) return (format === 'rich' ? '<ul>' : '') + ShippingRules.util.flatten(Array.from(node.childNodes).map(naturalise)).join(' ') + (format === 'rich' ? '</ul>' : '');
-	                if (node instanceof HTMLLIElement) return (format === 'rich' ? '<li>' : '\n\t') + ShippingRules.util.flatten(Array.from(node.childNodes).map(naturalise)).join(' ') + (format === 'rich' ? '</li>' : '');
-	                return ShippingRules.util.flatten(Array.from(node.childNodes).map(naturalise));
+	                if (node instanceof HTMLUListElement) return (format === 'rich' ? '<ul>' : '') + _util2.default.flatten(Array.from(node.childNodes).map(naturalise)).join(' ') + (format === 'rich' ? '</ul>' : '');
+	                if (node instanceof HTMLLIElement) return (format === 'rich' ? '<li>' : '\n\t') + _util2.default.flatten(Array.from(node.childNodes).map(naturalise)).join(' ') + (format === 'rich' ? '</li>' : '');
+	                return _util2.default.flatten(Array.from(node.childNodes).map(naturalise));
 	            }).join(' ').replace(/<li><\/li>/g, '').replace(/>\s</g, '><').replace(/<ul><\/ul>/g, '');
 	            return text;
 	        }
@@ -909,16 +912,16 @@
 	                parent = this.parent;
 	                index = this.index + 1;
 	            }
-	            var origin = ShippingRules.calculators[event.dataTransfer.getData('calculator')].getObjectById(event.dataTransfer.getData('id'));
+	            var origin = Meanbee.ShippingRules.calculators[event.dataTransfer.getData('calculator')].getObjectById(event.dataTransfer.getData('id'));
 	            var childDesc = JSON.parse(event.dataTransfer.getData('descriptor'));
-	            var child = parent.addChild(ShippingRules.Register[childDesc.register.toLowerCase()].get(childDesc.key), index);
+	            var child = parent.addChild(Meanbee.ShippingRules.registers[childDesc.register.toLowerCase()].get(childDesc.key), index);
 	            child.init(childDesc);
 	            if (!(event.metaKey || event.ctrlKey || event.altKey || event.shiftKey || event.dataTransfer.effectAllowed === 'copy')) {
 	                origin.delete(0);
 	            }
 	            this.focus(child.id);
 	            this.root.rerender();
-	            ShippingRules.history.pushState();
+	            Meanbee.ShippingRules.history.pushState();
 	            event.stopPropagation();
 	        }
 	    }, {
@@ -1121,6 +1124,170 @@
 
 /***/ },
 /* 9 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+	
+	var canvas = document.createElement('canvas');
+	var ctx = canvas.getContext('2d');
+	ctx.font = 'bold 10.8px sans-serif';
+	
+	var util = {
+	    toOptions: function toOptions(options, selected) {
+	        selected = Array.isArray(selected) ? selected : [selected];
+	        var html = [];
+	        options.forEach(function (option) {
+	            if ({}.toString.call(option.value) === '[object Array]') {
+	                html.push(React.createElement(
+	                    'optgroup',
+	                    { label: option.label },
+	                    toOptions(option.value, selected)
+	                ));
+	            } else {
+	                var optionElement = function () {
+	                    return React.createElement(
+	                        'option',
+	                        { value: option.value },
+	                        option.label
+	                    );
+	                }();
+	                if (~selected.indexOf(option.value)) optionElement.selected = true;
+	                if (option.inputType) optionElement.dataset.inputType = option.inputType;
+	                if (option.type) optionElement.dataset.type = option.type;
+	                html.push(optionElement);
+	            }
+	        });
+	        return html;
+	    },
+	    constructInputField: function constructInputField(condition) {
+	        var comparator = Meanbee.ShippingRules.ajax.getComparators(condition.attribute).filter(function (x) {
+	            return x.value === condition.comparator;
+	        })[0];
+	        var conditionField = Meanbee.ShippingRules.ajax.getConditionFieldByValue(condition.attribute);
+	        var prefix = condition.prefix + '-c' + condition.id;
+	        if (!comparator) {
+	            return React.createElement('input', { id: prefix + '-value' });
+	        }
+	        var input = null;
+	        switch (comparator.inputType) {
+	            case 'x-interval':
+	                input = function () {
+	                    return React.createElement(
+	                        'span',
+	                        { id: prefix + '-value' },
+	                        React.createElement('input', { id: prefix + '-value-min' }),
+	                        ' and ',
+	                        React.createElement('input', { id: prefix + '-value-max' })
+	                    );
+	                }();
+	                Object.defineProperty(input, 'value', {
+	                    enumerable: true,
+	                    get: function get() {
+	                        return [document.getElementById(input.id + '-min').value, document.getElementById(input.id + '-max').value];
+	                    },
+	                    set: function set(value) {
+	                        if (value) {
+	                            document.getElementById(input.id + '-min').value = value[0];
+	                            document.getElementById(input.id + '-max').value = value[1];
+	                        }
+	                    }
+	                });
+	                break;
+	            case 'x-multiselect':
+	                input = function () {
+	                    return React.createElement(
+	                        'select',
+	                        { id: prefix + '-value', multiple: 'multiple' },
+	                        util.toOptions(conditionField.options, condition.value)
+	                    );
+	                }();
+	                break;
+	            case 'select':
+	                input = function () {
+	                    return React.createElement(
+	                        'select',
+	                        { id: prefix + '-value' },
+	                        util.toOptions(conditionField.options, condition.value)
+	                    );
+	                }();
+	                break;
+	            default:
+	                input = function () {
+	                    return React.createElement('input', { id: prefix + '-value', type: comparator.inputType || 'text' });
+	                }();
+	                if (comparator.inputPattern) {
+	                    input.pattern = comparator.inputPattern;
+	                }
+	                break;
+	        }
+	        input.value = condition.value;
+	        input.addEventListener('keyup', function () {
+	            return condition.value = input.value;
+	        }, false);
+	        input.addEventListener('change', function () {
+	            return condition.value = input.value;
+	        }, false);
+	        return input;
+	    },
+	    addButton: function addButton(ctx, handler) {
+	        return React.createElement('button', { id: ctx.prefix + '-t' + ctx.id + '-add', type: 'button', 'class': 'add', onClick: handler });
+	    },
+	    removeButton: function removeButton(ctx, handler) {
+	        return React.createElement('button', { id: ctx.id + '-remove', 'aria-label': 'Remove', type: 'button', 'class': 'remove', onClick: handler });
+	    },
+	    fieldTextSize: function fieldTextSize(text) {
+	        return Math.floor(ctx.measureText(text).width) + 25 + 'px';
+	    },
+	    textWidth: function textWidth(text) {
+	        return ctx.measureText(text).width;
+	    },
+	    resizeFields: function resizeFields() {
+	        [].forEach.call(document.querySelectorAll('.calculator-tree select:not([multiple])'), function (select) {
+	            var text = select.selectedOptions[0] ? select.selectedOptions[0].innerText : '';
+	            select.style.width = util.fieldTextSize(text);
+	        });
+	        [].forEach.call(document.querySelectorAll('.calculator-tree input'), function (input) {
+	            var text = input.value || (input.type === 'time' ? '-------' : '---');
+	            input.style.width = util.fieldTextSize(text);
+	        });
+	    },
+	    loadData: function loadData(path) {
+	        if (!('data' in Meanbee.ShippingRules)) Meanbee.ShippingRules.data = {};
+	        if (Meanbee.ShippingRules.data[path]) return;
+	        var url = Meanbee.ShippingRules.ajaxBasePath + path;
+	        var xhr = new XMLHttpRequest();
+	        xhr.open('POST', url);
+	        xhr.onreadystatechange = function () {
+	            if (xhr.readyState === 4 && xhr.status === 200) {
+	                Meanbee.ShippingRules.data[path] = JSON.parse(xhr.responseText);
+	                if (Meanbee.ShippingRules.calculators) Object.keys(Meanbee.ShippingRules.calculators).forEach(function (calcName) {
+	                    Meanbee.ShippingRules.calculators[calcName].refresh();
+	                    Meanbee.ShippingRules.calculators[calcName].rerender();
+	                });
+	            }
+	        };
+	        var formData = new FormData();
+	        formData.set('form_key', Meanbee.ShippingRules.formKey);
+	        xhr.send(formData);
+	    },
+	    flatten: function flatten(arr) {
+	        var _ref;
+	
+	        var flat = (_ref = []).concat.apply(_ref, _toConsumableArray(arr));
+	        return flat.some(Array.isArray) ? flatten(flat) : flat;
+	    }
+	};
+	
+	exports.default = util;
+
+/***/ },
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1133,7 +1300,7 @@
 	
 	var _Register2 = _interopRequireDefault(_Register);
 	
-	var _Comparator = __webpack_require__(10);
+	var _Comparator = __webpack_require__(11);
 	
 	var _Comparator2 = _interopRequireDefault(_Comparator);
 	
@@ -1172,7 +1339,7 @@
 	exports.default = comparatorRegister;
 
 /***/ },
-/* 10 */
+/* 11 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1255,7 +1422,7 @@
 	exports.default = Comparator;
 
 /***/ },
-/* 11 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1268,7 +1435,7 @@
 	
 	var _Register2 = _interopRequireDefault(_Register);
 	
-	var _Condition = __webpack_require__(12);
+	var _Condition = __webpack_require__(13);
 	
 	var _Condition2 = _interopRequireDefault(_Condition);
 	
@@ -1313,7 +1480,7 @@
 	exports.default = conditionRegister;
 
 /***/ },
-/* 12 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1450,7 +1617,7 @@
 	exports.default = Condition;
 
 /***/ },
-/* 13 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1463,7 +1630,7 @@
 	
 	var _Register2 = _interopRequireDefault(_Register);
 	
-	var _Field = __webpack_require__(14);
+	var _Field = __webpack_require__(15);
 	
 	var _Field2 = _interopRequireDefault(_Field);
 	
@@ -1480,7 +1647,7 @@
 	exports.default = fieldRegister;
 
 /***/ },
-/* 14 */
+/* 15 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -1516,7 +1683,7 @@
 	exports.default = Field;
 
 /***/ },
-/* 15 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1529,7 +1696,7 @@
 	
 	var _Register2 = _interopRequireDefault(_Register);
 	
-	var _Term = __webpack_require__(16);
+	var _Term = __webpack_require__(17);
 	
 	var _Term2 = _interopRequireDefault(_Term);
 	
@@ -1546,7 +1713,7 @@
 	exports.default = termRegister;
 
 /***/ },
-/* 16 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1614,168 +1781,6 @@
 	}(_Base3.default);
 	
 	exports.default = Term;
-
-/***/ },
-/* 17 */
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	
-	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-	
-	var canvas = document.createElement('canvas');
-	var ctx = canvas.getContext('2d');
-	ctx.font = 'bold 10.8px sans-serif';
-	
-	exports.default = {
-	    toOptions: function toOptions(options, selected) {
-	        selected = Array.isArray(selected) ? selected : [selected];
-	        var html = [];
-	        options.forEach(function (option) {
-	            if ({}.toString.call(option.value) === '[object Array]') {
-	                html.push(React.createElement(
-	                    'optgroup',
-	                    { label: option.label },
-	                    Meanbee.ShippingRules.util.toOptions(option.value, selected)
-	                ));
-	            } else {
-	                var optionElement = function () {
-	                    return React.createElement(
-	                        'option',
-	                        { value: option.value },
-	                        option.label
-	                    );
-	                }();
-	                if (~selected.indexOf(option.value)) optionElement.selected = true;
-	                if (option.inputType) optionElement.dataset.inputType = option.inputType;
-	                if (option.type) optionElement.dataset.type = option.type;
-	                html.push(optionElement);
-	            }
-	        });
-	        return html;
-	    },
-	    constructInputField: function constructInputField(condition) {
-	        var comparator = Meanbee.ShippingRules.ajax.getComparators(condition.attribute).filter(function (x) {
-	            return x.value === condition.comparator;
-	        })[0];
-	        var conditionField = Meanbee.ShippingRules.ajax.getConditionFieldByValue(condition.attribute);
-	        var prefix = condition.prefix + '-c' + condition.id;
-	        if (!comparator) {
-	            return React.createElement('input', { id: prefix + '-value' });
-	        }
-	        var input = null;
-	        switch (comparator.inputType) {
-	            case 'x-interval':
-	                input = function () {
-	                    return React.createElement(
-	                        'span',
-	                        { id: prefix + '-value' },
-	                        React.createElement('input', { id: prefix + '-value-min' }),
-	                        ' and ',
-	                        React.createElement('input', { id: prefix + '-value-max' })
-	                    );
-	                }();
-	                Object.defineProperty(input, 'value', {
-	                    enumerable: true,
-	                    get: function get() {
-	                        return [document.getElementById(input.id + '-min').value, document.getElementById(input.id + '-max').value];
-	                    },
-	                    set: function set(value) {
-	                        if (value) {
-	                            document.getElementById(input.id + '-min').value = value[0];
-	                            document.getElementById(input.id + '-max').value = value[1];
-	                        }
-	                    }
-	                });
-	                break;
-	            case 'x-multiselect':
-	                input = function () {
-	                    return React.createElement(
-	                        'select',
-	                        { id: prefix + '-value', multiple: 'multiple' },
-	                        Meanbee.ShippingRules.util.toOptions(conditionField.options, condition.value)
-	                    );
-	                }();
-	                break;
-	            case 'select':
-	                input = function () {
-	                    return React.createElement(
-	                        'select',
-	                        { id: prefix + '-value' },
-	                        Meanbee.ShippingRules.util.toOptions(conditionField.options, condition.value)
-	                    );
-	                }();
-	                break;
-	            default:
-	                input = function () {
-	                    return React.createElement('input', { id: prefix + '-value', type: comparator.inputType || 'text' });
-	                }();
-	                if (comparator.inputPattern) {
-	                    input.pattern = comparator.inputPattern;
-	                }
-	                break;
-	        }
-	        input.value = condition.value;
-	        input.addEventListener('keyup', function () {
-	            return condition.value = input.value;
-	        }, false);
-	        input.addEventListener('change', function () {
-	            return condition.value = input.value;
-	        }, false);
-	        return input;
-	    },
-	    addButton: function addButton(ctx, handler) {
-	        return React.createElement('button', { id: ctx.prefix + '-t' + ctx.id + '-add', type: 'button', 'class': 'add', onClick: handler });
-	    },
-	    removeButton: function removeButton(ctx, handler) {
-	        return React.createElement('button', { id: ctx.id + '-remove', 'aria-label': 'Remove', type: 'button', 'class': 'remove', onClick: handler });
-	    },
-	    fieldTextSize: function fieldTextSize(text) {
-	        return Math.floor(ctx.measureText(text).width) + 25 + 'px';
-	    },
-	    textWidth: function textWidth(text) {
-	        return ctx.measureText(text).width;
-	    },
-	    resizeFields: function resizeFields() {
-	        [].forEach.call(document.querySelectorAll('.calculator-tree select:not([multiple])'), function (select) {
-	            var text = select.selectedOptions[0] ? select.selectedOptions[0].innerText : '';
-	            select.style.width = Meanbee.ShippingRules.util.fieldTextSize(text);
-	        });
-	        [].forEach.call(document.querySelectorAll('.calculator-tree input'), function (input) {
-	            var text = input.value || (input.type === 'time' ? '-------' : '---');
-	            input.style.width = Meanbee.ShippingRules.util.fieldTextSize(text);
-	        });
-	    },
-	    loadData: function loadData(path) {
-	        if (!('data' in Meanbee.ShippingRules)) Meanbee.ShippingRules.data = {};
-	        if (Meanbee.ShippingRules.data[path]) return;
-	        var url = Meanbee.ShippingRules.ajaxBasePath + path;
-	        var xhr = new XMLHttpRequest();
-	        xhr.open('POST', url);
-	        xhr.onreadystatechange = function () {
-	            if (xhr.readyState === 4 && xhr.status === 200) {
-	                Meanbee.ShippingRules.data[path] = JSON.parse(xhr.responseText);
-	                if (Meanbee.ShippingRules.calculators) Object.keys(Meanbee.ShippingRules.calculators).forEach(function (calcName) {
-	                    Meanbee.ShippingRules.calculators[calcName].refresh();
-	                    Meanbee.ShippingRules.calculators[calcName].rerender();
-	                });
-	            }
-	        };
-	        var formData = new FormData();
-	        formData.set('form_key', Meanbee.ShippingRules.formKey);
-	        xhr.send(formData);
-	    },
-	    flatten: function flatten(arr) {
-	        var _ref;
-	
-	        var flat = (_ref = []).concat.apply(_ref, _toConsumableArray(arr));
-	        return flat.some(Array.isArray) ? flatten(flat) : flat;
-	    }
-	};
 
 /***/ },
 /* 18 */
@@ -1864,7 +1869,7 @@
 	
 	var _Aggregator3 = _interopRequireDefault(_Aggregator2);
 	
-	var _Condition = __webpack_require__(12);
+	var _Condition = __webpack_require__(13);
 	
 	var _Condition2 = _interopRequireDefault(_Condition);
 	
@@ -2091,7 +2096,7 @@
 	
 	var _Aggregator3 = _interopRequireDefault(_Aggregator2);
 	
-	var _Term = __webpack_require__(16);
+	var _Term = __webpack_require__(17);
 	
 	var _Term2 = _interopRequireDefault(_Term);
 	
@@ -2241,7 +2246,7 @@
 	
 	var _Aggregator3 = _interopRequireDefault(_Aggregator2);
 	
-	var _Condition = __webpack_require__(12);
+	var _Condition = __webpack_require__(13);
 	
 	var _Condition2 = _interopRequireDefault(_Condition);
 	
@@ -2464,7 +2469,7 @@
 	    value: true
 	});
 	
-	var _Comparator2 = __webpack_require__(10);
+	var _Comparator2 = __webpack_require__(11);
 	
 	var _Comparator3 = _interopRequireDefault(_Comparator2);
 	
@@ -2554,7 +2559,7 @@
 	    value: true
 	});
 	
-	var _Comparator2 = __webpack_require__(10);
+	var _Comparator2 = __webpack_require__(11);
 	
 	var _Comparator3 = _interopRequireDefault(_Comparator2);
 	
@@ -2654,7 +2659,7 @@
 	    value: true
 	});
 	
-	var _Comparator2 = __webpack_require__(10);
+	var _Comparator2 = __webpack_require__(11);
 	
 	var _Comparator3 = _interopRequireDefault(_Comparator2);
 	
@@ -2752,7 +2757,7 @@
 	    value: true
 	});
 	
-	var _Comparator2 = __webpack_require__(10);
+	var _Comparator2 = __webpack_require__(11);
 	
 	var _Comparator3 = _interopRequireDefault(_Comparator2);
 	
@@ -2850,7 +2855,7 @@
 	    value: true
 	});
 	
-	var _Comparator2 = __webpack_require__(10);
+	var _Comparator2 = __webpack_require__(11);
 	
 	var _Comparator3 = _interopRequireDefault(_Comparator2);
 	
@@ -2948,7 +2953,7 @@
 	    value: true
 	});
 	
-	var _Comparator2 = __webpack_require__(10);
+	var _Comparator2 = __webpack_require__(11);
 	
 	var _Comparator3 = _interopRequireDefault(_Comparator2);
 	
@@ -3046,7 +3051,7 @@
 	    value: true
 	});
 	
-	var _Comparator2 = __webpack_require__(10);
+	var _Comparator2 = __webpack_require__(11);
 	
 	var _Comparator3 = _interopRequireDefault(_Comparator2);
 	
@@ -3144,7 +3149,7 @@
 	    value: true
 	});
 	
-	var _Condition2 = __webpack_require__(12);
+	var _Condition2 = __webpack_require__(13);
 	
 	var _Condition3 = _interopRequireDefault(_Condition2);
 	
@@ -3212,7 +3217,7 @@
 	    value: true
 	});
 	
-	var _Condition2 = __webpack_require__(12);
+	var _Condition2 = __webpack_require__(13);
 	
 	var _Condition3 = _interopRequireDefault(_Condition2);
 	
@@ -3276,7 +3281,7 @@
 	    value: true
 	});
 	
-	var _Condition2 = __webpack_require__(12);
+	var _Condition2 = __webpack_require__(13);
 	
 	var _Condition3 = _interopRequireDefault(_Condition2);
 	
@@ -3344,7 +3349,7 @@
 	    value: true
 	});
 	
-	var _Condition2 = __webpack_require__(12);
+	var _Condition2 = __webpack_require__(13);
 	
 	var _Condition3 = _interopRequireDefault(_Condition2);
 	
@@ -3412,7 +3417,7 @@
 	    value: true
 	});
 	
-	var _Condition2 = __webpack_require__(12);
+	var _Condition2 = __webpack_require__(13);
 	
 	var _Condition3 = _interopRequireDefault(_Condition2);
 	
@@ -3423,6 +3428,10 @@
 	var _popper = __webpack_require__(34);
 	
 	var _popper2 = _interopRequireDefault(_popper);
+	
+	var _util = __webpack_require__(9);
+	
+	var _util2 = _interopRequireDefault(_util);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -3452,7 +3461,7 @@
 	            var _this2 = this;
 	
 	            return Meanbee.ShippingRules.data['condition/destination_postalcode/formats'].filter(function (f) {
-	                return f.value === _this2.format && Meanbee.ShippingRules.util.textWidth(f.decoration) < 2 * Meanbee.ShippingRules.util.textWidth('🇦');
+	                return f.value === _this2.format && _util2.default.textWidth(f.decoration) < 2 * _util2.default.textWidth('🇦');
 	            }).map(function (f) {
 	                return React.createElement(
 	                    'span',
@@ -4902,7 +4911,7 @@
 	    value: true
 	});
 	
-	var _Condition2 = __webpack_require__(12);
+	var _Condition2 = __webpack_require__(13);
 	
 	var _Condition3 = _interopRequireDefault(_Condition2);
 	
@@ -5019,7 +5028,7 @@
 	    value: true
 	});
 	
-	var _Term2 = __webpack_require__(16);
+	var _Term2 = __webpack_require__(17);
 	
 	var _Term3 = _interopRequireDefault(_Term2);
 	
@@ -5161,7 +5170,7 @@
 	    value: true
 	});
 	
-	var _Condition2 = __webpack_require__(12);
+	var _Condition2 = __webpack_require__(13);
 	
 	var _Condition3 = _interopRequireDefault(_Condition2);
 	
@@ -5227,7 +5236,7 @@
 	    value: true
 	});
 	
-	var _Condition2 = __webpack_require__(12);
+	var _Condition2 = __webpack_require__(13);
 	
 	var _Condition3 = _interopRequireDefault(_Condition2);
 	
@@ -5290,7 +5299,7 @@
 	    value: true
 	});
 	
-	var _Field2 = __webpack_require__(14);
+	var _Field2 = __webpack_require__(15);
 	
 	var _Field3 = _interopRequireDefault(_Field2);
 	
@@ -5351,7 +5360,7 @@
 	    value: true
 	});
 	
-	var _Field2 = __webpack_require__(14);
+	var _Field2 = __webpack_require__(15);
 	
 	var _Field3 = _interopRequireDefault(_Field2);
 	
@@ -5402,7 +5411,7 @@
 	    value: true
 	});
 	
-	var _Field2 = __webpack_require__(14);
+	var _Field2 = __webpack_require__(15);
 	
 	var _Field3 = _interopRequireDefault(_Field2);
 	
@@ -5459,7 +5468,7 @@
 	    value: true
 	});
 	
-	var _Field2 = __webpack_require__(14);
+	var _Field2 = __webpack_require__(15);
 	
 	var _Field3 = _interopRequireDefault(_Field2);
 	
@@ -5514,9 +5523,13 @@
 	    value: true
 	});
 	
-	var _Field2 = __webpack_require__(14);
+	var _Field2 = __webpack_require__(15);
 	
 	var _Field3 = _interopRequireDefault(_Field2);
+	
+	var _util = __webpack_require__(9);
+	
+	var _util2 = _interopRequireDefault(_util);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -5536,7 +5549,7 @@
 	
 	        var conditionDescriptor = condition.toJSON();
 	        _this.dataKey = conditionDescriptor.register.toLowerCase() + '/' + conditionDescriptor.key.toLowerCase() + '/options/' + condition.variable;
-	        Meanbee.ShippingRules.util.loadData(_this.dataKey);
+	        _util2.default.loadData(_this.dataKey);
 	        return _this;
 	    }
 	
@@ -5580,7 +5593,7 @@
 	    value: true
 	});
 	
-	var _Field2 = __webpack_require__(14);
+	var _Field2 = __webpack_require__(15);
 	
 	var _Field3 = _interopRequireDefault(_Field2);
 	
@@ -5629,7 +5642,7 @@
 	    value: true
 	});
 	
-	var _Field2 = __webpack_require__(14);
+	var _Field2 = __webpack_require__(15);
 	
 	var _Field3 = _interopRequireDefault(_Field2);
 	
@@ -5678,7 +5691,7 @@
 	    value: true
 	});
 	
-	var _Field2 = __webpack_require__(14);
+	var _Field2 = __webpack_require__(15);
 	
 	var _Field3 = _interopRequireDefault(_Field2);
 	
@@ -5742,7 +5755,7 @@
 	    value: true
 	});
 	
-	var _Field2 = __webpack_require__(14);
+	var _Field2 = __webpack_require__(15);
 	
 	var _Field3 = _interopRequireDefault(_Field2);
 	
@@ -5807,7 +5820,7 @@
 	    value: true
 	});
 	
-	var _Field2 = __webpack_require__(14);
+	var _Field2 = __webpack_require__(15);
 	
 	var _Field3 = _interopRequireDefault(_Field2);
 	
@@ -5872,7 +5885,7 @@
 	    value: true
 	});
 	
-	var _Field2 = __webpack_require__(14);
+	var _Field2 = __webpack_require__(15);
 	
 	var _Field3 = _interopRequireDefault(_Field2);
 	
@@ -5936,7 +5949,7 @@
 	    value: true
 	});
 	
-	var _Field2 = __webpack_require__(14);
+	var _Field2 = __webpack_require__(15);
 	
 	var _Field3 = _interopRequireDefault(_Field2);
 	
@@ -6002,7 +6015,7 @@
 	    value: true
 	});
 	
-	var _Term2 = __webpack_require__(16);
+	var _Term2 = __webpack_require__(17);
 	
 	var _Term3 = _interopRequireDefault(_Term2);
 	
@@ -6108,7 +6121,7 @@
 	
 	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 	
-	var _Term2 = __webpack_require__(16);
+	var _Term2 = __webpack_require__(17);
 	
 	var _Term3 = _interopRequireDefault(_Term2);
 	
