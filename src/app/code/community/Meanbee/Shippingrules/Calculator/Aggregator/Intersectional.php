@@ -54,7 +54,7 @@ class Meanbee_Shippingrules_Calculator_Aggregator_Intersectional
     public function evaluate($request)
     {
         $result = array();
-        $products = $request->getAllItems();
+        $products = $request->getAllItems() ?: array();
         foreach ($products as $product) {
             $request->setData('current_item', $product);
             if ($this->evaluateOverProduct($request)) {

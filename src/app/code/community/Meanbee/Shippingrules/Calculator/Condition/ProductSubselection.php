@@ -88,7 +88,6 @@ class Meanbee_Shippingrules_Calculator_Condition_ProductSubselection
      * @return boolean
      */
     public function evaluate($request) {
-        $comp = @end(explode('_', get_class($this->getComparator())));
         if ($this->getVariable() === 'product_subselection') {
             $result = $this->getComparator()->evaluate(
                 $this->getValue(),
@@ -114,7 +113,7 @@ class Meanbee_Shippingrules_Calculator_Condition_ProductSubselection
     public function init($obj, $registers) {
         parent::init($obj, $registers);
         if ($this->getVariable() === 'product_subselection') {
-            $this->setTerm($registers->getTermRegister()->newInstanceOf('product_subselection', $obj['term']));
+            $this->setTerm($registers->getTermRegister()->newInstanceOf($obj['term']['key'], $obj['term']));
         }
         return $this;
     }
