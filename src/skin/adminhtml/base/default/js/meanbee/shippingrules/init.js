@@ -1,4 +1,4 @@
-import polyfills from './polyfills';
+import './polyfills';
 import aggregatorRegister from './Register/aggregator';
 import comparatorRegister from './Register/comparator';
 import conditionRegister from './Register/condition';

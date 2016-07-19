@@ -1,5 +1,6 @@
 import Condition from '../Condition';
 import BooleanAggregator from '../Aggregator/Boolean';
+import Popper from 'popper.js';
 
 export default class PostalCode extends Condition
 {
