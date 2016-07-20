@@ -20,7 +20,7 @@ export default class Register
 
     getAsOptions() {
         return Object.keys(this.children).map(key => {
-            return (<option value={key}>{this.get(key).name()}</option>);
+            return (<option value={key}>{this.get(key).identifier()}</option>);
         });
     }
 }

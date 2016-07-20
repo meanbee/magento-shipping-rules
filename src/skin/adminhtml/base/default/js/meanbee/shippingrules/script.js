@@ -83,6 +83,10 @@
 	
 	var _History2 = _interopRequireDefault(_History);
 	
+	var _Aggregator = __webpack_require__(5);
+	
+	var _Aggregator2 = _interopRequireDefault(_Aggregator);
+	
 	var _Boolean = __webpack_require__(19);
 	
 	var _Boolean2 = _interopRequireDefault(_Boolean);
@@ -94,6 +98,10 @@
 	var _ProductSet = __webpack_require__(21);
 	
 	var _ProductSet2 = _interopRequireDefault(_ProductSet);
+	
+	var _Comparator = __webpack_require__(11);
+	
+	var _Comparator2 = _interopRequireDefault(_Comparator);
 	
 	var _Between = __webpack_require__(22);
 	
@@ -122,6 +130,10 @@
 	var _LessThanOrEqual = __webpack_require__(28);
 	
 	var _LessThanOrEqual2 = _interopRequireDefault(_LessThanOrEqual);
+	
+	var _Condition = __webpack_require__(13);
+	
+	var _Condition2 = _interopRequireDefault(_Condition);
 	
 	var _Cart = __webpack_require__(29);
 	
@@ -154,6 +166,10 @@
 	var _Time = __webpack_require__(38);
 	
 	var _Time2 = _interopRequireDefault(_Time);
+	
+	var _Field = __webpack_require__(15);
+	
+	var _Field2 = _interopRequireDefault(_Field);
 	
 	var _Boolean3 = __webpack_require__(39);
 	
@@ -202,6 +218,10 @@
 	var _TimeX = __webpack_require__(50);
 	
 	var _TimeX2 = _interopRequireDefault(_TimeX);
+	
+	var _Term = __webpack_require__(17);
+	
+	var _Term2 = _interopRequireDefault(_Term);
 	
 	var _Conditional = __webpack_require__(51);
 	
@@ -253,12 +273,14 @@
 	    };
 	    Meanbee.ShippingRules.history = new _History2.default();
 	
+	    Meanbee.ShippingRules.Aggregator = _Aggregator2.default;
 	    Meanbee.ShippingRules.registers.aggregator.add(_Boolean2.default.CONJUNCTIVE, _Boolean2.default);
 	    Meanbee.ShippingRules.registers.aggregator.add(_Boolean2.default.DISJUNCTIVE, _Boolean2.default);
 	    Meanbee.ShippingRules.registers.aggregator.add('Summative', _Numeric2.default);
 	    Meanbee.ShippingRules.registers.aggregator.add(_ProductSet2.default.INTERSECTIONAL, _ProductSet2.default);
 	    Meanbee.ShippingRules.registers.aggregator.add(_ProductSet2.default.UNIONAL, _ProductSet2.default);
 	
+	    Meanbee.ShippingRules.Comparator = _Comparator2.default;
 	    Meanbee.ShippingRules.registers.comparator.add('Between', _Between2.default);
 	    Meanbee.ShippingRules.registers.comparator.add('Equal', _Equal2.default);
 	    Meanbee.ShippingRules.registers.comparator.add('NotEqual', _NotEqual2.default);
@@ -267,6 +289,7 @@
 	    Meanbee.ShippingRules.registers.comparator.add('LessThan', _LessThan2.default);
 	    Meanbee.ShippingRules.registers.comparator.add('LessThanOrEqual', _LessThanOrEqual2.default);
 	
+	    Meanbee.ShippingRules.Condition = _Condition2.default;
 	    Meanbee.ShippingRules.registers.condition.add('Cart', _Cart2.default);
 	    Meanbee.ShippingRules.registers.condition.add('Customer', _Customer2.default);
 	    Meanbee.ShippingRules.registers.condition.add('Destination', _Destination2.default);
@@ -276,6 +299,7 @@
 	    Meanbee.ShippingRules.registers.condition.add('Promotion', _Promotion2.default);
 	    Meanbee.ShippingRules.registers.condition.add('Time', _Time2.default);
 	
+	    Meanbee.ShippingRules.Field = _Field2.default;
 	    Meanbee.ShippingRules.registers.field.add('Boolean', _Boolean4.default);
 	    Meanbee.ShippingRules.registers.field.add('Number', _Number2.default);
 	    Meanbee.ShippingRules.registers.field.add('NumberBase26', _NumberBase2.default);
@@ -289,6 +313,7 @@
 	    Meanbee.ShippingRules.registers.field.add('TextX2', _TextX2.default);
 	    Meanbee.ShippingRules.registers.field.add('TimeX2', _TimeX2.default);
 	
+	    Meanbee.ShippingRules.Term = _Term2.default;
 	    Meanbee.ShippingRules.registers.term.add('Conditional', _Conditional2.default);
 	    Meanbee.ShippingRules.registers.term.add('Constant', _Constant2.default);
 	    Meanbee.ShippingRules.registers.term.add('Product_Subselection', _ProductSubselection4.default);
@@ -512,7 +537,7 @@
 	                return React.createElement(
 	                    "option",
 	                    { value: key },
-	                    _this.get(key).name()
+	                    _this.get(key).identifier()
 	                );
 	            });
 	        }
@@ -1267,14 +1292,12 @@
 	            if (xhr.readyState === 4 && xhr.status === 200) {
 	                Meanbee.ShippingRules.data[path] = JSON.parse(xhr.responseText);
 	                if (Meanbee.ShippingRules.calculators) Object.keys(Meanbee.ShippingRules.calculators).forEach(function (calcName) {
-	                    Meanbee.ShippingRules.calculators[calcName].refresh();
 	                    Meanbee.ShippingRules.calculators[calcName].rerender();
 	                });
 	            }
 	        };
-	        var formData = new FormData();
-	        formData.set('form_key', Meanbee.ShippingRules.formKey);
-	        xhr.send(formData);
+	        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+	        xhr.send('form_key=' + Meanbee.ShippingRules.formKey);
 	    },
 	    flatten: function flatten(arr) {
 	        var _ref;
@@ -1329,9 +1352,9 @@
 	        var option = React.createElement(
 	            'option',
 	            { value: key },
-	            options[key].name(type)
+	            options[key].identifier(type)
 	        );
-	        option.selected = options[key].name(type) === selectedName;
+	        option.selected = options[key].identifier(type) === selectedName;
 	        return option;
 	    });
 	};
@@ -1367,9 +1390,9 @@
 	            };
 	        }
 	    }, {
-	        key: 'name',
+	        key: 'identifier',
 	        get: function get() {
-	            return this.constructor.name(this.type);
+	            return this.constructor.identifier(this.type);
 	        }
 	    }], [{
 	        key: 'supportedTypes',
@@ -1409,8 +1432,8 @@
 	            return false;
 	        }
 	    }, {
-	        key: 'name',
-	        value: function name(type) {
+	        key: 'identifier',
+	        value: function identifier(type) {
 	            // eslint-disable-line no-unused-vars
 	            return {};
 	        }
@@ -1536,7 +1559,7 @@
 	                        me.root.rerender();
 	                        Meanbee.ShippingRules.history.pushState();
 	                    } },
-	                Meanbee.ShippingRules.registers.comparator.getAsOptions(me.type, me.comparator.name)
+	                Meanbee.ShippingRules.registers.comparator.getAsOptions(me.type, me.comparator.identifier)
 	            );
 	        }
 	    }, {
@@ -2526,8 +2549,8 @@
 	            return ['number', 'currency', 'numeric_b10', 'numeric_b26', 'numeric_b36', 'date', 'time', 'datetime'];
 	        }
 	    }, {
-	        key: 'name',
-	        value: function name(type) {
+	        key: 'identifier',
+	        value: function identifier(type) {
 	            var _this3 = this;
 	
 	            type = type.filter(function (t) {
@@ -2620,8 +2643,8 @@
 	            return ['number', 'currency', 'numeric_b10', 'numeric_b26', 'numeric_b36', 'string', 'enum', 'date', 'time', 'datetime', 'boolean'];
 	        }
 	    }, {
-	        key: 'name',
-	        value: function name(type) {
+	        key: 'identifier',
+	        value: function identifier(type) {
 	            var _this3 = this;
 	
 	            type = type.filter(function (t) {
@@ -2718,8 +2741,8 @@
 	            return ['number', 'currency', 'numeric_b10', 'numeric_b26', 'numeric_b36', 'string', 'enum', 'date', 'time', 'datetime'];
 	        }
 	    }, {
-	        key: 'name',
-	        value: function name(type) {
+	        key: 'identifier',
+	        value: function identifier(type) {
 	            var _this3 = this;
 	
 	            type = type.filter(function (t) {
@@ -2814,8 +2837,8 @@
 	            return ['number', 'currency', 'numeric_b10', 'numeric_b26', 'numeric_b36', 'date', 'time', 'datetime'];
 	        }
 	    }, {
-	        key: 'name',
-	        value: function name(type) {
+	        key: 'identifier',
+	        value: function identifier(type) {
 	            var _this3 = this;
 	
 	            type = type.filter(function (t) {
@@ -2912,8 +2935,8 @@
 	            return ['number', 'currency', 'numeric_b10', 'numeric_b26', 'numeric_b36', 'date', 'time', 'datetime'];
 	        }
 	    }, {
-	        key: 'name',
-	        value: function name(type) {
+	        key: 'identifier',
+	        value: function identifier(type) {
 	            var _this3 = this;
 	
 	            type = type.filter(function (t) {
@@ -3010,8 +3033,8 @@
 	            return ['number', 'currency', 'numeric_b10', 'numeric_b26', 'numeric_b36', 'date', 'time', 'datetime'];
 	        }
 	    }, {
-	        key: 'name',
-	        value: function name(type) {
+	        key: 'identifier',
+	        value: function identifier(type) {
 	            var _this3 = this;
 	
 	            type = type.filter(function (t) {
@@ -3108,8 +3131,8 @@
 	            return ['number', 'currency', 'numeric_b10', 'numeric_b26', 'numeric_b36', 'date', 'time', 'datetime'];
 	        }
 	    }, {
-	        key: 'name',
-	        value: function name(type) {
+	        key: 'identifier',
+	        value: function identifier(type) {
 	            var _this3 = this;
 	
 	            type = type.filter(function (t) {
@@ -5003,8 +5026,8 @@
 	            return variables;
 	        }
 	    }, {
-	        key: 'name',
-	        value: function name() {
+	        key: 'identifier',
+	        value: function identifier() {
 	            return 'Product Subselection';
 	        }
 	    }]);
@@ -5145,8 +5168,8 @@
 	            return obj;
 	        }
 	    }], [{
-	        key: 'name',
-	        value: function name() {
+	        key: 'identifier',
+	        value: function identifier() {
 	            return 'Product Subselection';
 	        }
 	    }]);
@@ -6100,8 +6123,8 @@
 	            return obj;
 	        }
 	    }], [{
-	        key: 'name',
-	        value: function name() {
+	        key: 'identifier',
+	        value: function identifier() {
 	            return 'Conditional Value';
 	        }
 	    }]);
@@ -6181,8 +6204,8 @@
 	            return obj;
 	        }
 	    }], [{
-	        key: 'name',
-	        value: function name() {
+	        key: 'identifier',
+	        value: function identifier() {
 	            return 'Constant Value';
 	        }
 	    }]);

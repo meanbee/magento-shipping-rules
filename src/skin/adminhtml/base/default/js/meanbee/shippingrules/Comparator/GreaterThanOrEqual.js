@@ -10,7 +10,7 @@ export default class GreaterThanOrEqual extends Comparator
         return ['number', 'currency', 'numeric_b10', 'numeric_b26', 'numeric_b36', 'date', 'time', 'datetime'];
     }
 
-    static name(type) {
+    static identifier(type) {
         type = type.filter((t => ~this.supportedTypes().indexOf(t)).bind(this));
         switch (type[0]) {
         case 'numeric_b10':

@@ -104,14 +104,12 @@ let util = {
                 Meanbee.ShippingRules.data[path] = JSON.parse(xhr.responseText);
                 if (Meanbee.ShippingRules.calculators)
                     Object.keys(Meanbee.ShippingRules.calculators).forEach(calcName => {
-                        Meanbee.ShippingRules.calculators[calcName].refresh();
                         Meanbee.ShippingRules.calculators[calcName].rerender();
                     });
             }
         };
-        let formData = new FormData();
-        formData.set('form_key', Meanbee.ShippingRules.formKey);
-        xhr.send(formData);
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        xhr.send(`form_key=${Meanbee.ShippingRules.formKey}`);
     },
     flatten: function flatten (arr) {
         const flat = [].concat(...arr)

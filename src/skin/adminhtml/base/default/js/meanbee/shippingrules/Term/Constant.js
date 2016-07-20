@@ -30,7 +30,7 @@ class Constant extends Term
         return obj;
     }
 
-    static name() {
+    static identifier() {
         return 'Constant Value';
     }
 }

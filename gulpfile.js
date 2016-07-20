@@ -1,14 +1,14 @@
-/* global require:false, process:false */
+/* global require:false, process:false, __dirname:false */
 var gulp         = require('gulp'),
     autoprefixer = require('gulp-autoprefixer'),
     gutil        = require('gulp-util'),
     sourcemaps   = require('gulp-sourcemaps'),
     stylus       = require('gulp-stylus'),
-    // uglify       = require('gulp-uglify'),
     spawn        = require('child_process').spawn,
-    webpack      = require('webpack-stream');
+    webpack      = require('webpack-stream'),
+    KarmaServer  = require('karma').Server;
 
-gulp.task('test', ['test:php']);
+gulp.task('test', ['test:php', 'test:js']);
 
 gulp.task('test:php', function (done) {
     var child = spawn('phpunit', ['--colors=always'], { cwd: process.cwd() }),
@@ -25,6 +25,13 @@ gulp.task('test:php', function (done) {
         gutil.log(stdout);
         if (code !== 0) done('error');
     });
+});
+
+gulp.task('test:js', ['scripts'], function (done) {
+    new KarmaServer({
+        configFile: __dirname + '/karma.conf.js',
+        singleRun: true
+    }, done).start();
 });
 
 gulp.task('scripts', function() {

@@ -19,8 +19,8 @@ comparatorRegister.getByType = function (type) {
 comparatorRegister.getAsOptions = function (type, selectedName) {
     let options = type ? this.getByType(type) : this.children;
     return Object.keys(options).map(key => {
-        let option = (<option value={key}>{options[key].name(type)}</option>);
-        option.selected = options[key].name(type) === selectedName;
+        let option = (<option value={key}>{options[key].identifier(type)}</option>);
+        option.selected = options[key].identifier(type) === selectedName;
         return option;
     });
 };

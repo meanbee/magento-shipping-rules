@@ -38,7 +38,7 @@ export default class Condition extends Base
             me.root.rerender();
             Meanbee.ShippingRules.history.pushState();
         }}>
-            {Meanbee.ShippingRules.registers.comparator.getAsOptions(me.type, me.comparator.name)}
+            {Meanbee.ShippingRules.registers.comparator.getAsOptions(me.type, me.comparator.identifier)}
         </select>);
     }
 

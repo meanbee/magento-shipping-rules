@@ -47,7 +47,7 @@ export default class Conditional extends Term
         return obj;
     }
 
-    static name() {
+    static identifier() {
         return 'Conditional Value';
     }
 }

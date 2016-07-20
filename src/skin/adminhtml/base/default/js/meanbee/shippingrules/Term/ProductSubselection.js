@@ -67,7 +67,7 @@ export default class ProductSubselection extends Term
         return obj;
     }
 
-    static name() {
+    static identifier() {
         return 'Product Subselection';
     }
 }

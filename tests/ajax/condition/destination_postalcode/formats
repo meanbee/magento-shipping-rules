@@ -1,0 +1,8 @@
+[{
+  "decoration": "🇬🇧",
+  "example": ["W", "1A", "3", "BP"],
+  "label": "United Kingdom",
+  "parser": "/^([A-Z]{1,2})(\\d{2}|\\d[A-Z]?)(\\d)([A-Z]{2})$/",
+  "parts": ["str", "str", "b36", "b10", "b26"],
+  "value": "GB"
+}]

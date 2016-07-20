@@ -18,6 +18,11 @@
     "gulp-sourcemaps": "^1.6.0",
     "gulp-stylus": "^2.3.1",
     "gulp-util": "^3.0.7",
+    "karma": "^1.1.1",
+    "karma-chrome-launcher": "^1.0.1",
+    "karma-phantomjs-launcher": "^1.0.1",
+    "karma-qunit": "^1.1.0",
+    "qunitjs": "^1.23.1",
     "webpack-stream": "^3.2.0"
   },
   "dependencies": {

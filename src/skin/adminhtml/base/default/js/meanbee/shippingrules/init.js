@@ -7,10 +7,12 @@ import termRegister from './Register/term';
 import util from './util';
 import History from './History';
 
+import Aggregator from './Aggregator';
 import BooleanAggregator from './Aggregator/Boolean';
 import NumericAggregator from './Aggregator/Numeric';
 import ProductSetAggregator from './Aggregator/ProductSet';
 
+import Comparator from './Comparator';
 import BetweenComparator from './Comparator/Between';
 import EqualComparator from './Comparator/Equal';
 import NotEqualComparator from './Comparator/NotEqual';
@@ -19,6 +21,7 @@ import GreaterThanOrEqualComparator from './Comparator/GreaterThanOrEqual';
 import LessThanComparator from './Comparator/LessThan';
 import LessThanOrEqualComparator from './Comparator/LessThanOrEqual';
 
+import Condition from './Condition';
 import CartCondition from './Condition/Cart';
 import CustomerCondition from './Condition/Customer';
 import DestinationCondition from './Condition/Destination';
@@ -28,6 +31,7 @@ import ProductSubselectionCondition from './Condition/ProductSubselection';
 import PromotionCondition from './Condition/Promotion';
 import TimeCondition from './Condition/Time';
 
+import Field from './Field';
 import BooleanField from './Field/Boolean';
 import NumberField from './Field/Number';
 import NumberBase26Field from './Field/NumberBase26';
@@ -41,6 +45,7 @@ import NumberBase36X2Field from './Field/NumberBase36X2';
 import TextX2Field from './Field/TextX2';
 import TimeX2Field from './Field/TimeX2';
 
+import Term from './Term';
 import ConditionalTerm from './Term/Conditional';
 import ConstantTerm from './Term/Constant';
 import ProductSubselectionTerm from './Term/ProductSubselection';
@@ -76,12 +81,14 @@ window.React = {
     };
     Meanbee.ShippingRules.history = new History;
 
+    Meanbee.ShippingRules.Aggregator = Aggregator;
     Meanbee.ShippingRules.registers.aggregator.add(BooleanAggregator.CONJUNCTIVE, BooleanAggregator);
     Meanbee.ShippingRules.registers.aggregator.add(BooleanAggregator.DISJUNCTIVE, BooleanAggregator);
     Meanbee.ShippingRules.registers.aggregator.add('Summative', NumericAggregator);
     Meanbee.ShippingRules.registers.aggregator.add(ProductSetAggregator.INTERSECTIONAL, ProductSetAggregator);
     Meanbee.ShippingRules.registers.aggregator.add(ProductSetAggregator.UNIONAL, ProductSetAggregator);
-    
+
+    Meanbee.ShippingRules.Comparator = Comparator;
     Meanbee.ShippingRules.registers.comparator.add('Between', BetweenComparator);
     Meanbee.ShippingRules.registers.comparator.add('Equal', EqualComparator);
     Meanbee.ShippingRules.registers.comparator.add('NotEqual', NotEqualComparator);
@@ -90,6 +97,7 @@ window.React = {
     Meanbee.ShippingRules.registers.comparator.add('LessThan', LessThanComparator);
     Meanbee.ShippingRules.registers.comparator.add('LessThanOrEqual', LessThanOrEqualComparator);
 
+    Meanbee.ShippingRules.Condition = Condition;
     Meanbee.ShippingRules.registers.condition.add('Cart', CartCondition);
     Meanbee.ShippingRules.registers.condition.add('Customer', CustomerCondition);
     Meanbee.ShippingRules.registers.condition.add('Destination', DestinationCondition);
@@ -98,7 +106,8 @@ window.React = {
     Meanbee.ShippingRules.registers.condition.add('Product_Subselection', ProductSubselectionCondition);
     Meanbee.ShippingRules.registers.condition.add('Promotion', PromotionCondition);
     Meanbee.ShippingRules.registers.condition.add('Time', TimeCondition);
-    
+
+    Meanbee.ShippingRules.Field = Field;
     Meanbee.ShippingRules.registers.field.add('Boolean', BooleanField);
     Meanbee.ShippingRules.registers.field.add('Number', NumberField);
     Meanbee.ShippingRules.registers.field.add('NumberBase26', NumberBase26Field);
@@ -112,6 +121,7 @@ window.React = {
     Meanbee.ShippingRules.registers.field.add('TextX2', TextX2Field);
     Meanbee.ShippingRules.registers.field.add('TimeX2', TimeX2Field);
 
+    Meanbee.ShippingRules.Term = Term;
     Meanbee.ShippingRules.registers.term.add('Conditional', ConditionalTerm);
     Meanbee.ShippingRules.registers.term.add('Constant', ConstantTerm);
     Meanbee.ShippingRules.registers.term.add('Product_Subselection', ProductSubselectionTerm);

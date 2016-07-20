@@ -52,7 +52,7 @@ export default class ProductSubselection extends Condition
         return obj;
     }
 
-    static name() {
+    static identifier() {
         return 'Product Subselection';
     }
 }

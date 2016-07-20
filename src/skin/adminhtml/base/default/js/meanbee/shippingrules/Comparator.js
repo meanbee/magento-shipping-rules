@@ -17,11 +17,11 @@ export default class Comparator
         return false;
     }
 
-    get name() {
-        return this.constructor.name(this.type);
+    get identifier() {
+        return this.constructor.identifier(this.type);
     }
 
-    static name(type) { // eslint-disable-line no-unused-vars
+    static identifier(type) { // eslint-disable-line no-unused-vars
         return {};
     }
 
