@@ -2,12 +2,12 @@
 class Meanbee_Shippingrules_Calculator_Term_Constant
     extends Meanbee_Shippingrules_Calculator_Term_Abstract
 {
-    /** @var int|float|null */
-    private $value = null;
+    /** @var int|float */
+    private $value = 0;
 
     /**
      * Retrieves the currently set value.
-     * @return int|float|null
+     * @return int|float
      */
     public function getValue()
     {

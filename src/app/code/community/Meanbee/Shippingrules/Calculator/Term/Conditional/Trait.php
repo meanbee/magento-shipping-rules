@@ -41,6 +41,7 @@ trait Meanbee_Shippingrules_Calculator_Term_Conditional_Trait
         if ($this->getAggregator()->evaluate($request)) {
             return parent::evaluate($request);
         }
+        return 0;
     }
 
     /**
