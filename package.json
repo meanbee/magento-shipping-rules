@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "gulp test"
+    "test": "gulp test",
+    "postinstall": "cp -R hooks .git/hooks"
   },
   "author": "",
   "license": "ISC",
