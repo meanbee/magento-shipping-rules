@@ -2,11 +2,11 @@
 var gulp         = require('gulp'),
     autoprefixer = require('gulp-autoprefixer'),
     gutil        = require('gulp-util'),
+    KarmaServer  = require('karma').Server,
     sourcemaps   = require('gulp-sourcemaps'),
     stylus       = require('gulp-stylus'),
     spawn        = require('child_process').spawn,
-    webpack      = require('webpack-stream'),
-    KarmaServer  = require('karma').Server;
+    webpack      = require('webpack-stream');
 
 gulp.task('test', ['test:php', 'test:js']);
 
@@ -28,6 +28,7 @@ gulp.task('test:php', function (done) {
 });
 
 gulp.task('test:js', ['scripts'], function (done) {
+    console.log(process.env.NODE_ENV);
     new KarmaServer({
         configFile: __dirname + '/karma.conf.js',
         singleRun: true
