@@ -62,9 +62,9 @@ abstract class Meanbee_Shippingrules_Calculator_Register_Abstract
      * @param  mixed        $child Register entry.
      * @return string|false        Register key.
      */
-    public function find($child)
+    public function find($child, $strict)
     {
-        return array_search($child, $this->children);
+        return array_search($child, $this->children, $strict);
     }
 
     /**

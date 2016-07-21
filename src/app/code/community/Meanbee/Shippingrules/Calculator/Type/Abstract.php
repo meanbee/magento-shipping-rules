@@ -53,7 +53,7 @@ abstract class Meanbee_Shippingrules_Calculator_Type_Abstract
             return true;
         }
         if ($bidi) {
-            $typeID = $this->registers->getTypeRegister()->find($this);
+            $typeID = $this->registers->getTypeRegister()->find($this, false);
             return $this->registers->getComparatorRegister()->get($comparatorID)->canHandleType($typeID, false);
         }
         return false;
