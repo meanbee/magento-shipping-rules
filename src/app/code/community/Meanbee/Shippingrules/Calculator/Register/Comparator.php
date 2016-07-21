@@ -14,6 +14,7 @@ class Meanbee_Shippingrules_Calculator_Register_Comparator
         $this->add('lessthanorequal', new Meanbee_Shippingrules_Calculator_Comparator_LessThanOrEqual($this->registers));
         $this->add('greaterthanorequal', new Meanbee_Shippingrules_Calculator_Comparator_GreaterThanOrEqual($this->registers));
         $this->add('between', new Meanbee_Shippingrules_Calculator_Comparator_Between($this->registers));
+        $this->add('notbetween', new Meanbee_Shippingrules_Calculator_Comparator_NotBetween($this->registers));
     }
 
     /**

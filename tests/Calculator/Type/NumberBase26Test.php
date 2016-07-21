@@ -35,6 +35,7 @@ class Calculator_Type_NumberBase26Test extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->type->canBeHandledByComparator('lessthanorequal'));
         $this->assertTrue($this->type->canBeHandledByComparator('greaterthanorequal'));
         $this->assertTrue($this->type->canBeHandledByComparator('between'));
+        $this->assertTrue($this->type->canBeHandledByComparator('notbetween'));
     }
 
     public function testValidValue()

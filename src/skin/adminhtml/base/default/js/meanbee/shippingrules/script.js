@@ -107,27 +107,31 @@
 	
 	var _Between2 = _interopRequireDefault(_Between);
 	
-	var _Equal = __webpack_require__(23);
+	var _NotBetween = __webpack_require__(23);
+	
+	var _NotBetween2 = _interopRequireDefault(_NotBetween);
+	
+	var _Equal = __webpack_require__(24);
 	
 	var _Equal2 = _interopRequireDefault(_Equal);
 	
-	var _NotEqual = __webpack_require__(24);
+	var _NotEqual = __webpack_require__(25);
 	
 	var _NotEqual2 = _interopRequireDefault(_NotEqual);
 	
-	var _GreaterThan = __webpack_require__(25);
+	var _GreaterThan = __webpack_require__(26);
 	
 	var _GreaterThan2 = _interopRequireDefault(_GreaterThan);
 	
-	var _GreaterThanOrEqual = __webpack_require__(26);
+	var _GreaterThanOrEqual = __webpack_require__(27);
 	
 	var _GreaterThanOrEqual2 = _interopRequireDefault(_GreaterThanOrEqual);
 	
-	var _LessThan = __webpack_require__(27);
+	var _LessThan = __webpack_require__(28);
 	
 	var _LessThan2 = _interopRequireDefault(_LessThan);
 	
-	var _LessThanOrEqual = __webpack_require__(28);
+	var _LessThanOrEqual = __webpack_require__(29);
 	
 	var _LessThanOrEqual2 = _interopRequireDefault(_LessThanOrEqual);
 	
@@ -135,35 +139,35 @@
 	
 	var _Condition2 = _interopRequireDefault(_Condition);
 	
-	var _Cart = __webpack_require__(29);
+	var _Cart = __webpack_require__(30);
 	
 	var _Cart2 = _interopRequireDefault(_Cart);
 	
-	var _Customer = __webpack_require__(30);
+	var _Customer = __webpack_require__(31);
 	
 	var _Customer2 = _interopRequireDefault(_Customer);
 	
-	var _Destination = __webpack_require__(31);
+	var _Destination = __webpack_require__(32);
 	
 	var _Destination2 = _interopRequireDefault(_Destination);
 	
-	var _Environment = __webpack_require__(32);
+	var _Environment = __webpack_require__(33);
 	
 	var _Environment2 = _interopRequireDefault(_Environment);
 	
-	var _PostalCode = __webpack_require__(33);
+	var _PostalCode = __webpack_require__(34);
 	
 	var _PostalCode2 = _interopRequireDefault(_PostalCode);
 	
-	var _ProductSubselection = __webpack_require__(35);
+	var _ProductSubselection = __webpack_require__(36);
 	
 	var _ProductSubselection2 = _interopRequireDefault(_ProductSubselection);
 	
-	var _Promotion = __webpack_require__(37);
+	var _Promotion = __webpack_require__(38);
 	
 	var _Promotion2 = _interopRequireDefault(_Promotion);
 	
-	var _Time = __webpack_require__(38);
+	var _Time = __webpack_require__(39);
 	
 	var _Time2 = _interopRequireDefault(_Time);
 	
@@ -171,51 +175,51 @@
 	
 	var _Field2 = _interopRequireDefault(_Field);
 	
-	var _Boolean3 = __webpack_require__(39);
+	var _Boolean3 = __webpack_require__(40);
 	
 	var _Boolean4 = _interopRequireDefault(_Boolean3);
 	
-	var _Number = __webpack_require__(40);
+	var _Number = __webpack_require__(41);
 	
 	var _Number2 = _interopRequireDefault(_Number);
 	
-	var _NumberBase = __webpack_require__(41);
+	var _NumberBase = __webpack_require__(42);
 	
 	var _NumberBase2 = _interopRequireDefault(_NumberBase);
 	
-	var _NumberBase3 = __webpack_require__(42);
+	var _NumberBase3 = __webpack_require__(43);
 	
 	var _NumberBase4 = _interopRequireDefault(_NumberBase3);
 	
-	var _Select = __webpack_require__(43);
+	var _Select = __webpack_require__(44);
 	
 	var _Select2 = _interopRequireDefault(_Select);
 	
-	var _Text = __webpack_require__(44);
+	var _Text = __webpack_require__(45);
 	
 	var _Text2 = _interopRequireDefault(_Text);
 	
-	var _Time3 = __webpack_require__(45);
+	var _Time3 = __webpack_require__(46);
 	
 	var _Time4 = _interopRequireDefault(_Time3);
 	
-	var _NumberX = __webpack_require__(46);
+	var _NumberX = __webpack_require__(47);
 	
 	var _NumberX2 = _interopRequireDefault(_NumberX);
 	
-	var _NumberBase26X = __webpack_require__(47);
+	var _NumberBase26X = __webpack_require__(48);
 	
 	var _NumberBase26X2 = _interopRequireDefault(_NumberBase26X);
 	
-	var _NumberBase36X = __webpack_require__(48);
+	var _NumberBase36X = __webpack_require__(49);
 	
 	var _NumberBase36X2 = _interopRequireDefault(_NumberBase36X);
 	
-	var _TextX = __webpack_require__(49);
+	var _TextX = __webpack_require__(50);
 	
 	var _TextX2 = _interopRequireDefault(_TextX);
 	
-	var _TimeX = __webpack_require__(50);
+	var _TimeX = __webpack_require__(51);
 	
 	var _TimeX2 = _interopRequireDefault(_TimeX);
 	
@@ -223,15 +227,15 @@
 	
 	var _Term2 = _interopRequireDefault(_Term);
 	
-	var _Conditional = __webpack_require__(51);
+	var _Conditional = __webpack_require__(52);
 	
 	var _Conditional2 = _interopRequireDefault(_Conditional);
 	
-	var _Constant = __webpack_require__(52);
+	var _Constant = __webpack_require__(53);
 	
 	var _Constant2 = _interopRequireDefault(_Constant);
 	
-	var _ProductSubselection3 = __webpack_require__(36);
+	var _ProductSubselection3 = __webpack_require__(37);
 	
 	var _ProductSubselection4 = _interopRequireDefault(_ProductSubselection3);
 	
@@ -282,6 +286,7 @@
 	
 	    Meanbee.ShippingRules.Comparator = _Comparator2.default;
 	    Meanbee.ShippingRules.registers.comparator.add('Between', _Between2.default);
+	    Meanbee.ShippingRules.registers.comparator.add('NotBetween', _NotBetween2.default);
 	    Meanbee.ShippingRules.registers.comparator.add('Equal', _Equal2.default);
 	    Meanbee.ShippingRules.registers.comparator.add('NotEqual', _NotEqual2.default);
 	    Meanbee.ShippingRules.registers.comparator.add('GreaterThan', _GreaterThan2.default);
@@ -2574,6 +2579,96 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
+	var NotBetween = function (_Comparator) {
+	    _inherits(NotBetween, _Comparator);
+	
+	    function NotBetween(type) {
+	        _classCallCheck(this, NotBetween);
+	
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(NotBetween).call(this, type));
+	    }
+	
+	    _createClass(NotBetween, [{
+	        key: 'getField',
+	        value: function getField() {
+	            var _this2 = this;
+	
+	            var type = this.type.filter(function (t) {
+	                return ~_this2.constructor.supportedTypes().indexOf(t);
+	            }.bind(this));
+	            switch (type[0]) {
+	                case 'currency':
+	                case 'number':
+	                case 'numeric_b10':
+	                    return 'NumberX2';
+	                case 'numeric_b26':
+	                    return 'NumberBase26X2';
+	                case 'numeric_b36':
+	                    return 'NumberBase36X2';
+	                case 'time':
+	                    return 'TimeX2';
+	                default:
+	                    return 'TextX2';
+	            }
+	        }
+	    }, {
+	        key: 'toJSON',
+	        value: function toJSON() {
+	            var obj = _get(Object.getPrototypeOf(NotBetween.prototype), 'toJSON', this).call(this);
+	            obj.key = 'NotBetween';
+	            return obj;
+	        }
+	    }], [{
+	        key: 'supportedTypes',
+	        value: function supportedTypes() {
+	            return ['number', 'currency', 'numeric_b10', 'numeric_b26', 'numeric_b36', 'date', 'time', 'datetime'];
+	        }
+	    }, {
+	        key: 'identifier',
+	        value: function identifier(type) {
+	            var _this3 = this;
+	
+	            type = type.filter(function (t) {
+	                return ~_this3.supportedTypes().indexOf(t);
+	            }.bind(this));
+	            switch (type[0]) {
+	                default:
+	                    return 'IS NOT BETWEEN';
+	            }
+	        }
+	    }]);
+	
+	    return NotBetween;
+	}(_Comparator3.default);
+	
+	exports.default = NotBetween;
+
+/***/ },
+/* 24 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+	
+	var _Comparator2 = __webpack_require__(11);
+	
+	var _Comparator3 = _interopRequireDefault(_Comparator2);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
 	var Equal = function (_Comparator) {
 	    _inherits(Equal, _Comparator);
 	
@@ -2649,7 +2744,7 @@
 	exports.default = Equal;
 
 /***/ },
-/* 24 */
+/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2747,7 +2842,7 @@
 	exports.default = NotEqual;
 
 /***/ },
-/* 25 */
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2845,7 +2940,7 @@
 	exports.default = GreaterThan;
 
 /***/ },
-/* 26 */
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2943,7 +3038,7 @@
 	exports.default = GreaterThanOrEqual;
 
 /***/ },
-/* 27 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3041,7 +3136,7 @@
 	exports.default = LessThan;
 
 /***/ },
-/* 28 */
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3139,7 +3234,7 @@
 	exports.default = LessThanOrEqual;
 
 /***/ },
-/* 29 */
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3207,7 +3302,7 @@
 	exports.default = Cart;
 
 /***/ },
-/* 30 */
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3271,7 +3366,7 @@
 	exports.default = Customer;
 
 /***/ },
-/* 31 */
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3339,7 +3434,7 @@
 	exports.default = Destination;
 
 /***/ },
-/* 32 */
+/* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3405,7 +3500,7 @@
 	exports.default = Environment;
 
 /***/ },
-/* 33 */
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3428,7 +3523,7 @@
 	
 	var _Boolean2 = _interopRequireDefault(_Boolean);
 	
-	var _popper = __webpack_require__(34);
+	var _popper = __webpack_require__(35);
 	
 	var _popper2 = _interopRequireDefault(_popper);
 	
@@ -3668,7 +3763,7 @@
 	exports.default = PostalCode;
 
 /***/ },
-/* 34 */
+/* 35 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -4932,7 +5027,7 @@
 	});
 
 /***/ },
-/* 35 */
+/* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4949,7 +5044,7 @@
 	
 	var _Condition3 = _interopRequireDefault(_Condition2);
 	
-	var _ProductSubselection = __webpack_require__(36);
+	var _ProductSubselection = __webpack_require__(37);
 	
 	var _ProductSubselection2 = _interopRequireDefault(_ProductSubselection);
 	
@@ -5049,7 +5144,7 @@
 	exports.default = ProductSubselection;
 
 /***/ },
-/* 36 */
+/* 37 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5191,7 +5286,7 @@
 	exports.default = ProductSubselection;
 
 /***/ },
-/* 37 */
+/* 38 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5257,7 +5352,7 @@
 	exports.default = Promotion;
 
 /***/ },
-/* 38 */
+/* 39 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5322,7 +5417,7 @@
 	exports.default = Time;
 
 /***/ },
-/* 39 */
+/* 40 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5383,7 +5478,7 @@
 	exports.default = BooleanField;
 
 /***/ },
-/* 40 */
+/* 41 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -5432,7 +5527,7 @@
 	exports.default = Number;
 
 /***/ },
-/* 41 */
+/* 42 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -5489,7 +5584,7 @@
 	exports.default = NumberBase26;
 
 /***/ },
-/* 42 */
+/* 43 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -5546,7 +5641,7 @@
 	exports.default = NumberBase36;
 
 /***/ },
-/* 43 */
+/* 44 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5616,7 +5711,7 @@
 	exports.default = Select;
 
 /***/ },
-/* 44 */
+/* 45 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -5665,7 +5760,7 @@
 	exports.default = Text;
 
 /***/ },
-/* 45 */
+/* 46 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -5714,7 +5809,7 @@
 	exports.default = Time;
 
 /***/ },
-/* 46 */
+/* 47 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5778,7 +5873,7 @@
 	exports.default = NumberX2;
 
 /***/ },
-/* 47 */
+/* 48 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -5843,7 +5938,7 @@
 	exports.default = NumberBase26X2;
 
 /***/ },
-/* 48 */
+/* 49 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -5908,7 +6003,7 @@
 	exports.default = NumberBase36X2;
 
 /***/ },
-/* 49 */
+/* 50 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5972,7 +6067,7 @@
 	exports.default = TextX2;
 
 /***/ },
-/* 50 */
+/* 51 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6036,7 +6131,7 @@
 	exports.default = TimeX2;
 
 /***/ },
-/* 51 */
+/* 52 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6146,7 +6241,7 @@
 	exports.default = Conditional;
 
 /***/ },
-/* 52 */
+/* 53 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
