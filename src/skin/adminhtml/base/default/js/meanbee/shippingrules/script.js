@@ -111,27 +111,35 @@
 	
 	var _NotBetween2 = _interopRequireDefault(_NotBetween);
 	
-	var _Equal = __webpack_require__(24);
+	var _Contains = __webpack_require__(24);
+	
+	var _Contains2 = _interopRequireDefault(_Contains);
+	
+	var _NotContain = __webpack_require__(25);
+	
+	var _NotContain2 = _interopRequireDefault(_NotContain);
+	
+	var _Equal = __webpack_require__(26);
 	
 	var _Equal2 = _interopRequireDefault(_Equal);
 	
-	var _NotEqual = __webpack_require__(25);
+	var _NotEqual = __webpack_require__(27);
 	
 	var _NotEqual2 = _interopRequireDefault(_NotEqual);
 	
-	var _GreaterThan = __webpack_require__(26);
+	var _GreaterThan = __webpack_require__(28);
 	
 	var _GreaterThan2 = _interopRequireDefault(_GreaterThan);
 	
-	var _GreaterThanOrEqual = __webpack_require__(27);
+	var _GreaterThanOrEqual = __webpack_require__(29);
 	
 	var _GreaterThanOrEqual2 = _interopRequireDefault(_GreaterThanOrEqual);
 	
-	var _LessThan = __webpack_require__(28);
+	var _LessThan = __webpack_require__(30);
 	
 	var _LessThan2 = _interopRequireDefault(_LessThan);
 	
-	var _LessThanOrEqual = __webpack_require__(29);
+	var _LessThanOrEqual = __webpack_require__(31);
 	
 	var _LessThanOrEqual2 = _interopRequireDefault(_LessThanOrEqual);
 	
@@ -139,35 +147,35 @@
 	
 	var _Condition2 = _interopRequireDefault(_Condition);
 	
-	var _Cart = __webpack_require__(30);
+	var _Cart = __webpack_require__(32);
 	
 	var _Cart2 = _interopRequireDefault(_Cart);
 	
-	var _Customer = __webpack_require__(31);
+	var _Customer = __webpack_require__(33);
 	
 	var _Customer2 = _interopRequireDefault(_Customer);
 	
-	var _Destination = __webpack_require__(32);
+	var _Destination = __webpack_require__(34);
 	
 	var _Destination2 = _interopRequireDefault(_Destination);
 	
-	var _Environment = __webpack_require__(33);
+	var _Environment = __webpack_require__(35);
 	
 	var _Environment2 = _interopRequireDefault(_Environment);
 	
-	var _PostalCode = __webpack_require__(34);
+	var _PostalCode = __webpack_require__(36);
 	
 	var _PostalCode2 = _interopRequireDefault(_PostalCode);
 	
-	var _ProductSubselection = __webpack_require__(36);
+	var _ProductSubselection = __webpack_require__(38);
 	
 	var _ProductSubselection2 = _interopRequireDefault(_ProductSubselection);
 	
-	var _Promotion = __webpack_require__(38);
+	var _Promotion = __webpack_require__(40);
 	
 	var _Promotion2 = _interopRequireDefault(_Promotion);
 	
-	var _Time = __webpack_require__(39);
+	var _Time = __webpack_require__(41);
 	
 	var _Time2 = _interopRequireDefault(_Time);
 	
@@ -175,51 +183,51 @@
 	
 	var _Field2 = _interopRequireDefault(_Field);
 	
-	var _Boolean3 = __webpack_require__(40);
+	var _Boolean3 = __webpack_require__(42);
 	
 	var _Boolean4 = _interopRequireDefault(_Boolean3);
 	
-	var _Number = __webpack_require__(41);
+	var _Number = __webpack_require__(43);
 	
 	var _Number2 = _interopRequireDefault(_Number);
 	
-	var _NumberBase = __webpack_require__(42);
+	var _NumberBase = __webpack_require__(44);
 	
 	var _NumberBase2 = _interopRequireDefault(_NumberBase);
 	
-	var _NumberBase3 = __webpack_require__(43);
+	var _NumberBase3 = __webpack_require__(45);
 	
 	var _NumberBase4 = _interopRequireDefault(_NumberBase3);
 	
-	var _Select = __webpack_require__(44);
+	var _Select = __webpack_require__(46);
 	
 	var _Select2 = _interopRequireDefault(_Select);
 	
-	var _Text = __webpack_require__(45);
+	var _Text = __webpack_require__(47);
 	
 	var _Text2 = _interopRequireDefault(_Text);
 	
-	var _Time3 = __webpack_require__(46);
+	var _Time3 = __webpack_require__(48);
 	
 	var _Time4 = _interopRequireDefault(_Time3);
 	
-	var _NumberX = __webpack_require__(47);
+	var _NumberX = __webpack_require__(49);
 	
 	var _NumberX2 = _interopRequireDefault(_NumberX);
 	
-	var _NumberBase26X = __webpack_require__(48);
+	var _NumberBase26X = __webpack_require__(50);
 	
 	var _NumberBase26X2 = _interopRequireDefault(_NumberBase26X);
 	
-	var _NumberBase36X = __webpack_require__(49);
+	var _NumberBase36X = __webpack_require__(51);
 	
 	var _NumberBase36X2 = _interopRequireDefault(_NumberBase36X);
 	
-	var _TextX = __webpack_require__(50);
+	var _TextX = __webpack_require__(52);
 	
 	var _TextX2 = _interopRequireDefault(_TextX);
 	
-	var _TimeX = __webpack_require__(51);
+	var _TimeX = __webpack_require__(53);
 	
 	var _TimeX2 = _interopRequireDefault(_TimeX);
 	
@@ -227,15 +235,15 @@
 	
 	var _Term2 = _interopRequireDefault(_Term);
 	
-	var _Conditional = __webpack_require__(52);
+	var _Conditional = __webpack_require__(54);
 	
 	var _Conditional2 = _interopRequireDefault(_Conditional);
 	
-	var _Constant = __webpack_require__(53);
+	var _Constant = __webpack_require__(55);
 	
 	var _Constant2 = _interopRequireDefault(_Constant);
 	
-	var _ProductSubselection3 = __webpack_require__(37);
+	var _ProductSubselection3 = __webpack_require__(39);
 	
 	var _ProductSubselection4 = _interopRequireDefault(_ProductSubselection3);
 	
@@ -287,6 +295,8 @@
 	    Meanbee.ShippingRules.Comparator = _Comparator2.default;
 	    Meanbee.ShippingRules.registers.comparator.add('Between', _Between2.default);
 	    Meanbee.ShippingRules.registers.comparator.add('NotBetween', _NotBetween2.default);
+	    Meanbee.ShippingRules.registers.comparator.add('Contains', _Contains2.default);
+	    Meanbee.ShippingRules.registers.comparator.add('NotContain', _NotContain2.default);
 	    Meanbee.ShippingRules.registers.comparator.add('Equal', _Equal2.default);
 	    Meanbee.ShippingRules.registers.comparator.add('NotEqual', _NotEqual2.default);
 	    Meanbee.ShippingRules.registers.comparator.add('GreaterThan', _GreaterThan2.default);
@@ -2669,6 +2679,166 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
+	var Contains = function (_Comparator) {
+	    _inherits(Contains, _Comparator);
+	
+	    function Contains(type) {
+	        _classCallCheck(this, Contains);
+	
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(Contains).call(this, type));
+	    }
+	
+	    _createClass(Contains, [{
+	        key: 'getField',
+	        value: function getField() {
+	            var _this2 = this;
+	
+	            var type = this.type.filter(function (t) {
+	                return ~_this2.constructor.supportedTypes().indexOf(t);
+	            }.bind(this));
+	            switch (type[0]) {
+	                default:
+	                    return 'Text';
+	            }
+	        }
+	    }, {
+	        key: 'toJSON',
+	        value: function toJSON() {
+	            var obj = _get(Object.getPrototypeOf(Contains.prototype), 'toJSON', this).call(this);
+	            obj.key = 'Contains';
+	            return obj;
+	        }
+	    }], [{
+	        key: 'supportedTypes',
+	        value: function supportedTypes() {
+	            return ['string'];
+	        }
+	    }, {
+	        key: 'identifier',
+	        value: function identifier(type) {
+	            var _this3 = this;
+	
+	            type = type.filter(function (t) {
+	                return ~_this3.supportedTypes().indexOf(t);
+	            }.bind(this));
+	            switch (type[0]) {
+	                default:
+	                    return 'CONTAINS';
+	            }
+	        }
+	    }]);
+	
+	    return Contains;
+	}(_Comparator3.default);
+	
+	exports.default = Contains;
+
+/***/ },
+/* 25 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+	
+	var _Comparator2 = __webpack_require__(11);
+	
+	var _Comparator3 = _interopRequireDefault(_Comparator2);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var NotContain = function (_Comparator) {
+	    _inherits(NotContain, _Comparator);
+	
+	    function NotContain(type) {
+	        _classCallCheck(this, NotContain);
+	
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(NotContain).call(this, type));
+	    }
+	
+	    _createClass(NotContain, [{
+	        key: 'getField',
+	        value: function getField() {
+	            var _this2 = this;
+	
+	            var type = this.type.filter(function (t) {
+	                return ~_this2.constructor.supportedTypes().indexOf(t);
+	            }.bind(this));
+	            switch (type[0]) {
+	                default:
+	                    return 'Text';
+	            }
+	        }
+	    }, {
+	        key: 'toJSON',
+	        value: function toJSON() {
+	            var obj = _get(Object.getPrototypeOf(NotContain.prototype), 'toJSON', this).call(this);
+	            obj.key = 'NotContain';
+	            return obj;
+	        }
+	    }], [{
+	        key: 'supportedTypes',
+	        value: function supportedTypes() {
+	            return ['string'];
+	        }
+	    }, {
+	        key: 'identifier',
+	        value: function identifier(type) {
+	            var _this3 = this;
+	
+	            type = type.filter(function (t) {
+	                return ~_this3.supportedTypes().indexOf(t);
+	            }.bind(this));
+	            switch (type[0]) {
+	                default:
+	                    return 'DOES NOT CONTAIN';
+	            }
+	        }
+	    }]);
+	
+	    return NotContain;
+	}(_Comparator3.default);
+	
+	exports.default = NotContain;
+
+/***/ },
+/* 26 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+	
+	var _Comparator2 = __webpack_require__(11);
+	
+	var _Comparator3 = _interopRequireDefault(_Comparator2);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
 	var Equal = function (_Comparator) {
 	    _inherits(Equal, _Comparator);
 	
@@ -2744,7 +2914,7 @@
 	exports.default = Equal;
 
 /***/ },
-/* 25 */
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2842,7 +3012,7 @@
 	exports.default = NotEqual;
 
 /***/ },
-/* 26 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2940,7 +3110,7 @@
 	exports.default = GreaterThan;
 
 /***/ },
-/* 27 */
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3038,7 +3208,7 @@
 	exports.default = GreaterThanOrEqual;
 
 /***/ },
-/* 28 */
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3136,7 +3306,7 @@
 	exports.default = LessThan;
 
 /***/ },
-/* 29 */
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3234,7 +3404,7 @@
 	exports.default = LessThanOrEqual;
 
 /***/ },
-/* 30 */
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3302,7 +3472,7 @@
 	exports.default = Cart;
 
 /***/ },
-/* 31 */
+/* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3366,7 +3536,7 @@
 	exports.default = Customer;
 
 /***/ },
-/* 32 */
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3434,7 +3604,7 @@
 	exports.default = Destination;
 
 /***/ },
-/* 33 */
+/* 35 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3500,7 +3670,7 @@
 	exports.default = Environment;
 
 /***/ },
-/* 34 */
+/* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3523,7 +3693,7 @@
 	
 	var _Boolean2 = _interopRequireDefault(_Boolean);
 	
-	var _popper = __webpack_require__(35);
+	var _popper = __webpack_require__(37);
 	
 	var _popper2 = _interopRequireDefault(_popper);
 	
@@ -3763,7 +3933,7 @@
 	exports.default = PostalCode;
 
 /***/ },
-/* 35 */
+/* 37 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -5027,7 +5197,7 @@
 	});
 
 /***/ },
-/* 36 */
+/* 38 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5044,7 +5214,7 @@
 	
 	var _Condition3 = _interopRequireDefault(_Condition2);
 	
-	var _ProductSubselection = __webpack_require__(37);
+	var _ProductSubselection = __webpack_require__(39);
 	
 	var _ProductSubselection2 = _interopRequireDefault(_ProductSubselection);
 	
@@ -5144,7 +5314,7 @@
 	exports.default = ProductSubselection;
 
 /***/ },
-/* 37 */
+/* 39 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5286,7 +5456,7 @@
 	exports.default = ProductSubselection;
 
 /***/ },
-/* 38 */
+/* 40 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5352,7 +5522,7 @@
 	exports.default = Promotion;
 
 /***/ },
-/* 39 */
+/* 41 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5417,7 +5587,7 @@
 	exports.default = Time;
 
 /***/ },
-/* 40 */
+/* 42 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5478,7 +5648,7 @@
 	exports.default = BooleanField;
 
 /***/ },
-/* 41 */
+/* 43 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -5527,7 +5697,7 @@
 	exports.default = Number;
 
 /***/ },
-/* 42 */
+/* 44 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -5584,7 +5754,7 @@
 	exports.default = NumberBase26;
 
 /***/ },
-/* 43 */
+/* 45 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -5641,7 +5811,7 @@
 	exports.default = NumberBase36;
 
 /***/ },
-/* 44 */
+/* 46 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5711,7 +5881,7 @@
 	exports.default = Select;
 
 /***/ },
-/* 45 */
+/* 47 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -5760,7 +5930,7 @@
 	exports.default = Text;
 
 /***/ },
-/* 46 */
+/* 48 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -5809,7 +5979,7 @@
 	exports.default = Time;
 
 /***/ },
-/* 47 */
+/* 49 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5873,7 +6043,7 @@
 	exports.default = NumberX2;
 
 /***/ },
-/* 48 */
+/* 50 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -5938,7 +6108,7 @@
 	exports.default = NumberBase26X2;
 
 /***/ },
-/* 49 */
+/* 51 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -6003,7 +6173,7 @@
 	exports.default = NumberBase36X2;
 
 /***/ },
-/* 50 */
+/* 52 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6067,7 +6237,7 @@
 	exports.default = TextX2;
 
 /***/ },
-/* 51 */
+/* 53 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6131,7 +6301,7 @@
 	exports.default = TimeX2;
 
 /***/ },
-/* 52 */
+/* 54 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6241,7 +6411,7 @@
 	exports.default = Conditional;
 
 /***/ },
-/* 53 */
+/* 55 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
