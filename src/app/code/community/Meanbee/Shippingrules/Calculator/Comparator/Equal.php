@@ -8,6 +8,7 @@ class Meanbee_Shippingrules_Calculator_Comparator_Equal
         $this->addType('number');
         $this->addType('number_base26');
         $this->addType('number_base36');
+        $this->addType('string');
     }
 
     /**

@@ -10,6 +10,7 @@ class Meanbee_Shippingrules_Calculator_Register_Type
         $this->add('number', new Meanbee_Shippingrules_Calculator_Type_Number($this->registers));
         $this->add('number_base26', new Meanbee_Shippingrules_Calculator_Type_NumberBase26($this->registers));
         $this->add('number_base36', new Meanbee_Shippingrules_Calculator_Type_NumberBase36($this->registers));
+        $this->add('string', new Meanbee_Shippingrules_Calculator_Type_String($this->registers));
     }
     
     /**
