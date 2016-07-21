@@ -19,6 +19,8 @@ import ContainsComparator from './Comparator/Contains';
 import NotContainComparator from './Comparator/NotContain';
 import BeginsComparator from './Comparator/Begins';
 import NotBeginComparator from './Comparator/NotBegin';
+import EndsComparator from './Comparator/Ends';
+import NotEndComparator from './Comparator/NotEnd';
 import EqualComparator from './Comparator/Equal';
 import NotEqualComparator from './Comparator/NotEqual';
 import GreaterThanComparator from './Comparator/GreaterThan';
@@ -100,6 +102,8 @@ window.React = {
     Meanbee.ShippingRules.registers.comparator.add('NotContain', NotContainComparator);
     Meanbee.ShippingRules.registers.comparator.add('Begins', BeginsComparator);
     Meanbee.ShippingRules.registers.comparator.add('NotBegin', NotBeginComparator);
+    Meanbee.ShippingRules.registers.comparator.add('Ends', EndsComparator);
+    Meanbee.ShippingRules.registers.comparator.add('NotEnd', NotEndComparator);
     Meanbee.ShippingRules.registers.comparator.add('Equal', EqualComparator);
     Meanbee.ShippingRules.registers.comparator.add('NotEqual', NotEqualComparator);
     Meanbee.ShippingRules.registers.comparator.add('GreaterThan', GreaterThanComparator);
