@@ -29,7 +29,7 @@ export default class Numeric extends Aggregator
 
     renderChildSelector() {
         let me = this;
-        return (<li id={`${me.id}.${me.children.length}`} onKeyDown={me.keyHandler.bind(me)} tabIndex={0}>
+        return (<li id={me.id + '.' + me.children.length} onKeyDown={me.keyHandler.bind(me)} tabIndex={0}>
             <select id={`${me.id}-childselector`} aria-label="Type of value" onChange={(event) => {
                 let child = (event.target.value === 'this') ? me.constructor : Meanbee.ShippingRules.registers.term.get(event.target.value);
                 let id = me.addChild(child).id;

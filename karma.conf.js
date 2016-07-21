@@ -6,6 +6,9 @@ module.exports = function (config) {
         browsers: {
             IDE: ['PhantomJS']
         }[(argv.env || process.env.NODE_ENV).toUpperCase()] || ['Chrome', 'Firefox', 'Safari', 'PhantomJS', 'Opera'],
+        client: {
+            clearContext: false
+        },
         customContextFile: 'tests/context.html',
         files: [
             'src/skin/adminhtml/base/default/js/meanbee/shippingrules/script.js',
@@ -13,6 +16,7 @@ module.exports = function (config) {
             { pattern: 'tests/ajax/**/*', included: false, watched: false }
         ],
         frameworks: ['qunit'],
+        logLevel: config.LOG_ERROR,
         plugins: [
             require('karma-qunit'),
             require('karma-chrome-launcher'),

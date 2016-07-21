@@ -21,7 +21,7 @@ export default class Base
 
     get id() {
         if (this.parent instanceof Base) {
-            return `${this.parent.id}.${this.index}`;
+            return this.parent.id + '.' + this.index;
         } else {
             return this.index;
         }
@@ -100,6 +100,7 @@ export default class Base
     }
 
     rerender() {
+        if (!this.container) return;
         let focussedElementId = document.activeElement.id;
         this.container.innerHTML = '';
         this.container.appendChild(this.render());

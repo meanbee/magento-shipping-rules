@@ -28,7 +28,6 @@ gulp.task('test:php', function (done) {
 });
 
 gulp.task('test:js', ['scripts'], function (done) {
-    console.log(process.env.NODE_ENV);
     new KarmaServer({
         configFile: __dirname + '/karma.conf.js',
         singleRun: true

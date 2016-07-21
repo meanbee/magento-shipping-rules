@@ -72,7 +72,7 @@ class BooleanAggregator extends Aggregator
 
     renderChildSelector() {
         let me = this;
-        return (<li id={`${me.id}.${me.children.length}`} onKeyDown={me.keyHandler.bind(me)} tabIndex={0}>
+        return (<li id={me.id + '.' + me.children.length} onKeyDown={me.keyHandler.bind(me)} tabIndex={0}>
             <select id={`${me.id}-childselector`} aria-label="Condition" onChange={(event) => {
                 let selected = event.target.selectedOptions[0];
                 let registerKey = selected.getAttribute('data-register-key');

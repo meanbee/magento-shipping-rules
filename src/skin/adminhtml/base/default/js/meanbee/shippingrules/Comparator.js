@@ -9,7 +9,8 @@ export default class Comparator
     }
 
     static canHandleType(type) {
-        for (let t of type) {
+        for (let i = 0; i < type.length; i++) {
+            let t = type[i];
             if (~this.supportedTypes().indexOf(t)) {
                 return true;
             }
