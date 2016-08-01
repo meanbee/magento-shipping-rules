@@ -32,8 +32,12 @@ export default class PostalCode extends Condition
         return variables;
     }
 
-    renderFormatDecoration() {
-        return Meanbee.ShippingRules.data['condition/destination_postalcode/formats'].filter(f => (f.value === this.format && util.textWidth(f.decoration) < 2 * util.textWidth('🇦'))).map(f => (<span>{f.decoration}</span>));
+    fieldDecorator (decoration, label) {
+        if (util.textWidth(decoration) < 2 * util.textWidth('🇦')) {
+            return decoration + ' ' + label;
+        } else {
+            return label;
+        }
     }
 
     renderFormatSelector() {
@@ -46,7 +50,7 @@ export default class PostalCode extends Condition
         }}>
             <option disabled={true} selected={!me.format}>[SELECT]</option>
             {Meanbee.ShippingRules.data['condition/destination_postalcode/formats'].sort((a, b) => ((a.label.toUpperCase() < b.label.toUpperCase()) ? -1 : 1)).map((format) => {
-                let option = (<option value={format.value} dir='rtl'>{format.label}</option>);
+                let option = (<option value={format.value} dir='rtl'>{me.fieldDecorator(format.decoration, format.label)}</option>);
                 option.selected = me.format === format.value;
                 return option;
             })}
@@ -85,7 +89,6 @@ export default class PostalCode extends Condition
             onDragStart={me.drag.bind(me)} onDragOver={me.allowDrop.bind(me)} onDrop={me.drop.bind(me)} onDragEnter={me.dragIn.bind(me)} onDragLeave={me.dragOut.bind(me)}>
             {me.label} matches the format of
             <span class="popper-target">
-                {me.renderFormatDecoration()}
                 {me.renderFormatSelector()}
             </span>
             <span id={me.aggregator.id}>

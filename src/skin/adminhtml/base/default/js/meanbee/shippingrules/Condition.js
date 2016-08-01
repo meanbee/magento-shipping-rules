@@ -34,7 +34,7 @@ export default class Condition extends Base
         let me = this;
         return (<select id={`${me.id}-comparator`} onChange={event => {
             me.comparator = new (Meanbee.ShippingRules.registers.comparator.get(event.target.value))(this.type);
-            me.valueField = new (Meanbee.ShippingRules.registers.field.get(me.comparator.getField()))(me, me.value);
+            me.refresh();
             me.root.rerender();
             Meanbee.ShippingRules.history.pushState();
         }}>

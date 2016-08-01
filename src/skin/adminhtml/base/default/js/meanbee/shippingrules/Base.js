@@ -104,7 +104,7 @@ export default class Base
         let focussedElementId = document.activeElement.id;
         this.container.innerHTML = '';
         this.container.appendChild(this.render());
-        util.resizeFields();
+        window.Stretchy.resizeAll();
         this.focus(focussedElementId);
         this.root.updateJSON();
     }

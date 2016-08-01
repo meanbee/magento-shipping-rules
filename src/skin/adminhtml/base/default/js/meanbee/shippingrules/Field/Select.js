@@ -16,7 +16,7 @@ export default class Select extends Field
             Meanbee.ShippingRules.history.pushState();
         }}>
             {Meanbee.ShippingRules.data[me.dataKey] ? Meanbee.ShippingRules.data[me.dataKey].map((optionDesc) => {
-                let option = <option value={optionDesc.value}>{optionDesc.label}</option>
+                let option = <option value={optionDesc.value}>{me.decorator ? me.decorator(optionDesc.value, optionDesc.label) : optionDesc.label}</option>
                 if (optionDesc.value === me.value) option.selected = true;
                 return option;
             }) : []}

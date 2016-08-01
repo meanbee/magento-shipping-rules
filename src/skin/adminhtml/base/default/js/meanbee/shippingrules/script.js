@@ -263,7 +263,12 @@
 	
 	var _ProductSubselection4 = _interopRequireDefault(_ProductSubselection3);
 	
+	__webpack_require__(60);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	window.Stretchy.selectors.filter = '.calculator-tree *';
+	window.Stretchy.selectors.base += ', input[type="number"]';
 	
 	window.React = {
 	    createElement: function createElement(tagName, attributes) {
@@ -357,6 +362,7 @@
 	    _util2.default.loadData('condition/destination_postalcode/formats');
 	
 	    document.addEventListener('DOMContentLoaded', function () {
+	        window.Stretchy.init();
 	        var priceField = document.getElementById('price');
 	        priceField.hidden = true;
 	        var priceContainer = document.createElement('ul');
@@ -385,15 +391,6 @@
 	        condContainer.appendChild(condCalc.render());
 	
 	        Meanbee.ShippingRules.history.pushState();
-	
-	        function changeHandler(event) {
-	            if (~['INPUT', 'SELECT'].indexOf(event.target.tagName)) _util2.default.resizeFields();
-	        }
-	
-	        document.body.addEventListener('change', changeHandler, false);
-	        document.body.addEventListener('keyup', changeHandler, false);
-	
-	        _util2.default.resizeFields();
 	    });
 	})();
 
@@ -788,7 +785,7 @@
 	            var focussedElementId = document.activeElement.id;
 	            this.container.innerHTML = '';
 	            this.container.appendChild(this.render());
-	            _util2.default.resizeFields();
+	            window.Stretchy.resizeAll();
 	            this.focus(focussedElementId);
 	            this.root.updateJSON();
 	        }
@@ -1200,123 +1197,11 @@
 	ctx.font = 'bold 10.8px sans-serif';
 	
 	var util = {
-	    toOptions: function toOptions(options, selected) {
-	        selected = Array.isArray(selected) ? selected : [selected];
-	        var html = [];
-	        options.forEach(function (option) {
-	            if ({}.toString.call(option.value) === '[object Array]') {
-	                html.push(React.createElement(
-	                    'optgroup',
-	                    { label: option.label },
-	                    toOptions(option.value, selected)
-	                ));
-	            } else {
-	                var optionElement = function () {
-	                    return React.createElement(
-	                        'option',
-	                        { value: option.value },
-	                        option.label
-	                    );
-	                }();
-	                if (~selected.indexOf(option.value)) optionElement.selected = true;
-	                if (option.inputType) optionElement.dataset.inputType = option.inputType;
-	                if (option.type) optionElement.dataset.type = option.type;
-	                html.push(optionElement);
-	            }
-	        });
-	        return html;
-	    },
-	    constructInputField: function constructInputField(condition) {
-	        var comparator = Meanbee.ShippingRules.ajax.getComparators(condition.attribute).filter(function (x) {
-	            return x.value === condition.comparator;
-	        })[0];
-	        var conditionField = Meanbee.ShippingRules.ajax.getConditionFieldByValue(condition.attribute);
-	        var prefix = condition.prefix + '-c' + condition.id;
-	        if (!comparator) {
-	            return React.createElement('input', { id: prefix + '-value' });
-	        }
-	        var input = null;
-	        switch (comparator.inputType) {
-	            case 'x-interval':
-	                input = function () {
-	                    return React.createElement(
-	                        'span',
-	                        { id: prefix + '-value' },
-	                        React.createElement('input', { id: prefix + '-value-min' }),
-	                        ' and ',
-	                        React.createElement('input', { id: prefix + '-value-max' })
-	                    );
-	                }();
-	                Object.defineProperty(input, 'value', {
-	                    enumerable: true,
-	                    get: function get() {
-	                        return [document.getElementById(input.id + '-min').value, document.getElementById(input.id + '-max').value];
-	                    },
-	                    set: function set(value) {
-	                        if (value) {
-	                            document.getElementById(input.id + '-min').value = value[0];
-	                            document.getElementById(input.id + '-max').value = value[1];
-	                        }
-	                    }
-	                });
-	                break;
-	            case 'x-multiselect':
-	                input = function () {
-	                    return React.createElement(
-	                        'select',
-	                        { id: prefix + '-value', multiple: 'multiple' },
-	                        util.toOptions(conditionField.options, condition.value)
-	                    );
-	                }();
-	                break;
-	            case 'select':
-	                input = function () {
-	                    return React.createElement(
-	                        'select',
-	                        { id: prefix + '-value' },
-	                        util.toOptions(conditionField.options, condition.value)
-	                    );
-	                }();
-	                break;
-	            default:
-	                input = function () {
-	                    return React.createElement('input', { id: prefix + '-value', type: comparator.inputType || 'text' });
-	                }();
-	                if (comparator.inputPattern) {
-	                    input.pattern = comparator.inputPattern;
-	                }
-	                break;
-	        }
-	        input.value = condition.value;
-	        input.addEventListener('keyup', function () {
-	            return condition.value = input.value;
-	        }, false);
-	        input.addEventListener('change', function () {
-	            return condition.value = input.value;
-	        }, false);
-	        return input;
-	    },
-	    addButton: function addButton(ctx, handler) {
-	        return React.createElement('button', { id: ctx.prefix + '-t' + ctx.id + '-add', type: 'button', 'class': 'add', onClick: handler });
-	    },
 	    removeButton: function removeButton(ctx, handler) {
 	        return React.createElement('button', { id: ctx.id + '-remove', 'aria-label': 'Remove', type: 'button', 'class': 'remove', onClick: handler });
 	    },
-	    fieldTextSize: function fieldTextSize(text) {
-	        return Math.floor(ctx.measureText(text).width) + 25 + 'px';
-	    },
 	    textWidth: function textWidth(text) {
 	        return ctx.measureText(text).width;
-	    },
-	    resizeFields: function resizeFields() {
-	        [].forEach.call(document.querySelectorAll('.calculator-tree select:not([multiple])'), function (select) {
-	            var text = select.selectedOptions[0] ? select.selectedOptions[0].innerText : '';
-	            select.style.width = util.fieldTextSize(text);
-	        });
-	        [].forEach.call(document.querySelectorAll('.calculator-tree input'), function (input) {
-	            var text = input.value || (input.type === 'time' ? '-------' : '---');
-	            input.style.width = util.fieldTextSize(text);
-	        });
 	    },
 	    loadData: function loadData(path) {
 	        if (!('data' in Meanbee.ShippingRules)) Meanbee.ShippingRules.data = {};
@@ -1570,7 +1455,7 @@
 	                'select',
 	                { id: me.id + '-comparator', onChange: function onChange(event) {
 	                        me.comparator = new (Meanbee.ShippingRules.registers.comparator.get(event.target.value))(_this2.type);
-	                        me.valueField = new (Meanbee.ShippingRules.registers.field.get(me.comparator.getField()))(me, me.value);
+	                        me.refresh();
 	                        me.root.rerender();
 	                        Meanbee.ShippingRules.history.pushState();
 	                    } },
@@ -3893,6 +3778,10 @@
 	
 	var _Condition3 = _interopRequireDefault(_Condition2);
 	
+	var _util = __webpack_require__(9);
+	
+	var _util2 = _interopRequireDefault(_util);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -3907,10 +3796,59 @@
 	    function Destination(index, parent, variable) {
 	        _classCallCheck(this, Destination);
 	
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(Destination).call(this, index, parent, variable));
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Destination).call(this, index, parent, variable));
+	
+	        if (_this.valueField) {
+	            _this.valueField.decorator = _this.variable === 'dest_country_id' ? _this.fieldDecorator.bind(_this) : null;
+	        }
+	        return _this;
 	    }
 	
 	    _createClass(Destination, [{
+	        key: 'refresh',
+	        value: function refresh() {
+	            _get(Object.getPrototypeOf(Destination.prototype), 'refresh', this).call(this);
+	            if (this.valueField) {
+	                this.valueField.decorator = this.variable === 'dest_country_id' ? this.fieldDecorator.bind(this) : null;
+	            }
+	        }
+	    }, {
+	        key: 'fieldDecorator',
+	        value: function fieldDecorator(value, label) {
+	            var flag = this.toRegionalIndicatorSymbols(value);
+	            if (_util2.default.textWidth(flag) < 2 * _util2.default.textWidth('🇦')) {
+	                return flag + ' ' + label;
+	            } else {
+	                return label;
+	            }
+	        }
+	    }, {
+	        key: 'toRegionalIndicatorSymbols',
+	        value: function toRegionalIndicatorSymbols(plaintext) {
+	            var regionalIndicatorSymbols = '',
+	                strlen = plaintext.length;
+	            for (var i = 0; i < strlen; i++) {
+	                // For each character in string
+	                var codepoint = plaintext.codePointAt(i);
+	                if (codepoint >= 'A'.codePointAt(0) && codepoint <= 'Z'.codePointAt(0)) {
+	                    // If character in range A-Z
+	                    regionalIndicatorSymbols += String.fromCodePoint(127462 + codepoint - 'A'.codePointAt(0)); // Create character for respective Regional Indicator Symbol
+	                } else {
+	                    // Else
+	                    regionalIndicatorSymbols += plaintext.charAt(i); // Use original character
+	                }
+	            }
+	            return regionalIndicatorSymbols;
+	        }
+	    }, {
+	        key: 'init',
+	        value: function init(obj) {
+	            _get(Object.getPrototypeOf(Destination.prototype), 'init', this).call(this, obj);
+	            if (this.valueField) {
+	                this.valueField.decorator = this.variable === 'dest_country_id' ? this.fieldDecorator.bind(this) : null;
+	            }
+	        }
+	    }, {
 	        key: 'toJSON',
 	        value: function toJSON() {
 	            var obj = _get(Object.getPrototypeOf(Destination.prototype), 'toJSON', this).call(this);
@@ -4064,19 +4002,13 @@
 	    }
 	
 	    _createClass(PostalCode, [{
-	        key: 'renderFormatDecoration',
-	        value: function renderFormatDecoration() {
-	            var _this2 = this;
-	
-	            return Meanbee.ShippingRules.data['condition/destination_postalcode/formats'].filter(function (f) {
-	                return f.value === _this2.format && _util2.default.textWidth(f.decoration) < 2 * _util2.default.textWidth('🇦');
-	            }).map(function (f) {
-	                return React.createElement(
-	                    'span',
-	                    null,
-	                    f.decoration
-	                );
-	            });
+	        key: 'fieldDecorator',
+	        value: function fieldDecorator(decoration, label) {
+	            if (_util2.default.textWidth(decoration) < 2 * _util2.default.textWidth('🇦')) {
+	                return decoration + ' ' + label;
+	            } else {
+	                return label;
+	            }
 	        }
 	    }, {
 	        key: 'renderFormatSelector',
@@ -4101,7 +4033,7 @@
 	                    var option = React.createElement(
 	                        'option',
 	                        { value: format.value, dir: 'rtl' },
-	                        format.label
+	                        me.fieldDecorator(format.decoration, format.label)
 	                    );
 	                    option.selected = me.format === format.value;
 	                    return option;
@@ -4111,7 +4043,7 @@
 	    }, {
 	        key: 'renderHelp',
 	        value: function renderHelp(item) {
-	            var _this3 = this;
+	            var _this2 = this;
 	
 	            item.addEventListener('focus', function () {
 	                var popper = void 0;
@@ -4120,7 +4052,7 @@
 	                } else {
 	                    var _ret = function () {
 	                        var postalCodeFormatData = Meanbee.ShippingRules.data['condition/destination_postalcode/formats'].filter(function (f) {
-	                            return f.value === _this3.format;
+	                            return f.value === _this2.format;
 	                        });
 	                        if (!postalCodeFormatData || !postalCodeFormatData.length) return {
 	                                v: void 0
@@ -4143,7 +4075,7 @@
 	                            React.createElement('div', { 'class': 'popper__arrow' })
 	                        );
 	                        item.querySelector('.popper-target').insertAdjacentElement('afterend', help);
-	                        _this3._popper = popper = new _popper2.default(item.querySelector('.popper-target'), help, {
+	                        _this2._popper = popper = new _popper2.default(item.querySelector('.popper-target'), help, {
 	                            placement: 'top',
 	                            removeOnDestroy: true
 	                        });
@@ -4177,7 +4109,6 @@
 	                React.createElement(
 	                    'span',
 	                    { 'class': 'popper-target' },
-	                    me.renderFormatDecoration(),
 	                    me.renderFormatSelector()
 	                ),
 	                React.createElement(
@@ -4198,19 +4129,19 @@
 	    }, {
 	        key: 'refresh',
 	        value: function refresh() {
-	            var _this4 = this;
+	            var _this3 = this;
 	
 	            if (this.context instanceof this.constructor) {
 	                if (this.variable in this.constructor.getVariables(this.context)) {
 	                    (function () {
-	                        var validComparators = Meanbee.ShippingRules.registers.comparator.getByType(_this4.type);
+	                        var validComparators = Meanbee.ShippingRules.registers.comparator.getByType(_this3.type);
 	                        if (Object.keys(validComparators).reduce(function (accumulator, key) {
-	                            return accumulator || _this4.comparator instanceof validComparators[key];
+	                            return accumulator || _this3.comparator instanceof validComparators[key];
 	                        }, false)) {
-	                            _this4.comparator.type = _this4.type;
+	                            _this3.comparator.type = _this3.type;
 	                        } else {
 	                            var comparator = validComparators[Object.keys(validComparators)[0]];
-	                            _this4.comparator = comparator ? new comparator(_this4.type) : null;
+	                            _this3.comparator = comparator ? new comparator(_this3.type) : null;
 	                        }
 	                    })();
 	                } else {
@@ -6206,7 +6137,7 @@
 	                    var option = React.createElement(
 	                        'option',
 	                        { value: optionDesc.value },
-	                        optionDesc.label
+	                        me.decorator ? me.decorator(optionDesc.value, optionDesc.label) : optionDesc.label
 	                    );
 	                    if (optionDesc.value === me.value) option.selected = true;
 	                    return option;
@@ -6828,6 +6759,196 @@
 
 	    return Constant;
 	}(_Term3.default);
+
+/***/ },
+/* 60 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	/*
+	 * Stretchy: Form element autosizing, the way it should be.
+	 * by Lea Verou http://lea.verou.me
+	 * MIT license
+	 */
+	(function () {
+	
+		if (!self.Element) {
+			return; // super old browser
+		}
+	
+		if (!Element.prototype.matches) {
+			Element.prototype.matches = Element.prototype.webkitMatchesSelector || Element.prototype.mozMatchesSelector || Element.prototype.msMatchesSelector || Element.prototype.oMatchesSelector || null;
+		}
+	
+		if (!Element.prototype.matches) {
+			return;
+		}
+	
+		function $$(expr, con) {
+			return expr instanceof Node || expr instanceof Window ? [expr] : [].slice.call(typeof expr == "string" ? (con || document).querySelectorAll(expr) : expr || []);
+		}
+	
+		var _ = self.Stretchy = {
+			selectors: {
+				base: 'textarea, select:not([size]), input:not([type]), input[type="' + "text url email tel".split(" ").join('"], input[type="') + '"]',
+				filter: "*"
+			},
+	
+			// Script element this was included with, if any
+			script: document.currentScript || $$("script").pop(),
+	
+			// Autosize one element. The core of Stretchy.
+			resize: function resize(element) {
+				if (!_.resizes(element)) {
+					return;
+				}
+	
+				var cs = getComputedStyle(element);
+				var offset = 0;
+	
+				if (!element.value && element.placeholder) {
+					var empty = true;
+					element.value = element.placeholder;
+				}
+	
+				var type = element.nodeName.toLowerCase();
+	
+				if (type == "textarea") {
+					element.style.height = "0";
+	
+					if (cs.boxSizing == "border-box") {
+						offset = element.offsetHeight;
+					} else if (cs.boxSizing == "content-box") {
+						offset = -element.clientHeight;
+					}
+	
+					element.style.height = element.scrollHeight + offset + "px";
+				} else if (type == "input") {
+					element.style.width = "0";
+	
+					if (cs.boxSizing == "border-box") {
+						offset = element.offsetWidth;
+					} else if (cs.boxSizing == "padding-box") {
+						offset = element.clientWidth;
+					}
+	
+					// Safari misreports scrollWidth, so we will instead set scrollLeft to a
+					// huge number, and read that back to see what it was clipped to
+					element.scrollLeft = 1e+10;
+	
+					var width = Math.max(element.scrollLeft + offset, element.scrollWidth - element.clientWidth);
+	
+					element.style.width = width + "px";
+					if (~['number'].indexOf(element.type)) {
+						element.style.width = "calc(" + width + "px + 2em)";
+					}
+				} else if (type == "select") {
+					var selectedIndex = element.selectedIndex > 0 ? element.selectedIndex : 0;
+	
+					// Need to use dummy element to measure :(
+					var option = document.createElement("_");
+					if (element.options[selectedIndex]) option.textContent = element.options[selectedIndex].textContent;
+					element.parentNode.insertBefore(option, element.nextSibling);
+	
+					// The name of the appearance property, as it might be prefixed
+					var appearance;
+	
+					for (var property in Object.keys(cs)) {
+						if (!/^(width|webkitLogicalWidth)$/.test(property)) {
+							//console.log(property, option.offsetWidth, cs[property]);
+							option.style[property] = cs[property];
+	
+							if (/appearance$/i.test(property)) {
+								appearance = property;
+							}
+						}
+					}
+	
+					option.style.width = "";
+	
+					if (option.offsetWidth > 0) {
+						element.style.width = option.offsetWidth + "px";
+	
+						if (!cs[appearance] || cs[appearance] !== "none") {
+							// Account for arrow
+							element.style.width = "calc(" + element.style.width + " + 2em)";
+						}
+					}
+	
+					option.parentNode.removeChild(option);
+					option = null;
+				}
+	
+				if (empty) {
+					element.value = "";
+				}
+			},
+	
+			// Autosize multiple elements
+			resizeAll: function resizeAll(elements) {
+				$$(elements || _.selectors.base).forEach(function (element) {
+					_.resize(element);
+				});
+			},
+	
+			active: true,
+	
+			// Will stretchy do anything for this element?
+			resizes: function resizes(element) {
+				return element && element.parentNode && element.matches && element.matches(_.selectors.base) && element.matches(_.selectors.filter);
+			},
+	
+			init: function init() {
+				console.log(Stretchy.selectors.base);
+				_.selectors.filter = _.script.getAttribute("data-filter") || ($$("[data-stretchy-filter]").pop() || document.body).getAttribute("data-stretchy-filter") || Stretchy.selectors.filter || "*";
+	
+				_.resizeAll();
+			},
+	
+			$$: $$
+		};
+	
+		// Autosize all elements once the DOM is loaded
+	
+		// DOM already loaded?
+		// if (document.readyState !== "loading") {
+		// 	console.log('Already loaded');
+		// 	_.init();
+		// }
+		// else {
+		// 	// Wait for it
+		// 	document.addEventListener("DOMContentLoaded", _.init);
+		// }
+	
+		// Listen for changes
+		var listener = function listener(evt) {
+			if (_.active) {
+				_.resize(evt.target);
+			}
+		};
+	
+		document.documentElement.addEventListener("input", listener);
+	
+		// Firefox fires a change event instead of an input event
+		document.documentElement.addEventListener("change", listener);
+	
+		// Listen for new elements
+		if (self.MutationObserver) {
+			new MutationObserver(function (mutations) {
+				if (_.active) {
+					mutations.forEach(function (mutation) {
+						if (mutation.type == "childList") {
+							Stretchy.resizeAll(mutation.addedNodes);
+						}
+					});
+				}
+			}).observe(document.documentElement, {
+				childList: true,
+				subtree: true
+			});
+		}
+	})();
 
 /***/ }
 /******/ ]);
