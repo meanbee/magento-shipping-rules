@@ -1,4 +1,4 @@
 #!/bin/sh
-gulp test
+gulp test -env dev
 
 exit $?

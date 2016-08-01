@@ -57,6 +57,10 @@ import ConditionalTerm from './Term/Conditional';
 import ConstantTerm from './Term/Constant';
 import ProductSubselectionTerm from './Term/ProductSubselection';
 
+import 'stretchy';
+window.Stretchy.selectors.filter = '.calculator-tree *';
+window.Stretchy.selectors.base += ', input[type="number"]';
+
 window.React = {
     createElement(tagName, attributes, ...children) {
         let element = document.createElement(tagName);
@@ -144,6 +148,7 @@ window.React = {
     util.loadData('condition/destination_postalcode/formats');
     
     document.addEventListener('DOMContentLoaded', function () {
+        window.Stretchy.init();
         let priceField = document.getElementById('price');
         priceField.hidden = true;
         let priceContainer = document.createElement('ul');
@@ -172,14 +177,5 @@ window.React = {
         condContainer.appendChild(condCalc.render());
 
         Meanbee.ShippingRules.history.pushState();
-
-        function changeHandler (event) {
-            if (~['INPUT', 'SELECT'].indexOf(event.target.tagName)) util.resizeFields();
-        }
-
-        document.body.addEventListener('change', changeHandler, false);
-        document.body.addEventListener('keyup', changeHandler, false);
-
-        util.resizeFields();
     });
 })();
