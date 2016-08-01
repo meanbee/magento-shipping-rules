@@ -21,6 +21,8 @@ class Meanbee_Shippingrules_Calculator_Register_Comparator
         $this->add('notbegin', new Meanbee_Shippingrules_Calculator_Comparator_NotBegin($this->registers));
         $this->add('ends', new Meanbee_Shippingrules_Calculator_Comparator_Ends($this->registers));
         $this->add('notend', new Meanbee_Shippingrules_Calculator_Comparator_NotEnd($this->registers));
+        $this->add('matchesregex', new Meanbee_Shippingrules_Calculator_Comparator_MatchesRegEx($this->registers));
+        $this->add('notmatchregex', new Meanbee_Shippingrules_Calculator_Comparator_NotMatchRegEx($this->registers));
     }
 
     /**

@@ -22,23 +22,16 @@ ul.calculator-tree button {
   height: 1.2em;
   width: 1.2em;
 }
-ul.calculator-tree button.add {
-  background-image: url("/skin/adminhtml/default/default/images/rule_component_add.gif");
-}
 ul.calculator-tree button.remove {
   background-image: url("/skin/adminhtml/default/default/images/rule_component_remove.gif");
-}
-ul.calculator-tree button.help {
-  background-image: url("/skin/adminhtml/default/default/images/fam_help.gif");
-  margin-right: 0.5em;
+  margin-left: 0.5em;
 }
 ul.calculator-tree input,
 ul.calculator-tree select[id] {
   background: linear-gradient(to top, currentColor 0, currentColor 1px, transparent 1px);
   border: none;
   border-radius: 0;
-  padding-bottom: 0.2em;
-  padding-left: 0.5em;
+  padding: 0 0.5em 0.2em 0.5em;
   vertical-align: bottom;
   width: auto;
 }
@@ -49,6 +42,9 @@ ul.calculator-tree select[id] {
 }
 ul.calculator-tree input[type="time"]::-webkit-clear-button {
   display: none;
+}
+ul.calculator-tree input[type="checkbox"] {
+  margin: 0 0.2em 0.2em 0.5em;
 }
 [id^="meanbee_shippingrules_form_"] .hor-scroll {
   overflow: initial;

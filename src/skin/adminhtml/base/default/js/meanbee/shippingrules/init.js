@@ -27,6 +27,8 @@ import GreaterThanComparator from './Comparator/GreaterThan';
 import GreaterThanOrEqualComparator from './Comparator/GreaterThanOrEqual';
 import LessThanComparator from './Comparator/LessThan';
 import LessThanOrEqualComparator from './Comparator/LessThanOrEqual';
+import MatchesRegExComparator from './Comparator/MatchesRegEx';
+import NotMatchRegExComparator from './Comparator/NotMatchRegEx';
 
 import Condition from './Condition';
 import CartCondition from './Condition/Cart';
@@ -46,6 +48,7 @@ import NumberBase36Field from './Field/NumberBase36';
 import SelectField from './Field/Select';
 import TextField from './Field/Text';
 import TimeField from './Field/Time';
+import CasedTextField from './Field/CasedText';
 import NumberX2Field from './Field/NumberX2';
 import NumberBase26X2Field from './Field/NumberBase26X2';
 import NumberBase36X2Field from './Field/NumberBase36X2';
@@ -114,6 +117,8 @@ window.React = {
     Meanbee.ShippingRules.registers.comparator.add('GreaterThanOrEqual', GreaterThanOrEqualComparator);
     Meanbee.ShippingRules.registers.comparator.add('LessThan', LessThanComparator);
     Meanbee.ShippingRules.registers.comparator.add('LessThanOrEqual', LessThanOrEqualComparator);
+    Meanbee.ShippingRules.registers.comparator.add('MatchesRegEx', MatchesRegExComparator);
+    Meanbee.ShippingRules.registers.comparator.add('NotMatchRegEx', NotMatchRegExComparator);
 
     Meanbee.ShippingRules.Condition = Condition;
     Meanbee.ShippingRules.registers.condition.add('Cart', CartCondition);
@@ -133,6 +138,7 @@ window.React = {
     Meanbee.ShippingRules.registers.field.add('Select', SelectField);
     Meanbee.ShippingRules.registers.field.add('Text', TextField);
     Meanbee.ShippingRules.registers.field.add('Time', TimeField);
+    Meanbee.ShippingRules.registers.field.add('CasedText', CasedTextField);
     Meanbee.ShippingRules.registers.field.add('NumberX2', NumberX2Field);
     Meanbee.ShippingRules.registers.field.add('NumberBase26X2', NumberBase26X2Field);
     Meanbee.ShippingRules.registers.field.add('NumberBase36X2', NumberBase36X2Field);

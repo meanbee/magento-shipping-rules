@@ -159,39 +159,47 @@
 	
 	var _LessThanOrEqual2 = _interopRequireDefault(_LessThanOrEqual);
 	
+	var _MatchesRegEx = __webpack_require__(36);
+	
+	var _MatchesRegEx2 = _interopRequireDefault(_MatchesRegEx);
+	
+	var _NotMatchRegEx = __webpack_require__(37);
+	
+	var _NotMatchRegEx2 = _interopRequireDefault(_NotMatchRegEx);
+	
 	var _Condition = __webpack_require__(13);
 	
 	var _Condition2 = _interopRequireDefault(_Condition);
 	
-	var _Cart = __webpack_require__(36);
+	var _Cart = __webpack_require__(38);
 	
 	var _Cart2 = _interopRequireDefault(_Cart);
 	
-	var _Customer = __webpack_require__(37);
+	var _Customer = __webpack_require__(39);
 	
 	var _Customer2 = _interopRequireDefault(_Customer);
 	
-	var _Destination = __webpack_require__(38);
+	var _Destination = __webpack_require__(40);
 	
 	var _Destination2 = _interopRequireDefault(_Destination);
 	
-	var _Environment = __webpack_require__(39);
+	var _Environment = __webpack_require__(41);
 	
 	var _Environment2 = _interopRequireDefault(_Environment);
 	
-	var _PostalCode = __webpack_require__(40);
+	var _PostalCode = __webpack_require__(42);
 	
 	var _PostalCode2 = _interopRequireDefault(_PostalCode);
 	
-	var _ProductSubselection = __webpack_require__(42);
+	var _ProductSubselection = __webpack_require__(44);
 	
 	var _ProductSubselection2 = _interopRequireDefault(_ProductSubselection);
 	
-	var _Promotion = __webpack_require__(44);
+	var _Promotion = __webpack_require__(46);
 	
 	var _Promotion2 = _interopRequireDefault(_Promotion);
 	
-	var _Time = __webpack_require__(45);
+	var _Time = __webpack_require__(47);
 	
 	var _Time2 = _interopRequireDefault(_Time);
 	
@@ -199,51 +207,55 @@
 	
 	var _Field2 = _interopRequireDefault(_Field);
 	
-	var _Boolean3 = __webpack_require__(46);
+	var _Boolean3 = __webpack_require__(48);
 	
 	var _Boolean4 = _interopRequireDefault(_Boolean3);
 	
-	var _Number = __webpack_require__(47);
+	var _Number = __webpack_require__(49);
 	
 	var _Number2 = _interopRequireDefault(_Number);
 	
-	var _NumberBase = __webpack_require__(48);
+	var _NumberBase = __webpack_require__(50);
 	
 	var _NumberBase2 = _interopRequireDefault(_NumberBase);
 	
-	var _NumberBase3 = __webpack_require__(49);
+	var _NumberBase3 = __webpack_require__(51);
 	
 	var _NumberBase4 = _interopRequireDefault(_NumberBase3);
 	
-	var _Select = __webpack_require__(50);
+	var _Select = __webpack_require__(52);
 	
 	var _Select2 = _interopRequireDefault(_Select);
 	
-	var _Text = __webpack_require__(51);
+	var _Text = __webpack_require__(53);
 	
 	var _Text2 = _interopRequireDefault(_Text);
 	
-	var _Time3 = __webpack_require__(52);
+	var _Time3 = __webpack_require__(54);
 	
 	var _Time4 = _interopRequireDefault(_Time3);
 	
-	var _NumberX = __webpack_require__(53);
+	var _CasedText = __webpack_require__(55);
+	
+	var _CasedText2 = _interopRequireDefault(_CasedText);
+	
+	var _NumberX = __webpack_require__(56);
 	
 	var _NumberX2 = _interopRequireDefault(_NumberX);
 	
-	var _NumberBase26X = __webpack_require__(54);
+	var _NumberBase26X = __webpack_require__(57);
 	
 	var _NumberBase26X2 = _interopRequireDefault(_NumberBase26X);
 	
-	var _NumberBase36X = __webpack_require__(55);
+	var _NumberBase36X = __webpack_require__(58);
 	
 	var _NumberBase36X2 = _interopRequireDefault(_NumberBase36X);
 	
-	var _TextX = __webpack_require__(56);
+	var _TextX = __webpack_require__(59);
 	
 	var _TextX2 = _interopRequireDefault(_TextX);
 	
-	var _TimeX = __webpack_require__(57);
+	var _TimeX = __webpack_require__(60);
 	
 	var _TimeX2 = _interopRequireDefault(_TimeX);
 	
@@ -251,19 +263,19 @@
 	
 	var _Term2 = _interopRequireDefault(_Term);
 	
-	var _Conditional = __webpack_require__(58);
+	var _Conditional = __webpack_require__(61);
 	
 	var _Conditional2 = _interopRequireDefault(_Conditional);
 	
-	var _Constant = __webpack_require__(59);
+	var _Constant = __webpack_require__(62);
 	
 	var _Constant2 = _interopRequireDefault(_Constant);
 	
-	var _ProductSubselection3 = __webpack_require__(43);
+	var _ProductSubselection3 = __webpack_require__(45);
 	
 	var _ProductSubselection4 = _interopRequireDefault(_ProductSubselection3);
 	
-	__webpack_require__(60);
+	__webpack_require__(63);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -328,6 +340,8 @@
 	    Meanbee.ShippingRules.registers.comparator.add('GreaterThanOrEqual', _GreaterThanOrEqual2.default);
 	    Meanbee.ShippingRules.registers.comparator.add('LessThan', _LessThan2.default);
 	    Meanbee.ShippingRules.registers.comparator.add('LessThanOrEqual', _LessThanOrEqual2.default);
+	    Meanbee.ShippingRules.registers.comparator.add('MatchesRegEx', _MatchesRegEx2.default);
+	    Meanbee.ShippingRules.registers.comparator.add('NotMatchRegEx', _NotMatchRegEx2.default);
 	
 	    Meanbee.ShippingRules.Condition = _Condition2.default;
 	    Meanbee.ShippingRules.registers.condition.add('Cart', _Cart2.default);
@@ -347,6 +361,7 @@
 	    Meanbee.ShippingRules.registers.field.add('Select', _Select2.default);
 	    Meanbee.ShippingRules.registers.field.add('Text', _Text2.default);
 	    Meanbee.ShippingRules.registers.field.add('Time', _Time4.default);
+	    Meanbee.ShippingRules.registers.field.add('CasedText', _CasedText2.default);
 	    Meanbee.ShippingRules.registers.field.add('NumberX2', _NumberX2.default);
 	    Meanbee.ShippingRules.registers.field.add('NumberBase26X2', _NumberBase26X2.default);
 	    Meanbee.ShippingRules.registers.field.add('NumberBase36X2', _NumberBase36X2.default);
@@ -3642,6 +3657,166 @@
 	
 	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 	
+	var _Comparator2 = __webpack_require__(11);
+	
+	var _Comparator3 = _interopRequireDefault(_Comparator2);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var MatchesRegEx = function (_Comparator) {
+	    _inherits(MatchesRegEx, _Comparator);
+	
+	    function MatchesRegEx(type) {
+	        _classCallCheck(this, MatchesRegEx);
+	
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(MatchesRegEx).call(this, type));
+	    }
+	
+	    _createClass(MatchesRegEx, [{
+	        key: 'getField',
+	        value: function getField() {
+	            var _this2 = this;
+	
+	            var type = this.type.filter(function (t) {
+	                return ~_this2.constructor.supportedTypes().indexOf(t);
+	            }.bind(this));
+	            switch (type[0]) {
+	                default:
+	                    return 'CasedText';
+	            }
+	        }
+	    }, {
+	        key: 'toJSON',
+	        value: function toJSON() {
+	            var obj = _get(Object.getPrototypeOf(MatchesRegEx.prototype), 'toJSON', this).call(this);
+	            obj.key = 'MatchesRegEx';
+	            return obj;
+	        }
+	    }], [{
+	        key: 'supportedTypes',
+	        value: function supportedTypes() {
+	            return ['string'];
+	        }
+	    }, {
+	        key: 'identifier',
+	        value: function identifier(type) {
+	            var _this3 = this;
+	
+	            type = type.filter(function (t) {
+	                return ~_this3.supportedTypes().indexOf(t);
+	            }.bind(this));
+	            switch (type[0]) {
+	                default:
+	                    return 'MATCHES REGEX';
+	            }
+	        }
+	    }]);
+	
+	    return MatchesRegEx;
+	}(_Comparator3.default);
+	
+	exports.default = MatchesRegEx;
+
+/***/ },
+/* 37 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+	
+	var _Comparator2 = __webpack_require__(11);
+	
+	var _Comparator3 = _interopRequireDefault(_Comparator2);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var NotMatchRegEx = function (_Comparator) {
+	    _inherits(NotMatchRegEx, _Comparator);
+	
+	    function NotMatchRegEx(type) {
+	        _classCallCheck(this, NotMatchRegEx);
+	
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(NotMatchRegEx).call(this, type));
+	    }
+	
+	    _createClass(NotMatchRegEx, [{
+	        key: 'getField',
+	        value: function getField() {
+	            var _this2 = this;
+	
+	            var type = this.type.filter(function (t) {
+	                return ~_this2.constructor.supportedTypes().indexOf(t);
+	            }.bind(this));
+	            switch (type[0]) {
+	                default:
+	                    return 'CasedText';
+	            }
+	        }
+	    }, {
+	        key: 'toJSON',
+	        value: function toJSON() {
+	            var obj = _get(Object.getPrototypeOf(NotMatchRegEx.prototype), 'toJSON', this).call(this);
+	            obj.key = 'NotMatchRegEx';
+	            return obj;
+	        }
+	    }], [{
+	        key: 'supportedTypes',
+	        value: function supportedTypes() {
+	            return ['string'];
+	        }
+	    }, {
+	        key: 'identifier',
+	        value: function identifier(type) {
+	            var _this3 = this;
+	
+	            type = type.filter(function (t) {
+	                return ~_this3.supportedTypes().indexOf(t);
+	            }.bind(this));
+	            switch (type[0]) {
+	                default:
+	                    return 'DOES NOT MATCH REGEX';
+	            }
+	        }
+	    }]);
+	
+	    return NotMatchRegEx;
+	}(_Comparator3.default);
+	
+	exports.default = NotMatchRegEx;
+
+/***/ },
+/* 38 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+	
 	var _Condition2 = __webpack_require__(13);
 	
 	var _Condition3 = _interopRequireDefault(_Condition2);
@@ -3697,7 +3872,7 @@
 	exports.default = Cart;
 
 /***/ },
-/* 37 */
+/* 39 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3761,7 +3936,7 @@
 	exports.default = Customer;
 
 /***/ },
-/* 38 */
+/* 40 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3882,7 +4057,7 @@
 	exports.default = Destination;
 
 /***/ },
-/* 39 */
+/* 41 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3948,7 +4123,7 @@
 	exports.default = Environment;
 
 /***/ },
-/* 40 */
+/* 42 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3971,7 +4146,7 @@
 	
 	var _Boolean2 = _interopRequireDefault(_Boolean);
 	
-	var _popper = __webpack_require__(41);
+	var _popper = __webpack_require__(43);
 	
 	var _popper2 = _interopRequireDefault(_popper);
 	
@@ -4204,7 +4379,7 @@
 	exports.default = PostalCode;
 
 /***/ },
-/* 41 */
+/* 43 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -5468,7 +5643,7 @@
 	});
 
 /***/ },
-/* 42 */
+/* 44 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5485,7 +5660,7 @@
 	
 	var _Condition3 = _interopRequireDefault(_Condition2);
 	
-	var _ProductSubselection = __webpack_require__(43);
+	var _ProductSubselection = __webpack_require__(45);
 	
 	var _ProductSubselection2 = _interopRequireDefault(_ProductSubselection);
 	
@@ -5585,7 +5760,7 @@
 	exports.default = ProductSubselection;
 
 /***/ },
-/* 43 */
+/* 45 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5727,7 +5902,7 @@
 	exports.default = ProductSubselection;
 
 /***/ },
-/* 44 */
+/* 46 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5793,7 +5968,7 @@
 	exports.default = Promotion;
 
 /***/ },
-/* 45 */
+/* 47 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5858,7 +6033,7 @@
 	exports.default = Time;
 
 /***/ },
-/* 46 */
+/* 48 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5919,7 +6094,7 @@
 	exports.default = BooleanField;
 
 /***/ },
-/* 47 */
+/* 49 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -5968,7 +6143,7 @@
 	exports.default = Number;
 
 /***/ },
-/* 48 */
+/* 50 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -6025,7 +6200,7 @@
 	exports.default = NumberBase26;
 
 /***/ },
-/* 49 */
+/* 51 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -6082,7 +6257,7 @@
 	exports.default = NumberBase36;
 
 /***/ },
-/* 50 */
+/* 52 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6152,7 +6327,7 @@
 	exports.default = Select;
 
 /***/ },
-/* 51 */
+/* 53 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -6201,7 +6376,7 @@
 	exports.default = Text;
 
 /***/ },
-/* 52 */
+/* 54 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -6250,7 +6425,81 @@
 	exports.default = Time;
 
 /***/ },
-/* 53 */
+/* 55 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _Field2 = __webpack_require__(15);
+	
+	var _Field3 = _interopRequireDefault(_Field2);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var CasedText = function (_Field) {
+	    _inherits(CasedText, _Field);
+	
+	    function CasedText() {
+	        _classCallCheck(this, CasedText);
+	
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(CasedText).apply(this, arguments));
+	    }
+	
+	    _createClass(CasedText, [{
+	        key: "render",
+	        value: function render() {
+	            var me = this;
+	            var caseSensitiveField = React.createElement("input", { type: "checkbox", id: me.idPrefix + "-value-caseSensitive", onChange: function onChange(event) {
+	                    me.valueChangeHandler(event);
+	                    Meanbee.ShippingRules.history.pushState();
+	                } });
+	            caseSensitiveField.checked = this.value.caseSensitive || false;
+	            return React.createElement(
+	                "span",
+	                { id: me.idPrefix + "-value" },
+	                React.createElement("input", { type: "text", id: me.idPrefix + "-value-text", value: me.value.text || '', placeholder: "RegEx", onKeyUp: me.valueChangeHandler.bind(me), onChange: function onChange(event) {
+	                        me.valueChangeHandler(event);
+	                        Meanbee.ShippingRules.history.pushState();
+	                    } }),
+	                caseSensitiveField,
+	                " ",
+	                React.createElement(
+	                    "label",
+	                    { "for": me.idPrefix + "-value-caseSensitive" },
+	                    "Case Sensitive"
+	                )
+	            );
+	        }
+	    }, {
+	        key: "valueChangeHandler",
+	        value: function valueChangeHandler() {
+	            this.value = {
+	                text: document.getElementById(this.idPrefix + "-value-text").value,
+	                caseSensitive: document.getElementById(this.idPrefix + "-value-caseSensitive").checked
+	            };
+	            this.condition.valueChangeHandler(this.value);
+	        }
+	    }]);
+	
+	    return CasedText;
+	}(_Field3.default);
+	
+	exports.default = CasedText;
+
+/***/ },
+/* 56 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6314,7 +6563,7 @@
 	exports.default = NumberX2;
 
 /***/ },
-/* 54 */
+/* 57 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -6379,7 +6628,7 @@
 	exports.default = NumberBase26X2;
 
 /***/ },
-/* 55 */
+/* 58 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -6444,7 +6693,7 @@
 	exports.default = NumberBase36X2;
 
 /***/ },
-/* 56 */
+/* 59 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6508,7 +6757,7 @@
 	exports.default = TextX2;
 
 /***/ },
-/* 57 */
+/* 60 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6572,7 +6821,7 @@
 	exports.default = TimeX2;
 
 /***/ },
-/* 58 */
+/* 61 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6682,7 +6931,7 @@
 	exports.default = Conditional;
 
 /***/ },
-/* 59 */
+/* 62 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6761,7 +7010,7 @@
 	}(_Term3.default);
 
 /***/ },
-/* 60 */
+/* 63 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -6900,7 +7149,6 @@
 			},
 	
 			init: function init() {
-				console.log(Stretchy.selectors.base);
 				_.selectors.filter = _.script.getAttribute("data-filter") || ($$("[data-stretchy-filter]").pop() || document.body).getAttribute("data-stretchy-filter") || Stretchy.selectors.filter || "*";
 	
 				_.resizeAll();
