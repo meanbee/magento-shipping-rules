@@ -129,6 +129,9 @@ class Meanbee_Shippingrules_Helper_Postcode extends Mage_Core_Helper_Abstract {
      * @return string
      */
     public function sanitisePostcode($postalCode) {
+        if (is_array($postalCode)) {
+            return array_map(array($this, 'sanitisePostcode'), $postalCode);
+        }
         return preg_replace('/\s+/', '', str_replace(array('-', '-', '‒', '–', '—', '―'), '', strtoupper($postalCode)));
     }
 
