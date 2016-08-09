@@ -1,5 +1,5 @@
 <_>
-   <form_key>cVDlRIzTPTf2LEcn</form_key>
+   <form_key>S3yQt5lhMlOa0os5</form_key>
    <name>Meanbee_Shippingrules</name>
    <channel>community</channel>
    <version_ids>
@@ -9,9 +9,9 @@
    <description>Provides a GUI, similar to the one for shopping and catalogue promotion rules, to specifying shipping rates for your customers.</description>
    <license>Commercial License</license>
    <license_uri/>
-   <version>2.7.1</version>
+   <version>2.7.2</version>
    <stability>stable</stability>
-   <notes>* Bugfix for product level cart price rules not being matched by &apos;Applied Cart Price Rules&apos; condition when billing and shipping addresses differ.</notes>
+   <notes>* Allow postal code prefix conditions to accept a comma-separated list of values through the use of &apos;is one of&apos;.</notes>
    <authors>
       <name>
          <name>Meanbee</name>
@@ -40,7 +40,7 @@
             <max/>
          </max>
          <files>
-            <files>                        </files>
+            <files>                         </files>
          </files>
       </package>
       <extension>

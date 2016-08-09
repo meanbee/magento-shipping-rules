@@ -286,7 +286,9 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
         $requestItems = $request->getAllItems();
         if (count($requestItems) > 0) {
             $quote = $requestItems[0]->getQuote();
-            $request->setData('promo_free_shipping', $quote->getShippingAddress()->getFreeShipping());
+            if(null != $quote->getShippingAddress()) {
+                $request->setData('promo_free_shipping', $quote->getShippingAddress()->getFreeShipping());
+            }
             $request->setData('promo_coupon_code', $quote->getCouponCode());
             $request->setData('promo_applied_rule_ids', implode(',', $this->getAppliedCartPriceRules($requestItems)) ?: null);
         }
@@ -356,10 +358,12 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
         $requestItems = $request->getAllItems();
         if (count($requestItems) > 0) {
             $quote = $requestItems[0]->getQuote();
-            $street = $quote->getShippingAddress()->getData('street');
-            $street = explode("\n", $street, 2);
-            $request->setData('dest_street_address_l1', isset($street[0]) ? $street[0] : null);
-            $request->setData('dest_street_address_l2', isset($street[1]) ? $street[1] : null);
+            if(null != $quote->getShippingAddress()) {
+                $street = $quote->getShippingAddress()->getData('street');
+                $street = explode("\n", $street, 2);
+                $request->setData('dest_street_address_l1', isset($street[0]) ? $street[0] : null);
+                $request->setData('dest_street_address_l2', isset($street[1]) ? $street[1] : null);
+            }
         }
         return $request;
     }
