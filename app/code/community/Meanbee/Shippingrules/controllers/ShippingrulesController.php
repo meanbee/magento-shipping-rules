@@ -87,6 +87,7 @@ class Meanbee_Shippingrules_ShippingrulesController extends Mage_Adminhtml_Contr
                 if ($id) {
                     $model->setId($id);
                 }
+                $model = Mage::helper('meanship/upgrade')->readyMigrationToVersion3($model);
                 $model->save();
 
                 if (!$model->getId()) {

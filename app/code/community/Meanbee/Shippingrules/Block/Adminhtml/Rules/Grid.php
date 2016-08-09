@@ -112,7 +112,8 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Grid extends Mage_Adminhtml_Bl
     protected function _prepareExportColumns() {
         $columns = array(
             'rule_id', 'name', 'price', 'cost', 'per_item', 'conditions_serialized', 'stop_rules_processing',
-            'stop_all_rules_processing', 'notes', 'sort_order', 'is_active', 'version'
+            'stop_all_rules_processing', 'notes', 'sort_order', 'is_active', 'version', 'conditions_migration',
+            'price_migration', 'cost_migration'
         );
 
         foreach ($columns as $column) {
@@ -137,7 +138,7 @@ class Meanbee_Shippingrules_Block_Adminhtml_Rules_Grid extends Mage_Adminhtml_Bl
      */
     public function decorateExportValue($value, $row, $column, $isExport) {
         if ($isExport) {
-            if ($column->getIndex() == 'conditions_serialized') {
+            if (in_array($column->getIndex(), array('conditions_serialized', 'conditions_migration', 'price_migration', 'cost_migration'))) {
                 return base64_encode(html_entity_decode($value));
             }
         }
