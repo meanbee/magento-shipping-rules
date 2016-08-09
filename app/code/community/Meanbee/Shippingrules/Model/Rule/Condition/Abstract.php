@@ -14,7 +14,7 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Abstract extends Mage_Rule_Mode
     {
         if (null === $this->_defaultOperatorInputByType) {
             $this->_defaultOperatorInputByType = array(
-                'string'      => array('==', '!=', '{}', '!{}', '^', '$', '!^', '!$', '//'),
+                'string'      => array('==', '!=', '{}', '!{}', '^', '$', '!^', '!$', '()', '!()', '//'),
                 'numeric'     => array('==', '!=', '>=', '>', '<=', '<', '..', '!..', '()', '!()'),
                 'numeric_b26' => array('==', '!=', '>=:b26', '>:b26', '<=:b26', '<:b26', '..:b26', '!..:b26', '()', '!()'),
                 'numeric_b36' => array('==', '!=', '>=:b36', '>:b36', '<=:b36', '<:b36', '..:b36', '!..:b36', '()', '!()'),
