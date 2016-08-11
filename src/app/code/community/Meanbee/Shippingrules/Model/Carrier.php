@@ -42,9 +42,12 @@ class Meanbee_Shippingrules_Model_Carrier
         }
 
         $registers = new Meanbee_Shippingrules_Calculator_Registers;
+        Mage::dispatchEvent(Meanbee_Shippingrules_Helper_Data::CALCULATOR_LOAD_EVENT, array(
+            'registers' => $registers
+        ));
 
         $request = Meanbee_Shippingrules_Model_Rule::addVariablesToRequest($request, $registers);
-        // Mage::log(array_map(function ($item) { return json_encode($item->getData()); }, $request->getAllItems()), Zend_Log::DEBUG, 'debug.log', true);
+        
         $resultArray = array();
         foreach ($methods = $this->getMatchedRules($request, $registers) as $methodName => $rule) {
             /** @var Mage_Shipping_Model_Rate_Result_Method $method */
