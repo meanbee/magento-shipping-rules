@@ -26,6 +26,10 @@ export default class Comparator
         return {};
     }
 
+    valueChangeHandler(value) {
+        return value;
+    }
+
     toJSON() {
         return {
             register: 'Comparator'

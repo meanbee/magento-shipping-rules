@@ -10,7 +10,7 @@ export default class CasedText extends Field
         }} />);
         caseSensitiveField.checked = this.value.caseSensitive || false;
         return (<span id={`${me.idPrefix}-value`}>
-            <input type="text" id={`${me.idPrefix}-value-text`} value={me.value.text || ''} placeholder="RegEx" onKeyUp={me.valueChangeHandler.bind(me)} onChange={(event) => {
+            <input type="text" id={`${me.idPrefix}-value-text`} value={me.value.text || ''} placeholder="     " onKeyUp={me.valueChangeHandler.bind(me)} onChange={(event) => {
                 me.valueChangeHandler(event);
                 Meanbee.ShippingRules.history.pushState();
             }} />

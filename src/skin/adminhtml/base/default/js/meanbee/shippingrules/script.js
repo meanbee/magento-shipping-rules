@@ -167,39 +167,47 @@
 	
 	var _NotMatchRegEx2 = _interopRequireDefault(_NotMatchRegEx);
 	
+	var _OneOf = __webpack_require__(38);
+	
+	var _OneOf2 = _interopRequireDefault(_OneOf);
+	
+	var _NotOneOf = __webpack_require__(39);
+	
+	var _NotOneOf2 = _interopRequireDefault(_NotOneOf);
+	
 	var _Condition = __webpack_require__(13);
 	
 	var _Condition2 = _interopRequireDefault(_Condition);
 	
-	var _Cart = __webpack_require__(38);
+	var _Cart = __webpack_require__(40);
 	
 	var _Cart2 = _interopRequireDefault(_Cart);
 	
-	var _Customer = __webpack_require__(39);
+	var _Customer = __webpack_require__(41);
 	
 	var _Customer2 = _interopRequireDefault(_Customer);
 	
-	var _Destination = __webpack_require__(40);
+	var _Destination = __webpack_require__(42);
 	
 	var _Destination2 = _interopRequireDefault(_Destination);
 	
-	var _Environment = __webpack_require__(41);
+	var _Environment = __webpack_require__(43);
 	
 	var _Environment2 = _interopRequireDefault(_Environment);
 	
-	var _PostalCode = __webpack_require__(42);
+	var _PostalCode = __webpack_require__(44);
 	
 	var _PostalCode2 = _interopRequireDefault(_PostalCode);
 	
-	var _ProductSubselection = __webpack_require__(44);
+	var _ProductSubselection = __webpack_require__(46);
 	
 	var _ProductSubselection2 = _interopRequireDefault(_ProductSubselection);
 	
-	var _Promotion = __webpack_require__(46);
+	var _Promotion = __webpack_require__(48);
 	
 	var _Promotion2 = _interopRequireDefault(_Promotion);
 	
-	var _Time = __webpack_require__(47);
+	var _Time = __webpack_require__(49);
 	
 	var _Time2 = _interopRequireDefault(_Time);
 	
@@ -207,75 +215,91 @@
 	
 	var _Field2 = _interopRequireDefault(_Field);
 	
-	var _Boolean3 = __webpack_require__(48);
+	var _Boolean3 = __webpack_require__(50);
 	
 	var _Boolean4 = _interopRequireDefault(_Boolean3);
 	
-	var _Number = __webpack_require__(49);
+	var _Number = __webpack_require__(51);
 	
 	var _Number2 = _interopRequireDefault(_Number);
 	
-	var _NumberBase = __webpack_require__(50);
+	var _NumberBase = __webpack_require__(52);
 	
 	var _NumberBase2 = _interopRequireDefault(_NumberBase);
 	
-	var _NumberBase3 = __webpack_require__(51);
+	var _NumberBase3 = __webpack_require__(53);
 	
 	var _NumberBase4 = _interopRequireDefault(_NumberBase3);
 	
-	var _Select = __webpack_require__(52);
+	var _Select = __webpack_require__(54);
 	
 	var _Select2 = _interopRequireDefault(_Select);
 	
-	var _Text = __webpack_require__(53);
+	var _Multiselect = __webpack_require__(55);
+	
+	var _Multiselect2 = _interopRequireDefault(_Multiselect);
+	
+	var _Text = __webpack_require__(56);
 	
 	var _Text2 = _interopRequireDefault(_Text);
 	
-	var _Time3 = __webpack_require__(54);
+	var _Time3 = __webpack_require__(57);
 	
 	var _Time4 = _interopRequireDefault(_Time3);
 	
-	var _CasedText = __webpack_require__(55);
+	var _CasedText = __webpack_require__(58);
 	
 	var _CasedText2 = _interopRequireDefault(_CasedText);
 	
-	var _NumberX = __webpack_require__(56);
+	var _NumberX = __webpack_require__(59);
 	
 	var _NumberX2 = _interopRequireDefault(_NumberX);
 	
-	var _NumberBase26X = __webpack_require__(57);
+	var _NumberBase26X = __webpack_require__(60);
 	
 	var _NumberBase26X2 = _interopRequireDefault(_NumberBase26X);
 	
-	var _NumberBase36X = __webpack_require__(58);
+	var _NumberBase36X = __webpack_require__(61);
 	
 	var _NumberBase36X2 = _interopRequireDefault(_NumberBase36X);
 	
-	var _TextX = __webpack_require__(59);
+	var _TextX = __webpack_require__(62);
 	
 	var _TextX2 = _interopRequireDefault(_TextX);
 	
-	var _TimeX = __webpack_require__(60);
+	var _TimeX = __webpack_require__(63);
 	
 	var _TimeX2 = _interopRequireDefault(_TimeX);
+	
+	var _NumberList = __webpack_require__(64);
+	
+	var _NumberList2 = _interopRequireDefault(_NumberList);
+	
+	var _NumberBase26List = __webpack_require__(65);
+	
+	var _NumberBase26List2 = _interopRequireDefault(_NumberBase26List);
+	
+	var _NumberBase36List = __webpack_require__(66);
+	
+	var _NumberBase36List2 = _interopRequireDefault(_NumberBase36List);
 	
 	var _Term = __webpack_require__(17);
 	
 	var _Term2 = _interopRequireDefault(_Term);
 	
-	var _Conditional = __webpack_require__(61);
+	var _Conditional = __webpack_require__(67);
 	
 	var _Conditional2 = _interopRequireDefault(_Conditional);
 	
-	var _Constant = __webpack_require__(62);
+	var _Constant = __webpack_require__(68);
 	
 	var _Constant2 = _interopRequireDefault(_Constant);
 	
-	var _ProductSubselection3 = __webpack_require__(45);
+	var _ProductSubselection3 = __webpack_require__(47);
 	
 	var _ProductSubselection4 = _interopRequireDefault(_ProductSubselection3);
 	
-	__webpack_require__(63);
+	__webpack_require__(69);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -342,6 +366,8 @@
 	    Meanbee.ShippingRules.registers.comparator.add('LessThanOrEqual', _LessThanOrEqual2.default);
 	    Meanbee.ShippingRules.registers.comparator.add('MatchesRegEx', _MatchesRegEx2.default);
 	    Meanbee.ShippingRules.registers.comparator.add('NotMatchRegEx', _NotMatchRegEx2.default);
+	    Meanbee.ShippingRules.registers.comparator.add('OneOf', _OneOf2.default);
+	    Meanbee.ShippingRules.registers.comparator.add('NotOneOf', _NotOneOf2.default);
 	
 	    Meanbee.ShippingRules.Condition = _Condition2.default;
 	    Meanbee.ShippingRules.registers.condition.add('Cart', _Cart2.default);
@@ -359,6 +385,7 @@
 	    Meanbee.ShippingRules.registers.field.add('NumberBase26', _NumberBase2.default);
 	    Meanbee.ShippingRules.registers.field.add('NumberBase36', _NumberBase4.default);
 	    Meanbee.ShippingRules.registers.field.add('Select', _Select2.default);
+	    Meanbee.ShippingRules.registers.field.add('Multiselect', _Multiselect2.default);
 	    Meanbee.ShippingRules.registers.field.add('Text', _Text2.default);
 	    Meanbee.ShippingRules.registers.field.add('Time', _Time4.default);
 	    Meanbee.ShippingRules.registers.field.add('CasedText', _CasedText2.default);
@@ -367,6 +394,9 @@
 	    Meanbee.ShippingRules.registers.field.add('NumberBase36X2', _NumberBase36X2.default);
 	    Meanbee.ShippingRules.registers.field.add('TextX2', _TextX2.default);
 	    Meanbee.ShippingRules.registers.field.add('TimeX2', _TimeX2.default);
+	    Meanbee.ShippingRules.registers.field.add('NumberList', _NumberList2.default);
+	    Meanbee.ShippingRules.registers.field.add('NumberBase26List', _NumberBase26List2.default);
+	    Meanbee.ShippingRules.registers.field.add('NumberBase36List', _NumberBase36List2.default);
 	
 	    Meanbee.ShippingRules.Term = _Term2.default;
 	    Meanbee.ShippingRules.registers.term.add('Conditional', _Conditional2.default);
@@ -1319,6 +1349,11 @@
 	    }
 	
 	    _createClass(Comparator, [{
+	        key: 'valueChangeHandler',
+	        value: function valueChangeHandler(value) {
+	            return value;
+	        }
+	    }, {
 	        key: 'toJSON',
 	        value: function toJSON() {
 	            return {
@@ -1480,7 +1515,7 @@
 	    }, {
 	        key: 'valueChangeHandler',
 	        value: function valueChangeHandler(value) {
-	            this.value = value;
+	            this.value = this.comparator.valueChangeHandler(value);
 	            this.root.updateJSON();
 	        }
 	    }, {
@@ -3817,6 +3852,234 @@
 	
 	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 	
+	var _Comparator2 = __webpack_require__(11);
+	
+	var _Comparator3 = _interopRequireDefault(_Comparator2);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var OneOf = function (_Comparator) {
+	    _inherits(OneOf, _Comparator);
+	
+	    function OneOf(type) {
+	        _classCallCheck(this, OneOf);
+	
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(OneOf).call(this, type));
+	    }
+	
+	    _createClass(OneOf, [{
+	        key: 'getField',
+	        value: function getField() {
+	            var _this2 = this;
+	
+	            var type = this.type.filter(function (t) {
+	                return ~_this2.constructor.supportedTypes().indexOf(t);
+	            }.bind(this));
+	            switch (type[0]) {
+	                case 'enum':
+	                    return 'Multiselect';
+	                case 'number':
+	                case 'numeric_b10':
+	                    return 'NumberList';
+	                case 'numeric_b26':
+	                    return 'NumberBase26List';
+	                case 'numeric_b36':
+	                    return 'NumberBase36List';
+	                case 'string':
+	                    return 'CasedText';
+	                default:
+	                    return 'Text';
+	            }
+	        }
+	    }, {
+	        key: 'valueChangeHandler',
+	        value: function valueChangeHandler(value) {
+	            var _this3 = this;
+	
+	            if (Array.isArray(value)) {
+	                return value;
+	            }
+	            var type = this.type.filter(function (t) {
+	                return ~_this3.constructor.supportedTypes().indexOf(t);
+	            }.bind(this));
+	            if (type[0] === 'string') {
+	                var caseSensitive = value.caseSensitive;
+	                value = value.text.split(',').map(function (v) {
+	                    return v.trim();
+	                });
+	                value.caseSensitive = caseSensitive;
+	                return value;
+	            }
+	            return value.split(',').map(function (v) {
+	                return v.trim();
+	            });
+	        }
+	    }, {
+	        key: 'toJSON',
+	        value: function toJSON() {
+	            var obj = _get(Object.getPrototypeOf(OneOf.prototype), 'toJSON', this).call(this);
+	            obj.key = 'OneOf';
+	            return obj;
+	        }
+	    }], [{
+	        key: 'supportedTypes',
+	        value: function supportedTypes() {
+	            return ['enum', 'number', 'numeric_b10', 'numeric_b26', 'numeric_b36', 'string'];
+	        }
+	    }, {
+	        key: 'identifier',
+	        value: function identifier(type) {
+	            var _this4 = this;
+	
+	            type = type.filter(function (t) {
+	                return ~_this4.supportedTypes().indexOf(t);
+	            }.bind(this));
+	            switch (type[0]) {
+	                default:
+	                    return 'IS ONE OF';
+	            }
+	        }
+	    }]);
+	
+	    return OneOf;
+	}(_Comparator3.default);
+	
+	exports.default = OneOf;
+
+/***/ },
+/* 39 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+	
+	var _Comparator2 = __webpack_require__(11);
+	
+	var _Comparator3 = _interopRequireDefault(_Comparator2);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var NotOneOf = function (_Comparator) {
+	    _inherits(NotOneOf, _Comparator);
+	
+	    function NotOneOf(type) {
+	        _classCallCheck(this, NotOneOf);
+	
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(NotOneOf).call(this, type));
+	    }
+	
+	    _createClass(NotOneOf, [{
+	        key: 'getField',
+	        value: function getField() {
+	            var _this2 = this;
+	
+	            var type = this.type.filter(function (t) {
+	                return ~_this2.constructor.supportedTypes().indexOf(t);
+	            }.bind(this));
+	            switch (type[0]) {
+	                case 'enum':
+	                    return 'Multiselect';
+	                case 'number':
+	                case 'numeric_b10':
+	                    return 'NumberList';
+	                case 'numeric_b26':
+	                    return 'NumberBase26List';
+	                case 'numeric_b36':
+	                    return 'NumberBase36List';
+	                case 'string':
+	                    return 'CasedText';
+	                default:
+	                    return 'Text';
+	            }
+	        }
+	    }, {
+	        key: 'valueChangeHandler',
+	        value: function valueChangeHandler(value) {
+	            var _this3 = this;
+	
+	            if (Array.isArray(value)) {
+	                return value;
+	            }
+	            var type = this.type.filter(function (t) {
+	                return ~_this3.constructor.supportedTypes().indexOf(t);
+	            }.bind(this));
+	            if (type[0] === 'string') {
+	                var caseSensitive = value.caseSensitive;
+	                value = value.text.split(',').map(function (v) {
+	                    return v.trim();
+	                });
+	                value.caseSensitive = caseSensitive;
+	                return value;
+	            }
+	            return value.split(',').map(function (v) {
+	                return v.trim();
+	            });
+	        }
+	    }, {
+	        key: 'toJSON',
+	        value: function toJSON() {
+	            var obj = _get(Object.getPrototypeOf(NotOneOf.prototype), 'toJSON', this).call(this);
+	            obj.key = 'NotOneOf';
+	            return obj;
+	        }
+	    }], [{
+	        key: 'supportedTypes',
+	        value: function supportedTypes() {
+	            return ['enum', 'number', 'numeric_b10', 'numeric_b26', 'numeric_b36', 'string'];
+	        }
+	    }, {
+	        key: 'identifier',
+	        value: function identifier(type) {
+	            var _this4 = this;
+	
+	            type = type.filter(function (t) {
+	                return ~_this4.supportedTypes().indexOf(t);
+	            }.bind(this));
+	            switch (type[0]) {
+	                default:
+	                    return 'IS NOT ONE OF';
+	            }
+	        }
+	    }]);
+	
+	    return NotOneOf;
+	}(_Comparator3.default);
+	
+	exports.default = NotOneOf;
+
+/***/ },
+/* 40 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+	
 	var _Condition2 = __webpack_require__(13);
 	
 	var _Condition3 = _interopRequireDefault(_Condition2);
@@ -3872,7 +4135,7 @@
 	exports.default = Cart;
 
 /***/ },
-/* 39 */
+/* 41 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3936,7 +4199,7 @@
 	exports.default = Customer;
 
 /***/ },
-/* 40 */
+/* 42 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4057,7 +4320,7 @@
 	exports.default = Destination;
 
 /***/ },
-/* 41 */
+/* 43 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4123,7 +4386,7 @@
 	exports.default = Environment;
 
 /***/ },
-/* 42 */
+/* 44 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4146,7 +4409,7 @@
 	
 	var _Boolean2 = _interopRequireDefault(_Boolean);
 	
-	var _popper = __webpack_require__(43);
+	var _popper = __webpack_require__(45);
 	
 	var _popper2 = _interopRequireDefault(_popper);
 	
@@ -4379,7 +4642,7 @@
 	exports.default = PostalCode;
 
 /***/ },
-/* 43 */
+/* 45 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -5643,7 +5906,7 @@
 	});
 
 /***/ },
-/* 44 */
+/* 46 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5660,7 +5923,7 @@
 	
 	var _Condition3 = _interopRequireDefault(_Condition2);
 	
-	var _ProductSubselection = __webpack_require__(45);
+	var _ProductSubselection = __webpack_require__(47);
 	
 	var _ProductSubselection2 = _interopRequireDefault(_ProductSubselection);
 	
@@ -5760,7 +6023,7 @@
 	exports.default = ProductSubselection;
 
 /***/ },
-/* 45 */
+/* 47 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5902,7 +6165,7 @@
 	exports.default = ProductSubselection;
 
 /***/ },
-/* 46 */
+/* 48 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5968,7 +6231,7 @@
 	exports.default = Promotion;
 
 /***/ },
-/* 47 */
+/* 49 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6033,7 +6296,7 @@
 	exports.default = Time;
 
 /***/ },
-/* 48 */
+/* 50 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6094,7 +6357,7 @@
 	exports.default = BooleanField;
 
 /***/ },
-/* 49 */
+/* 51 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -6143,7 +6406,7 @@
 	exports.default = Number;
 
 /***/ },
-/* 50 */
+/* 52 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -6200,7 +6463,7 @@
 	exports.default = NumberBase26;
 
 /***/ },
-/* 51 */
+/* 53 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -6257,7 +6520,7 @@
 	exports.default = NumberBase36;
 
 /***/ },
-/* 52 */
+/* 54 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6327,7 +6590,109 @@
 	exports.default = Select;
 
 /***/ },
-/* 53 */
+/* 55 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _Field2 = __webpack_require__(15);
+	
+	var _Field3 = _interopRequireDefault(_Field2);
+	
+	var _util = __webpack_require__(9);
+	
+	var _util2 = _interopRequireDefault(_util);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var Multiselect = function (_Field) {
+	    _inherits(Multiselect, _Field);
+	
+	    function Multiselect(condition, value) {
+	        _classCallCheck(this, Multiselect);
+	
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Multiselect).call(this, condition, value));
+	
+	        var conditionDescriptor = condition.toJSON();
+	        _this.dataKey = conditionDescriptor.register.toLowerCase() + '/' + conditionDescriptor.key.toLowerCase() + '/options/' + condition.variable;
+	        _util2.default.loadData(_this.dataKey);
+	        return _this;
+	    }
+	
+	    _createClass(Multiselect, [{
+	        key: 'render',
+	        value: function render() {
+	            var me = this;
+	            return React.createElement(
+	                'span',
+	                { id: me.idPrefix + '-value-container' },
+	                React.createElement(
+	                    'select',
+	                    { id: me.idPrefix + '-value', multiple: 'multiple', size: '5', onKeyUp: me.valueChangeHandler.bind(me), onChange: function onChange(event) {
+	                            me.valueChangeHandler(event);
+	                            Meanbee.ShippingRules.history.pushState();
+	                        } },
+	                    Meanbee.ShippingRules.data[me.dataKey] ? Meanbee.ShippingRules.data[me.dataKey].map(function (optionDesc) {
+	                        var option = React.createElement(
+	                            'option',
+	                            { value: optionDesc.value },
+	                            me.decorator ? me.decorator(optionDesc.value, optionDesc.label) : optionDesc.label
+	                        );
+	                        if (me.value.indexOf(optionDesc.value)) option.selected = true;
+	                        return option;
+	                    }) : []
+	                ),
+	                React.createElement(
+	                    'output',
+	                    { id: me.idPrefix + '-value-output', onClick: function onClick() {
+	                            return document.getElementById(me.idPrefix + '-value').focus();
+	                        } },
+	                    function () {
+	                        return (Meanbee.ShippingRules.data[me.dataKey] ? Meanbee.ShippingRules.data[me.dataKey].filter(function (optionDesc) {
+	                            return ~me.value.indexOf(optionDesc.value);
+	                        }).map(function (optionDesc) {
+	                            return me.decorator ? me.decorator(optionDesc.value, optionDesc.label) : optionDesc.label;
+	                        }).join(', ') : '') || '[SELECT]';
+	                    }()
+	                )
+	            );
+	        }
+	    }, {
+	        key: 'valueChangeHandler',
+	        value: function valueChangeHandler() {
+	            var _this2 = this;
+	
+	            this.value = Array.from(document.getElementById(this.idPrefix + '-value').selectedOptions).map(function (option) {
+	                return option.value;
+	            });
+	            this.condition.valueChangeHandler(this.value);
+	            document.getElementById(this.idPrefix + '-value-output').innerHTML = (Meanbee.ShippingRules.data[this.dataKey] ? Meanbee.ShippingRules.data[this.dataKey].filter(function (optionDesc) {
+	                return ~_this2.value.indexOf(optionDesc.value);
+	            }).map(function (optionDesc) {
+	                return _this2.decorator ? _this2.decorator(optionDesc.value, optionDesc.label) : optionDesc.label;
+	            }).join(', ') : '') || '[SELECT]';
+	        }
+	    }]);
+	
+	    return Multiselect;
+	}(_Field3.default);
+	
+	exports.default = Multiselect;
+
+/***/ },
+/* 56 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -6376,7 +6741,7 @@
 	exports.default = Text;
 
 /***/ },
-/* 54 */
+/* 57 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -6425,7 +6790,7 @@
 	exports.default = Time;
 
 /***/ },
-/* 55 */
+/* 58 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -6469,7 +6834,7 @@
 	            return React.createElement(
 	                "span",
 	                { id: me.idPrefix + "-value" },
-	                React.createElement("input", { type: "text", id: me.idPrefix + "-value-text", value: me.value.text || '', placeholder: "RegEx", onKeyUp: me.valueChangeHandler.bind(me), onChange: function onChange(event) {
+	                React.createElement("input", { type: "text", id: me.idPrefix + "-value-text", value: me.value.text || '', placeholder: "     ", onKeyUp: me.valueChangeHandler.bind(me), onChange: function onChange(event) {
 	                        me.valueChangeHandler(event);
 	                        Meanbee.ShippingRules.history.pushState();
 	                    } }),
@@ -6499,7 +6864,7 @@
 	exports.default = CasedText;
 
 /***/ },
-/* 56 */
+/* 59 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6563,7 +6928,7 @@
 	exports.default = NumberX2;
 
 /***/ },
-/* 57 */
+/* 60 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -6628,7 +6993,7 @@
 	exports.default = NumberBase26X2;
 
 /***/ },
-/* 58 */
+/* 61 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -6693,7 +7058,7 @@
 	exports.default = NumberBase36X2;
 
 /***/ },
-/* 59 */
+/* 62 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6757,7 +7122,7 @@
 	exports.default = TextX2;
 
 /***/ },
-/* 60 */
+/* 63 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6821,7 +7186,178 @@
 	exports.default = TimeX2;
 
 /***/ },
-/* 61 */
+/* 64 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+	
+	var _Field2 = __webpack_require__(15);
+	
+	var _Field3 = _interopRequireDefault(_Field2);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var NumberList = function (_Field) {
+	    _inherits(NumberList, _Field);
+	
+	    function NumberList() {
+	        _classCallCheck(this, NumberList);
+	
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(NumberList).apply(this, arguments));
+	    }
+	
+	    _createClass(NumberList, [{
+	        key: "render",
+	        value: function render() {
+	            var me = this;
+	            return React.createElement("input", { type: "text", id: me.idPrefix + "-value", pattern: "[0-9, ]", value: me.value, onKeyUp: me.valueChangeHandler.bind(me), onChange: function onChange(event) {
+	                    me.valueChangeHandler(event);
+	                    Meanbee.ShippingRules.history.pushState();
+	                } });
+	        }
+	    }, {
+	        key: "valueChangeHandler",
+	        value: function valueChangeHandler(event) {
+	            event.target.value = event.target.value.toUpperCase();
+	            _get(Object.getPrototypeOf(NumberList.prototype), "valueChangeHandler", this).call(this, event);
+	        }
+	    }]);
+	
+	    return NumberList;
+	}(_Field3.default);
+	
+	exports.default = NumberList;
+
+/***/ },
+/* 65 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+	
+	var _Field2 = __webpack_require__(15);
+	
+	var _Field3 = _interopRequireDefault(_Field2);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var NumberBase26List = function (_Field) {
+	    _inherits(NumberBase26List, _Field);
+	
+	    function NumberBase26List() {
+	        _classCallCheck(this, NumberBase26List);
+	
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(NumberBase26List).apply(this, arguments));
+	    }
+	
+	    _createClass(NumberBase26List, [{
+	        key: "render",
+	        value: function render() {
+	            var me = this;
+	            return React.createElement("input", { type: "text", id: me.idPrefix + "-value", pattern: "[A-Z, ]", value: me.value, onKeyUp: me.valueChangeHandler.bind(me), onChange: function onChange(event) {
+	                    me.valueChangeHandler(event);
+	                    Meanbee.ShippingRules.history.pushState();
+	                } });
+	        }
+	    }, {
+	        key: "valueChangeHandler",
+	        value: function valueChangeHandler(event) {
+	            event.target.value = event.target.value.toUpperCase();
+	            _get(Object.getPrototypeOf(NumberBase26List.prototype), "valueChangeHandler", this).call(this, event);
+	        }
+	    }]);
+	
+	    return NumberBase26List;
+	}(_Field3.default);
+	
+	exports.default = NumberBase26List;
+
+/***/ },
+/* 66 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+	
+	var _Field2 = __webpack_require__(15);
+	
+	var _Field3 = _interopRequireDefault(_Field2);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var NumberBase36List = function (_Field) {
+	    _inherits(NumberBase36List, _Field);
+	
+	    function NumberBase36List() {
+	        _classCallCheck(this, NumberBase36List);
+	
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(NumberBase36List).apply(this, arguments));
+	    }
+	
+	    _createClass(NumberBase36List, [{
+	        key: "render",
+	        value: function render() {
+	            var me = this;
+	            return React.createElement("input", { type: "text", id: me.idPrefix + "-value", pattern: "[0-9A-Z, ]", value: me.value, onKeyUp: me.valueChangeHandler.bind(me), onChange: function onChange(event) {
+	                    me.valueChangeHandler(event);
+	                    Meanbee.ShippingRules.history.pushState();
+	                } });
+	        }
+	    }, {
+	        key: "valueChangeHandler",
+	        value: function valueChangeHandler(event) {
+	            event.target.value = event.target.value.toUpperCase();
+	            _get(Object.getPrototypeOf(NumberBase36List.prototype), "valueChangeHandler", this).call(this, event);
+	        }
+	    }]);
+	
+	    return NumberBase36List;
+	}(_Field3.default);
+	
+	exports.default = NumberBase36List;
+
+/***/ },
+/* 67 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6931,7 +7467,7 @@
 	exports.default = Conditional;
 
 /***/ },
-/* 62 */
+/* 68 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -7010,7 +7546,7 @@
 	}(_Term3.default);
 
 /***/ },
-/* 63 */
+/* 69 */
 /***/ function(module, exports) {
 
 	"use strict";

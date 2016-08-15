@@ -7,6 +7,7 @@ class Meanbee_Shippingrules_Calculator_Register_Type
 
     public function init()
     {
+        $this->add('enum', new Meanbee_Shippingrules_Calculator_Type_Enum($this->registers));
         $this->add('number', new Meanbee_Shippingrules_Calculator_Type_Number($this->registers));
         $this->add('number_base26', new Meanbee_Shippingrules_Calculator_Type_NumberBase26($this->registers));
         $this->add('number_base36', new Meanbee_Shippingrules_Calculator_Type_NumberBase36($this->registers));
@@ -17,7 +18,7 @@ class Meanbee_Shippingrules_Calculator_Register_Type
      * {@inheritdoc}
      * @implementation Meanbee_Shippingrules_Calculator_Register_Abstract
      * @param  mixed   $child Potential child
-     * @return boolean
+     * @return bool
      */
     protected function isValidChild($child)
     {

@@ -29,6 +29,8 @@ import LessThanComparator from './Comparator/LessThan';
 import LessThanOrEqualComparator from './Comparator/LessThanOrEqual';
 import MatchesRegExComparator from './Comparator/MatchesRegEx';
 import NotMatchRegExComparator from './Comparator/NotMatchRegEx';
+import OneOfComparator from './Comparator/OneOf';
+import NotOneOfComparator from './Comparator/NotOneOf';
 
 import Condition from './Condition';
 import CartCondition from './Condition/Cart';
@@ -46,6 +48,7 @@ import NumberField from './Field/Number';
 import NumberBase26Field from './Field/NumberBase26';
 import NumberBase36Field from './Field/NumberBase36';
 import SelectField from './Field/Select';
+import MultiselectField from './Field/Multiselect';
 import TextField from './Field/Text';
 import TimeField from './Field/Time';
 import CasedTextField from './Field/CasedText';
@@ -54,6 +57,9 @@ import NumberBase26X2Field from './Field/NumberBase26X2';
 import NumberBase36X2Field from './Field/NumberBase36X2';
 import TextX2Field from './Field/TextX2';
 import TimeX2Field from './Field/TimeX2';
+import NumberListField from './Field/NumberList';
+import NumberBase26ListField from './Field/NumberBase26List';
+import NumberBase36ListField from './Field/NumberBase36List';
 
 import Term from './Term';
 import ConditionalTerm from './Term/Conditional';
@@ -119,6 +125,8 @@ window.React = {
     Meanbee.ShippingRules.registers.comparator.add('LessThanOrEqual', LessThanOrEqualComparator);
     Meanbee.ShippingRules.registers.comparator.add('MatchesRegEx', MatchesRegExComparator);
     Meanbee.ShippingRules.registers.comparator.add('NotMatchRegEx', NotMatchRegExComparator);
+    Meanbee.ShippingRules.registers.comparator.add('OneOf', OneOfComparator);
+    Meanbee.ShippingRules.registers.comparator.add('NotOneOf', NotOneOfComparator);
 
     Meanbee.ShippingRules.Condition = Condition;
     Meanbee.ShippingRules.registers.condition.add('Cart', CartCondition);
@@ -136,6 +144,7 @@ window.React = {
     Meanbee.ShippingRules.registers.field.add('NumberBase26', NumberBase26Field);
     Meanbee.ShippingRules.registers.field.add('NumberBase36', NumberBase36Field);
     Meanbee.ShippingRules.registers.field.add('Select', SelectField);
+    Meanbee.ShippingRules.registers.field.add('Multiselect', MultiselectField);
     Meanbee.ShippingRules.registers.field.add('Text', TextField);
     Meanbee.ShippingRules.registers.field.add('Time', TimeField);
     Meanbee.ShippingRules.registers.field.add('CasedText', CasedTextField);
@@ -144,6 +153,9 @@ window.React = {
     Meanbee.ShippingRules.registers.field.add('NumberBase36X2', NumberBase36X2Field);
     Meanbee.ShippingRules.registers.field.add('TextX2', TextX2Field);
     Meanbee.ShippingRules.registers.field.add('TimeX2', TimeX2Field);
+    Meanbee.ShippingRules.registers.field.add('NumberList', NumberListField);
+    Meanbee.ShippingRules.registers.field.add('NumberBase26List', NumberBase26ListField);
+    Meanbee.ShippingRules.registers.field.add('NumberBase36List', NumberBase36ListField);
 
     Meanbee.ShippingRules.Term = Term;
     Meanbee.ShippingRules.registers.term.add('Conditional', ConditionalTerm);

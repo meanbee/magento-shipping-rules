@@ -39,6 +39,15 @@ class Calculator_Comparator_NotBeginTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->comparator->evaluate('c', 'abc', 'string'));
         $this->assertTrue($this->comparator->evaluate('d', 'abc', 'string'));
         $this->assertTrue($this->comparator->evaluate('A', 'abc', 'string'));
+
+        $this->assertFalse($this->comparator->evaluate(array(
+            'text' => 'BEGINS',
+            'caseSensitive' => false
+        ), 'beginsDifferentCases', 'string'));
+        $this->assertTrue($this->comparator->evaluate(array(
+            'text' => 'BEGINS',
+            'caseSensitive' => true
+        ), 'beginsDifferentCases', 'string'));
     }
 
     public function testExtensibility()

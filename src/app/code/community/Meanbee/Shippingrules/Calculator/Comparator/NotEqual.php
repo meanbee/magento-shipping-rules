@@ -20,6 +20,11 @@ class Meanbee_Shippingrules_Calculator_Comparator_NotEqual
      */
     public function evaluate($validValue, $variableValue, $typeId) {
         $type = $this->getType($typeId);
-        return $type->sanitizeVariableValue($variableValue) != $type->sanitizeValidValue($validValue);
+        $sanitizedVariableValue = $type->sanitizeVariableValue($variableValue);
+        $sanitizedValidValue = $type->sanitizeValidValue($validValue);
+        if ($typeId === 'string' && !$type->isCaseSensitive($validValue)) {
+            return strtolower($sanitizedVariableValue) != strtolower($sanitizedValidValue);
+        }
+        return $sanitizedVariableValue != $sanitizedValidValue;
     }
 }

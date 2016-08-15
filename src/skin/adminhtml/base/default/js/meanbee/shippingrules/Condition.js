@@ -43,7 +43,7 @@ export default class Condition extends Base
     }
 
     valueChangeHandler(value) {
-        this.value = value;
+        this.value = this.comparator.valueChangeHandler(value);
         this.root.updateJSON();
     }
 

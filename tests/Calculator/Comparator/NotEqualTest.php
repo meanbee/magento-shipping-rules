@@ -31,6 +31,7 @@ class Calculator_Comparator_NotEqualTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->comparator->canHandleType('number'));
         $this->assertTrue($this->comparator->canHandleType('number_base26'));
         $this->assertTrue($this->comparator->canHandleType('number_base36'));
+        $this->assertTrue($this->comparator->canHandleType('string'));
     }
 
     public function testNumber()
@@ -73,6 +74,21 @@ class Calculator_Comparator_NotEqualTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($this->comparator->evaluate('12YZ', '12YZ', 'number_base36'));
         
         $this->assertTrue($this->comparator->evaluate('01YZ', 'ABYZ', 'number_base36'));
+    }
+
+    public function testString()
+    {
+        $this->assertFalse($this->comparator->evaluate('same', 'same', 'string'));
+        $this->assertTrue($this->comparator->evaluate('same', 'different', 'string'));
+
+        $this->assertFalse($this->comparator->evaluate(array(
+            'text' => 'differentCases',
+            'caseSensitive' => false
+        ), 'DIFFERENTCASES', 'string'));
+        $this->assertTrue($this->comparator->evaluate(array(
+            'text' => 'differentCases',
+            'caseSensitive' => true
+        ), 'DIFFERENTCASES', 'string'));
     }
 
     public function testExtensibility()

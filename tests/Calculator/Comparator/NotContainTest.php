@@ -39,6 +39,15 @@ class Calculator_Comparator_NotContainTest extends PHPUnit_Framework_TestCase
         
         $this->assertTrue($this->comparator->evaluate('d', 'abc', 'string'));
         $this->assertTrue($this->comparator->evaluate('A', 'abc', 'string'));
+
+        $this->assertFalse($this->comparator->evaluate(array(
+            'text' => 'DIFFERENT',
+            'caseSensitive' => false
+        ), 'containsDifferentCases', 'string'));
+        $this->assertTrue($this->comparator->evaluate(array(
+            'text' => 'DIFFERENT',
+            'caseSensitive' => true
+        ), 'containsDifferentCases', 'string'));
     }
 
     public function testExtensibility()

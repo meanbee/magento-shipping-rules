@@ -30,6 +30,16 @@ class Calculator_Type_StringTest extends PHPUnit_Framework_TestCase
     {
         $this->assertTrue($this->type->canBeHandledByComparator('equal'));
         $this->assertTrue($this->type->canBeHandledByComparator('notequal'));
+        $this->assertTrue($this->type->canBeHandledByComparator('begins'));
+        $this->assertTrue($this->type->canBeHandledByComparator('notbegin'));
+        $this->assertTrue($this->type->canBeHandledByComparator('contains'));
+        $this->assertTrue($this->type->canBeHandledByComparator('notcontain'));
+        $this->assertTrue($this->type->canBeHandledByComparator('ends'));
+        $this->assertTrue($this->type->canBeHandledByComparator('notend'));
+        $this->assertTrue($this->type->canBeHandledByComparator('matchesregex'));
+        $this->assertTrue($this->type->canBeHandledByComparator('notmatchregex'));
+        $this->assertTrue($this->type->canBeHandledByComparator('oneof'));
+        $this->assertTrue($this->type->canBeHandledByComparator('notoneof'));
     }
 
     public function testValidValue()

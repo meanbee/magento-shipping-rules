@@ -1,10 +1,14 @@
 <?php
-class Meanbee_Shippingrules_Calculator_Comparator_Ends
+class Meanbee_Shippingrules_Calculator_Comparator_OneOf
     extends Meanbee_Shippingrules_Calculator_Comparator_Abstract
 {
     public function __construct($registers)
     {
         parent::__construct($registers);
+        $this->addType('enum');
+        $this->addType('number');
+        $this->addType('number_base26');
+        $this->addType('number_base36');
         $this->addType('string');
     }
 
@@ -17,16 +21,12 @@ class Meanbee_Shippingrules_Calculator_Comparator_Ends
      */
     public function evaluate($validValue, $variableValue, $typeId) {
         $type = $this->getType($typeId);
-        $sanitizedValidValue = $type->sanitizeValidValue($validValue);
+        $sanitizedValidValue = array_map(array($type, 'sanitizeValidValue'), $validValue);
         $sanitizedVariableValue = $type->sanitizeVariableValue($variableValue);
         if ($typeId === 'string' && !$type->isCaseSensitive($validValue)) {
-            $sanitizedValidValue = strtolower($sanitizedValidValue);
+            $sanitizedValidValue = array_map('strtolower', $sanitizedValidValue);
             $sanitizedVariableValue = strtolower($sanitizedVariableValue);
         }
-        return $this->strEndsWith($sanitizedVariableValue, $sanitizedValidValue);
-    }
-
-    private function strEndsWith($haystack, $needle) {
-        return $needle === '' || (($temp = strlen($haystack) - strlen($needle)) >= 0 && strpos($haystack, $needle, $temp) !== false);
+        return in_array($sanitizedVariableValue, $sanitizedValidValue);
     }
 }

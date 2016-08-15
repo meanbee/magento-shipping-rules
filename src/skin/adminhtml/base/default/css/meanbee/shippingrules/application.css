@@ -32,13 +32,44 @@ ul.calculator-tree select[id] {
   border: none;
   border-radius: 0;
   padding: 0 0.5em 0.2em 0.5em;
-  vertical-align: bottom;
+  vertical-align: text-top;
   width: auto;
 }
 ul.calculator-tree select[id] {
   font-size: 0.9em;
   font-weight: bold;
   padding: 0;
+}
+ul.calculator-tree select[id][multiple] {
+  background: none;
+  border: solid 1px currentColor;
+  font-size: 1em;
+}
+ul.calculator-tree select[id][multiple] option {
+  padding: 0 0.5em;
+}
+ul.calculator-tree span[id$='-value-container'] {
+  position: relative;
+}
+ul.calculator-tree span[id$='-value-container'] select[multiple] {
+  background: #fff;
+}
+ul.calculator-tree span[id$='-value-container'] select[multiple]:not(:focus) {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+ul.calculator-tree span[id$='-value-container'] select[multiple]:focus + output {
+  display: none;
+}
+ul.calculator-tree span[id$='-value-container'] output {
+  background: linear-gradient(to top, currentColor 0, currentColor 1px, transparent 1px);
+  padding: 0 0.5em 0.2em 0.5em;
 }
 ul.calculator-tree input[type="time"]::-webkit-clear-button {
   display: none;

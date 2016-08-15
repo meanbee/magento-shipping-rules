@@ -23,13 +23,15 @@ class Meanbee_Shippingrules_Calculator_Register_Comparator
         $this->add('notend', new Meanbee_Shippingrules_Calculator_Comparator_NotEnd($this->registers));
         $this->add('matchesregex', new Meanbee_Shippingrules_Calculator_Comparator_MatchesRegEx($this->registers));
         $this->add('notmatchregex', new Meanbee_Shippingrules_Calculator_Comparator_NotMatchRegEx($this->registers));
+        $this->add('oneof', new Meanbee_Shippingrules_Calculator_Comparator_OneOf($this->registers));
+        $this->add('notoneof', new Meanbee_Shippingrules_Calculator_Comparator_NotOneOf($this->registers));
     }
 
     /**
      * {@inheritdoc}
      * @implementation Meanbee_Shippingrules_Calculator_Register_Abstract
      * @param  mixed   $child Potential child
-     * @return boolean
+     * @return bool
      */
     protected function isValidChild($child)
     {

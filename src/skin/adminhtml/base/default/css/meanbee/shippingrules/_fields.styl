@@ -4,13 +4,44 @@ ul.calculator-tree {
         border: none;
         border-radius: 0;
         padding: 0 .5em .2em .5em;
-        vertical-align: bottom;
+        vertical-align: text-top;
         width: auto;
     }
     select[id] {
         font-size: .9em;
         font-weight: bold;
         padding: 0;
+        &[multiple] {
+            background: none;
+            border: solid 1px currentColor;
+            font-size: 1em;
+            option {
+                padding: 0 .5em;
+            }
+        }
+    }
+    span[id$='-value-container'] {
+        position: relative;
+        select[multiple] {
+            background: #FFF;
+            &:not(:focus) {
+                border: 0;
+                clip: rect(0 0 0 0);
+                height: 1px;
+                margin: -1px;
+                overflow: hidden;
+                padding: 0;
+                position: absolute;
+                width: 1px;
+            }
+            &:focus + output {
+                display: none;
+            }
+        }
+        output {
+            background: linear-gradient(to top, currentColor 0, currentColor 1px, transparent 1px);
+            padding: 0 .5em .2em .5em;
+        }
     }
 
     input[type="time"]::-webkit-clear-button {

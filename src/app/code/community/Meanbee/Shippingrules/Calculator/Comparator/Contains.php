@@ -13,12 +13,16 @@ class Meanbee_Shippingrules_Calculator_Comparator_Contains
      * @param  mixed   $validValue    Admin configured value
      * @param  mixed   $variableValue From Shipping Rate Request
      * @param  string  $typeId
-     * @return boolean
+     * @return bool
      */
     public function evaluate($validValue, $variableValue, $typeId) {
         $type = $this->getType($typeId);
         $sanitizedValidValue = $type->sanitizeValidValue($validValue);
         $sanitizedVariableValue = $type->sanitizeVariableValue($variableValue);
+        if ($typeId === 'string' && !$type->isCaseSensitive($validValue)) {
+            $sanitizedValidValue = strtolower($sanitizedValidValue);
+            $sanitizedVariableValue = strtolower($sanitizedVariableValue);
+        }
         return strpos($sanitizedVariableValue, $sanitizedValidValue) !== false;
     }
 }
