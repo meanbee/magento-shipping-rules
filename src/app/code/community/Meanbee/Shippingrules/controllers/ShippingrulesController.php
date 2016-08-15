@@ -40,6 +40,14 @@ class Meanbee_Shippingrules_ShippingrulesController
         Mage::register('meanbee_shippingrules_data', $model);
 
         $this->loadLayout();
+
+        $registers = new Meanbee_Shippingrules_Calculator_Registers;
+        Mage::dispatchEvent(Meanbee_Shippingrules_Helper_Data::CALCULATOR_LOAD_EVENT, array(
+            'registers' => $registers,
+            'context' => 'collectScripts'
+        ));
+        $registers->getScriptRegister()->addScriptsToBlock($this->getLayout()->getBlock('head'));
+        
         $this->getLayout()->getBlock('head')->setCanLoadExtJs(true);
         $this->_setTitle(($id ? 'Edit' : 'New') . ' Shipping Rule')
              ->_setActiveMenu('catalog/meanbee_shippingrules')

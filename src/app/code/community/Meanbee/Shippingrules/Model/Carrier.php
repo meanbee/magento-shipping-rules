@@ -43,7 +43,8 @@ class Meanbee_Shippingrules_Model_Carrier
 
         $registers = new Meanbee_Shippingrules_Calculator_Registers;
         Mage::dispatchEvent(Meanbee_Shippingrules_Helper_Data::CALCULATOR_LOAD_EVENT, array(
-            'registers' => $registers
+            'registers' => $registers,
+            'context' => 'collectRates'
         ));
 
         $request = Meanbee_Shippingrules_Model_Rule::addVariablesToRequest($request, $registers);
