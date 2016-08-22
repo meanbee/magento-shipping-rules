@@ -22,6 +22,8 @@ CREATE TABLE `{$installer->getTable('meanbee_shippingrules/rule')}` (
   `notes` text NOT NULL COMMENT 'Notes',
   `is_active` smallint(6) NOT NULL DEFAULT '0' COMMENT 'Is Active',
   `version` varchar(32) NOT NULL DEFAULT '3.0.0' COMMENT 'Version',
+  `migrated_to` text NOT NULL,
+  `migration_ignored` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`rule_id`)
 ) DEFAULT CHARSET=utf8 COMMENT='Meanbee Shipping Rule';
 

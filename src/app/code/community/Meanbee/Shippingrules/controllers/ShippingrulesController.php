@@ -10,6 +10,20 @@ class Meanbee_Shippingrules_ShippingrulesController
              ->renderLayout();
     }
 
+    public function migrateAction()
+    {
+        $migrate = $this->getRequest()->getParam('migrate', null);
+        if ($migrate == 0) {
+            $this->_addNotice('Ignoring...')
+                 ->_redirect('*/*/');
+        } else if ($migrate == 1) {
+            $this->_addNotice('Migrating...')
+                 ->_redirect('*/*/');
+        } else {
+            $this->_redirect('*/*/');
+        }
+    }
+
     public function gridAction()
     {
         $this->loadLayout();

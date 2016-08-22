@@ -1,6 +1,7 @@
 <?php
 class Meanbee_Shippingrules_Helper_Config extends Mage_Core_Helper_Abstract
 {
+    const DOCUMENTATION_SECTION_ROOT = 'root';
     const DOCUMENTATION_URL = 'https://meanbee.atlassian.net/wiki/display/EXT/Shipping+Rules';
 
     const XML_CARRIER_NAME       = 'carriers/meanbee_shippingrules/title';
@@ -18,9 +19,12 @@ class Meanbee_Shippingrules_Helper_Config extends Mage_Core_Helper_Abstract
         return (int) Mage::getStoreConfig(self::XML_CARRIER_SORT_ORDER, $store);
     }
 
-    public function getDocumentationURL()
+    public function getDocumentationURL($section = self::DOCUMENTATION_SECTION_ROOT)
     {
-        return self::DOCUMENTATION_URL;
+        switch ($section) {
+            default:
+                return self::DOCUMENTATION_URL;
+        }
     }
     
     public function isActive($store = null)

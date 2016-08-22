@@ -1,0 +1,21 @@
+<?php
+/** @var Meanbee_Shippingrules_Helper_Data $helper */
+$helper = Mage::helper('meanbee_shippingrules');
+
+/** @var Meanbee_Shippingrules_Helper_Config $config */
+$config = Mage::helper('meanbee_shippingrules/config');
+?>
+<ul class="messages">
+    <li class="notice-msg">
+        <form action="<?php echo Mage::helper("adminhtml")->getUrl('adminhtml/shippingrules/migrate') ?>" method="post">
+            <p><?php echo $helper->__('Rules from a previous version of Shipping Rules have been detected, would you like them to be migrated to version %s? See our <a href="%s" target="_blank">migration guide</a> for details.', $config->getVersion(), $config->getDocumentationURL()) ?></p>
+            <button title="<?php echo $helper->__('Yes') ?>" type="submit" name="migrate" value="1" class="scalable save">
+                <span><span><span><?php echo $helper->__('Yes') ?></span></span></span>
+            </button>
+            <button title="<?php echo $helper->__('No') ?>" type="submit" name="migrate" value="0" class="scalable cancel">
+                <span><span><span><?php echo $helper->__('No') ?></span></span></span>
+            </button>
+            <input type="hidden" name="form_key" value="<?php echo Mage::getSingleton('core/session')->getFormKey(); ?>" />
+        </form>
+    </li>
+</ul>

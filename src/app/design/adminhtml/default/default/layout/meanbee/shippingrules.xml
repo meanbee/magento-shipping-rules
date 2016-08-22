@@ -35,7 +35,25 @@
 			</action>
 		</reference>
 		<reference name="content">
-			<block type="core/template" template="meanbee/shippingrules/jsglobals.phtml" name="globals"/>
+			<block type="core/template" template="meanbee/shippingrules/jsglobals.phtml" name="globals" />
 		</reference>
 	</meanbee_shippingrules>
+
+	<meanbee_shippingrules_MIGRATION_QUEUED>
+		<reference name="content">
+			<block type="core/template" before="*" template="meanbee/shippingrules/migration/queued.phtml" />
+		</reference>
+	</meanbee_shippingrules_MIGRATION_QUEUED>
+
+	<meanbee_shippingrules_MIGRATION_MALFORMED>
+		<reference name="content">
+			<block type="core/template" before="*" template="meanbee/shippingrules/migration/malformed.phtml" />
+		</reference>
+	</meanbee_shippingrules_MIGRATION_MALFORMED>
+
+	<meanbee_shippingrules_MIGRATION_MIXED>
+		<reference name="content">
+			<block type="core/template" before="*" template="meanbee/shippingrules/migration/mixed.phtml" />
+		</reference>
+	</meanbee_shippingrules_MIGRATION_MIXED>
 </layout>

@@ -68,6 +68,16 @@
                 </children>
             </catalog>
         </menu>
+        <events>
+            <controller_action_layout_load_before>
+                <observers>
+                    <meanbee_shippingrules_action_layout_load_before>
+                        <class>meanbee_shippingrules/observer</class>
+                        <method>controllerActionLayoutLoadBefore</method>
+                    </meanbee_shippingrules_action_layout_load_before>
+                </observers>
+            </controller_action_layout_load_before>
+        </events>
     </adminhtml>
     <default>
         <carriers>
