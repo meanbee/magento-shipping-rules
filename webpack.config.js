@@ -5,7 +5,7 @@ var argv    = require('yargs').argv,
 module.exports = {
     devtool: '#source-map',
     entry: [
-        './src/skin/adminhtml/base/default/js/meanbee/shippingrules/init.js'
+        './src/js/lib/meanbee/shippingrules/init.js'
     ],
     output: {
         filename: 'script.js'

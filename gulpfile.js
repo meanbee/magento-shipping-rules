@@ -35,12 +35,12 @@ gulp.task('test:js', ['scripts'], function (done) {
 });
 
 gulp.task('scripts', function() {
-    return gulp.src(['src/skin/adminhtml/base/default/js/meanbee/shippingrules/init.js'])
+    return gulp.src(['src/js/lib/meanbee/shippingrules/init.js'])
     .pipe(webpack(require('./webpack.config')))
     .on('error', function () {
         this.emit('end');
     })
-    .pipe(gulp.dest('src/skin/adminhtml/base/default/js/meanbee/shippingrules'));
+    .pipe(gulp.dest('src/js/lib/meanbee/shippingrules'));
 });
 
 gulp.task('stylus', function () {
@@ -57,7 +57,7 @@ gulp.task('stylus', function () {
 gulp.task('watch', ['stylus', 'scripts'], function() {
     return gulp.watch([
         'src/skin/adminhtml/base/default/css/meanbee/shippingrules/*.styl',
-        'src/skin/adminhtml/base/default/js/meanbee/shippingrules/*.js',
+        'src/js/lib/meanbee/shippingrules/*.js',
         '!src/skin/adminhtml/base/default/js/meanbee/shippingrules/script.js'
     ], ['stylus', 'scripts']);
 });

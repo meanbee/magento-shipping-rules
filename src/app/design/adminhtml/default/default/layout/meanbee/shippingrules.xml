@@ -20,7 +20,7 @@
 		<reference name="content">
 			<block type="core/text" name="shippingrules_script">
 				<action method="setText">
-					<text><![CDATA[<script src="/skin/adminhtml/base/default/js/meanbee/shippingrules/script.js" defer></script>]]></text>
+					<text><![CDATA[<script src="/js/lib/meanbee/shippingrules/script.js" defer></script>]]></text>
 				</action>
 			</block>
 			<block type="meanbee_shippingrules/adminhtml_rules_edit" name="rules_edit" />

@@ -11,7 +11,7 @@ module.exports = function (config) {
         },
         customContextFile: 'tests/context.html',
         files: [
-            'src/skin/adminhtml/base/default/js/meanbee/shippingrules/script.js',
+            'src/js/lib/meanbee/shippingrules/script.js',
             'tests/**/*.js',
             { pattern: 'tests/ajax/**/*', included: false, watched: false }
         ],

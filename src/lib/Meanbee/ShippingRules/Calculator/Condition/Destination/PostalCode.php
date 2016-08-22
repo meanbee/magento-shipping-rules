@@ -89,7 +89,7 @@ class Meanbee_Shippingrules_Calculator_Condition_Destination_PostalCode
 
     public function ajaxFormats()
     {
-        $postalCodeFormatsPath = implode(DIRECTORY_SEPARATOR, array($_SERVER['DOCUMENT_ROOT'],'js','lib','Meanbee','ShippingRulesLibrary','data','postal_code_formats.json'));
+        $postalCodeFormatsPath = implode(DIRECTORY_SEPARATOR, array($_SERVER['DOCUMENT_ROOT'],'js','lib','meanbee','shippingrules','data','postal_code_formats.json'));
         return json_decode(file_get_contents($postalCodeFormatsPath), true);
     }
 
