@@ -1,5 +1,5 @@
 import Term from '../Term';
-class Constant extends Term
+export default class Constant extends Term
 {
     constructor(index, parent) {
         super(index, parent);
