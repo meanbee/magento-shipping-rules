@@ -41,9 +41,7 @@ export default class Aggregator extends Base
     }
 
     init(obj) {
-        if (obj.register !== 'Aggregator' || Meanbee.ShippingRules.registers.aggregator.get(obj.key) !== this.constructor) {
-            return;
-        }
+        super.init(obj);
         this.combinator = obj.type;
     }
 

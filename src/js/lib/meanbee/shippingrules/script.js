@@ -735,9 +735,7 @@
 	    }, {
 	        key: 'init',
 	        value: function init(obj) {
-	            if (obj.register !== 'Aggregator' || Meanbee.ShippingRules.registers.aggregator.get(obj.key) !== this.constructor) {
-	                return;
-	            }
+	            _get(Object.getPrototypeOf(Aggregator.prototype), 'init', this).call(this, obj);
 	            this.combinator = obj.type;
 	        }
 	    }, {
@@ -1106,7 +1104,7 @@
 	        key: 'field',
 	        set: function set(input) {
 	            this._field = input;
-	            this.init(JSON.parse(input.value));
+	            this.init(JSON.parse(input.value || '{}'));
 	            return this;
 	        },
 	        get: function get() {

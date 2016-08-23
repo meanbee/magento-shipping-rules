@@ -46,7 +46,7 @@ export default class Base
 
     set field(input) {
         this._field = input;
-        this.init(JSON.parse(input.value));
+        this.init(JSON.parse(input.value || '{}'));
         return this;
     }
 
