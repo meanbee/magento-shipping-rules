@@ -10,12 +10,12 @@ $migration = Mage::helper('meanbee_shippingrules/migration');
 ?>
 <ul class="messages">
     <li class="notice-msg">
-        <form ction="<?php echo Mage::helper("adminhtml")->getUrl('adminhtml/shippingrules/migrate') ?>" method="post">
+        <form action="<?php echo Mage::helper("adminhtml")->getUrl('adminhtml/shippingrules/migrate') ?>" method="post">
         <p><?php echo $helper->__('Rules from a previous version of Shipping Rules have been detected, however the following rules are not ready for migration:'); ?></p>
-        <?php $references = $migration->getReferencesByMigrationStatus(); ?>
+        <?php $references = $migration->getRulesByMigrationStatus(); ?>
         <ul>
             <?php foreach($references[Meanbee_Shippingrules_Helper_Migration::MIGRATION_MALFORMED] as $reference): ?>
-                <li><?php echo $reference ?></li>
+                <li><?php echo $reference->getDbTable().'#'.$reference->getRuleId() ?></li>
             <?php endforeach; ?>
         </ul>
         <p><?php echo $helper->__('Would you like the migratable rules to be migrated anyway? See our <a href="%s" target="_blank">migration guide</a> for details.', $config->getDocumentationURL()) ?></p>

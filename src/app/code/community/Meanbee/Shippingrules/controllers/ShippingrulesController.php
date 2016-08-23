@@ -12,12 +12,15 @@ class Meanbee_Shippingrules_ShippingrulesController
 
     public function migrateAction()
     {
+        /** @var Meanbee_Shippingrules_Helper_Migration $migrationHelper */
+        $migrationHelper = Mage::helper('meanbee_shippingrules/migration');
         $migrate = $this->getRequest()->getParam('migrate', null);
         if ($migrate == 0) {
-            $this->_addNotice('Ignoring...')
-                 ->_redirect('*/*/');
+            $migrationHelper->ignoreMigration();
+            $this->_redirect('*/*/');
         } else if ($migrate == 1) {
-            $this->_addNotice('Migrating...')
+            $migrationHelper->migrateRules();
+            $this->_addNotice('Migrated Rules have been disbled so they may be verified before going live.')
                  ->_redirect('*/*/');
         } else {
             $this->_redirect('*/*/');
