@@ -7,8 +7,8 @@ export default class Term extends Base
     }
 
     set value(param) {
-        if (!isNaN(parseInt(param, 10))) {
-            this._value = parseInt(param, 10);
+        if (!isNaN(parseFloat(param, 10))) {
+            this._value = parseFloat(param, 10);
         }
         return this;
     }

@@ -64,7 +64,7 @@ class BooleanAggregator extends Aggregator
         }}>
             {[{ label: 'TRUE', value: 1}, { label: 'FALSE', value: 0}].map(value => {
                 let option = (<option value={value.value}>{value.label}</option>);
-                if (me.value === value.value) option.selected = true;
+                if (me.value == value.value) option.selected = true;
                 return option;
             })}
         </select>);

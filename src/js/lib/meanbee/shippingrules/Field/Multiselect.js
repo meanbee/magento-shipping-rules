@@ -23,7 +23,7 @@ export default class Multiselect extends Field
                 }) : []}
             </select>
             <output id={`${me.idPrefix}-value-output`} onClick={() => document.getElementById(`${me.idPrefix}-value`).focus()}>{(function () {
-                return (Meanbee.ShippingRules.data[me.dataKey] ? Meanbee.ShippingRules.data[me.dataKey].filter(optionDesc => ~me.value.indexOf(optionDesc.value)).map(optionDesc => me.decorator ? me.decorator(optionDesc.value, optionDesc.label) : optionDesc.label).join(', ') : '') || '[SELECT]';
+                return (Meanbee.ShippingRules.data[me.dataKey] ? Meanbee.ShippingRules.data[me.dataKey].filter(optionDesc => ~me.value.indexOf(optionDesc.value + '')).map(optionDesc => me.decorator ? me.decorator(optionDesc.value, optionDesc.label) : optionDesc.label).join(', ') : '') || '[SELECT]';
             })()}</output>
         </span>);
     }
@@ -31,6 +31,6 @@ export default class Multiselect extends Field
     valueChangeHandler() {
         this.value = Array.from(document.getElementById(`${this.idPrefix}-value`).selectedOptions).map(option => option.value);
         this.condition.valueChangeHandler(this.value);
-        document.getElementById(`${this.idPrefix}-value-output`).innerHTML = (Meanbee.ShippingRules.data[this.dataKey] ? Meanbee.ShippingRules.data[this.dataKey].filter(optionDesc => ~this.value.indexOf(optionDesc.value)).map(optionDesc => this.decorator ? this.decorator(optionDesc.value, optionDesc.label) : optionDesc.label).join(', ') : '') || '[SELECT]';
+        document.getElementById(`${this.idPrefix}-value-output`).innerHTML = (Meanbee.ShippingRules.data[this.dataKey] ? Meanbee.ShippingRules.data[this.dataKey].filter(optionDesc => ~this.value.indexOf(optionDesc.value + '')).map(optionDesc => this.decorator ? this.decorator(optionDesc.value, optionDesc.label) : optionDesc.label).join(', ') : '') || '[SELECT]';
     }
 }

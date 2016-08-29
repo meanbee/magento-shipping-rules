@@ -101,23 +101,27 @@ export default class PostalCode extends Condition
     }
 
     refresh() {
-        if (this.context instanceof this.constructor) {
-            if (this.variable in this.constructor.getVariables(this.context)) {
-                let validComparators = Meanbee.ShippingRules.registers.comparator.getByType(this.type);
-                if (Object.keys(validComparators).reduce((accumulator, key) => (accumulator || this.comparator instanceof validComparators[key]), false)) {
-                    this.comparator.type = this.type;
+        let me = this;
+        if (me.context instanceof me.constructor) {
+            if (me.variable in me.constructor.getVariables(me.context)) {
+                let validComparators = Meanbee.ShippingRules.registers.comparator.getByType(me.type);
+                if (Object.keys(validComparators).reduce((accumulator, key) => (accumulator || me.comparator instanceof validComparators[key]), false)) {
+                    me.comparator.type = me.type;
                 } else {
                     let comparator = validComparators[Object.keys(validComparators)[0]];
-                    this.comparator = comparator ? new comparator(this.type) : null;
+                    me.comparator = comparator ? new comparator(me.type) : null;
+                }
+                if (me.comparator) {
+                    me.valueField = new (Meanbee.ShippingRules.registers.field.get(me.comparator.getField()))(me, me.value);
                 }
             } else {
-                this.parent.removeChildByIndex(this.index);
+                me.parent.removeChildByIndex(me.index);
             }
         } else {
-            this.aggregator.refresh();
+            me.aggregator.refresh();
         }
-        if (this._popper) {
-            this._popper.destroy();
+        if (me._popper) {
+            me._popper.destroy();
         }
     }
 

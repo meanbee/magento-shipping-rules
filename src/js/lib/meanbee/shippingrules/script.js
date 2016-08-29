@@ -1514,13 +1514,11 @@
 	    _createClass(Condition, [{
 	        key: 'renderComparator',
 	        value: function renderComparator() {
-	            var _this2 = this;
-	
 	            var me = this;
 	            return React.createElement(
 	                'select',
 	                { id: me.id + '-comparator', onChange: function onChange(event) {
-	                        me.comparator = new (Meanbee.ShippingRules.registers.comparator.get(event.target.value))(_this2.type);
+	                        me.comparator = new (Meanbee.ShippingRules.registers.comparator.get(event.target.value))(me.type);
 	                        me.refresh();
 	                        me.root.rerender();
 	                        Meanbee.ShippingRules.history.pushState();
@@ -1540,7 +1538,8 @@
 	            var me = this;
 	            return React.createElement(
 	                'li',
-	                { id: me.id, tabIndex: 0, onCopy: me.copyText, draggable: 'true', onDragStart: me.drag.bind(me), onDragOver: me.allowDrop.bind(me), onDrop: me.drop.bind(me), onDragEnter: me.dragIn.bind(me), onDragLeave: me.dragOut.bind(me) },
+	                { id: me.id, tabIndex: 0, onCopy: me.copyText, draggable: 'true', onDragStart: me.drag.bind(me),
+	                    onDragOver: me.allowDrop.bind(me), onDrop: me.drop.bind(me), onDragEnter: me.dragIn.bind(me), onDragLeave: me.dragOut.bind(me) },
 	                me.label || ' ',
 	                me.renderComparator(),
 	                me.valueField.render ? me.valueField.render() : [],
@@ -1664,6 +1663,11 @@
 	            this.value = event.target.value;
 	            this.condition.valueChangeHandler(this.value);
 	        }
+	    }, {
+	        key: "root",
+	        get: function get() {
+	            return this.condition.root;
+	        }
 	    }]);
 	
 	    return Field;
@@ -1756,8 +1760,8 @@
 	    }, {
 	        key: 'value',
 	        set: function set(param) {
-	            if (!isNaN(parseInt(param, 10))) {
-	                this._value = parseInt(param, 10);
+	            if (!isNaN(parseFloat(param, 10))) {
+	                this._value = parseFloat(param, 10);
 	            }
 	            return this;
 	        },
@@ -1956,7 +1960,7 @@
 	                        { value: value.value },
 	                        value.label
 	                    );
-	                    if (me.value === value.value) option.selected = true;
+	                    if (me.value == value.value) option.selected = true;
 	                    return option;
 	                })
 	            );
@@ -3290,7 +3294,7 @@
 	                case 'numeric_b10':
 	                case 'numeric_b26':
 	                case 'numeric_b36':
-	                    return 'DOESN\'T EQUAL';
+	                    return 'DOES NOT EQUAL';
 	                default:
 	                    return 'IS NOT';
 	            }
@@ -3678,7 +3682,7 @@
 	                case 'numeric_b10':
 	                case 'numeric_b26':
 	                case 'numeric_b36':
-	                    return 'PRECEEDS OR EQUALS';
+	                    return 'PRECEDES OR EQUALS';
 	                case 'date':
 	                case 'time':
 	                case 'datetime':
@@ -4583,29 +4587,31 @@
 	    }, {
 	        key: 'refresh',
 	        value: function refresh() {
-	            var _this3 = this;
-	
-	            if (this.context instanceof this.constructor) {
-	                if (this.variable in this.constructor.getVariables(this.context)) {
+	            var me = this;
+	            if (me.context instanceof me.constructor) {
+	                if (me.variable in me.constructor.getVariables(me.context)) {
 	                    (function () {
-	                        var validComparators = Meanbee.ShippingRules.registers.comparator.getByType(_this3.type);
+	                        var validComparators = Meanbee.ShippingRules.registers.comparator.getByType(me.type);
 	                        if (Object.keys(validComparators).reduce(function (accumulator, key) {
-	                            return accumulator || _this3.comparator instanceof validComparators[key];
+	                            return accumulator || me.comparator instanceof validComparators[key];
 	                        }, false)) {
-	                            _this3.comparator.type = _this3.type;
+	                            me.comparator.type = me.type;
 	                        } else {
 	                            var comparator = validComparators[Object.keys(validComparators)[0]];
-	                            _this3.comparator = comparator ? new comparator(_this3.type) : null;
+	                            me.comparator = comparator ? new comparator(me.type) : null;
+	                        }
+	                        if (me.comparator) {
+	                            me.valueField = new (Meanbee.ShippingRules.registers.field.get(me.comparator.getField()))(me, me.value);
 	                        }
 	                    })();
 	                } else {
-	                    this.parent.removeChildByIndex(this.index);
+	                    me.parent.removeChildByIndex(me.index);
 	                }
 	            } else {
-	                this.aggregator.refresh();
+	                me.aggregator.refresh();
 	            }
-	            if (this._popper) {
-	                this._popper.destroy();
+	            if (me._popper) {
+	                me._popper.destroy();
 	            }
 	        }
 	    }, {
@@ -6593,7 +6599,7 @@
 	                        { value: optionDesc.value },
 	                        me.decorator ? me.decorator(optionDesc.value, optionDesc.label) : optionDesc.label
 	                    );
-	                    if (optionDesc.value === me.value) option.selected = true;
+	                    if (optionDesc.value == me.value) option.selected = true;
 	                    return option;
 	                }) : []
 	            );
@@ -6677,7 +6683,7 @@
 	                        } },
 	                    function () {
 	                        return (Meanbee.ShippingRules.data[me.dataKey] ? Meanbee.ShippingRules.data[me.dataKey].filter(function (optionDesc) {
-	                            return ~me.value.indexOf(optionDesc.value);
+	                            return ~me.value.indexOf(optionDesc.value + '');
 	                        }).map(function (optionDesc) {
 	                            return me.decorator ? me.decorator(optionDesc.value, optionDesc.label) : optionDesc.label;
 	                        }).join(', ') : '') || '[SELECT]';
@@ -6695,7 +6701,7 @@
 	            });
 	            this.condition.valueChangeHandler(this.value);
 	            document.getElementById(this.idPrefix + '-value-output').innerHTML = (Meanbee.ShippingRules.data[this.dataKey] ? Meanbee.ShippingRules.data[this.dataKey].filter(function (optionDesc) {
-	                return ~_this2.value.indexOf(optionDesc.value);
+	                return ~_this2.value.indexOf(optionDesc.value + '');
 	            }).map(function (optionDesc) {
 	                return _this2.decorator ? _this2.decorator(optionDesc.value, optionDesc.label) : optionDesc.label;
 	            }).join(', ') : '') || '[SELECT]';
@@ -7240,7 +7246,7 @@
 	        key: "render",
 	        value: function render() {
 	            var me = this;
-	            return React.createElement("input", { type: "text", id: me.idPrefix + "-value", pattern: "[0-9, ]", value: me.value, onKeyUp: me.valueChangeHandler.bind(me), onChange: function onChange(event) {
+	            return React.createElement("input", { type: "text", id: me.idPrefix + "-value", pattern: "[0-9., ]", value: me.value, onKeyUp: me.valueChangeHandler.bind(me), onChange: function onChange(event) {
 	                    me.valueChangeHandler(event);
 	                    Meanbee.ShippingRules.history.pushState();
 	                } });
@@ -7488,6 +7494,10 @@
 
 	'use strict';
 	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
 	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
@@ -7557,9 +7567,11 @@
 	            return 'Constant Value';
 	        }
 	    }]);
-
+	
 	    return Constant;
 	}(_Term3.default);
+	
+	exports.default = Constant;
 
 /***/ },
 /* 71 */

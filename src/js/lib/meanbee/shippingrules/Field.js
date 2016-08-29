@@ -10,4 +10,8 @@ export default class Field
         this.value = event.target.value;
         this.condition.valueChangeHandler(this.value);
     }
+
+    get root () {
+        return this.condition.root;
+    }
 }

@@ -33,7 +33,7 @@ export default class Condition extends Base
     renderComparator() {
         let me = this;
         return (<select id={`${me.id}-comparator`} onChange={event => {
-            me.comparator = new (Meanbee.ShippingRules.registers.comparator.get(event.target.value))(this.type);
+            me.comparator = new (Meanbee.ShippingRules.registers.comparator.get(event.target.value))(me.type);
             me.refresh();
             me.root.rerender();
             Meanbee.ShippingRules.history.pushState();
@@ -49,7 +49,8 @@ export default class Condition extends Base
 
     render() {
         let me = this;
-        return (<li id={me.id} tabIndex={0} onCopy={me.copyText} draggable="true" onDragStart={me.drag.bind(me)} onDragOver={me.allowDrop.bind(me)} onDrop={me.drop.bind(me)} onDragEnter={me.dragIn.bind(me)} onDragLeave={me.dragOut.bind(me)}>
+        return (<li id={me.id} tabIndex={0} onCopy={me.copyText} draggable="true" onDragStart={me.drag.bind(me)}
+            onDragOver={me.allowDrop.bind(me)} onDrop={me.drop.bind(me)} onDragEnter={me.dragIn.bind(me)} onDragLeave={me.dragOut.bind(me)}>
             {me.label || ' '}
             {me.renderComparator()}
             {me.valueField.render ? me.valueField.render() : []}

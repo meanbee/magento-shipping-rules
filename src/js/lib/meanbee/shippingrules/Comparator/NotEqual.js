@@ -18,7 +18,7 @@ export default class NotEqual extends Comparator
         case 'numeric_b10':
         case 'numeric_b26':
         case 'numeric_b36':
-            return 'DOESN\'T EQUAL';
+            return 'DOES NOT EQUAL';
         default:
             return 'IS NOT';
         }

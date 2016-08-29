@@ -16,7 +16,7 @@ export default class LessThanOrEqual extends Comparator
         case 'numeric_b10':
         case 'numeric_b26':
         case 'numeric_b36':
-            return 'PRECEEDS OR EQUALS';
+            return 'PRECEDES OR EQUALS';
         case 'date':
         case 'time':
         case 'datetime':
