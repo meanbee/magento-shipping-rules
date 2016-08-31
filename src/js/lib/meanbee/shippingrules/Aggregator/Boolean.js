@@ -1,6 +1,11 @@
 import Aggregator from '../Aggregator';
 import Condition from '../Condition';
 
+/**
+ * @extends Aggregator
+ *
+ * @memberof Meanbee.ShippingRules.Aggregator
+ */
 class BooleanAggregator extends Aggregator
 {
     constructor(index, parent = null, container) {

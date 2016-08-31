@@ -1,0 +1,35 @@
+{
+  "tags": {
+    "allowUnknownTags": true,
+    "dictionaries": ["jsdoc","closure"]
+  },
+  "source": {
+    "include": ["./README.MD", "./src/js/lib/meanbee/shippingrules"],
+    "exclude": ["./src/js/lib/meanbee/shippingrules/script.js"],
+    "includePattern": ".+\\.js(doc)?$",
+    "excludePattern": "(^|\\/|\\\\)_"
+  },
+  "plugins": [
+    "plugins/markdown",
+    "../ub-jsdoc/plugins/sripPFromDescription"
+  ],
+  "templates": {
+    "cleverLinks": true,
+    "monospaceLinks": false,
+    "buildInURL": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/",
+    "buildins": ["array", "arraybuffer", "boolean", "date", "error", "function", "json", "number", "object", "regexp", "string", "null"],
+    "smallSourceLink": true,
+    "hideAuthor": true,
+    "stylesheet": "styles/ub-jsdoc.css",
+    "default": {
+      "outputSourceFiles": false
+    }
+  },
+  "opts":  {
+    "encoding": "utf8",
+    "destination": "./docs/",
+    "recurse": true,
+    "private": true,
+    "template": "./node_modules/ub-jsdoc"
+  }
+}

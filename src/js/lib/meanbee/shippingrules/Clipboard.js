@@ -1,10 +1,24 @@
+/**
+ * @module clipboard
+ */
 export default {
+    /**
+     * Copies the target tree item to the Shipping Rules clipboard sessionStorage.
+     * @param {Meanbee.ShippingRules.Base} target
+     * @returns {undefined}
+     */
     copy(target) {
         if (window.Storage) {
             let targetDescriptor = JSON.stringify(target);
             window.sessionStorage.meanbeeShippingRulesClipboard = targetDescriptor;
         }
     },
+
+    /**
+     * Pastes the tree item in the Shipping Rules clipboard sessionStorage as target tree item's direct child or sibling.
+     * @param {Meanbee.ShippingRules.Base} target
+     * @returns {undefined}
+     */
     paste(target) {
         if (window.Storage) {
             let clipboardItemDescriptor = JSON.parse(window.sessionStorage.meanbeeShippingRulesClipboard);

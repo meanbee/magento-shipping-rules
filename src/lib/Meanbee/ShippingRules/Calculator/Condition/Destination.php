@@ -11,9 +11,9 @@ class Meanbee_Shippingrules_Calculator_Condition_Destination
         return array(
             'dest_street_address_l1' => array('label' => 'Street Address, Line 1', 'type' => array('string')),
             'dest_street_address_l2' => array('label' => 'Street Address, Line 2', 'type' => array('string')),
-            'dest_country_id'        => array('label' => 'Shipping Country',       'type' => array('enumerated')),
-            'dest_country_group'     => array('label' => 'Shipping Country Group', 'type' => array('enumerated')),
-            'dest_region_id'         => array('label' => 'Shipping State',         'type' => array('enumerated'))
+            'dest_country_id'        => array('label' => 'Shipping Country',       'type' => array('enum')),
+            'dest_country_group'     => array('label' => 'Shipping Country Group', 'type' => array('enum')),
+            'dest_region_id'         => array('label' => 'Shipping State',         'type' => array('enum'))
         );
     }
 

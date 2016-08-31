@@ -197,7 +197,11 @@
 	
 	__webpack_require__(4);
 	
-	var _aggregator = __webpack_require__(5);
+	var _Base = __webpack_require__(5);
+	
+	var _Base2 = _interopRequireDefault(_Base);
+	
+	var _aggregator = __webpack_require__(9);
 	
 	var _aggregator2 = _interopRequireDefault(_aggregator);
 	
@@ -217,15 +221,23 @@
 	
 	var _term2 = _interopRequireDefault(_term);
 	
-	var _util = __webpack_require__(11);
+	var _navigation = __webpack_require__(6);
+	
+	var _navigation2 = _interopRequireDefault(_navigation);
+	
+	var _util = __webpack_require__(8);
 	
 	var _util2 = _interopRequireDefault(_util);
+	
+	var _clipboard = __webpack_require__(7);
+	
+	var _clipboard2 = _interopRequireDefault(_clipboard);
 	
 	var _History = __webpack_require__(20);
 	
 	var _History2 = _interopRequireDefault(_History);
 	
-	var _Aggregator = __webpack_require__(7);
+	var _Aggregator = __webpack_require__(11);
 	
 	var _Aggregator2 = _interopRequireDefault(_Aggregator);
 	
@@ -448,19 +460,36 @@
 	window.Stretchy.selectors.filter = '.calculator-tree *';
 	window.Stretchy.selectors.base += ', input[type="number"]';
 	
+	/** @namespace Meanbee */
 	if (!('Meanbee' in window)) window.Meanbee = {};
+	/** @namespace Meanbee.ShippingRules */
 	if (!('ShippingRules' in Meanbee)) Meanbee.ShippingRules = {};
 	
+	/**
+	 * @prop {Object} ShippingRules.registers Object of the client-side registers
+	 * @prop {Meanbee.ShippingRules.Register} ShippingRules.register.aggregator Aggregator Register
+	 * @prop {Meanbee.ShippingRules.Register} ShippingRules.register.comparator Comparator Register
+	 * @prop {Meanbee.ShippingRules.Register} ShippingRules.register.condition Condition Register
+	 * @prop {Meanbee.ShippingRules.Register} ShippingRules.register.field Field Register
+	 * @prop {Meanbee.ShippingRules.Register} ShippingRules.register.term Term Register
+	 */
 	Meanbee.ShippingRules.registers = {
-	    aggregator: _aggregator2.default,
-	    comparator: _comparator2.default,
-	    condition: _condition2.default,
-	    field: _field2.default,
-	    term: _term2.default
+	  aggregator: _aggregator2.default,
+	  comparator: _comparator2.default,
+	  condition: _condition2.default,
+	  field: _field2.default,
+	  term: _term2.default
 	};
 	
+	/** @prop {Meanbee.ShippingRules.History} ShippingRules.history Manages the historical states of calculator fields and time-travelling through them. */
 	Meanbee.ShippingRules.history = new _History2.default();
+	/** @prop {module:util} ShippingRules.util Module containing utility functions. */
 	Meanbee.ShippingRules.util = _util2.default;
+	Meanbee.ShippingRules.Base = _Base2.default;
+	/** @prop {module:clipboard} ShippingRules.clipboard Module managing the ShippingRules clipboard */
+	Meanbee.ShippingRules.clipboard = _clipboard2.default;
+	/** @prop {module:navigation} ShippingRules.navigation Module managing keyboard navigation. */
+	Meanbee.ShippingRules.navigation = _navigation2.default;
 	
 	Meanbee.ShippingRules.Aggregator = _Aggregator2.default;
 	Meanbee.ShippingRules.registers.aggregator.add(_Boolean2.default.CONJUNCTIVE, Meanbee.ShippingRules.Aggregator.Conjunctive = _Boolean2.default);
@@ -565,216 +594,17 @@
 	    value: true
 	});
 	
-	var _Register = __webpack_require__(6);
-	
-	var _Register2 = _interopRequireDefault(_Register);
-	
-	var _Aggregator = __webpack_require__(7);
-	
-	var _Aggregator2 = _interopRequireDefault(_Aggregator);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var aggregatorRegister = new _Register2.default();
-	aggregatorRegister.add = function (key, child) {
-	    if (!this.has(key) && child.prototype instanceof _Aggregator2.default) {
-	        this.children[key] = child;
-	    }
-	    return this;
-	};
-	
-	exports.default = aggregatorRegister;
-
-/***/ },
-/* 6 */
-/***/ function(module, exports) {
-
-	"use strict";
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	var Register = function () {
-	    function Register() {
-	        _classCallCheck(this, Register);
-	
-	        this.children = {};
-	    }
-	
-	    _createClass(Register, [{
-	        key: "remove",
-	        value: function remove(key) {
-	            var child = this.get(key);
-	            delete this.children[key];
-	            return child;
-	        }
-	    }, {
-	        key: "has",
-	        value: function has(key) {
-	            return this.children.hasOwnProperty(key);
-	        }
-	    }, {
-	        key: "get",
-	        value: function get(key) {
-	            return this.has(key) && this.children[key];
-	        }
-	    }, {
-	        key: "getAsOptions",
-	        value: function getAsOptions() {
-	            var _this = this;
-	
-	            return Object.keys(this.children).map(function (key) {
-	                return React.createElement(
-	                    "option",
-	                    { value: key },
-	                    _this.get(key).identifier()
-	                );
-	            });
-	        }
-	    }]);
-	
-	    return Register;
-	}();
-	
-	exports.default = Register;
-
-/***/ },
-/* 7 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
-	
-	var _Base2 = __webpack_require__(8);
-	
-	var _Base3 = _interopRequireDefault(_Base2);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var Aggregator = function (_Base) {
-	    _inherits(Aggregator, _Base);
-	
-	    function Aggregator(index) {
-	        var parent = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
-	        var container = arguments[2];
-	
-	        _classCallCheck(this, Aggregator);
-	
-	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Aggregator).call(this, index, parent, container));
-	
-	        _this.children = [];
-	        _this.combinator = null;
-	        if (!parent) {
-	            if (!Meanbee.ShippingRules.calculators) Meanbee.ShippingRules.calculators = {};
-	            Meanbee.ShippingRules.calculators[index] = _this;
-	        }
-	        return _this;
-	    }
-	
-	    _createClass(Aggregator, [{
-	        key: 'removeChildByIndex',
-	        value: function removeChildByIndex(index) {
-	            this.children.splice(index, 1);
-	            this.reindexChildren();
-	        }
-	    }, {
-	        key: 'reindexChildren',
-	        value: function reindexChildren() {
-	            this.children.forEach(function (child, i) {
-	                return child.index = i;
-	            });
-	            return this;
-	        }
-	    }, {
-	        key: 'sortChildren',
-	        value: function sortChildren() {
-	            this.children = this.children.sort(function (a, b) {
-	                return a.index - b.index;
-	            });
-	            return this;
-	        }
-	    }, {
-	        key: 'renderChildren',
-	        value: function renderChildren() {
-	            var me = this;
-	            return React.createElement(
-	                'ul',
-	                null,
-	                me.children.map(function (child) {
-	                    return child.render();
-	                }),
-	                me.renderChildSelector()
-	            );
-	        }
-	    }, {
-	        key: 'refresh',
-	        value: function refresh() {
-	            _get(Object.getPrototypeOf(Aggregator.prototype), 'refresh', this).call(this);
-	            this.children.forEach(function (c) {
-	                return c.refresh();
-	            });
-	        }
-	    }, {
-	        key: 'init',
-	        value: function init(obj) {
-	            _get(Object.getPrototypeOf(Aggregator.prototype), 'init', this).call(this, obj);
-	            this.combinator = obj.type;
-	        }
-	    }, {
-	        key: 'toJSON',
-	        value: function toJSON() {
-	            return {
-	                children: this.children,
-	                register: 'Aggregator',
-	                key: this.combinator
-	            };
-	        }
-	    }]);
-	
-	    return Aggregator;
-	}(_Base3.default);
-	
-	exports.default = Aggregator;
-
-/***/ },
-/* 8 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	var _navigation = __webpack_require__(9);
+	var _navigation = __webpack_require__(6);
 	
 	var _navigation2 = _interopRequireDefault(_navigation);
 	
-	var _clipboard = __webpack_require__(10);
+	var _clipboard = __webpack_require__(7);
 	
 	var _clipboard2 = _interopRequireDefault(_clipboard);
 	
-	var _util = __webpack_require__(11);
+	var _util = __webpack_require__(8);
 	
 	var _util2 = _interopRequireDefault(_util);
 	
@@ -782,7 +612,16 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
+	/**
+	 * The base class from which all tree items should inherit.
+	 * @memberof Meanbee.ShippingRules
+	 */
 	var Base = function () {
+	    /**
+	     * @param {(number|string)} index The index at which you can find this among the children of it's parent.
+	     * @param {Meanbee.ShippingRules.Base} parent The parent tree item.
+	     * @param {Element} container The element in which this calculator field is rendered.
+	     */
 	    function Base(index, parent, container) {
 	        _classCallCheck(this, Base);
 	
@@ -791,9 +630,31 @@
 	        this.container = container;
 	    }
 	
+	    /**
+	     * The index at which you can find this among the children of it's parent.
+	     * @type {(number|string)}
+	     */
+	
+	
 	    _createClass(Base, [{
 	        key: 'init',
-	        value: function init() {}
+	
+	
+	        /**
+	         * Initialises the trree item with its serialised form.
+	         * @abstract
+	         * @return {this}
+	         */
+	        value: function init() {
+	            return this;
+	        }
+	
+	        /**
+	         * Gets the child that matches the passed id.
+	         * @param {string} id The id to search for.
+	         * @return {Meanbee.ShippingRules.Base} The matching child.
+	         */
+	
 	    }, {
 	        key: 'getObjectById',
 	        value: function getObjectById(id) {
@@ -823,6 +684,13 @@
 	            }
 	            return null;
 	        }
+	
+	        /**
+	         * Removes the tree item from its parent, thereby deleting it.
+	         * @param {number} navDir The direction (+/-) in which to move the keyboard focus.
+	         * @return {this} The removed tree item.
+	         */
+	
 	    }, {
 	        key: 'delete',
 	        value: function _delete(navDir) {
@@ -838,7 +706,14 @@
 	                setTimeout(this.root.rerender.bind(this.root), 200);
 	                Meanbee.ShippingRules.history.pushState();
 	            }
+	            return this;
 	        }
+	
+	        /**
+	         * Rerenders the calculator form in its [container]{@link Base#container}.
+	         * @return {this}
+	         */
+	
 	    }, {
 	        key: 'rerender',
 	        value: function rerender() {
@@ -849,17 +724,39 @@
 	            window.Stretchy.resizeAll();
 	            this.focus(focussedElementId);
 	            this.root.updateJSON();
+	            return this;
 	        }
+	
+	        /**
+	         * Called when tree item may need to update in respose to changes made in higher nesting scopes.
+	         * @abstract
+	         * @return {this}
+	         */
+	
 	    }, {
 	        key: 'refresh',
 	        value: function refresh() {
 	            // NOOP
+	            return this;
 	        }
+	
+	        /**
+	         * Updates the associated input field with the serialised form of the calulator field.
+	         * @returns this
+	         */
+	
 	    }, {
 	        key: 'updateJSON',
 	        value: function updateJSON() {
 	            this.root.field.value = JSON.stringify(this.root);
+	            return this;
 	        }
+	
+	        /**
+	         * Moves keyboard focus to the element with [id]{@link Base.id}.
+	         * @param {string} id
+	         */
+	
 	    }, {
 	        key: 'focus',
 	        value: function focus(id) {
@@ -868,6 +765,12 @@
 	                element.focus();
 	            }
 	        }
+	
+	        /**
+	         * Creates the common remove button.
+	         * @return {HTMLButtonElement|Array} Remove button.
+	         */
+	
 	    }, {
 	        key: 'renderRemoveButton',
 	        value: function renderRemoveButton() {
@@ -876,6 +779,14 @@
 	            }
 	            return [];
 	        }
+	
+	        /**
+	         * Common keboard event listener.
+	         * @listens keyDown
+	         * @param {KeyboardEvent} event
+	         * @return {undefined}
+	         */
+	
 	    }, {
 	        key: 'keyHandler',
 	        value: function keyHandler(event) {
@@ -982,12 +893,28 @@
 	                event.stopPropagation();
 	            }
 	        }
+	
+	        /**
+	         * Common copy event listener.
+	         * @listens copy
+	         * @param {ClipboardEvent} event
+	         * @returns {undefined}
+	         */
+	
 	    }, {
 	        key: 'copyText',
 	        value: function copyText(event) {
 	            event.clipboardData.setData('text/html', this.toText(event.target, 'rich'));
 	            event.preventDefault();
 	        }
+	
+	        /**
+	         * Converts the tree item and its children to immutable text.
+	         * @param {Element} target
+	         * @param {string} format
+	         * @returns {String}
+	         */
+	
 	    }, {
 	        key: 'toText',
 	        value: function toText(target, format) {
@@ -1004,6 +931,14 @@
 	            }).join(' ').replace(/<li><\/li>/g, '').replace(/>\s</g, '><').replace(/<ul><\/ul>/g, '');
 	            return text;
 	        }
+	
+	        /**
+	         * Common dragStart event listener.
+	         * @listens dragStart
+	         * @param {DragEvent} event
+	         * @returns {undefined}
+	         */
+	
 	    }, {
 	        key: 'drag',
 	        value: function drag(event) {
@@ -1015,6 +950,14 @@
 	            event.dataTransfer.items.add(this.toText(event.target, 'rich'), 'text/html');
 	            event.stopPropagation();
 	        }
+	
+	        /**
+	         * Common drop event listener.
+	         * @listens drop
+	         * @param {DragEvent} event
+	         * @returns {undefined}
+	         */
+	
 	    }, {
 	        key: 'drop',
 	        value: function drop(event) {
@@ -1043,6 +986,14 @@
 	            Meanbee.ShippingRules.history.pushState();
 	            event.stopPropagation();
 	        }
+	
+	        /**
+	         * Common dragOver event listener.
+	         * @listens dragOver
+	         * @param {DragEvent}
+	         * @returns {undefined}
+	         */
+	
 	    }, {
 	        key: 'allowDrop',
 	        value: function allowDrop(event) {
@@ -1053,12 +1004,28 @@
 	                event.dataTransfer.dropEffect = 'move';
 	            }
 	        }
+	
+	        /**
+	         * Common dragEnter event listener.
+	         * @listens dragEnter
+	         * @param {DragEvent} event
+	         * @returns {undefined}
+	         */
+	
 	    }, {
 	        key: 'dragIn',
 	        value: function dragIn(event) {
 	            event.target.classList.add('drop-target');
 	            event.stopPropagation();
 	        }
+	
+	        /**
+	         * Common dragLeave event listener.
+	         * @listens dragLeave
+	         * @param {DragEvent} event
+	         * @returns {undefined}
+	         */
+	
 	    }, {
 	        key: 'dragOut',
 	        value: function dragOut(event) {
@@ -1073,6 +1040,12 @@
 	        get: function get() {
 	            return this._index;
 	        }
+	
+	        /**
+	         * The unique identifier of the tree item, used the the id attibute on it's root element.
+	         * @type {string}
+	         */
+	
 	    }, {
 	        key: 'id',
 	        get: function get() {
@@ -1082,6 +1055,12 @@
 	                return this.index;
 	            }
 	        }
+	
+	        /**
+	         * The root tree item.
+	         * @type {Meanbee.ShippingRules.Aggregator}
+	         */
+	
 	    }, {
 	        key: 'root',
 	        get: function get() {
@@ -1091,6 +1070,12 @@
 	            }
 	            return root;
 	        }
+	
+	        /**
+	         * The tree item that defines the context of its children.
+	         * @type {Meanbee.ShippingRules.Base}
+	         */
+	
 	    }, {
 	        key: 'context',
 	        set: function set(context) {
@@ -1100,6 +1085,12 @@
 	        get: function get() {
 	            return this._context || this.parent && this.parent.context;
 	        }
+	
+	        /**
+	         * The input field that holds the serialised form of the calculator field. 
+	         * @type {HTMLInputElement}
+	         */
+	
 	    }, {
 	        key: 'field',
 	        set: function set(input) {
@@ -1118,7 +1109,7 @@
 	exports.default = Base;
 
 /***/ },
-/* 9 */
+/* 6 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1126,7 +1117,14 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+	/** @module navigation */
+	
 	exports.default = {
+	    /**
+	     * Move keyboard focus to nearest parent tree item.
+	     * @param {KeyboardEvent} event
+	     * @returns {undefined}
+	     */
 	    escape: function escape(event) {
 	        event.preventDefault();
 	        if (~['INPUT', 'SELECT', 'BUTTON', 'TEXTAREA'].indexOf(event.target.tagName)) {
@@ -1135,12 +1133,27 @@
 	            document.body.focus();
 	        }
 	    },
+	
+	
+	    /**
+	     * Move keyboard focus to first input field that is a child of the currently
+	     * focussed tree item.
+	     * @param {KeyboardEvent} event
+	     * @returns {undefined}
+	     */
 	    firstField: function firstField(event) {
 	        if (event.target.tagName === 'LI') {
 	            event.preventDefault();
 	            event.target.querySelector('input, select, button, textarea').focus();
 	        }
 	    },
+	
+	
+	    /**
+	     * Move keyboard focus to the parent tree item if applicable.
+	     * @param {KeyboardEvent} event
+	     * @returns {undefined}
+	     */
 	    parentTree: function parentTree(event) {
 	        if (event.target.tagName === 'LI') {
 	            event.preventDefault();
@@ -1151,6 +1164,13 @@
 	            }
 	        }
 	    },
+	
+	
+	    /**
+	     * Move keyboard focus to first child tree item if applicable.
+	     * @param {KeyboardEvent} event
+	     * @returns {undefined}
+	     */
 	    childTree: function childTree(event) {
 	        if (event.target.tagName === 'LI') {
 	            event.preventDefault();
@@ -1166,6 +1186,14 @@
 	            }
 	        }
 	    },
+	
+	
+	    /**
+	     * Moves keyboard focus to the previous sibling tree item or the direct parent tree item.
+	     * @param {KeyboardEvent} event
+	     * @param {Meanbee.ShippingRules.Base} context The object representing the currently focussed tree item.
+	     * @returns {undefined}
+	     */
 	    previous: function previous(event, context) {
 	        if (event.target.tagName === 'LI') {
 	            event.preventDefault();
@@ -1177,6 +1205,14 @@
 	            }
 	        }
 	    },
+	
+	
+	    /**
+	     * Moves keyboard focus to the next sibling tree item or the direct parent's next sibling tree item.
+	     * @param {KeyboardEvent} event
+	     * @param {Meanbee.ShippingRules.Base} context The object representing the currently focussed tree item.
+	     * @returns {undefined}
+	     */
 	    next: function next(event, context) {
 	        if (event.target.tagName === 'LI') {
 	            event.preventDefault();
@@ -1188,6 +1224,14 @@
 	            }
 	        }
 	    },
+	
+	
+	    /**
+	     * Move keyboard focus to the tree item that allows the user to create a new tree item.
+	     * @param {KeyboardEvent} event
+	     * @param {Meanbee.ShippingRules.Base} context The object representing the currently focussed tree item.
+	     * @returns {undefined}
+	     */
 	    new: function _new(event, context) {
 	        if (event.target.tagName === 'LI') {
 	            event.preventDefault();
@@ -1201,7 +1245,7 @@
 	};
 
 /***/ },
-/* 10 */
+/* 7 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -1209,13 +1253,28 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+	/**
+	 * @module clipboard
+	 */
 	exports.default = {
+	    /**
+	     * Copies the target tree item to the Shipping Rules clipboard sessionStorage.
+	     * @param {Meanbee.ShippingRules.Base} target
+	     * @returns {undefined}
+	     */
 	    copy: function copy(target) {
 	        if (window.Storage) {
 	            var targetDescriptor = JSON.stringify(target);
 	            window.sessionStorage.meanbeeShippingRulesClipboard = targetDescriptor;
 	        }
 	    },
+	
+	
+	    /**
+	     * Pastes the tree item in the Shipping Rules clipboard sessionStorage as target tree item's direct child or sibling.
+	     * @param {Meanbee.ShippingRules.Base} target
+	     * @returns {undefined}
+	     */
 	    paste: function paste(target) {
 	        if (window.Storage) {
 	            var clipboardItemDescriptor = JSON.parse(window.sessionStorage.meanbeeShippingRulesClipboard);
@@ -1242,7 +1301,7 @@
 	};
 
 /***/ },
-/* 11 */
+/* 8 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1257,13 +1316,37 @@
 	var ctx = canvas.getContext('2d');
 	ctx.font = 'bold 10.8px sans-serif';
 	
-	var util = {
+	/** @module */
+	exports.default = {
+	    /**
+	     * Creates a remove button.
+	     * @param  {Meanbee.ShippingRules.Base} ctx Tree item to which the button belongs.
+	     * @param  {function} handler The on click event handler.
+	     * @returns {HTMLButton}
+	     */
 	    removeButton: function removeButton(ctx, handler) {
 	        return React.createElement('button', { id: ctx.id + '-remove', 'aria-label': 'Remove', type: 'button', 'class': 'remove', onClick: handler });
 	    },
+	
+	
+	    /**
+	     * Measures the width of the passed text.
+	     * @param {String} text Text to Measure.
+	     * @returns {Number} Width of text in CSS pixels.
+	     */
 	    textWidth: function textWidth(text) {
 	        return ctx.measureText(text).width;
 	    },
+	
+	
+	    /**
+	     * Loads data from a ShippingRules ajax route. Routes are defined as `<register>/<registerKey>/<method>`,
+	     * referring to a register, registerKey and method on the server, where the methods signature is prefixed with `ajax`.
+	     * Stores result in `Meanbee.ShippingRules.data` indexed by using route as the key,
+	     * and refreshes and rerenders the calculators.
+	     * @param {String} path Ajax route.
+	     * @returns {XMLHttpRequest} The ajax request.
+	     */
 	    loadData: function loadData(path) {
 	        if (!('data' in Meanbee.ShippingRules)) Meanbee.ShippingRules.data = {};
 	        if (Meanbee.ShippingRules.data[path]) return;
@@ -1274,22 +1357,316 @@
 	            if (xhr.readyState === 4 && xhr.status === 200) {
 	                Meanbee.ShippingRules.data[path] = JSON.parse(xhr.responseText);
 	                if (Meanbee.ShippingRules.calculators) Object.keys(Meanbee.ShippingRules.calculators).forEach(function (calcName) {
+	                    Meanbee.ShippingRules.calculators[calcName].refresh();
 	                    Meanbee.ShippingRules.calculators[calcName].rerender();
 	                });
 	            }
 	        };
 	        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 	        xhr.send('form_key=' + Meanbee.ShippingRules.formKey);
+	        return xhr;
 	    },
+	
+	
+	    /**
+	     * Flattens a multidimentional or varidimentional array to one dimention.
+	     * @param {Array} arr Multidimentional or varidimentional array.
+	     * @returns {Array} One dimentional array.
+	     */
 	    flatten: function flatten(arr) {
 	        var _ref;
 	
 	        var flat = (_ref = []).concat.apply(_ref, _toConsumableArray(arr));
-	        return flat.some(Array.isArray) ? flatten(flat) : flat;
+	        return flat.some(Array.isArray) ? this.flatten(flat) : flat;
 	    }
 	};
+
+/***/ },
+/* 9 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
 	
-	exports.default = util;
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _Register = __webpack_require__(10);
+	
+	var _Register2 = _interopRequireDefault(_Register);
+	
+	var _Aggregator = __webpack_require__(11);
+	
+	var _Aggregator2 = _interopRequireDefault(_Aggregator);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var aggregatorRegister = new _Register2.default();
+	aggregatorRegister.add = function (key, child) {
+	    if (!this.has(key) && child.prototype instanceof _Aggregator2.default) {
+	        this.children[key] = child;
+	    }
+	    return this;
+	};
+	
+	exports.default = aggregatorRegister;
+
+/***/ },
+/* 10 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	/**
+	 * Class from which all registers inherit.
+	 * @memberof Meanbee.ShippingRules
+	 */
+	var Register = function () {
+	    function Register() {
+	        _classCallCheck(this, Register);
+	
+	        this.children = {};
+	    }
+	
+	    /**
+	     * Removes the registered object by key.
+	     * @param {string} key
+	     * @returns {Object} The removed object
+	     */
+	
+	
+	    _createClass(Register, [{
+	        key: "remove",
+	        value: function remove(key) {
+	            var child = this.get(key);
+	            delete this.children[key];
+	            return child;
+	        }
+	
+	        /**
+	         * Checks whether there already exists a object in the register with given key.
+	         * @param {string} key
+	         * @returns {boolean}
+	         */
+	
+	    }, {
+	        key: "has",
+	        value: function has(key) {
+	            return this.children.hasOwnProperty(key);
+	        }
+	
+	        /**
+	         * Gets a registered object by its key.
+	         * @param {string} key
+	         * @returns {Object}
+	         */
+	
+	    }, {
+	        key: "get",
+	        value: function get(key) {
+	            return this.has(key) && this.children[key];
+	        }
+	
+	        /**
+	         * Constructs an array of option elements representing the objects in the register.
+	         * @return {Object[]}
+	         */
+	
+	    }, {
+	        key: "getAsOptions",
+	        value: function getAsOptions() {
+	            var _this = this;
+	
+	            return Object.keys(this.children).map(function (key) {
+	                return React.createElement(
+	                    "option",
+	                    { value: key },
+	                    _this.get(key).identifier()
+	                );
+	            });
+	        }
+	    }]);
+	
+	    return Register;
+	}();
+	
+	exports.default = Register;
+
+/***/ },
+/* 11 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+	
+	var _Base2 = __webpack_require__(5);
+	
+	var _Base3 = _interopRequireDefault(_Base2);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	/**
+	 * Groups a number of other tree items. Client side representation of an object
+	 * that takes the result of its children and returns a single value.
+	 * @extends Meanbee.ShippingRules.Base
+	 * @memberof Meanbee.ShippingRules
+	 */
+	var Aggregator = function (_Base) {
+	    _inherits(Aggregator, _Base);
+	
+	    /**
+	     * @param {(number|string)} index The index at which you can find this among the children of it's parent.
+	     * @param {Meanbee.ShippingRules.Base} parent The parent tree item.
+	     * @param {Element} container The element in which this calculator field is rendered.
+	     */
+	    function Aggregator(index) {
+	        var parent = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
+	        var container = arguments.length <= 2 || arguments[2] === undefined ? null : arguments[2];
+	
+	        _classCallCheck(this, Aggregator);
+	
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Aggregator).call(this, index, parent, container));
+	
+	        _this.children = [];
+	        _this.combinator = null;
+	        if (!parent) {
+	            if (!Meanbee.ShippingRules.calculators) Meanbee.ShippingRules.calculators = {};
+	            Meanbee.ShippingRules.calculators[index] = _this;
+	        }
+	        return _this;
+	    }
+	
+	    /**
+	     * Removes the child at the specified index and reindexes the remaining children.
+	     * @param {number} index The index that identifies the child to be removed.
+	     * @returns {Meanbee.ShippingRules.Base} The removed child.
+	     */
+	
+	
+	    _createClass(Aggregator, [{
+	        key: 'removeChildByIndex',
+	        value: function removeChildByIndex(index) {
+	            var removed = this.children.splice(index, 1);
+	            this.reindexChildren();
+	            return removed[0];
+	        }
+	
+	        /**
+	         * Resets the {@link Meanbee.ShippingRules.Base#index} property of its children according to their relative positions.
+	         * @returns {this}
+	         */
+	
+	    }, {
+	        key: 'reindexChildren',
+	        value: function reindexChildren() {
+	            this.children.forEach(function (child, i) {
+	                return child.index = i;
+	            });
+	            return this;
+	        }
+	
+	        /**
+	         * Sorts the children according to their respective [index]{@link Base#index}.
+	         * @return {this}
+	         */
+	
+	    }, {
+	        key: 'sortChildren',
+	        value: function sortChildren() {
+	            this.children = this.children.sort(function (a, b) {
+	                return a.index - b.index;
+	            });
+	            return this;
+	        }
+	
+	        /**
+	         * Constructs a HTML element containing the rendered children.
+	         * @return {HTMLUListElement}
+	         */
+	
+	    }, {
+	        key: 'renderChildren',
+	        value: function renderChildren() {
+	            var me = this;
+	            return React.createElement(
+	                'ul',
+	                null,
+	                me.children.map(function (child) {
+	                    return child.render();
+	                }),
+	                me.renderChildSelector()
+	            );
+	        }
+	
+	        /**
+	         * Indicates to its children that they may need to update considering changes that have occurred higher ing the nested tree items.
+	         * @returns {this}
+	         */
+	
+	    }, {
+	        key: 'refresh',
+	        value: function refresh() {
+	            _get(Object.getPrototypeOf(Aggregator.prototype), 'refresh', this).call(this);
+	            this.children.forEach(function (c) {
+	                return c.refresh();
+	            });
+	            return this;
+	        }
+	
+	        /**
+	         * Initialises the aggregator with a serialised aggregator.
+	         * @returns {this}
+	         */
+	
+	    }, {
+	        key: 'init',
+	        value: function init(obj) {
+	            _get(Object.getPrototypeOf(Aggregator.prototype), 'init', this).call(this, obj);
+	            this.combinator = obj.type;
+	            return this;
+	        }
+	
+	        /**
+	         * Serialises the aggregator to an object that can be stringified to JSON while persisting all necessary data.
+	         * @returns {Object}
+	         */
+	
+	    }, {
+	        key: 'toJSON',
+	        value: function toJSON() {
+	            return {
+	                children: this.children,
+	                register: 'Aggregator',
+	                key: this.combinator
+	            };
+	        }
+	    }]);
+	
+	    return Aggregator;
+	}(_Base3.default);
+	
+	exports.default = Aggregator;
 
 /***/ },
 /* 12 */
@@ -1301,7 +1678,7 @@
 	    value: true
 	});
 	
-	var _Register = __webpack_require__(6);
+	var _Register = __webpack_require__(10);
 	
 	var _Register2 = _interopRequireDefault(_Register);
 	
@@ -1357,18 +1734,40 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
+	/**
+	 * @memberof Meanbee.ShippingRules
+	 */
 	var Comparator = function () {
+	    /** @param {string} type Types over which the comparator 'compares'. */
 	    function Comparator(type) {
 	        _classCallCheck(this, Comparator);
 	
 	        this.type = type;
 	    }
 	
+	    /**
+	     * Override to specify the types over which your comparator is valid.
+	     * @returns {string[]} An array of strings identifying the types over which it is valid for this comparator to 'compare'.
+	     */
+	
+	
 	    _createClass(Comparator, [{
 	        key: 'valueChangeHandler',
+	
+	
+	        /**
+	         * Called when the asscoiated field is changed.
+	         * @returns {Object}
+	         */
 	        value: function valueChangeHandler(value) {
 	            return value;
 	        }
+	
+	        /**
+	         * Serialises the comparator to an object that can be stringified to JSON while persisting all necessary data.
+	         * @returns {Object}
+	         */
+	
 	    }, {
 	        key: 'toJSON',
 	        value: function toJSON() {
@@ -1378,14 +1777,33 @@
 	        }
 	    }, {
 	        key: 'identifier',
+	
+	
+	        /**
+	         * The text used for the comparator in the context of the types over which it 'compares'.
+	         * @type {string}
+	         */
 	        get: function get() {
 	            return this.constructor.identifier(this.type);
 	        }
+	
+	        /**
+	         * Override this method to set the text used for the comparator
+	         * @returns {string}
+	         */
+	
 	    }], [{
 	        key: 'supportedTypes',
 	        value: function supportedTypes() {
 	            return [];
 	        }
+	
+	        /**
+	         * Checks whether or not this comparator is valid over the specified type.
+	         * @param {string} type The type to check
+	         * @returns {boolean}
+	         */
+	
 	    }, {
 	        key: 'canHandleType',
 	        value: function canHandleType(type) {
@@ -1420,7 +1838,7 @@
 	    value: true
 	});
 	
-	var _Register = __webpack_require__(6);
+	var _Register = __webpack_require__(10);
 	
 	var _Register2 = _interopRequireDefault(_Register);
 	
@@ -1482,7 +1900,7 @@
 	
 	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 	
-	var _Base2 = __webpack_require__(8);
+	var _Base2 = __webpack_require__(5);
 	
 	var _Base3 = _interopRequireDefault(_Base2);
 	
@@ -1494,9 +1912,19 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
+	/**
+	 * The client side representation of an object that considers a variable and evaluates to a boolean.
+	 * @extends Meanbee.ShippingRules.Base
+	 * @memberof Meanbee.ShippingRules
+	 */
 	var Condition = function (_Base) {
 	    _inherits(Condition, _Base);
 	
+	    /**
+	     * @param {number} index The index at which you can find this among the children of it's parent.
+	     * @param {Meanbee.ShippingRules.Base} parent The parent tree item.
+	     * @param {string} variable The selected variable upon which the condition is evaluated.
+	     */
 	    function Condition(index, parent, variable) {
 	        _classCallCheck(this, Condition);
 	
@@ -1511,8 +1939,21 @@
 	        return _this;
 	    }
 	
+	    /**
+	     * The textual label that groups the variables of this condition with other conditions that share the same category.
+	     * @param {Meanbee.ShippingRules.Base} context
+	     * @returns {string}
+	     */
+	
+	
 	    _createClass(Condition, [{
 	        key: 'renderComparator',
+	
+	
+	        /**
+	         * Creates a select field listing valid comparators.
+	         * @return {HTMLSelectElement}
+	         */
 	        value: function renderComparator() {
 	            var me = this;
 	            return React.createElement(
@@ -1526,12 +1967,24 @@
 	                Meanbee.ShippingRules.registers.comparator.getAsOptions(me.type, me.comparator.identifier)
 	            );
 	        }
+	
+	        /**
+	         * Called when the falue field is changed.
+	         * @param {Object} value
+	         */
+	
 	    }, {
 	        key: 'valueChangeHandler',
 	        value: function valueChangeHandler(value) {
 	            this.value = this.comparator.valueChangeHandler(value);
 	            this.root.updateJSON();
 	        }
+	
+	        /**
+	         * Creates the DOM representation of the tree item.
+	         * @return {HTMLLIElement}
+	         */
+	
 	    }, {
 	        key: 'render',
 	        value: function render() {
@@ -1546,6 +1999,12 @@
 	                me.renderRemoveButton()
 	            );
 	        }
+	
+	        /**
+	         * Changes the value field according to the new comparator.
+	         * @returns {this}
+	         */
+	
 	    }, {
 	        key: 'refresh',
 	        value: function refresh() {
@@ -1554,7 +2013,14 @@
 	                this.comparator.type = this.type;
 	                this.valueField = new (Meanbee.ShippingRules.registers.field.get(this.comparator.getField()))(this, this.value);
 	            }
+	            return this;
 	        }
+	
+	        /**
+	         * Initialises the condition with a serialised condition.
+	         * @returns {this}
+	         */
+	
 	    }, {
 	        key: 'init',
 	        value: function init(obj) {
@@ -1563,6 +2029,12 @@
 	            this.comparator = new (Meanbee.ShippingRules.registers.comparator.get(obj.comparator.key))(this.type);
 	            if (this.type.length) this.valueField = new (Meanbee.ShippingRules.registers.field.get(this.comparator.getField()))(this, this.value);
 	        }
+	
+	        /**
+	         * Serialises the condition to an object that can be stringified to JSON while persisting all necessary data.
+	         * @returns {Object}
+	         */
+	
 	    }, {
 	        key: 'toJSON',
 	        value: function toJSON() {
@@ -1575,10 +2047,22 @@
 	        }
 	    }, {
 	        key: 'label',
+	
+	
+	        /**
+	         * The textual label for the variable selected.
+	         * @type {string}
+	         */
 	        get: function get() {
 	            var variable = this.constructor.getVariables(this.parent && this.parent.context)[this.variable];
 	            return variable ? variable.label : '';
 	        }
+	
+	        /**
+	         * The type array of the selected variable.
+	         * @type {string[]}
+	         */
+	
 	    }, {
 	        key: 'type',
 	        get: function get() {
@@ -1591,6 +2075,12 @@
 	            // eslint-disable-line no-unused-vars
 	            return null;
 	        }
+	
+	        /**
+	         * Gets object of `{key: {label: <string>, type: <string[]>}}` pairs representing the variables over which this condition can be evaluated.
+	         * @returns {Object}
+	         */
+	
 	    }, {
 	        key: 'getVariables',
 	        value: function getVariables(context) {
@@ -1614,7 +2104,7 @@
 	    value: true
 	});
 	
-	var _Register = __webpack_require__(6);
+	var _Register = __webpack_require__(10);
 	
 	var _Register2 = _interopRequireDefault(_Register);
 	
@@ -1641,36 +2131,57 @@
 	"use strict";
 	
 	Object.defineProperty(exports, "__esModule", {
-	    value: true
+	  value: true
 	});
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
+	/**
+	 * An input field.
+	 * @memberof Meanbee.ShippingRules
+	 */
 	var Field = function () {
-	    function Field(condition, value) {
-	        _classCallCheck(this, Field);
+	  /**
+	   * @param {Meanbee.ShippingRules.Condition} condition Reference to the parent condition.
+	   * @param {Object} value The initial value.
+	   */
+	  function Field(condition, value) {
+	    _classCallCheck(this, Field);
 	
-	        this.condition = condition;
-	        this.idPrefix = condition ? condition.id : null;
-	        this.value = value;
+	    this.condition = condition;
+	    this.idPrefix = condition ? condition.id : null;
+	    this.value = value;
+	  }
+	
+	  /**
+	   * Called when the fields value is changed.
+	   * @listens change
+	   * @param {Event} event
+	   */
+	
+	
+	  _createClass(Field, [{
+	    key: "valueChangeHandler",
+	    value: function valueChangeHandler(event) {
+	      this.value = event.target.value;
+	      this.condition.valueChangeHandler(this.value);
 	    }
 	
-	    _createClass(Field, [{
-	        key: "valueChangeHandler",
-	        value: function valueChangeHandler(event) {
-	            this.value = event.target.value;
-	            this.condition.valueChangeHandler(this.value);
-	        }
-	    }, {
-	        key: "root",
-	        get: function get() {
-	            return this.condition.root;
-	        }
-	    }]);
+	    /**
+	     * The root tree item.
+	     * @type {Meanbee.ShippingRules.Aggregator}
+	     */
 	
-	    return Field;
+	  }, {
+	    key: "root",
+	    get: function get() {
+	      return this.condition.root;
+	    }
+	  }]);
+	
+	  return Field;
 	}();
 	
 	exports.default = Field;
@@ -1685,7 +2196,7 @@
 	    value: true
 	});
 	
-	var _Register = __webpack_require__(6);
+	var _Register = __webpack_require__(10);
 	
 	var _Register2 = _interopRequireDefault(_Register);
 	
@@ -1717,7 +2228,7 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _Base2 = __webpack_require__(8);
+	var _Base2 = __webpack_require__(5);
 	
 	var _Base3 = _interopRequireDefault(_Base2);
 	
@@ -1729,9 +2240,18 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
+	/**
+	 * The client side representation of an object that considers a variable and evaluates to a number.
+	 * @extends Meanbee.ShipppingRules.Base
+	 * @memberof Meanbee.ShippingRules
+	 */
 	var Term = function (_Base) {
 	    _inherits(Term, _Base);
 	
+	    /**
+	     * @param {number} index The client side representation of an object that considers a variable and evaluates to a boolean.
+	     * @param {Meanbee.ShippingRules.Base} parent The parent tree item.
+	     */
 	    function Term(index, parent) {
 	        _classCallCheck(this, Term);
 	
@@ -1741,14 +2261,33 @@
 	        return _this;
 	    }
 	
+	    /**
+	     * The numerical value represented by this term.
+	     * @type {number}
+	     */
+	
+	
 	    _createClass(Term, [{
 	        key: 'init',
+	
+	
+	        /**
+	         * Initialises the term with a serialised condition.
+	         * @return {this}
+	         */
 	        value: function init(obj) {
 	            if (obj.register !== 'Term' || Meanbee.ShippingRules.registers.term.get(obj.key) !== this.constructor) {
 	                return;
 	            }
 	            this.combinator = obj.type;
+	            return this;
 	        }
+	
+	        /**
+	         * Serialises the term to an object that can be stringified to JSON while persisting all necessary data.
+	         * @returns {Object}
+	         */
+	
 	    }, {
 	        key: 'toJSON',
 	        value: function toJSON() {
@@ -1789,6 +2328,14 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
+	/**
+	 * Encapsulates the changes made to the calculator fields on the page in a
+	 * temporally ordered form, allowing for time travelling through
+	 * present-past-present and present-future-present states, where this object
+	 * serves as the objective cannonical record of time.
+	 *
+	 * @memberof Meanbee.ShippingRules
+	 */
 	var History = function () {
 	    function History() {
 	        _classCallCheck(this, History);
@@ -1797,20 +2344,32 @@
 	        this.pointer = 0; // The index of the history array at which new entries should be added.
 	    }
 	
+	    /**
+	     * Adds a new state to the history truncating the history, removing past-future-present states.
+	     * @returns {boolean} Whether paste-future-present states have been lost.
+	     */
+	
+	
 	    _createClass(History, [{
 	        key: "pushState",
 	        value: function pushState() {
-	            var historyEntry = {};
-	            Object.keys(Meanbee.ShippingRules.calculators).forEach(function (calculator) {
-	                historyEntry[calculator] = JSON.stringify(Meanbee.ShippingRules.calculators[calculator]);
-	            });
+	            var historyEntry = this.getCurrentState();
+	            var lostStates = this.history.length > this.pointer;
 	            this.history.length = this.pointer; // Truncate history array removing past-future-present states.
 	            this.history[this.pointer] = historyEntry;
 	            this.pointer++;
+	            return lostStates;
 	        }
+	
+	        /**
+	         * Steps back to the next present-past-present state.
+	         * @returns {Object} The historic state that was replaced.
+	         */
+	
 	    }, {
 	        key: "undo",
 	        value: function undo() {
+	            var replaced = this.getCurrentState();
 	            this.pointer--;
 	            var historyEntry = this.history[this.pointer - 1];
 	            if (!historyEntry) {
@@ -1818,24 +2377,58 @@
 	                return;
 	            }
 	            this.renderHistoricState(historyEntry);
+	            return replaced;
 	        }
+	
+	        /**
+	         * Steps forward to the next present-future-present states.
+	         * @returns {Object} The historic state that was replaced
+	         */
+	
 	    }, {
 	        key: "redo",
 	        value: function redo() {
+	            var replaced = this.getCurrentState();
 	            var historyEntry = this.history[this.pointer];
 	            if (!historyEntry) {
 	                return;
 	            }
 	            this.pointer++;
 	            this.renderHistoricState(historyEntry);
+	            return replaced;
 	        }
+	
+	        /**
+	         * Renders a historic state to the page regarless of its point in history,
+	         * present-present, present-past-present or present-future-present.
+	         * @param {Object} historicEntry The historic state to render.
+	         * @returns {Object} The historic state that was replaced
+	         */
+	
 	    }, {
 	        key: "renderHistoricState",
 	        value: function renderHistoricState(historyEntry) {
+	            var replaced = this.getCurrentState();
 	            Object.keys(historyEntry).forEach(function (calculator) {
 	                Meanbee.ShippingRules.calculators[calculator].init(JSON.parse(historyEntry[calculator]));
 	                Meanbee.ShippingRules.calculators[calculator].rerender();
 	            });
+	            return replaced;
+	        }
+	
+	        /**
+	         * Gets the currrent rendered state.
+	         * @returns {Object} A historic state representing the present-present.
+	         */
+	
+	    }, {
+	        key: "getCurrentState",
+	        value: function getCurrentState() {
+	            var currentState = {};
+	            Object.keys(Meanbee.ShippingRules.calculators).forEach(function (calculator) {
+	                currentState[calculator] = JSON.stringify(Meanbee.ShippingRules.calculators[calculator]);
+	            });
+	            return currentState;
 	        }
 	    }]);
 	
@@ -1858,7 +2451,7 @@
 	
 	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 	
-	var _Aggregator2 = __webpack_require__(7);
+	var _Aggregator2 = __webpack_require__(11);
 	
 	var _Aggregator3 = _interopRequireDefault(_Aggregator2);
 	
@@ -1874,6 +2467,11 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
+	/**
+	 * @extends Aggregator
+	 *
+	 * @memberof Meanbee.ShippingRules.Aggregator
+	 */
 	var BooleanAggregator = function (_Aggregator) {
 	    _inherits(BooleanAggregator, _Aggregator);
 	
@@ -2085,7 +2683,7 @@
 	
 	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 	
-	var _Aggregator2 = __webpack_require__(7);
+	var _Aggregator2 = __webpack_require__(11);
 	
 	var _Aggregator3 = _interopRequireDefault(_Aggregator2);
 	
@@ -2235,7 +2833,7 @@
 	
 	var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 	
-	var _Aggregator2 = __webpack_require__(7);
+	var _Aggregator2 = __webpack_require__(11);
 	
 	var _Aggregator3 = _interopRequireDefault(_Aggregator2);
 	
@@ -4236,7 +4834,7 @@
 	
 	var _Condition3 = _interopRequireDefault(_Condition2);
 	
-	var _util = __webpack_require__(11);
+	var _util = __webpack_require__(8);
 	
 	var _util2 = _interopRequireDefault(_util);
 	
@@ -4433,7 +5031,7 @@
 	
 	var _popper2 = _interopRequireDefault(_popper);
 	
-	var _util = __webpack_require__(11);
+	var _util = __webpack_require__(8);
 	
 	var _util2 = _interopRequireDefault(_util);
 	
@@ -6557,7 +7155,7 @@
 	
 	var _Field3 = _interopRequireDefault(_Field2);
 	
-	var _util = __webpack_require__(11);
+	var _util = __webpack_require__(8);
 	
 	var _util2 = _interopRequireDefault(_util);
 	
@@ -6627,7 +7225,7 @@
 	
 	var _Field3 = _interopRequireDefault(_Field2);
 	
-	var _util = __webpack_require__(11);
+	var _util = __webpack_require__(8);
 	
 	var _util2 = _interopRequireDefault(_util);
 	

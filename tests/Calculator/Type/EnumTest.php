@@ -28,6 +28,8 @@ class Calculator_Type_EnumTest extends PHPUnit_Framework_TestCase
 
     public function testComparators()
     {
+        $this->assertTrue($this->type->canBeHandledByComparator('equal'));
+        $this->assertTrue($this->type->canBeHandledByComparator('notequal'));
         $this->assertTrue($this->type->canBeHandledByComparator('oneof'));
         $this->assertTrue($this->type->canBeHandledByComparator('notoneof'));
     }

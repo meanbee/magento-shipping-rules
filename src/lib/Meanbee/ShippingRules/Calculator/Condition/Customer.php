@@ -9,7 +9,7 @@ class Meanbee_Shippingrules_Calculator_Condition_Customer
      */
     public function getVariables() {
         return array(
-            'customer_group' => array('label' => 'Customer Group', 'type' => array('enumerated'))
+            'customer_group' => array('label' => 'Customer Group', 'type' => array('enum'))
         );
     }
 

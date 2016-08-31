@@ -38,7 +38,7 @@ class Meanbee_Shippingrules_Calculator_Condition_Destination_PostalCode
     public function getVariables()
     {
         return array(
-            'dest_postal_code'       => array('label' => 'Shipping Postal Code', 'type' => array('enumerated'), 'options' => array()),
+            'dest_postal_code'       => array('label' => 'Shipping Postal Code', 'type' => array('enum'), 'options' => array()),
             'dest_postal_code_full'  => array('label' => 'Entire Postal Code',   'type' => array('number_base36')),
             'dest_postal_code_part1' => array('label' => 'Part 1',               'type' => array('number_base36')),
             'dest_postal_code_part2' => array('label' => 'Part 2',               'type' => array('number_base36')),

@@ -9,8 +9,8 @@ class Meanbee_Shippingrules_Calculator_Condition_Environment
      */
     public function getVariables() {
         return array(
-            'store_id'       => array('label' => 'Magento Store',   'type' => array('enumerated', 'string')),
-            'website_id'     => array('label' => 'Magento Website', 'type' => array('enumerated', 'string')),
+            'store_id'       => array('label' => 'Magento Store',   'type' => array('enum', 'string')),
+            'website_id'     => array('label' => 'Magento Website', 'type' => array('enum', 'string')),
             'is_admin_order' => array('label' => 'Is Admin Order?', 'type' => array('boolean'))
         );
     }

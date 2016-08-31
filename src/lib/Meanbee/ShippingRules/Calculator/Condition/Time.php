@@ -10,7 +10,7 @@ class Meanbee_Shippingrules_Calculator_Condition_Time
     public function getVariables() {
         return array(
             'time_time_of_day' => array('label' => 'Time of Day', 'type' => array('time')),
-            'time_day_of_week' => array('label' => 'Day of Week', 'type' => array('enumerated'))
+            'time_day_of_week' => array('label' => 'Day of Week', 'type' => array('enum'))
         );
     }
 

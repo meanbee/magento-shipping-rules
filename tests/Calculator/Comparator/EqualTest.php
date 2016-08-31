@@ -28,6 +28,8 @@ class Calculator_Comparator_EqualTest extends PHPUnit_Framework_TestCase
 
     public function testTypes()
     {
+        $this->assertTrue($this->comparator->canHandleType('boolean'));
+        $this->assertTrue($this->comparator->canHandleType('enum'));
         $this->assertTrue($this->comparator->canHandleType('number'));
         $this->assertTrue($this->comparator->canHandleType('number_base26'));
         $this->assertTrue($this->comparator->canHandleType('number_base36'));

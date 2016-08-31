@@ -17,7 +17,7 @@ abstract class Meanbee_Shippingrules_Calculator_Aggregator_Abstract
 
     /**
      * Initializes aggregator with descriptor array.
-     * @param  Array                                      $obj    Descriptor array.
+     * @param  array                                      $obj    Descriptor array.
      * @param  Meanbee_Shippingrules_Calculator_Registers $registers
      * @return $this
      */
@@ -25,7 +25,7 @@ abstract class Meanbee_Shippingrules_Calculator_Aggregator_Abstract
         foreach ($obj['children'] as $child) {
             switch ($child['register']) {
                 case 'Aggregator':
-                    $this->add($registers->getAggregatorRegister()->newInstanceOf($child['combinator'], $child, $this));
+                    $this->add($registers->getAggregatorRegister()->newInstanceOf($child['key'], $child, $this));
                     break;
                 case 'Condition':
                     $this->add($registers->getConditionRegister()->newInstanceOf($child['key'], $child, $this));

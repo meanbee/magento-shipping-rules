@@ -2,14 +2,27 @@ import navigateTo from './navigation';
 import clipboard from './clipboard'
 import util from './util';
 
-export default class Base
+/**
+ * The base class from which all tree items should inherit.
+ * @memberof Meanbee.ShippingRules
+ */
+class Base
 {
+    /**
+     * @param {(number|string)} index The index at which you can find this among the children of it's parent.
+     * @param {Meanbee.ShippingRules.Base} parent The parent tree item.
+     * @param {Element} container The element in which this calculator field is rendered.
+     */
     constructor(index, parent, container) {
         this.index = index;
         this.parent = parent;
         this.container = container;
     }
 
+    /**
+     * The index at which you can find this among the children of it's parent.
+     * @type {(number|string)}
+     */
     set index(param) {
         this._index = param;
         return this;
@@ -19,6 +32,10 @@ export default class Base
         return this._index;
     }
 
+    /**
+     * The unique identifier of the tree item, used the the id attibute on it's root element.
+     * @type {string}
+     */
     get id() {
         if (this.parent instanceof Base) {
             return this.parent.id + '.' + this.index;
@@ -27,6 +44,10 @@ export default class Base
         }
     }
 
+    /**
+     * The root tree item.
+     * @type {Meanbee.ShippingRules.Aggregator}
+     */
     get root() {
         let root = this;
         while (root.parent instanceof Base) {
@@ -35,6 +56,10 @@ export default class Base
         return root;
     }
 
+    /**
+     * The tree item that defines the context of its children.
+     * @type {Meanbee.ShippingRules.Base}
+     */
     set context(context) {
         this._context = context;
         return this;
@@ -44,6 +69,10 @@ export default class Base
         return this._context || this.parent && this.parent.context;
     }
 
+    /**
+     * The input field that holds the serialised form of the calculator field. 
+     * @type {HTMLInputElement}
+     */
     set field(input) {
         this._field = input;
         this.init(JSON.parse(input.value || '{}'));
@@ -54,8 +83,20 @@ export default class Base
         return this._field;
     }
 
-    init() {}
+    /**
+     * Initialises the trree item with its serialised form.
+     * @abstract
+     * @return {this}
+     */
+    init() {
+        return this;
+    }
 
+    /**
+     * Gets the child that matches the passed id.
+     * @param {string} id The id to search for.
+     * @return {Meanbee.ShippingRules.Base} The matching child.
+     */
     getObjectById(id) {
         if (this.id === id) {
             return this;
@@ -84,6 +125,11 @@ export default class Base
         return null;
     }
 
+    /**
+     * Removes the tree item from its parent, thereby deleting it.
+     * @param {number} navDir The direction (+/-) in which to move the keyboard focus.
+     * @return {this} The removed tree item.
+     */
     delete(navDir) {
         if (this.parent) {
             document.getElementById(this.id).className += 'deleting';
@@ -97,8 +143,13 @@ export default class Base
             setTimeout(this.root.rerender.bind(this.root), 200);
             Meanbee.ShippingRules.history.pushState();
         }
+        return this
     }
 
+    /**
+     * Rerenders the calculator form in its [container]{@link Base#container}.
+     * @return {this}
+     */
     rerender() {
         if (!this.container) return;
         let focussedElementId = document.activeElement.id;
@@ -107,16 +158,32 @@ export default class Base
         window.Stretchy.resizeAll();
         this.focus(focussedElementId);
         this.root.updateJSON();
+        return this;
     }
 
+    /**
+     * Called when tree item may need to update in respose to changes made in higher nesting scopes.
+     * @abstract
+     * @return {this}
+     */
     refresh() {
         // NOOP
+        return this
     }
 
+    /**
+     * Updates the associated input field with the serialised form of the calulator field.
+     * @returns this
+     */
     updateJSON() {
         this.root.field.value = JSON.stringify(this.root);
+        return this;
     }
 
+    /**
+     * Moves keyboard focus to the element with [id]{@link Base.id}.
+     * @param {string} id
+     */
     focus(id) {
         let element = document.getElementById(id);
         if (element) {
@@ -124,6 +191,10 @@ export default class Base
         }
     }
 
+    /**
+     * Creates the common remove button.
+     * @return {HTMLButtonElement|Array} Remove button.
+     */
     renderRemoveButton() {
         if (this.parent instanceof Base) {
             return util.removeButton(this, this.delete.bind(this));
@@ -131,6 +202,12 @@ export default class Base
         return [];
     }
 
+    /**
+     * Common keboard event listener.
+     * @listens keyDown
+     * @param {KeyboardEvent} event
+     * @return {undefined}
+     */
     keyHandler(event) {
         if (~['INPUT', 'SELECT', 'BUTTON', 'TEXTAREA'].indexOf(event.target.tagName)) {
             if (event.keyCode === 27) { // Escape
@@ -217,11 +294,23 @@ export default class Base
         }
     }
 
+    /**
+     * Common copy event listener.
+     * @listens copy
+     * @param {ClipboardEvent} event
+     * @returns {undefined}
+     */
     copyText(event) {
         event.clipboardData.setData('text/html', this.toText(event.target, 'rich'));
         event.preventDefault();
     }
 
+    /**
+     * Converts the tree item and its children to immutable text.
+     * @param {Element} target
+     * @param {string} format
+     * @returns {String}
+     */
     toText(target, format) {
         let text = Array.from(target.childNodes).map(function naturalise(node) {
             if (node instanceof Text) return node.data.trim();
@@ -237,6 +326,12 @@ export default class Base
         return text;
     }
 
+    /**
+     * Common dragStart event listener.
+     * @listens dragStart
+     * @param {DragEvent} event
+     * @returns {undefined}
+     */
     drag(event) {
         event.effectAllowed = 'copyMove';
         event.dataTransfer.setData('calculator', this.root.id);
@@ -247,6 +342,12 @@ export default class Base
         event.stopPropagation();
     }
 
+    /**
+     * Common drop event listener.
+     * @listens drop
+     * @param {DragEvent} event
+     * @returns {undefined}
+     */
     drop(event) {
         event.preventDefault();
         let index = 0, parent;
@@ -273,6 +374,12 @@ export default class Base
         event.stopPropagation();
     }
 
+    /**
+     * Common dragOver event listener.
+     * @listens dragOver
+     * @param {DragEvent}
+     * @returns {undefined}
+     */
     allowDrop(event) {
         event.preventDefault();
         if (event.metaKey || event.ctrlKey || event.altKey || event.shiftKey) {
@@ -282,12 +389,26 @@ export default class Base
         }
     }
 
+    /**
+     * Common dragEnter event listener.
+     * @listens dragEnter
+     * @param {DragEvent} event
+     * @returns {undefined}
+     */
     dragIn (event) {
         event.target.classList.add('drop-target');
         event.stopPropagation();
     }
 
+    /**
+     * Common dragLeave event listener.
+     * @listens dragLeave
+     * @param {DragEvent} event
+     * @returns {undefined}
+     */
     dragOut (event) {
         event.target.classList.remove('drop-target');
     }
 }
+
+export default Base

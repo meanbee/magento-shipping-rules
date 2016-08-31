@@ -1,11 +1,15 @@
 import './vendor/jsx-only-react';
+import Base from './Base';
 
 import aggregatorRegister from './Register/aggregator';
 import comparatorRegister from './Register/comparator';
 import conditionRegister from './Register/condition';
 import fieldRegister from './Register/field';
 import termRegister from './Register/term';
+
+import navigation from './navigation';
 import util from './util';
+import clipboard from './clipboard';
 import History from './History';
 
 import Aggregator from './Aggregator';
@@ -71,9 +75,19 @@ import './vendor/stretchy';
 window.Stretchy.selectors.filter = '.calculator-tree *';
 window.Stretchy.selectors.base += ', input[type="number"]';
 
+/** @namespace Meanbee */
 if (! ('Meanbee' in window)) window.Meanbee = {};
+/** @namespace Meanbee.ShippingRules */
 if (! ('ShippingRules' in Meanbee)) Meanbee.ShippingRules = {};
 
+/**
+ * @prop {Object} ShippingRules.registers Object of the client-side registers
+ * @prop {Meanbee.ShippingRules.Register} ShippingRules.register.aggregator Aggregator Register
+ * @prop {Meanbee.ShippingRules.Register} ShippingRules.register.comparator Comparator Register
+ * @prop {Meanbee.ShippingRules.Register} ShippingRules.register.condition Condition Register
+ * @prop {Meanbee.ShippingRules.Register} ShippingRules.register.field Field Register
+ * @prop {Meanbee.ShippingRules.Register} ShippingRules.register.term Term Register
+ */
 Meanbee.ShippingRules.registers = {
     aggregator: aggregatorRegister,
     comparator: comparatorRegister,
@@ -82,8 +96,15 @@ Meanbee.ShippingRules.registers = {
     term: termRegister
 };
 
+/** @prop {Meanbee.ShippingRules.History} ShippingRules.history Manages the historical states of calculator fields and time-travelling through them. */
 Meanbee.ShippingRules.history = new History;
+/** @prop {module:util} ShippingRules.util Module containing utility functions. */
 Meanbee.ShippingRules.util = util;
+Meanbee.ShippingRules.Base = Base;
+/** @prop {module:clipboard} ShippingRules.clipboard Module managing the ShippingRules clipboard */
+Meanbee.ShippingRules.clipboard = clipboard;
+/** @prop {module:navigation} ShippingRules.navigation Module managing keyboard navigation. */
+Meanbee.ShippingRules.navigation = navigation;
 
 Meanbee.ShippingRules.Aggregator = Aggregator;
 Meanbee.ShippingRules.registers.aggregator.add(BooleanAggregator.CONJUNCTIVE, Meanbee.ShippingRules.Aggregator.Conjunctive = BooleanAggregator);

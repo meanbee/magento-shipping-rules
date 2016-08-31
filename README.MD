@@ -99,3 +99,8 @@ The available environments are as follows:
         gulp test:js
         ```
 
+-   View documentation
+
+    ```bash
+    npm run docs
+    ```

@@ -10,8 +10,8 @@ class Meanbee_Shippingrules_Calculator_Condition_Promotion
     public function getVariables() {
         return array(
             'promo_free_shipping'    => array('label' => 'Free Shipping',            'type' => array('boolean')),
-            'promo_coupon_code'      => array('label' => 'Coupon Code',              'type' => array('enumerated', 'string')),
-            'promo_applied_rule_ids' => array('label' => 'Applied Cart Price Rules', 'type' => array('enumerated'))
+            'promo_coupon_code'      => array('label' => 'Coupon Code',              'type' => array('enum', 'string')),
+            'promo_applied_rule_ids' => array('label' => 'Applied Cart Price Rules', 'type' => array('enum'))
         );
     }
 

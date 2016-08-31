@@ -5,6 +5,8 @@ class Meanbee_Shippingrules_Calculator_Comparator_Equal
     public function __construct($registers)
     {
         parent::__construct($registers);
+        $this->addType('boolean');
+        $this->addType('enum');
         $this->addType('number');
         $this->addType('number_base26');
         $this->addType('number_base36');
