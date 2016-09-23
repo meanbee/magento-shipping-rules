@@ -1,4 +1,5 @@
-(function() {
+/* global meanbee_shippingrules_postcode_form_json */
+ ;(function() {
   /**
    * Non-conflicting forEach polyfill.
    * @see {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach#Polyfill}
@@ -19,9 +20,7 @@
     }
   }
 
-  var postalCodeData,
-      scripts = document.getElementsByTagName('script'),
-      jsDirectory = '/js/meanbee/shippingrules/'; //scripts[scripts.length - 1].src.replace(/\/[^\/]*\.js/, '/');
+  var postalCodeData;
 
   /**
    * Get postal code format descriptors from JSON file.
@@ -40,7 +39,7 @@
       }
     };
 
-    xhr.open('GET', jsDirectory + 'postalcode_formats.json');
+    xhr.open('GET', meanbee_shippingrules_postcode_form_json);
     xhr.send();
   }
 

@@ -2,7 +2,7 @@
     <?php echo $this->getFormHtml() ?>
 </div>
 <script type="text/javascript">
-
+var meanbee_shippingrules_postcode_form_json = '<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_JS) ?>meanbee/shippingrules/postalcode_formats.json';
 if ($('conditions_fieldset')) {
     var conditionsForm = new VarienRulesForm('conditions_fieldset', '<?php echo $this->getNewConditionChildUrl() ?>');
 }
