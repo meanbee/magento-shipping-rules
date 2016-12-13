@@ -1,5 +1,5 @@
 <_>
-   <form_key>S3yQt5lhMlOa0os5</form_key>
+   <form_key>j3zRvmiHpifEPp3W</form_key>
    <name>Meanbee_Shippingrules</name>
    <channel>community</channel>
    <version_ids>
@@ -9,9 +9,9 @@
    <description>Provides a GUI, similar to the one for shopping and catalogue promotion rules, to specifying shipping rates for your customers.</description>
    <license>Commercial License</license>
    <license_uri/>
-   <version>2.7.2</version>
+   <version>2.7.4</version>
    <stability>stable</stability>
-   <notes>* Allow postal code prefix conditions to accept a comma-separated list of values through the use of &apos;is one of&apos;.</notes>
+   <notes>* Bugfixes for Emojione</notes>
    <authors>
       <name>
          <name>Meanbee</name>
@@ -24,7 +24,7 @@
       </email>
    </authors>
    <depends_php_min>5.2.0</depends_php_min>
-   <depends_php_max>6.0.0</depends_php_max>
+   <depends_php_max>7.2.0</depends_php_max>
    <depends>
       <package>
          <name>
@@ -40,7 +40,7 @@
             <max/>
          </max>
          <files>
-            <files>                         </files>
+            <files>                                          </files>
          </files>
       </package>
       <extension>
@@ -66,6 +66,8 @@
          <target>mageweb</target>
          <target>mageweb</target>
          <target>magelib</target>
+         <target>mageskin</target>
+         <target>mageskin</target>
       </target>
       <path>
          <path/>
@@ -77,6 +79,8 @@
          <path>js/meanbee/shippingrules/grid.js</path>
          <path>js/meanbee/shippingrules/postalcode_formats.json</path>
          <path>Emojione</path>
+         <path>adminhtml/base/default/meanbee/shippingrules/</path>
+         <path>adminhtml/default/default/lib/emojione/</path>
       </path>
       <type>
          <type>file</type>
@@ -88,8 +92,12 @@
          <type>file</type>
          <type>file</type>
          <type>dir</type>
+         <type>dir</type>
+         <type>dir</type>
       </type>
       <include>
+         <include/>
+         <include/>
          <include/>
          <include/>
          <include/>
@@ -110,10 +118,8 @@
          <ignore/>
          <ignore/>
          <ignore/>
+         <ignore/>
+         <ignore/>
       </ignore>
    </contents>
-   <page>1</page>
-   <limit>200</limit>
-   <folder/>
-   <package/>
 </_>

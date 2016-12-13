@@ -3,6 +3,7 @@ app/etc/modules/*                                           app/etc/modules/
 app/design/adminhtml/default/default/layout/meanbee/*       app/design/adminhtml/default/default/layout/meanbee/
 app/design/adminhtml/default/default/template/meanbee/*     app/design/adminhtml/default/default/template/meanbee/
 js/meanbee/shippingrules/*                                  js/meanbee/shippingrules/
+lib/Emojione                                                lib/Emojione
 skin/adminhtml/base/default/meanbee/shippingrules/*         skin/adminhtml/base/default/meanbee/shippingrules/
 skin/adminhtml/default/default/lib/emojione/*               skin/adminhtml/default/default/lib/emojione/
 Meanbee_Shippingrules.xml                                   var/connect/
