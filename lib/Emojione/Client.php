@@ -21,12 +21,13 @@ class Emojione_Client implements Emojione_ClientInterface
 
     protected $ruleset = null;
 
-    public function __construct(Emojione_RulesetInterface $ruleset = null)
+    public function __construct(Emojione_RulesetInterface $ruleset = null, $imagePathPNG,
+        $imagePathSVG, $imagePathSVGSprites)
     {
-        if ( ! is_null($ruleset) )
-        {
-            $this->ruleset = $ruleset;
-        }
+        $this->ruleset = $ruleset;
+        $this->imagePathPNG = $imagePathPNG;
+        $this->imagePathSVG = $imagePathSVG;
+        $this->imagePathSVGSprites = $imagePathSVGSprites;
     }
 
     // ##########################################
