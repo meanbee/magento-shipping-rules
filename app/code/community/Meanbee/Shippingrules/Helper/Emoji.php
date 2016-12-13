@@ -4,7 +4,12 @@ class Meanbee_Shippingrules_Helper_Emoji extends Mage_Core_Helper_Abstract {
 
 	public function __construct()
 	{
-		$this->_libraryClient = new Emojione_Client();
+		$this->_libraryClient = new Emojione_Client(
+		    null,
+            Mage::getDesign()->getSkinBaseUrl() . 'lib/emojione/png/',
+            Mage::getDesign()->getSkinBaseUrl() . 'lib/emojione/svg/',
+            Mage::getDesign()->getSkinUrl('lib/emojione/sprites/emojione.sprites.svg')
+        );
 	}
 
 	/**
