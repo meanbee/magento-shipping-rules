@@ -93,6 +93,7 @@
                 <condense_countries_on_grid>flag</condense_countries_on_grid>
                 <colapse_conditions_on_subcondition_on_grid>1</colapse_conditions_on_subcondition_on_grid>
                 <use_emoji_one>1</use_emoji_one>
+                <sallowspecific>0</sallowspecific>
             </meanship>
         </carriers>
     </default>
