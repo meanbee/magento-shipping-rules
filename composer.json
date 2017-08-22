@@ -1,0 +1,16 @@
+{
+    "name": "meanbee/magento-shipping-rules",
+    "description": "Magento 1 extension that uses the power of the promotion rules system to create flat rate shipping methods based on conditions",
+    "homepage": "https://www.meanbee.com/magento-extensions/meanbee-shipping-rules.html",
+    "type": "magento-module",
+    "version": "2.7.4",
+    "authors": [
+        {
+            "name": "Meanbee",
+            "email": "hello@meanbee.com"
+        }
+    ],
+	"require":{
+			"magento-hackathon/magento-composer-installer":"^3.0.0"
+		}
+}
