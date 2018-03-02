@@ -327,7 +327,7 @@ class Meanbee_Shippingrules_Model_Carrier extends Mage_Shipping_Model_Carrier_Ab
         $requestItems = $request->getAllItems();
         if (count($requestItems) > 0) {
             $quote = $requestItems[0]->getQuote();
-            $quote->setData('payment_method', $quote->getPayment()->getMethod());
+            $request->setData('payment_method', $quote->getPayment()->getMethod());
         }
         return $request;
     }
