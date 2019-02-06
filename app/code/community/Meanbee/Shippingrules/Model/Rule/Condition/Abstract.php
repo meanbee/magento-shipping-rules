@@ -14,7 +14,7 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Abstract extends Mage_Rule_Mode
     {
         if (null === $this->_defaultOperatorInputByType) {
             $this->_defaultOperatorInputByType = array(
-                'string'      => array('==', '!=', '{}', '!{}', '^', '$', '!^', '!$', '()', '!()', '//'),
+                'string'      => array('==', '!=', '{}', '!{}', '^', '$', '!^', '!$', '()', '!()', '^()', '!^()', '//'),
                 'numeric'     => array('==', '!=', '>=', '>', '<=', '<', '..', '!..', '()', '!()'),
                 'numeric_b26' => array('==', '!=', '>=:b26', '>:b26', '<=:b26', '<:b26', '..:b26', '!..:b26', '()', '!()'),
                 'numeric_b36' => array('==', '!=', '>=:b36', '>:b36', '<=:b36', '<:b36', '..:b36', '!..:b36', '()', '!()'),
@@ -70,6 +70,8 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Abstract extends Mage_Rule_Mode
                 '$'       => Mage::helper('meanship')->__('ends with'),
                 '!^'      => Mage::helper('meanship')->__('does not begin with'),
                 '!$'      => Mage::helper('meanship')->__('does not end with'),
+                '^()'     => Mage::helper('rule')->__('begins with one of'),
+                '!^()'    => Mage::helper('rule')->__('does not begin with one of'),
                 '//'      => Mage::helper('meanship')->__('matches regex'),
             );
         }
@@ -86,7 +88,7 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Abstract extends Mage_Rule_Mode
      */
     public function isArrayOperatorType() {
         $op = $this->getOperator();
-        return $op === '()' || $op === '!()' || in_array($this->getInputType(), $this->_arrayInputTypes);
+        return $op === '()' || $op === '!()' || $op === '^()' || $op === '!^()' || in_array($this->getInputType(), $this->_arrayInputTypes);
     }
 
     /**
@@ -350,6 +352,22 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Abstract extends Mage_Rule_Mode
                 $result = (substr($validatedValue, -$length) === $value);
             }
             break;
+
+            case '^()': case '!^()':
+            if (!is_string($validatedValue)) {
+                return false;
+            } else {
+                $value = (array)$value;
+                foreach ($value as $item) {
+                    $length = strlen($item);
+                    if (substr($validatedValue, 0, $length) === $item) {
+                        $result = true;
+                        break;
+                    }
+                }
+            }
+            break;
+
             case '//':
                 if (Mage::helper('meanship')->isValidRegex($value)) {
                     $result = (bool)preg_match($value, $validatedValue);
@@ -357,7 +375,7 @@ class Meanbee_Shippingrules_Model_Rule_Condition_Abstract extends Mage_Rule_Mode
                 break;
         }
 
-        if (in_array($op, array('!=', '>', '<', '>:b26', '<:b26', '>:b36', '<:b36', '!..', '!..:b26', '!..:b36', '!{}', '!()', '!^', '!$'))) {
+        if (in_array($op, array('!=', '>', '<', '>:b26', '<:b26', '>:b36', '<:b36', '!..', '!..:b26', '!..:b36', '!{}', '!()', '!^', '!$', '!^()'))) {
             $result = !$result;
         }
 
