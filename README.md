@@ -35,7 +35,7 @@ Here are some examples of rules:
      - Part 1 (W1A 3BP) is "HS"
      - and Part 2 (W1A 3BP) is in range [1 - 9]
 
-More documentation [can be found here](https://meanbee.atlassian.net/wiki/display/EXT/Shipping+Rules).
+More documentation [can be found here](https://github.com/meanbee/magento-shipping-rules/blob/develop/EXT-ShippingRules-140819-1522.pdf).
 
 ##### Compatibility
 Compatibility: 1.6, 1.7, 1.8, 1.9
